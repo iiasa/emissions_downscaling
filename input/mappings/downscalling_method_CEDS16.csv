@@ -1,0 +1,21 @@
+sector,downscale_method
+Agriculture,linear
+Aircraft,none
+Electricity and Heat Production,ipat
+Forest Burning,linear
+Fossil Fuel Fires,linear
+Fuel Production and Transformation,ipat
+Grassland Burning,ipat
+Industrial Combustion,ipat
+Industrial Process and Product Use,ipat
+International shipping,none
+International Shipping - Tanker Loading,none
+Non-Road Transportation,ipat
+Oil and Gas Fugitive/Flaring,ipat
+Other Fugitive/Flaring,ipat
+Peat Burning,linear
+Residential Commercial Other - Other,ipat
+Residential Commercial Other - Residential Commercial,ipat
+Road Transportation,ipat
+Solvents Production and Application,ipat
+Waste,ipat

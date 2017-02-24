@@ -1,0 +1,21 @@
+sector_name,sector_short,proxy_year
+Agriculture,AGR,2014
+Forest Burning,FRTB,2014
+Grassland Burning,GRSB,2014
+Peat Burning,PEAT,2014
+Residential Commercial Other - Residential Commercial,RCORC,2014
+Industrial Combustion,INDP,2014
+Residential Commercial Other - Other,RCOO,2014
+Aircraft,AIR,2014
+Road Transportation,ROAD,2014
+Non-Road Transportation,NRTR,2014
+International Shipping,SHP,2014
+International Shipping - Tanker Loading,TANK,2014
+Electricity and Heat Production,ELEC,2014
+Fuel Production and Transformation,ETRN,2014
+Other Fugitive/Flaring,OFF,2014
+Oil and Gas Fugitive/Flaring,FLR,2014
+Fossil Fuel Fires,FFFI,2014
+Industrial Process and Product Use,INPU,2014
+Solvents Production and Application,SLV,2014
+Waste,WST,2014

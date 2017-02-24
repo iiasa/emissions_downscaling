@@ -1,0 +1,222 @@
+iso,GCAM_region_ID,country_name,region
+pri,1,Puerto Rico,USA
+usa,1,United States of America,USA
+vir,1,"Virgin Islands, U.S.",USA
+ssd,2,South Sudan,Africa_Eastern
+bdi,2,Burundi,Africa_Eastern
+com,2,Comoros,Africa_Eastern
+dji,2,Djibouti,Africa_Eastern
+eri,2,Eritrea,Africa_Eastern
+eth,2,Ethiopia,Africa_Eastern
+ken,2,Kenya,Africa_Eastern
+mdg,2,Madagascar,Africa_Eastern
+mus,2,Mauritius,Africa_Eastern
+reu,2,Reunion,Africa_Eastern
+rwa,2,Rwanda,Africa_Eastern
+sdn,2,Sudan,Africa_Eastern
+som,2,Somalia,Africa_Eastern
+uga,2,Uganda,Africa_Eastern
+dza,3,Algeria,Africa_Northern
+egy,3,Egypt,Africa_Northern
+esh,3,Western Sahara,Africa_Northern
+lby,3,Libyan Arab Jamahiriya,Africa_Northern
+mar,3,Morocco,Africa_Northern
+tun,3,Tunisia,Africa_Northern
+ago,4,Angola,Africa_Southern
+bwa,4,Botswana,Africa_Southern
+lso,4,Lesotho,Africa_Southern
+moz,4,Mozambique,Africa_Southern
+mwi,4,Malawi,Africa_Southern
+nam,4,Namibia,Africa_Southern
+swz,4,Swaziland,Africa_Southern
+tza,4,"Tanzania, United Republic of",Africa_Southern
+zmb,4,Zambia,Africa_Southern
+zwe,4,Zimbabwe,Africa_Southern
+ben,5,Benin,Africa_Western
+bfa,5,Burkina Faso,Africa_Western
+caf,5,Central African Republic,Africa_Western
+civ,5,Cote dIvoire,Africa_Western
+cmr,5,Cameroon,Africa_Western
+cod,5,"Congo, the Democratic Republic of the",Africa_Western
+cog,5,Congo,Africa_Western
+cpv,5,Cape Verde,Africa_Western
+gab,5,Gabon,Africa_Western
+gha,5,Ghana,Africa_Western
+gin,5,Guinea,Africa_Western
+gmb,5,Gambia,Africa_Western
+gnb,5,Guinea-Bissau,Africa_Western
+gnq,5,Equatorial Guinea,Africa_Western
+lbr,5,Liberia,Africa_Western
+mli,5,Mali,Africa_Western
+mrt,5,Mauritania,Africa_Western
+ner,5,Niger,Africa_Western
+nga,5,Nigeria,Africa_Western
+sen,5,Senegal,Africa_Western
+sle,5,Sierra Leone,Africa_Western
+stp,5,Sao Tome and Principe,Africa_Western
+tcd,5,Chad,Africa_Western
+tgo,5,Togo,Africa_Western
+aus,6,Australia,Australia_NZ
+nzl,6,New Zealand,Australia_NZ
+bra,7,Brazil,Brazil
+can,8,Canada,Canada
+abw,9,Aruba,Central America and Caribbean
+atg,9,Antigua & Barbuda,Central America and Caribbean
+bhs,9,Bahamas,Central America and Caribbean
+blz,9,Belize,Central America and Caribbean
+bmu,9,Bermuda,Central America and Caribbean
+brb,9,Barbados,Central America and Caribbean
+cri,9,Costa Rica,Central America and Caribbean
+cub,9,Cuba,Central America and Caribbean
+cym,9,Cayman Islands,Central America and Caribbean
+dma,9,Dominica,Central America and Caribbean
+dom,9,Dominican Republic,Central America and Caribbean
+glp,9,Guadeloupe,Central America and Caribbean
+grd,9,Grenada,Central America and Caribbean
+gtm,9,Guatemala,Central America and Caribbean
+hnd,9,Honduras,Central America and Caribbean
+hti,9,Haiti,Central America and Caribbean
+jam,9,Jamaica,Central America and Caribbean
+kna,9,Saint Kitts and Nevis,Central America and Caribbean
+lca,9,Saint Lucia,Central America and Caribbean
+msr,9,Montserrat,Central America and Caribbean
+mtq,9,Martinique,Central America and Caribbean
+nic,9,Nicaragua,Central America and Caribbean
+pan,9,Panama,Central America and Caribbean
+slv,9,El Salvador,Central America and Caribbean
+tto,9,Trinidad and Tobago,Central America and Caribbean
+vct,9,Saint Vincent and the Grenadines,Central America and Caribbean
+cuw,9,Curacao,Central America and Caribbean
+sxm,9,Sint Maarten,Central America and Caribbean
+arm,10,Armenia,Central Asia
+aze,10,Azerbaijan,Central Asia
+geo,10,Georgia,Central Asia
+kaz,10,Kazakhstan,Central Asia
+kgz,10,Kyrgyzstan,Central Asia
+mng,10,Mongolia,Central Asia
+tjk,10,Tajikistan,Central Asia
+tkm,10,Turkmenistan,Central Asia
+uzb,10,Uzbekistan,Central Asia
+chn,11,China,China
+hkg,11,Hong Kong,China
+mac,11,Macau,China
+rou,12,Romania,EU-12
+bgr,12,Bulgaria,EU-12
+cyp,12,Cyprus,EU-12
+cze,12,Czech Republic,EU-12
+est,12,Estonia,EU-12
+hun,12,Hungary,EU-12
+ltu,12,Lithuania,EU-12
+lva,12,Latvia,EU-12
+mlt,12,Malta,EU-12
+pol,12,Poland,EU-12
+svk,12,Slovakia,EU-12
+svn,12,Slovenia,EU-12
+aut,13,Austria,EU-15
+bel,13,Belgium,EU-15
+deu,13,Germany,EU-15
+dnk,13,Denmark,EU-15
+esp,13,Spain,EU-15
+fin,13,Finland,EU-15
+flk,13,Falkland Islands (Malvinas),EU-15
+fra,13,France,EU-15
+fro,13,Faroe Islands,EU-15
+gbr,13,United Kingdom,EU-15
+gib,13,Gibraltar,EU-15
+grc,13,Greece,EU-15
+grl,13,Greenland,EU-15
+irl,13,Ireland,EU-15
+ita,13,Italy,EU-15
+lux,13,Luxembourg,EU-15
+nld,13,Netherlands,EU-15
+prt,13,Portugal,EU-15
+spm,13,Saint Pierre and Miquelon,EU-15
+swe,13,Sweden,EU-15
+tca,13,Turks and Caicos,EU-15
+vgb,13,"Virgin Islands, British",EU-15
+wlf,13,Wallis and Futuna,EU-15
+blr,14,Belarus,Europe_Eastern
+mda,14,"Moldova, Republic of",Europe_Eastern
+ukr,14,Ukraine,Europe_Eastern
+srb (kosovo),15,Kosovo,Europe_Non_EU
+alb,15,Albania,Europe_Non_EU
+bih,15,Bosnia and Herzegovina,Europe_Non_EU
+hrv,15,Croatia,Europe_Non_EU
+mkd,15,"Macedonia, the former Yugoslav Republic of",Europe_Non_EU
+mne,15,Montenegro,Europe_Non_EU
+srb,15,Serbia,Europe_Non_EU
+tur,15,Turkey,Europe_Non_EU
+che,16,Switzerland,European Free Trade Association
+isl,16,Iceland,European Free Trade Association
+lie,16,Liechtenstein,European Free Trade Association
+nor,16,Norway,European Free Trade Association
+ind,17,India,India
+idn,18,Indonesia,Indonesia
+jpn,19,Japan,Japan
+mex,20,Mexico,Mexico
+are,21,United Arab Emirates,Middle East
+bhr,21,Bahrain,Middle East
+irn,21,"Iran, Islamic Republic of",Middle East
+irq,21,Iraq,Middle East
+isr,21,Israel,Middle East
+jor,21,Jordan,Middle East
+kwt,21,Kuwait,Middle East
+lbn,21,Lebanon,Middle East
+omn,21,Oman,Middle East
+pse,21,"Palestinian Territory, Occupied",Middle East
+qat,21,Qatar,Middle East
+sau,21,Saudi Arabia,Middle East
+syr,21,Syrian Arab Republic,Middle East
+yem,21,Yemen,Middle East
+pak,22,Pakistan,Pakistan
+rus,23,Russian Federation,Russia
+zaf,24,South Africa,South Africa
+guf,25,French Guiana,South America_Northern
+guy,25,Guyana,South America_Northern
+sur,25,Suriname,South America_Northern
+ven,25,Venezuela,South America_Northern
+bol,26,Bolivia,South America_Southern
+chl,26,Chile,South America_Southern
+ecu,26,Ecuador,South America_Southern
+per,26,Peru,South America_Southern
+pry,26,Paraguay,South America_Southern
+ury,26,Uruguay,South America_Southern
+afg,27,Afghanistan,South Asia
+bgd,27,Bangladesh,South Asia
+btn,27,Bhutan,South Asia
+lka,27,Sri Lanka,South Asia
+mdv,27,Maldives,South Asia
+npl,27,Nepal,South Asia
+kor,28,"Korea, Republic of",South Korea
+asm,29,American Samoa,Southeast Asia
+brn,29,Brunei Darussalam,Southeast Asia
+cok,29,Cook Islands,Southeast Asia
+fji,29,Fiji,Southeast Asia
+fsm,29,"Micronesia, Federated States of",Southeast Asia
+gum,29,Guam,Southeast Asia
+khm,29,Cambodia,Southeast Asia
+kir,29,Kiribati,Southeast Asia
+lao,29,Lao Peoples Democratic Republic,Southeast Asia
+mhl,29,Marshall Islands,Southeast Asia
+mmr,29,Myanmar,Southeast Asia
+mys,29,Malaysia,Southeast Asia
+ncl,29,New Caledonia,Southeast Asia
+niu,29,Niue,Southeast Asia
+phl,29,Philippines,Southeast Asia
+plw,29,Palau,Southeast Asia
+png,29,Papua New Guinea,Southeast Asia
+prk,29,"Korea, Democratic Peoples Republic of",Southeast Asia
+pyf,29,French Polynesia,Southeast Asia
+sgp,29,Singapore,Southeast Asia
+slb,29,Solomon Islands,Southeast Asia
+syc,29,Seychelles,Southeast Asia
+tha,29,Thailand,Southeast Asia
+tkl,29,Tokelau,Southeast Asia
+tls,29,Timor Leste,Southeast Asia
+ton,29,Tonga,Southeast Asia
+vnm,29,Viet Nam,Southeast Asia
+vut,29,Vanuatu,Southeast Asia
+wsm,29,Samoa,Southeast Asia
+twn,30,Taiwan,Taiwan
+arg,31,Argentina,Argentina
+col,32,Colombia,Colombia
