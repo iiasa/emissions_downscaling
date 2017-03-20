@@ -19,7 +19,7 @@
 dirs <- paste0( unlist( strsplit( getwd(), c( '/', '\\' ), fixed = T ) ), '/' )
 for ( i in 1:length( dirs ) ) {
   setwd( paste( dirs[ 1:( length( dirs ) + 1 - i ) ], collapse = '' ) )
-  wd <- grep( 'IAM_pilot/input', list.dirs(), value = T )
+  wd <- grep( 'emissions_downscaling/input', list.dirs(), value = T )
   if ( length( wd ) > 0 ) {
     setwd( wd[ 1 ] )
     break
@@ -38,7 +38,7 @@ initialize( script_name, log_msg, headers )
 
 # ------------------------------------------------------------------------------
 # 0.5 Define IAM variable
-args_from_makefile <- commandArgs( TRUE )
+if ( !exists( 'args_from_makefile' ) ) args_from_makefile <- commandArgs( TRUE )
 iam <- args_from_makefile[ 1 ]
 if ( is.na( iam ) ) iam <- "GCAM4"
 
