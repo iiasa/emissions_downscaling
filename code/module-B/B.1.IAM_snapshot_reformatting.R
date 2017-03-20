@@ -56,6 +56,7 @@ print( paste0( 'The IAM to be processed is: ', iam_name  ) )
 # -----------------------------------------------------------------------------
 # 2. Read in the snapshot and tease out un-wanted models 
 file_list <- list.files( './IAM_snapshot' )   
+file_list <- file_list[ file_list!= 'README' ]
 
 data_list <- lapply( file_list, function( file_name ) { 
   file_ext <- getFileExt( file_name )

@@ -37,9 +37,12 @@ args_from_makefile <- target_iam[ 1 ]
 
 # -----------------------------------------------------------------------------
 # 2. Clean up relics
-if ( length( list.files( '../final-output/module-B/'  ) ) > 0 ) { 
-  invisible( file.remove( paste0( '../final-output/module-B/', list.files( '../final-output/module-B/' ) ) ) )
+fin_filelist <- list.files( '../final-output/module-B/'  )
+fin_file_list <- fin_filelist[ fin_filelist != 'README' ]
+if ( length( fin_file_list ) > 0 ) { 
+  invisible( file.remove( paste0( '../final-output/module-B/', fin_file_list ) ) )
 }
+
 if ( length( list.files( path = '../intermediate-output/', pattern = 'B.' ) ) > 0 ) {  
   invisible( file.remove( paste0( '../intermediate-output/', list.files( path = '../intermediate-output/', pattern = 'B.' ) ) ) )
 }
