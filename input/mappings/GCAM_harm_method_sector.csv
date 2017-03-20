@@ -7,7 +7,7 @@ Industrial Combustion,ratio_reduced,0,2075,1,2075
 Aircraft,ratio_reduced,0,2075,1,2075
 Road Transportation,ratio_reduced,0,2075,1,2075
 Non-Road Transportation,ratio_reduced,0,2075,1,2075
-International shipping,ratio_reduced,0,2075,1,2075
+International Shipping,ratio_reduced,0,2075,1,2075
 Residential Commercial Other - Residential Commercial,ratio_reduced,0,2075,1,2150
 Residential Commercial Other - Other,ratio_reduced,0,2075,1,2075
 Oil and Gas Fugitive/Flaring,ratio_reduced,0,2075,1,2075
@@ -16,3 +16,4 @@ Solvents Production and Application,ratio_reduced,0,2075,1,2075
 Agriculture,ratio_reduced,0,2075,1,2075
 Waste,ratio_reduced,0,2075,1,2075
 Fossil Fuel Fires,ratio_reduced,0,2075,1,2075
+Transportation Sector,ratio_reduced,0,2075,1,2075

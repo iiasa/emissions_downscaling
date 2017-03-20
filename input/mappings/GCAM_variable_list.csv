@@ -301,3 +301,21 @@ Emissions|VOC|Industrial Processes,emission
 Emissions|VOC|Other,emission
 Emissions|VOC|Product Use|Solvents,emission
 Emissions|VOC|Waste,emission
+Emissions|CO2,emission
+Emissions|CO2|AFOLU,emission
+Emissions|CO2|Aggregate - Fossil Fuels and Industry,emission
+Emissions|CO2|Carbon Capture and Storage,emission
+Emissions|CO2|Carbon Capture and Storage|Biomass,emission
+Emissions|CO2|Energy,emission
+Emissions|CO2|Energy|Demand,emission
+Emissions|CO2|Energy|Demand|Aggregate - Residential and Commercial,emission
+Emissions|CO2|Energy|Demand|Commercial,emission
+Emissions|CO2|Energy|Demand|Industry,emission
+Emissions|CO2|Energy|Demand|Residential,emission
+Emissions|CO2|Energy|Demand|Transportation,emission
+Emissions|CO2|Energy|Demand|Transportation|Aviation|International,air_shp_emissions
+Emissions|CO2|Energy|Demand|Transportation|Shipping|International,air_shp_emissions
+Emissions|CO2|Energy|Supply,emission
+Emissions|CO2|Energy|Supply|Electricity,emission
+Emissions|CO2|Energy|Supply|Liquids,emission
+Emissions|CO2|Industrial Processes,emission

@@ -27,7 +27,7 @@ BC,Emissions|BC|Energy|Demand|Transportation|Rail,
 BC,Emissions|BC|Energy|Demand|Transportation|Road,Road Transportation
 BC,Emissions|BC|Energy|Demand|Transportation|Shipping,
 BC,Emissions|BC|Energy|Demand|Transportation|Shipping|Domestic,
-BC,Emissions|BC|Energy|Demand|Transportation|Shipping|International,International shipping
+BC,Emissions|BC|Energy|Demand|Transportation|Shipping|International,International Shipping
 BC,Emissions|BC|Energy|Other,
 BC,Emissions|BC|Energy|Supply,
 BC,Emissions|BC|Energy|Supply|Aggregate - Electricity and Heat,Electricity and Heat Production
@@ -69,7 +69,7 @@ CO,Emissions|CO|Energy|Demand|Transportation|Rail,
 CO,Emissions|CO|Energy|Demand|Transportation|Road,Road Transportation
 CO,Emissions|CO|Energy|Demand|Transportation|Shipping,
 CO,Emissions|CO|Energy|Demand|Transportation|Shipping|Domestic,
-CO,Emissions|CO|Energy|Demand|Transportation|Shipping|International,International shipping
+CO,Emissions|CO|Energy|Demand|Transportation|Shipping|International,International Shipping
 CO,Emissions|CO|Energy|Other,
 CO,Emissions|CO|Energy|Supply,
 CO,Emissions|CO|Energy|Supply|Aggregate - Electricity and Heat,Electricity and Heat Production
@@ -112,7 +112,7 @@ NH3,Emissions|NH3|Energy|Demand|Transportation|Rail,
 NH3,Emissions|NH3|Energy|Demand|Transportation|Road,Road Transportation
 NH3,Emissions|NH3|Energy|Demand|Transportation|Shipping,
 NH3,Emissions|NH3|Energy|Demand|Transportation|Shipping|Domestic,
-NH3,Emissions|NH3|Energy|Demand|Transportation|Shipping|International,International shipping
+NH3,Emissions|NH3|Energy|Demand|Transportation|Shipping|International,International Shipping
 NH3,Emissions|NH3|Energy|Other,
 NH3,Emissions|NH3|Energy|Supply,
 NH3,Emissions|NH3|Energy|Supply|Aggregate - Electricity and Heat,Electricity and Heat Production
@@ -155,7 +155,7 @@ NOx,Emissions|NOx|Energy|Demand|Transportation|Rail,
 NOx,Emissions|NOx|Energy|Demand|Transportation|Road,Road Transportation
 NOx,Emissions|NOx|Energy|Demand|Transportation|Shipping,
 NOx,Emissions|NOx|Energy|Demand|Transportation|Shipping|Domestic,
-NOx,Emissions|NOx|Energy|Demand|Transportation|Shipping|International,International shipping
+NOx,Emissions|NOx|Energy|Demand|Transportation|Shipping|International,International Shipping
 NOx,Emissions|NOx|Energy|Other,
 NOx,Emissions|NOx|Energy|Supply,
 NOx,Emissions|NOx|Energy|Supply|Aggregate - Electricity and Heat,Electricity and Heat Production
@@ -198,7 +198,7 @@ OC,Emissions|OC|Energy|Demand|Transportation|Rail,
 OC,Emissions|OC|Energy|Demand|Transportation|Road,Road Transportation
 OC,Emissions|OC|Energy|Demand|Transportation|Shipping,
 OC,Emissions|OC|Energy|Demand|Transportation|Shipping|Domestic,
-OC,Emissions|OC|Energy|Demand|Transportation|Shipping|International,International shipping
+OC,Emissions|OC|Energy|Demand|Transportation|Shipping|International,International Shipping
 OC,Emissions|OC|Energy|Other,
 OC,Emissions|OC|Energy|Supply,
 OC,Emissions|OC|Energy|Supply|Aggregate - Electricity and Heat,Electricity and Heat Production
@@ -212,89 +212,107 @@ OC,Emissions|OC|Industrial Processes,Industrial Process and Product Use
 OC,Emissions|OC|Other,
 OC,Emissions|OC|Product Use|Solvents,Solvents Production and Application
 OC,Emissions|OC|Waste,Waste
-SO2,Emissions|Sulfur,
-SO2,Emissions|Sulfur|AFOLU,
-SO2,Emissions|Sulfur|AFOLU|Aggregate - Agriculture and Biomass Burning,Agriculture
-SO2,Emissions|Sulfur|AFOLU|Agriculture,
-SO2,Emissions|Sulfur|AFOLU|Agriculture|Livestock,
-SO2,Emissions|Sulfur|AFOLU|Agriculture|Livestock|Enteric Fermentation,
-SO2,Emissions|Sulfur|AFOLU|Agriculture|Rice,
-SO2,Emissions|Sulfur|AFOLU|Biomass Burning,
-SO2,Emissions|Sulfur|AFOLU|Land,
-SO2,Emissions|Sulfur|AFOLU|Land|Forest Burning,Forest Burning
-SO2,Emissions|Sulfur|AFOLU|Land|Grassland Burning,Grassland Burning
-SO2,Emissions|Sulfur|Aggregate - Fossil Fuels and Industry,
-SO2,Emissions|Sulfur|Energy,
-SO2,Emissions|Sulfur|Energy|Demand,
-SO2,Emissions|Sulfur|Energy|Demand|Aggregate - Residential and Commercial,Residential Commercial Other - Residential Commercial
-SO2,Emissions|Sulfur|Energy|Demand|Commercial,
-SO2,Emissions|Sulfur|Energy|Demand|Industry,Industrial Combustion
-SO2,Emissions|Sulfur|Energy|Demand|Other Sector,
-SO2,Emissions|Sulfur|Energy|Demand|Residential,
-SO2,Emissions|Sulfur|Energy|Demand|Transportation,
-SO2,Emissions|Sulfur|Energy|Demand|Transportation|Aggregate - Rail and Domestic Shipping,Non-Road Transportation
-SO2,Emissions|Sulfur|Energy|Demand|Transportation|Aggregate - Road Rail and Domestic Shipping,Non-Road Transportation
-SO2,Emissions|Sulfur|Energy|Demand|Transportation|Aviation,Aircraft
-SO2,Emissions|Sulfur|Energy|Demand|Transportation|Aviation|Domestic,
-SO2,Emissions|Sulfur|Energy|Demand|Transportation|Aviation|International,
-SO2,Emissions|Sulfur|Energy|Demand|Transportation|Rail,
-SO2,Emissions|Sulfur|Energy|Demand|Transportation|Road,Road Transportation
-SO2,Emissions|Sulfur|Energy|Demand|Transportation|Shipping,
-SO2,Emissions|Sulfur|Energy|Demand|Transportation|Shipping|Domestic,
-SO2,Emissions|Sulfur|Energy|Demand|Transportation|Shipping|International,International shipping
-SO2,Emissions|Sulfur|Energy|Other,
-SO2,Emissions|Sulfur|Energy|Supply,
-SO2,Emissions|Sulfur|Energy|Supply|Aggregate - Electricity and Heat,Electricity and Heat Production
-SO2,Emissions|Sulfur|Energy|Supply|Electricity,
-SO2,Emissions|Sulfur|Energy|Supply|Gases,
-SO2,Emissions|Sulfur|Energy|Supply|Heat,
-SO2,Emissions|Sulfur|Energy|Supply|Liquids,
-SO2,Emissions|Sulfur|Energy|Supply|Other,
-SO2,Emissions|Sulfur|Energy|Supply|Solids,
-SO2,Emissions|Sulfur|Industrial Processes,Industrial Process and Product Use
-SO2,Emissions|Sulfur|Other,
-SO2,Emissions|Sulfur|Product Use|Solvents,Solvents Production and Application
-SO2,Emissions|Sulfur|Waste,Waste
-NMVOC,Emissions|VOC,
-NMVOC,Emissions|VOC|AFOLU,
-NMVOC,Emissions|VOC|AFOLU|Aggregate - Agriculture and Biomass Burning,Agriculture
-NMVOC,Emissions|VOC|AFOLU|Agriculture,
-NMVOC,Emissions|VOC|AFOLU|Agriculture|Livestock,
-NMVOC,Emissions|VOC|AFOLU|Agriculture|Livestock|Enteric Fermentation,
-NMVOC,Emissions|VOC|AFOLU|Agriculture|Rice,
-NMVOC,Emissions|VOC|AFOLU|Biomass Burning,
-NMVOC,Emissions|VOC|AFOLU|Land,
-NMVOC,Emissions|VOC|AFOLU|Land|Forest Burning,Forest Burning
-NMVOC,Emissions|VOC|AFOLU|Land|Grassland Burning,Grassland Burning
-NMVOC,Emissions|VOC|Aggregate - Fossil Fuels and Industry,
-NMVOC,Emissions|VOC|Energy,
-NMVOC,Emissions|VOC|Energy|Demand,
-NMVOC,Emissions|VOC|Energy|Demand|Aggregate - Residential and Commercial,Residential Commercial Other - Residential Commercial
-NMVOC,Emissions|VOC|Energy|Demand|Commercial,
-NMVOC,Emissions|VOC|Energy|Demand|Industry,Industrial Combustion
-NMVOC,Emissions|VOC|Energy|Demand|Other Sector,
-NMVOC,Emissions|VOC|Energy|Demand|Residential,
-NMVOC,Emissions|VOC|Energy|Demand|Transportation,
-NMVOC,Emissions|VOC|Energy|Demand|Transportation|Aggregate - Rail and Domestic Shipping,Non-Road Transportation
-NMVOC,Emissions|VOC|Energy|Demand|Transportation|Aggregate - Road Rail and Domestic Shipping,Non-Road Transportation
-NMVOC,Emissions|VOC|Energy|Demand|Transportation|Aviation,Aircraft
-NMVOC,Emissions|VOC|Energy|Demand|Transportation|Aviation|Domestic,
-NMVOC,Emissions|VOC|Energy|Demand|Transportation|Aviation|International,
-NMVOC,Emissions|VOC|Energy|Demand|Transportation|Rail,
-NMVOC,Emissions|VOC|Energy|Demand|Transportation|Road,Road Transportation
-NMVOC,Emissions|VOC|Energy|Demand|Transportation|Shipping,
-NMVOC,Emissions|VOC|Energy|Demand|Transportation|Shipping|Domestic,
-NMVOC,Emissions|VOC|Energy|Demand|Transportation|Shipping|International,International shipping
-NMVOC,Emissions|VOC|Energy|Other,
-NMVOC,Emissions|VOC|Energy|Supply,
-NMVOC,Emissions|VOC|Energy|Supply|Aggregate - Electricity and Heat,Electricity and Heat Production
-NMVOC,Emissions|VOC|Energy|Supply|Electricity,
-NMVOC,Emissions|VOC|Energy|Supply|Gases,
-NMVOC,Emissions|VOC|Energy|Supply|Heat,
-NMVOC,Emissions|VOC|Energy|Supply|Liquids,
-NMVOC,Emissions|VOC|Energy|Supply|Other,
-NMVOC,Emissions|VOC|Energy|Supply|Solids,
-NMVOC,Emissions|VOC|Industrial Processes,Industrial Process and Product Use
-NMVOC,Emissions|VOC|Other,
-NMVOC,Emissions|VOC|Product Use|Solvents,Solvents Production and Application
-NMVOC,Emissions|VOC|Waste,Waste
+Sulfur,Emissions|Sulfur,
+Sulfur,Emissions|Sulfur|AFOLU,
+Sulfur,Emissions|Sulfur|AFOLU|Aggregate - Agriculture and Biomass Burning,Agriculture
+Sulfur,Emissions|Sulfur|AFOLU|Agriculture,
+Sulfur,Emissions|Sulfur|AFOLU|Agriculture|Livestock,
+Sulfur,Emissions|Sulfur|AFOLU|Agriculture|Livestock|Enteric Fermentation,
+Sulfur,Emissions|Sulfur|AFOLU|Agriculture|Rice,
+Sulfur,Emissions|Sulfur|AFOLU|Biomass Burning,
+Sulfur,Emissions|Sulfur|AFOLU|Land,
+Sulfur,Emissions|Sulfur|AFOLU|Land|Forest Burning,Forest Burning
+Sulfur,Emissions|Sulfur|AFOLU|Land|Grassland Burning,Grassland Burning
+Sulfur,Emissions|Sulfur|Aggregate - Fossil Fuels and Industry,
+Sulfur,Emissions|Sulfur|Energy,
+Sulfur,Emissions|Sulfur|Energy|Demand,
+Sulfur,Emissions|Sulfur|Energy|Demand|Aggregate - Residential and Commercial,Residential Commercial Other - Residential Commercial
+Sulfur,Emissions|Sulfur|Energy|Demand|Commercial,
+Sulfur,Emissions|Sulfur|Energy|Demand|Industry,Industrial Combustion
+Sulfur,Emissions|Sulfur|Energy|Demand|Other Sector,
+Sulfur,Emissions|Sulfur|Energy|Demand|Residential,
+Sulfur,Emissions|Sulfur|Energy|Demand|Transportation,
+Sulfur,Emissions|Sulfur|Energy|Demand|Transportation|Aggregate - Rail and Domestic Shipping,Non-Road Transportation
+Sulfur,Emissions|Sulfur|Energy|Demand|Transportation|Aggregate - Road Rail and Domestic Shipping,Non-Road Transportation
+Sulfur,Emissions|Sulfur|Energy|Demand|Transportation|Aviation,Aircraft
+Sulfur,Emissions|Sulfur|Energy|Demand|Transportation|Aviation|Domestic,
+Sulfur,Emissions|Sulfur|Energy|Demand|Transportation|Aviation|International,
+Sulfur,Emissions|Sulfur|Energy|Demand|Transportation|Rail,
+Sulfur,Emissions|Sulfur|Energy|Demand|Transportation|Road,Road Transportation
+Sulfur,Emissions|Sulfur|Energy|Demand|Transportation|Shipping,
+Sulfur,Emissions|Sulfur|Energy|Demand|Transportation|Shipping|Domestic,
+Sulfur,Emissions|Sulfur|Energy|Demand|Transportation|Shipping|International,International Shipping
+Sulfur,Emissions|Sulfur|Energy|Other,
+Sulfur,Emissions|Sulfur|Energy|Supply,
+Sulfur,Emissions|Sulfur|Energy|Supply|Aggregate - Electricity and Heat,Electricity and Heat Production
+Sulfur,Emissions|Sulfur|Energy|Supply|Electricity,
+Sulfur,Emissions|Sulfur|Energy|Supply|Gases,
+Sulfur,Emissions|Sulfur|Energy|Supply|Heat,
+Sulfur,Emissions|Sulfur|Energy|Supply|Liquids,
+Sulfur,Emissions|Sulfur|Energy|Supply|Other,
+Sulfur,Emissions|Sulfur|Energy|Supply|Solids,
+Sulfur,Emissions|Sulfur|Industrial Processes,Industrial Process and Product Use
+Sulfur,Emissions|Sulfur|Other,
+Sulfur,Emissions|Sulfur|Product Use|Solvents,Solvents Production and Application
+Sulfur,Emissions|Sulfur|Waste,Waste
+VOC,Emissions|VOC,
+VOC,Emissions|VOC|AFOLU,
+VOC,Emissions|VOC|AFOLU|Aggregate - Agriculture and Biomass Burning,Agriculture
+VOC,Emissions|VOC|AFOLU|Agriculture,
+VOC,Emissions|VOC|AFOLU|Agriculture|Livestock,
+VOC,Emissions|VOC|AFOLU|Agriculture|Livestock|Enteric Fermentation,
+VOC,Emissions|VOC|AFOLU|Agriculture|Rice,
+VOC,Emissions|VOC|AFOLU|Biomass Burning,
+VOC,Emissions|VOC|AFOLU|Land,
+VOC,Emissions|VOC|AFOLU|Land|Forest Burning,Forest Burning
+VOC,Emissions|VOC|AFOLU|Land|Grassland Burning,Grassland Burning
+VOC,Emissions|VOC|Aggregate - Fossil Fuels and Industry,
+VOC,Emissions|VOC|Energy,
+VOC,Emissions|VOC|Energy|Demand,
+VOC,Emissions|VOC|Energy|Demand|Aggregate - Residential and Commercial,Residential Commercial Other - Residential Commercial
+VOC,Emissions|VOC|Energy|Demand|Commercial,
+VOC,Emissions|VOC|Energy|Demand|Industry,Industrial Combustion
+VOC,Emissions|VOC|Energy|Demand|Other Sector,
+VOC,Emissions|VOC|Energy|Demand|Residential,
+VOC,Emissions|VOC|Energy|Demand|Transportation,
+VOC,Emissions|VOC|Energy|Demand|Transportation|Aggregate - Rail and Domestic Shipping,Non-Road Transportation
+VOC,Emissions|VOC|Energy|Demand|Transportation|Aggregate - Road Rail and Domestic Shipping,Non-Road Transportation
+VOC,Emissions|VOC|Energy|Demand|Transportation|Aviation,Aircraft
+VOC,Emissions|VOC|Energy|Demand|Transportation|Aviation|Domestic,
+VOC,Emissions|VOC|Energy|Demand|Transportation|Aviation|International,
+VOC,Emissions|VOC|Energy|Demand|Transportation|Rail,
+VOC,Emissions|VOC|Energy|Demand|Transportation|Road,Road Transportation
+VOC,Emissions|VOC|Energy|Demand|Transportation|Shipping,
+VOC,Emissions|VOC|Energy|Demand|Transportation|Shipping|Domestic,
+VOC,Emissions|VOC|Energy|Demand|Transportation|Shipping|International,International Shipping
+VOC,Emissions|VOC|Energy|Other,
+VOC,Emissions|VOC|Energy|Supply,
+VOC,Emissions|VOC|Energy|Supply|Aggregate - Electricity and Heat,Electricity and Heat Production
+VOC,Emissions|VOC|Energy|Supply|Electricity,
+VOC,Emissions|VOC|Energy|Supply|Gases,
+VOC,Emissions|VOC|Energy|Supply|Heat,
+VOC,Emissions|VOC|Energy|Supply|Liquids,
+VOC,Emissions|VOC|Energy|Supply|Other,
+VOC,Emissions|VOC|Energy|Supply|Solids,
+VOC,Emissions|VOC|Industrial Processes,Industrial Process and Product Use
+VOC,Emissions|VOC|Other,
+VOC,Emissions|VOC|Product Use|Solvents,Solvents Production and Application
+VOC,Emissions|VOC|Waste,Waste
+CO2,Emissions|CO2,
+CO2,Emissions|CO2|AFOLU,
+CO2,Emissions|CO2|Aggregate - Fossil Fuels and Industry,
+CO2,Emissions|CO2|Carbon Capture and Storage,Fuel Production and Transformation
+CO2,Emissions|CO2|Carbon Capture and Storage|Biomass,Fuel Production and Transformation
+CO2,Emissions|CO2|Energy,
+CO2,Emissions|CO2|Energy|Demand,
+CO2,Emissions|CO2|Energy|Demand|Aggregate - Residential and Commercial,Residential Commercial Other - Residential Commercial
+CO2,Emissions|CO2|Energy|Demand|Commercial,
+CO2,Emissions|CO2|Energy|Demand|Industry,Industrial Combustion
+CO2,Emissions|CO2|Energy|Demand|Residential,
+CO2,Emissions|CO2|Energy|Demand|Transportation,Road Transportation
+CO2,Emissions|CO2|Energy|Demand|Transportation|Aviation|International,Aircraft
+CO2,Emissions|CO2|Energy|Demand|Transportation|Shipping|International,International Shipping
+CO2,Emissions|CO2|Energy|Supply,
+CO2,Emissions|CO2|Energy|Supply|Electricity,Electricity and Heat Production
+CO2,Emissions|CO2|Energy|Supply|Liquids,Fuel Production and Transformation
+CO2,Emissions|CO2|Industrial Processes,Industrial Process and Product Use
