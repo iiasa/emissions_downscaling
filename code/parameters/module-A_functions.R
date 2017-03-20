@@ -241,6 +241,14 @@ calculateOffset <- function( iam_em,
   #               in the mappings folder defining different harmonization methods for emission species, sector, region 
   #               or their combination. 
   
+  # debug
+  # iam_em <- iam_em_full
+  # ref_em <- ref_em_full
+  # baseyear = base_year
+  # harmonization_type  = harm_type 
+  # harm_method_specific_flag = harmonization_method_specific_flag
+  # harm_method_specific_mapping = harm_method_mapping
+  
   # ----
   # 1. merge iam_em and ref_em together using 'region', 'em', 'CEDS16'
   x_baseyear <- paste0( 'X', baseyear )
