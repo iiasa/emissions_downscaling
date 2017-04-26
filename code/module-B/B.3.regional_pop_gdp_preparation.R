@@ -43,7 +43,7 @@ if ( !exists( 'args_from_makefile' ) ) args_from_makefile <- commandArgs( TRUE )
 iam <- args_from_makefile[ 1 ]
 if ( is.na( iam ) ) iam <- "GCAM4"
 
-MODULE_A <- "../code/module-A/"
+MODULE_B <- "../code/module-B/"
 
 # ------------------------------------------------------------------------------
 # 1. Read mapping files and axtract iam info

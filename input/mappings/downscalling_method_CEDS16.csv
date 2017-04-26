@@ -1,5 +1,6 @@
 sector,downscale_method
 Agriculture,linear
+Agricultural Waste Burning,linear
 Aircraft,none
 Electricity and Heat Production,ipat
 Forest Burning,linear

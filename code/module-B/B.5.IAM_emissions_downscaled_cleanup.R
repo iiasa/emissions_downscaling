@@ -67,14 +67,22 @@ colnames( iam_em_nods ) [ which( colnames( iam_em_nods ) == 'region' ) ] <- 'iso
 common_header_col_names <- c( "model", "scenario", "em", "sector", "iso", "unit" )
 iam_reporting_years <- c( 2015, 2020, 2030, 2040, 2050, 2060, 2070, 2080, 2090, 2100 )
 iam_reporting_xyears <- paste0( 'X', iam_reporting_years )
+iam_gridding_years <- 2015 : 2100 
+iam_gridding_xyears <- paste0( 'X', iam_gridding_years )
 
 iam_em_nods_select <- iam_em_nods[ , c( common_header_col_names, iam_reporting_xyears ) ]
 iam_em_linear_select <- iam_em_linear[ , c( common_header_col_names, iam_reporting_xyears ) ]
 iam_em_ipat_select <- iam_em_ipat[ , c( common_header_col_names, iam_reporting_xyears ) ]
 
+iam_em_nods_gridding <- iam_em_nods[ , c( common_header_col_names, iam_gridding_xyears ) ]
+iam_em_linear_gridding <- iam_em_linear[ , c( common_header_col_names, iam_gridding_xyears ) ]
+iam_em_ipat_gridding <- iam_em_ipat[ , c( common_header_col_names, iam_gridding_xyears ) ]
+
 iam_em_full <- rbind( iam_em_nods_select, iam_em_linear_select, iam_em_ipat_select )
 iam_em_full$harm_status <- 'Harmonized'
 
+iam_em_gridding_full <- rbind( iam_em_nods_gridding, iam_em_linear_gridding, iam_em_ipat_gridding )
+ 
 # ------------------------------------------------------------------------------
 # 4. reformat into standard format 
 iam_em_iamc <- merge( iam_em_full, var_mapping, by = 'sector', all.x = T )
@@ -100,5 +108,7 @@ colnames( final_out ) <- gsub( 'X', '', colnames( final_out ) )
 out_filename <- paste0( 'B.', iam_name, '_emissions_downscaled' )
 writeData( final_out , 'FIN_OUT', domain_extension = 'module-B/', out_filename, meta = F )  
 
+out_filename <- paste0( 'B.', iam_name, '_emissions_downscaled_for_gridding' )
+writeData( iam_em_gridding_full , 'MED_OUT', out_filename, meta = F )  
 # END
 

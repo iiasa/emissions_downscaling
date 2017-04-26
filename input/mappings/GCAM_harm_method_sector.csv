@@ -1,19 +1,22 @@
 CEDS16,harm_method,offset_reduced_value,offset_reduced_year,ratio_reduced_value,ratio_reduced_year
-Forest Burning,offset_reduced,0,2075,1,2075
-Grassland Burning,offset_reduced,0,2075,1,2075
-Electricity and Heat Production,ratio_reduced,0,2075,1,2075
-Fuel Production and Transformation,ratio_reduced,0,2075,1,2075
-Industrial Combustion,ratio_reduced,0,2075,1,2075
-Aircraft,ratio_reduced,0,2075,1,2075
-Road Transportation,ratio_reduced,0,2075,1,2075
-Non-Road Transportation,ratio_reduced,0,2075,1,2075
-International Shipping,ratio_reduced,0,2075,1,2075
-Residential Commercial Other - Residential Commercial,ratio_reduced,0,2075,1,2150
-Residential Commercial Other - Other,ratio_reduced,0,2075,1,2075
-Oil and Gas Fugitive/Flaring,ratio_reduced,0,2075,1,2075
-Industrial Process and Product Use,ratio_reduced,0,2075,1,2075
-Solvents Production and Application,ratio_reduced,0,2075,1,2075
 Agriculture,ratio_reduced,0,2075,1,2075
-Waste,ratio_reduced,0,2075,1,2075
+Agricultural Waste Burning,ratio_reduced,0,2075,1,2075
+Aircraft,ratio_reduced,0,2075,1,2075
+Electricity and Heat Production,ratio_reduced,0,2075,1,2075
+Forest Burning,offset_reduced,0,2075,1,2075
 Fossil Fuel Fires,ratio_reduced,0,2075,1,2075
+Fuel Production and Transformation,ratio_reduced,0,2075,1,2075
+Grassland Burning,offset_reduced,0,2075,1,2075
+Industrial Combustion,ratio_reduced,0,2075,1,2075
+Industrial Process and Product Use,ratio_reduced,0,2075,1,2075
+International Shipping,ratio_reduced,0,2075,1,2075
+International Shipping - Tanker Loading,ratio_reduced,0,2075,1,2075
+Non-Road Transportation,ratio_reduced,0,2075,1,2075
+Oil and Gas Fugitive/Flaring,ratio_reduced,0,2075,1,2075
+Other Fugitive/Flaring,ratio_reduced,0,2075,1,2075
+Residential Commercial Other - Other,ratio_reduced,0,2075,1,2075
+Residential Commercial Other - Residential Commercial,ratio_reduced,0,2075,1,2150
+Road Transportation,ratio_reduced,0,2075,1,2075
+Solvents Production and Application,ratio_reduced,0,2075,1,2075
 Transportation Sector,ratio_reduced,0,2075,1,2075
+Waste,ratio_reduced,0,2075,1,2075
