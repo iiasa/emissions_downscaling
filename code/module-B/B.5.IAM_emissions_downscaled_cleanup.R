@@ -41,7 +41,9 @@ initialize( script_name, log_msg, headers )
 # 0.5 Define IAM variable
 if ( !exists( 'args_from_makefile' ) ) args_from_makefile <- commandArgs( TRUE )
 iam <- args_from_makefile[ 1 ]
+modb_out <- args_from_makefile[ 3 ]  
 if ( is.na( iam ) ) iam <- "GCAM4"
+if ( is.na( modb_out ) ) iam <- "../final-output/module-B"
 
 MODULE_B <- "../code/module-B/"
 
@@ -106,7 +108,7 @@ colnames( final_out ) <- gsub( 'X', '', colnames( final_out ) )
 # 5 Write out
 
 out_filename <- paste0( 'B.', iam_name, '_emissions_downscaled' )
-writeData( final_out , 'FIN_OUT', domain_extension = 'module-B/', out_filename, meta = F )  
+writeData( final_out , 'MODB_OUT', out_filename, meta = F )  
 
 out_filename <- paste0( 'B.', iam_name, '_emissions_downscaled_for_gridding' )
 writeData( iam_em_gridding_full , 'MED_OUT', out_filename, meta = F )  

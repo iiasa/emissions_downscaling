@@ -23,7 +23,16 @@ for ( i in 1:length( dirs ) ) {
     break
   }
 }
+PARAM_DIR <- "../code/parameters/"
 
+# Call standard script header function to read in universal header files - 
+# provides logging, file support, and system functions - and start the script log.
+headers <- c( 'common_data.R', 'data_functions.R', 'module-A_functions.R', 'all_module_functions.R' ) 
+log_msg <- "Initiate downscaling routines." 
+script_name <- "launch_downscaling.R"
+
+source( paste0( PARAM_DIR, "header.R" ) )
+initialize( script_name, log_msg, headers )
 # -----------------------------------------------------------------------------
 # 1. Set up desired IAM to be processing
 
@@ -32,8 +41,14 @@ for ( i in 1:length( dirs ) ) {
 #args_from_makefile <- target_iam
 
 # getting target IAM from command line arguement
-if ( !exists( 'args_from_makefile' ) ) target_iam <- commandArgs( TRUE )
-args_from_makefile <- target_iam[ 1 ]
+if ( !exists( 'args_from_makefile' ) ) args_from_makefile <- commandArgs( TRUE )
+iam <- args_from_makefile[ 1 ]
+snapshot_file <- args_from_makefile[ 2 ]   
+modb_out <- args_from_makefile[ 3 ]    
+
+domainmapping <- read.csv( DOMAINPATHMAP, stringsAsFactors = F )
+domainmapping[ domainmapping$Domain == 'MODB_OUT', "PathToDomain" ] <- modb_out
+write.csv( domainmapping, DOMAINPATHMAP, row.names = F )
 
 # -----------------------------------------------------------------------------
 # 2. Clean up relics
@@ -46,6 +61,7 @@ if ( length( fin_file_list ) > 0 ) {
 if ( length( list.files( path = '../intermediate-output/', pattern = 'B.' ) ) > 0 ) {  
   invisible( file.remove( paste0( '../intermediate-output/', list.files( path = '../intermediate-output/', pattern = 'B.' ) ) ) )
 }
+
 # -----------------------------------------------------------------------------
 # 3. Source module-B script in order
 source( '../code/module-B/B.1.IAM_snapshot_reformatting.R' )

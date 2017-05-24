@@ -1,18 +1,15 @@
-# This file is a central repository for domain names and their paths (from the Input directory),
-#,
-Domain,PathToDomain
-#,
-# Folder names,
-#,
-MAPPINGS,../input/mappings
-IAM_EM,../input/IAM_emissions
-REF_EM,../input/reference_emissions
-PARAM,../code/parameters
-LOGS,../code/logs
-MED_OUT,../intermediate-output
-FIN_OUT,../final-output
-DIAG_OUT,../diagnostic-output
-DOCUMENTATION,../documentation
-SSP_IN,../input/SSP_pop_gdp
-INPUT,../input
-GRIDDING,../input/gridding
+"Domain","PathToDomain"
+"MAPPINGS","../input/mappings"
+"IAM_EM","../input/IAM_emissions"
+"REF_EM","../input/reference_emissions"
+"PARAM","../code/parameters"
+"LOGS","../code/logs"
+"MED_OUT","../intermediate-output"
+"FIN_OUT","../final-output"
+"DIAG_OUT","../diagnostic-output"
+"DOCUMENTATION","../documentation"
+"SSP_IN","../input/SSP_pop_gdp"
+"INPUT","../input"
+"GRIDDING","../input/gridding"
+"MODB_OUT","C:/Users/feng999/Documents/emissions_downscaling/final-output/module-B"
+"MODC_OUT","../final-output/module-C"
