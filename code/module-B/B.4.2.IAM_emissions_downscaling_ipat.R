@@ -7,7 +7,7 @@
 #              CEDS_by_country_by_CEDS_sector_with_luc_all_em.csv  
 # Output Files: B.[iam]_emissions_downscaled_ipat.csv
 # Notes: 
-# TODO: 
+# TODO: find a smarter way to remove NA in section 4 
 # ------------------------------------------------------------------------------
 
 # ------------------------------------------------------------------------------
@@ -77,6 +77,7 @@ gdp_data_cols <- grep( 'X', colnames( gdp_data ), value = T )
 # -----------------------------------------------------------------------------
 # 4. Combine all input data into a wide df 
 wide_df <- merge( iam_em, ref_em[ , c( 'em', 'sector', 'region', 'iso', ref_em_data_cols ) ], by = c( 'em', 'sector', 'region', 'iso' ), all.x = T  )
+wide_df[, ref_em_data_cols ] <- ifelse( is.na( wide_df[, ref_em_data_cols ] ), 0, wide_df[, ref_em_data_cols ] )
 wide_df <- merge( wide_df, pop_data[ , c( 'scenario', 'region', 'iso', pop_data_cols ) ], 
                   by.x = c( 'region', 'iso', 'ssp_label' ), 
                   by.y = c( 'region', 'iso', 'scenario' ), all.x = T  ) 
