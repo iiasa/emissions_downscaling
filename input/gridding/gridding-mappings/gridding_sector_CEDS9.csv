@@ -1,0 +1,14 @@
+sector_name,sector_short
+Agriculture,AGR
+Agricultural Waste Burning,AWB
+Forest Burning,FRTB
+Grassland Burning,GRSB
+Peat Burning,PEAT
+Industrial Sector,IND
+Residential Commercial Other,RCO
+Aircraft,AIR
+Transportation Sector,TRA
+International Shipping,SHP
+Energy Sector,ENE
+Solvents Production and Application,SLV
+Waste,WST
