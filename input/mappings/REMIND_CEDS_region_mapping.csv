@@ -1,0 +1,221 @@
+iso,country_name,region,R5
+abw,Aruba,LAM,LAM
+afg,Afghanistan,OAS,ASIA
+ago,Angola,AFR,MAF
+alb,Albania,ROW,OECD
+are,United Arab Emirates,MEA,MAF
+arg,Argentina,LAM,LAM
+arm,Armenia,MEA,REF
+asm,American Samoa,OAS,
+atg,Antigua & Barbuda,LAM,LAM
+aus,Australia,ROW,OECD
+aut,Austria,EUR,OECD
+aze,Azerbaijan,MEA,REF
+bdi,Burundi,AFR,MAF
+bel,Belgium,EUR,OECD
+ben,Benin,AFR,MAF
+bfa,Burkina Faso,AFR,MAF
+bgd,Bangladesh,OAS,ASIA
+bgr,Bulgaria,EUR,OECD
+bhr,Bahrain,MEA,MAF
+bhs,Bahamas,LAM,LAM
+bih,Bosnia and Herzegovina,ROW,OECD
+blr,Belarus,ROW,REF
+blz,Belize,LAM,LAM
+bmu,Bermuda,LAM,LAM
+bol,Bolivia,LAM,LAM
+bra,Brazil,LAM,LAM
+brb,Barbados,LAM,LAM
+brn,Brunei Darussalam,OAS,ASIA
+btn,Bhutan,OAS,ASIA
+bwa,Botswana,AFR,MAF
+caf,Central African Republic,AFR,MAF
+can,Canada,ROW,OECD
+che,Switzerland,ROW,OECD
+chl,Chile,LAM,LAM
+chn,China,CHN,ASIA
+civ,Cote dIvoire,AFR,MAF
+cmr,Cameroon,AFR,MAF
+cod,"Congo, the Democratic Republic of the",AFR,MAF
+cog,Congo,AFR,MAF
+cok,Cook Islands,OAS,
+col,Colombia,LAM,LAM
+com,Comoros,AFR,MAF
+cpv,Cape Verde,AFR,MAF
+cri,Costa Rica,LAM,LAM
+cub,Cuba,LAM,LAM
+cuw,Curacao,LAM,
+cym,Cayman Islands,LAM,
+cyp,Cyprus,EUR,OECD
+cze,Czech Republic,EUR,OECD
+deu,Germany,EUR,OECD
+dji,Djibouti,AFR,MAF
+dma,Dominica,LAM,
+dnk,Denmark,EUR,OECD
+dom,Dominican Republic,LAM,LAM
+dza,Algeria,MEA,MAF
+ecu,Ecuador,LAM,LAM
+egy,Egypt,MEA,MAF
+eri,Eritrea,AFR,MAF
+esh,Western Sahara,MEA,MAF
+esp,Spain,EUR,OECD
+est,Estonia,EUR,OECD
+eth,Ethiopia,AFR,MAF
+fin,Finland,EUR,OECD
+fji,Fiji,OAS,ASIA
+flk,Falkland Islands (Malvinas),LAM,LAM
+fra,France,EUR,OECD
+fro,Faroe Islands,EUR,OECD
+fsm,"Micronesia, Federated States of",OAS,ASIA
+gab,Gabon,AFR,MAF
+gbr,United Kingdom,EUR,OECD
+geo,Georgia,MEA,REF
+gha,Ghana,AFR,MAF
+gib,Gibraltar,EUR,OECD
+gin,Guinea,AFR,MAF
+glp,Guadeloupe,LAM,LAM
+gmb,Gambia,AFR,MAF
+gnb,Guinea-Bissau,AFR,MAF
+gnq,Equatorial Guinea,AFR,MAF
+grc,Greece,EUR,OECD
+grd,Grenada,LAM,LAM
+grl,Greenland,EUR,OECD
+gtm,Guatemala,LAM,LAM
+guf,French Guiana,LAM,LAM
+gum,Guam,OAS,OECD
+guy,Guyana,LAM,LAM
+hkg,Hong Kong,CHN,ASIA
+hnd,Honduras,LAM,LAM
+hrv,Croatia,ROW,OECD
+hti,Haiti,LAM,LAM
+hun,Hungary,EUR,OECD
+idn,Indonesia,OAS,ASIA
+ind,India,IND,ASIA
+irl,Ireland,EUR,OECD
+irn,"Iran, Islamic Republic of",MEA,MAF
+irq,Iraq,MEA,MAF
+isl,Iceland,ROW,OECD
+isr,Israel,MEA,MAF
+ita,Italy,EUR,OECD
+jam,Jamaica,LAM,LAM
+jor,Jordan,MEA,MAF
+jpn,Japan,JPN,OECD
+kaz,Kazakhstan,MEA,REF
+ken,Kenya,AFR,MAF
+kgz,Kyrgyzstan,MEA,REF
+khm,Cambodia,OAS,ASIA
+kir,Kiribati,OAS,
+kna,Saint Kitts and Nevis,LAM,
+kor,"Korea, Republic of",OAS,ASIA
+kwt,Kuwait,MEA,MAF
+lao,Lao Peoples Democratic Republic,OAS,ASIA
+lbn,Lebanon,MEA,MAF
+lbr,Liberia,AFR,MAF
+lby,Libyan Arab Jamahiriya,MEA,MAF
+lca,Saint Lucia,LAM,
+lie,Liechtenstein,ROW,OECD
+lka,Sri Lanka,OAS,ASIA
+lso,Lesotho,AFR,MAF
+ltu,Lithuania,EUR,OECD
+lux,Luxembourg,EUR,OECD
+lva,Latvia,EUR,OECD
+mac,Macau,CHN,ASIA
+mar,Morocco,MEA,MAF
+mda,"Moldova, Republic of",ROW,REF
+mdg,Madagascar,AFR,MAF
+mdv,Maldives,OAS,ASIA
+mex,Mexico,LAM,LAM
+mhl,Marshall Islands,OAS,
+mkd,"Macedonia, the former Yugoslav Republic of",ROW,OECD
+mli,Mali,AFR,MAF
+mlt,Malta,EUR,OECD
+mmr,Myanmar,OAS,ASIA
+mne,Montenegro,ROW,OECD
+mng,Mongolia,OAS,ASIA
+moz,Mozambique,AFR,MAF
+mrt,Mauritania,AFR,MAF
+msr,Montserrat,LAM,
+mtq,Martinique,LAM,LAM
+mus,Mauritius,AFR,MAF
+mwi,Malawi,AFR,MAF
+mys,Malaysia,OAS,ASIA
+nam,Namibia,AFR,MAF
+ncl,New Caledonia,OAS,ASIA
+ner,Niger,AFR,MAF
+nga,Nigeria,AFR,MAF
+nic,Nicaragua,LAM,LAM
+niu,Niue,OAS,
+nld,Netherlands,EUR,OECD
+nor,Norway,ROW,OECD
+npl,Nepal,OAS,ASIA
+nzl,New Zealand,ROW,OECD
+omn,Oman,MEA,MAF
+pak,Pakistan,OAS,ASIA
+pan,Panama,LAM,LAM
+per,Peru,LAM,LAM
+phl,Philippines,OAS,ASIA
+plw,Palau,OAS,
+png,Papua New Guinea,OAS,ASIA
+pol,Poland,EUR,OECD
+pri,Puerto Rico,USA,OECD
+prk,"Korea, Democratic Peoples Republic of",OAS,ASIA
+prt,Portugal,EUR,OECD
+pry,Paraguay,LAM,LAM
+pse,"Palestinian Territory, Occupied",MEA,MAF
+pyf,French Polynesia,OAS,ASIA
+qat,Qatar,MEA,MAF
+reu,Reunion,AFR,MAF
+rou,Romania,EUR,OECD
+rus,Russian Federation,RUS,REF
+rwa,Rwanda,AFR,MAF
+sau,Saudi Arabia,MEA,MAF
+sdn,Sudan,AFR,MAF
+sen,Senegal,AFR,MAF
+sgp,Singapore,OAS,ASIA
+slb,Solomon Islands,OAS,ASIA
+sle,Sierra Leone,AFR,MAF
+slv,El Salvador,LAM,LAM
+som,Somalia,AFR,MAF
+spm,Saint Pierre and Miquelon,ROW,
+srb,Serbia,ROW,OECD
+ssd,South Sudan,AFR,MAF
+stp,Sao Tome and Principe,AFR,
+sur,Suriname,LAM,LAM
+svk,Slovakia,EUR,OECD
+svn,Slovenia,EUR,OECD
+swe,Sweden,EUR,OECD
+swz,Swaziland,AFR,MAF
+sxm,Sint Maarten,LAM,
+syc,Seychelles,AFR,
+syr,Syrian Arab Republic,MEA,MAF
+tca,Turks and Caicos,LAM,
+tcd,Chad,AFR,MAF
+tgo,Togo,AFR,MAF
+tha,Thailand,OAS,ASIA
+tjk,Tajikistan,MEA,REF
+tkl,Tokelau,OAS,
+tkm,Turkmenistan,MEA,REF
+tls,Timor Leste,OAS,ASIA
+ton,Tonga,OAS,
+tto,Trinidad and Tobago,LAM,LAM
+tun,Tunisia,MEA,MAF
+tur,Turkey,ROW,OECD
+twn,Taiwan,OAS,ASIA
+tza,"Tanzania, United Republic of",AFR,MAF
+uga,Uganda,AFR,MAF
+ukr,Ukraine,ROW,REF
+ury,Uruguay,LAM,LAM
+usa,United States of America,USA,OECD
+uzb,Uzbekistan,MEA,REF
+vct,Saint Vincent and the Grenadines,LAM,
+ven,Venezuela,LAM,LAM
+vgb,"Virgin Islands, British",LAM,
+vir,"Virgin Islands, U.S.",LAM,LAM
+vnm,Viet Nam,OAS,ASIA
+vut,Vanuatu,OAS,ASIA
+wlf,Wallis and Futuna,OAS,
+wsm,Samoa,OAS,ASIA
+yem,Yemen,MEA,MAF
+zaf,South Africa,ROW,MAF
+zmb,Zambia,AFR,MAF
+zwe,Zimbabwe,AFR,MAF
