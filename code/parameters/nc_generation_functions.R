@@ -96,7 +96,7 @@ generate_final_grids_nc <- function( int_grids_list,
   lons <- seq( -180 + grid_resolution / 2, 180 - grid_resolution / 2, grid_resolution )
   lats <- seq( -90 + grid_resolution / 2, 90 - grid_resolution / 2, grid_resolution )
   #base_days <- as.numeric( strptime( paste0( year, '0101' ), format = '%Y%m%d', tz = 'UTC' ) - strptime( "17500101", format = "%Y%m%d", tz = 'UTC' ) )
-  base_days <- ( year - 1750 ) * 365 
+  base_days <- ( year - 2015 ) * 365 
   time <- floor( c( 15.5, 45, 74.5, 105, 135.5, 166, 196.5, 227.5, 258, 288.5, 319, 349.5 ) )
   time <- time + base_days 
   londim <- ncdim_def( "lon", "degrees_east", as.double( lons ), longname = 'longitude' )
