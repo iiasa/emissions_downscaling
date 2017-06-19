@@ -1,0 +1,14 @@
+sector,downscale_method
+Agricultural Waste Burning,linear
+Agriculture,linear
+Aircraft,none
+Energy Sector,ipat
+Forest Burning,linear
+Grassland Burning,linear
+Industrial Sector,ipat
+International Shipping,none
+Peat Burning,linear
+Residential Commercial Other,ipat
+Solvents Production and Application,ipat
+Transportation Sector,ipat
+Waste,ipat

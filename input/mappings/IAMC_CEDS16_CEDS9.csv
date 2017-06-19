@@ -1,0 +1,22 @@
+CEDS16,CEDS9
+Agriculture,Agriculture
+Agricultural Waste Burning,Agricultural Waste Burning
+Forest Burning,Forest Burning
+Grassland Burning,Grassland Burning
+Peat Burning,Peat Burning
+Residential Commercial Other - Other,Residential Commercial Other
+Industrial Combustion,Industrial Sector
+Residential Commercial Other - Residential Commercial,Residential Commercial Other
+Aircraft,Aircraft
+Road Transportation,Transportation Sector
+Non-Road Transportation,Transportation Sector
+International Shipping,International Shipping
+International Shipping - Tanker Loading,International Shipping
+Electricity and Heat Production,Energy Sector
+Fuel Production and Transformation,Energy Sector
+Other Fugitive/Flaring,Energy Sector
+Oil and Gas Fugitive/Flaring,Energy Sector
+Fossil Fuel Fires,Energy Sector
+Industrial Process and Product Use,Industrial Sector
+Solvents Production and Application,Solvents Production and Application
+Waste,Waste
