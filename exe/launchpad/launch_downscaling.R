@@ -36,15 +36,21 @@ initialize( script_name, log_msg, headers )
 # -----------------------------------------------------------------------------
 # 1. Set up desired IAM to be processing
 
-# munally set up target IAM
-#target_iam <- 'GCAM4'
-#args_from_makefile <- target_iam
+# debug
+# args_from_makefile <- c( 'GCAM4', 
+#                         'Harmonized',
+#                         'C:/Users/feng999/Documents/emissions_downscaling/input/IAM_snapshot/v25.csv',
+#                         'C:/Users/feng999/Documents/emissions_downscaling/final-output/module-B' )
+
+# debug CLI
+
 
 # getting target IAM from command line arguement
 if ( !exists( 'args_from_makefile' ) ) args_from_makefile <- commandArgs( TRUE )
 iam <- args_from_makefile[ 1 ]
-snapshot_file <- args_from_makefile[ 2 ]   
-modb_out <- args_from_makefile[ 3 ]    
+harm_status <- args_from_makefile[ 2 ]
+snapshot_file <- args_from_makefile[ 3 ]   
+modb_out <- args_from_makefile[ 4 ]    
 
 domainmapping <- read.csv( DOMAINPATHMAP, stringsAsFactors = F )
 domainmapping[ domainmapping$Domain == 'MODB_OUT', "PathToDomain" ] <- modb_out
@@ -52,15 +58,15 @@ write.csv( domainmapping, DOMAINPATHMAP, row.names = F )
 
 # -----------------------------------------------------------------------------
 # 2. Clean up relics
-fin_filelist <- list.files( '../final-output/module-B/'  )
-fin_file_list <- fin_filelist[ fin_filelist != 'README' ]
-if ( length( fin_file_list ) > 0 ) { 
-  invisible( file.remove( paste0( '../final-output/module-B/', fin_file_list ) ) )
-}
+#fin_filelist <- list.files( '../final-output/module-B/'  )
+#fin_file_list <- fin_filelist[ fin_filelist != 'README' ]
+#if ( length( fin_file_list ) > 0 ) { 
+#  invisible( file.remove( paste0( '../final-output/module-B/', fin_file_list ) ) )
+#}
 
-if ( length( list.files( path = '../intermediate-output/', pattern = 'B.' ) ) > 0 ) {  
-  invisible( file.remove( paste0( '../intermediate-output/', list.files( path = '../intermediate-output/', pattern = 'B.' ) ) ) )
-}
+#if ( length( list.files( path = '../intermediate-output/', pattern = 'B.' ) ) > 0 ) {  
+#  invisible( file.remove( paste0( '../intermediate-output/', list.files( path = '../intermediate-output/', pattern = 'B.' ) ) ) )
+#}
 
 # -----------------------------------------------------------------------------
 # 3. Source module-B script in order
@@ -70,3 +76,6 @@ source( '../code/module-B/B.3.regional_pop_gdp_preparation.R' )
 source( '../code/module-B/B.4.1.IAM_emissions_downscaling_linear.R' )
 source( '../code/module-B/B.4.2.IAM_emissions_downscaling_ipat.R' )
 source( '../code/module-B/B.5.IAM_emissions_downscaled_cleanup.R' )
+if ( iam == 'REMIND-MAGPIE' ) { 
+  source( '../code/module-B/B.6.IAM_emissions_regional_aggregation.R' )
+}
