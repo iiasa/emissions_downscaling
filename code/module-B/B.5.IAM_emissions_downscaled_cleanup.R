@@ -41,6 +41,7 @@ initialize( script_name, log_msg, headers )
 # 0.5 Define IAM variable
 if ( !exists( 'args_from_makefile' ) ) args_from_makefile <- commandArgs( TRUE )
 iam <- args_from_makefile[ 1 ]
+harm_status <- args_from_makefile[ 2 ]
 modb_out <- args_from_makefile[ 3 ]  
 if ( is.na( iam ) ) iam <- "GCAM4"
 if ( is.na( modb_out ) ) iam <- "../final-output/module-B"
@@ -55,6 +56,7 @@ master_config <- readData( 'MAPPINGS', 'master_config', column_names = F )
 iam_info_list <- iamInfoExtract( master_config, iam )
 
 var_mapping <- readData( 'MAPPINGS', iamc_var_name_mapping )
+var_mapping$IAMC <- paste0( var_mapping$IAMC, '|', harm_status )
 
 # -----------------------------------------------------------------------------
 # 2. Read different parts of IAM emissions: IAM nods, IAM_linear_downscaled, IAM_ipat_downscaled 
@@ -81,7 +83,7 @@ iam_em_linear_gridding <- iam_em_linear[ , c( common_header_col_names, iam_gridd
 iam_em_ipat_gridding <- iam_em_ipat[ , c( common_header_col_names, iam_gridding_xyears ) ]
 
 iam_em_full <- rbind( iam_em_nods_select, iam_em_linear_select, iam_em_ipat_select )
-iam_em_full$harm_status <- 'Harmonized'
+iam_em_full$harm_status <- harm_status
 
 iam_em_gridding_full <- rbind( iam_em_nods_gridding, iam_em_linear_gridding, iam_em_ipat_gridding )
  
@@ -107,10 +109,10 @@ colnames( final_out ) <- gsub( 'X', '', colnames( final_out ) )
 # -----------------------------------------------------------------------------
 # 5 Write out
 
-out_filename <- paste0( 'B.', iam_name, '_emissions_downscaled' )
+out_filename <- paste0( 'B.', iam_name, '_', harm_status, '_emissions_downscaled' )
 writeData( final_out , 'MODB_OUT', out_filename, meta = F )  
 
-out_filename <- paste0( 'B.', iam_name, '_emissions_downscaled_for_gridding' )
+out_filename <- paste0( 'B.', iam_name, '_', harm_status, '_emissions_downscaled_for_gridding' )
 writeData( iam_em_gridding_full , 'MED_OUT', out_filename, meta = F )  
 # END
 
