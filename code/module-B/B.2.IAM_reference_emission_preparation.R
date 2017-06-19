@@ -82,6 +82,16 @@ ref_em <- readData( domain = 'REF_EM', file_name = 'CEDS_by_country_by_CEDS_sect
 ref_em_header_columns <- colnames( ref_em )[ grep( '^X', colnames( ref_em ), invert = T )  ]
 ref_em_xyear <- colnames( ref_em )[ grep( '^X', colnames( ref_em ) )  ]
 
+# convert reference emissions into CEDS9 sectors if necessary 
+if ( ds_sector_scheme == 'CEDS9' ) { 
+  sector_level_mapping <- readData( 'MAPPINGS', 'IAMC_CEDS16_CEDS9' )
+  ref_em <- merge( ref_em, sector_level_mapping, by.x = 'sector', by.y = 'CEDS16', all.x = T  )
+  ref_em <- aggregate( ref_em[ , c( ref_em_xyear ) ], 
+                       by = list( ref_em$iso, ref_em$CEDS9, ref_em$em, ref_em$unit ), 
+                       FUN = sum )
+  colnames( ref_em ) <- c( ref_em_header_columns, ref_em_xyear  )
+  }
+
 # -----------------------------------------------------------------------------
 # 3.1 Pick out base year reference emissions and change column names
 
