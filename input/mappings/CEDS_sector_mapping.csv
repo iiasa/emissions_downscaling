@@ -24,7 +24,7 @@ CEDS_working_sector,CEDS16,CEDS16_abr,CEDS9,CEdS9_abr
 1A3aii_Domestic-aviation,Aircraft,AIR,Aircraft,AIR
 1A3b_Road,Road Transportation,ROAD,Transportation Sector,TRA
 1A3c_Rail,Non-Road Transportation,NRTR,Transportation Sector,TRA
-1A3di_International-shipping,International shipping,SHP,International shipping,SHP
+1A3di_International-shipping,International Shipping,SHP,International Shipping,SHP
 1A3dii_Domestic-navigation,Non-Road Transportation,NRTR,Transportation Sector,TRA
 1A3eii_Other-transp,Non-Road Transportation,NRTR,Transportation Sector,TRA
 1A4a_Commercial-institutional,Residential Commercial Other - Residential Commercial,RCORC,Residential Commercial Other,RCO
