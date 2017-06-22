@@ -1,0 +1,218 @@
+iso,country_name,region,R5
+abw,Aruba,LAM,R5LAM
+afg,Afghanistan,SAS,R5ASIA
+ago,Angola,AFR,R5MAF
+alb,Albania,EEU,R5OECD
+are,United Arab Emirates,MEA,R5MAF
+arg,Argentina,LAM,R5LAM
+arm,Armenia,FSU,R5REF
+asm,American Samoa,PAS,R5ASIA
+atg,Antigua & Barbuda,LAM,R5LAM
+aus,Australia,PAO,R5OECD
+aut,Austria,WEU,R5OECD
+aze,Azerbaijan,FSU,R5REF
+bdi,Burundi,AFR,R5MAF
+bel,Belgium,WEU,R5OECD
+ben,Benin,AFR,R5MAF
+bfa,Burkina Faso,AFR,R5MAF
+bgd,Bangladesh,SAS,R5ASIA
+bgr,Bulgaria,EEU,R5OECD
+bhr,Bahrain,MEA,R5MAF
+bhs,Bahamas,LAM,R5LAM
+bih,Bosnia and Herzegovina,EEU,R5OECD
+blr,Belarus,FSU,R5REF
+blz,Belize,LAM,R5LAM
+bmu,Bermuda,LAM,R5LAM
+bol,Bolivia,LAM,R5LAM
+bra,Brazil,LAM,R5LAM
+brb,Barbados,LAM,R5LAM
+brn,Brunei Darussalam,PAS,R5ASIA
+btn,Bhutan,SAS,R5ASIA
+bwa,Botswana,AFR,R5MAF
+caf,Central African Republic,AFR,R5MAF
+can,Canada,NAM,R5OECD
+che,Switzerland,WEU,R5OECD
+chl,Chile,LAM,R5LAM
+chn,China,CPA,R5ASIA
+civ,Cote dIvoire,AFR,R5MAF
+cmr,Cameroon,AFR,R5MAF
+cod,"Congo, the Democratic Republic of the",AFR,R5MAF
+cog,Congo,AFR,R5MAF
+cok,Cook Islands,PAS,R5ASIA
+col,Colombia,LAM,R5LAM
+com,Comoros,AFR,R5MAF
+cpv,Cape Verde,AFR,R5MAF
+cri,Costa Rica,LAM,R5LAM
+cub,Cuba,LAM,R5LAM
+cym,Cayman Islands,LAM,R5LAM
+cyp,Cyprus,WEU,R5OECD
+cze,Czech Republic,EEU,R5OECD
+deu,Germany,WEU,R5OECD
+dji,Djibouti,AFR,R5MAF
+dma,Dominica,LAM,R5LAM
+dnk,Denmark,WEU,R5OECD
+dom,Dominican Republic,LAM,R5LAM
+dza,Algeria,MEA,R5MAF
+ecu,Ecuador,LAM,R5LAM
+egy,Egypt,MEA,R5MAF
+eri,Eritrea,AFR,R5MAF
+esh,Western Sahara,AFR,R5MAF
+esp,Spain,WEU,R5OECD
+est,Estonia,EEU,R5OECD
+eth,Ethiopia,AFR,R5MAF
+fin,Finland,WEU,R5OECD
+fji,Fiji,PAS,R5ASIA
+flk,Falkland Islands (Malvinas),LAM,R5LAM
+fra,France,WEU,R5OECD
+fro,Faroe Islands,WEU,R5OECD
+fsm,"Micronesia, Federated States of",PAS,R5ASIA
+gab,Gabon,AFR,R5MAF
+gbr,United Kingdom,WEU,R5OECD
+geo,Georgia,FSU,R5REF
+gha,Ghana,AFR,R5MAF
+gib,Gibraltar,WEU,R5OECD
+gin,Guinea,AFR,R5MAF
+glp,Guadeloupe,LAM,R5LAM
+gmb,Gambia,AFR,R5MAF
+gnb,Guinea-Bissau,AFR,R5MAF
+gnq,Equatorial Guinea,AFR,R5MAF
+grc,Greece,WEU,R5OECD
+grd,Grenada,LAM,R5LAM
+grl,Greenland,WEU,R5OECD
+gtm,Guatemala,LAM,R5LAM
+guf,French Guiana,LAM,R5LAM
+gum,Guam,NAM,R5OECD
+guy,Guyana,LAM,R5LAM
+hkg,Hong Kong,CPA,R5ASIA
+hnd,Honduras,LAM,R5LAM
+hrv,Croatia,EEU,R5OECD
+hti,Haiti,LAM,R5LAM
+hun,Hungary,EEU,R5OECD
+idn,Indonesia,PAS,R5ASIA
+ind,India,SAS,R5ASIA
+irl,Ireland,WEU,R5OECD
+irn,"Iran, Islamic Republic of",MEA,R5MAF
+irq,Iraq,MEA,R5MAF
+isl,Iceland,WEU,R5OECD
+isr,Israel,MEA,R5MAF
+ita,Italy,WEU,R5OECD
+jam,Jamaica,LAM,R5LAM
+jor,Jordan,MEA,R5MAF
+jpn,Japan,PAO,R5OECD
+kaz,Kazakhstan,FSU,R5REF
+ken,Kenya,AFR,R5MAF
+kgz,Kyrgyzstan,FSU,R5REF
+khm,Cambodia,CPA,R5ASIA
+kir,Kiribati,PAS,R5ASIA
+kna,Saint Kitts and Nevis,LAM,R5LAM
+kor,"Korea, Republic of",PAS,R5ASIA
+kwt,Kuwait,MEA,R5MAF
+lao,Lao Peoples Democratic Republic,CPA,R5ASIA
+lbn,Lebanon,MEA,R5MAF
+lbr,Liberia,AFR,R5MAF
+lby,Libyan Arab Jamahiriya,MEA,R5MAF
+lca,Saint Lucia,LAM,R5LAM
+lie,Liechtenstein,WEU,R5OECD
+lka,Sri Lanka,SAS,R5ASIA
+lso,Lesotho,AFR,R5MAF
+ltu,Lithuania,EEU,R5OECD
+lux,Luxembourg,WEU,R5OECD
+lva,Latvia,EEU,R5OECD
+mac,Macau,CPA,R5ASIA
+mar,Morocco,MEA,R5MAF
+mda,"Moldova, Republic of",FSU,R5REF
+mdg,Madagascar,AFR,R5MAF
+mdv,Maldives,SAS,R5ASIA
+mex,Mexico,LAM,R5LAM
+mhl,Marshall Islands,PAS,R5ASIA
+mkd,"Macedonia, the former Yugoslav Republic of",EEU,R5OECD
+mli,Mali,AFR,R5MAF
+mlt,Malta,WEU,R5OECD
+mmr,Myanmar,PAS,R5ASIA
+mne,Montenegro,EEU,R5OECD
+mng,Mongolia,CPA,R5ASIA
+moz,Mozambique,AFR,R5MAF
+mrt,Mauritania,AFR,R5MAF
+msr,Montserrat,LAM,R5LAM
+mtq,Martinique,LAM,R5LAM
+mus,Mauritius,AFR,R5MAF
+mwi,Malawi,AFR,R5MAF
+mys,Malaysia,PAS,R5ASIA
+nam,Namibia,AFR,R5MAF
+ncl,New Caledonia,PAS,R5ASIA
+ner,Niger,AFR,R5MAF
+nga,Nigeria,AFR,R5MAF
+nic,Nicaragua,LAM,R5LAM
+niu,Niue,PAS,R5ASIA
+nld,Netherlands,WEU,R5OECD
+nor,Norway,WEU,R5OECD
+npl,Nepal,SAS,R5ASIA
+nzl,New Zealand,PAO,R5OECD
+omn,Oman,MEA,R5MAF
+pak,Pakistan,SAS,R5ASIA
+pan,Panama,LAM,R5LAM
+per,Peru,LAM,R5LAM
+phl,Philippines,PAS,R5ASIA
+plw,Palau,PAS,R5ASIA
+png,Papua New Guinea,PAS,R5ASIA
+pol,Poland,EEU,R5OECD
+pri,Puerto Rico,NAM,R5OECD
+prk,"Korea, Democratic Peoples Republic of",CPA,R5ASIA
+prt,Portugal,WEU,R5OECD
+pry,Paraguay,LAM,R5LAM
+pse,"Palestinian Territory, Occupied",MEA,R5MAF
+pyf,French Polynesia,PAS,R5ASIA
+qat,Qatar,MEA,R5MAF
+reu,Reunion,WEU,R5OECD
+rou,Romania,EEU,R5OECD
+rus,Russian Federation,FSU,R5REF
+rwa,Rwanda,AFR,R5MAF
+sau,Saudi Arabia,MEA,R5MAF
+sdn,Sudan,MEA,R5MAF
+sen,Senegal,AFR,R5MAF
+sgp,Singapore,PAS,R5ASIA
+slb,Solomon Islands,PAS,R5ASIA
+sle,Sierra Leone,AFR,R5MAF
+slv,El Salvador,LAM,R5LAM
+som,Somalia,AFR,R5MAF
+spm,Saint Pierre and Miquelon,WEU,R5OECD
+srb,Serbia,EEU,R5OECD
+stp,Sao Tome and Principe,AFR,R5MAF
+sur,Suriname,LAM,R5LAM
+svk,Slovakia,EEU,R5OECD
+svn,Slovenia,EEU,R5OECD
+swe,Sweden,WEU,R5OECD
+swz,Swaziland,AFR,R5MAF
+syc,Seychelles,AFR,R5MAF
+syr,Syrian Arab Republic,MEA,R5MAF
+tca,Turks and Caicos,LAM,R5LAM
+tcd,Chad,AFR,R5MAF
+tgo,Togo,AFR,R5MAF
+tha,Thailand,PAS,R5ASIA
+tjk,Tajikistan,FSU,R5REF
+tkl,Tokelau,PAO,R5OECD
+tkm,Turkmenistan,FSU,R5REF
+tls,Timor Leste,PAS,R5ASIA
+ton,Tonga,PAS,R5ASIA
+tto,Trinidad and Tobago,LAM,R5LAM
+tun,Tunisia,MEA,R5MAF
+tur,Turkey,WEU,R5OECD
+twn,Taiwan,PAS,R5ASIA
+tza,"Tanzania, United Republic of",AFR,R5MAF
+uga,Uganda,AFR,R5MAF
+ukr,Ukraine,FSU,R5REF
+ury,Uruguay,LAM,R5LAM
+usa,United States of America,NAM,R5OECD
+uzb,Uzbekistan,FSU,R5REF
+vct,Saint Vincent and the Grenadines,LAM,R5LAM
+ven,Venezuela,LAM,R5LAM
+vgb,"Virgin Islands, British",WEU,R5OECD
+vir,"Virgin Islands, U.S.",NAM,R5OECD
+vnm,Viet Nam,CPA,R5ASIA
+vut,Vanuatu,PAS,R5ASIA
+wlf,Wallis and Futuna,WEU,R5OECD
+wsm,Samoa,PAS,R5ASIA
+yem,Yemen,MEA,R5MAF
+zaf,South Africa,AFR,R5MAF
+zmb,Zambia,AFR,R5MAF
+zwe,Zimbabwe,AFR,R5MAF
