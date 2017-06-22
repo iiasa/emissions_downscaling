@@ -1,362 +1,352 @@
-model,variable,CEDS9,em,harm_status
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|BC|Aggregate - Agriculture and LUC|Harmonized,,BC,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|BC|Aggregate - Agriculture and LUC|Unharmonized,,BC,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CH4|Aggregate - Agriculture and LUC|Harmonized,,CH4,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CH4|Aggregate - Agriculture and LUC|Unharmonized,,CH4,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO|Aggregate - Agriculture and LUC|Harmonized,,CO,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO|Aggregate - Agriculture and LUC|Unharmonized,,CO,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO2|Aggregate - Agriculture and LUC|Harmonized,,CO2,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO2|Aggregate - Agriculture and LUC|Harmonized-DB,,CO2,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO2|Aggregate - Agriculture and LUC|Unharmonized,,CO2,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NH3|Aggregate - Agriculture and LUC|Harmonized,,NH3,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NH3|Aggregate - Agriculture and LUC|Unharmonized,,NH3,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NOx|Aggregate - Agriculture and LUC|Harmonized,,NOx,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NOx|Aggregate - Agriculture and LUC|Unharmonized,,NOx,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|OC|Aggregate - Agriculture and LUC|Harmonized,,OC,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|OC|Aggregate - Agriculture and LUC|Unharmonized,,OC,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|Sulfur|Aggregate - Agriculture and LUC|Harmonized,,Sulfur,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|Sulfur|Aggregate - Agriculture and LUC|Unharmonized,,Sulfur,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|VOC|Aggregate - Agriculture and LUC|Harmonized,,VOC,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|VOC|Aggregate - Agriculture and LUC|Unharmonized,,VOC,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|BC|Agricultural Waste Burning|Harmonized,Agricultural Waste Burning,BC,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|BC|Agricultural Waste Burning|Harmonized-DB,Agricultural Waste Burning,BC,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|BC|Agricultural Waste Burning|Unharmonized,Agricultural Waste Burning,BC,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CH4|Agricultural Waste Burning|Harmonized,Agricultural Waste Burning,CH4,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CH4|Agricultural Waste Burning|Harmonized-DB,Agricultural Waste Burning,CH4,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CH4|Agricultural Waste Burning|Unharmonized,Agricultural Waste Burning,CH4,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO|Agricultural Waste Burning|Harmonized,Agricultural Waste Burning,CO,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO|Agricultural Waste Burning|Harmonized-DB,Agricultural Waste Burning,CO,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO|Agricultural Waste Burning|Unharmonized,Agricultural Waste Burning,CO,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO2|Agricultural Waste Burning|Harmonized,Agricultural Waste Burning,CO2,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO2|Agricultural Waste Burning|Unharmonized,Agricultural Waste Burning,CO2,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NH3|Agricultural Waste Burning|Harmonized,Agricultural Waste Burning,NH3,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NH3|Agricultural Waste Burning|Harmonized-DB,Agricultural Waste Burning,NH3,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NH3|Agricultural Waste Burning|Unharmonized,Agricultural Waste Burning,NH3,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NOx|Agricultural Waste Burning|Harmonized,Agricultural Waste Burning,NOx,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NOx|Agricultural Waste Burning|Harmonized-DB,Agricultural Waste Burning,NOx,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NOx|Agricultural Waste Burning|Unharmonized,Agricultural Waste Burning,NOx,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|OC|Agricultural Waste Burning|Harmonized,Agricultural Waste Burning,OC,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|OC|Agricultural Waste Burning|Harmonized-DB,Agricultural Waste Burning,OC,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|OC|Agricultural Waste Burning|Unharmonized,Agricultural Waste Burning,OC,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|Sulfur|Agricultural Waste Burning|Harmonized,Agricultural Waste Burning,Sulfur,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|Sulfur|Agricultural Waste Burning|Harmonized-DB,Agricultural Waste Burning,Sulfur,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|Sulfur|Agricultural Waste Burning|Unharmonized,Agricultural Waste Burning,Sulfur,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|VOC|Agricultural Waste Burning|Harmonized,Agricultural Waste Burning,VOC,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|VOC|Agricultural Waste Burning|Harmonized-DB,Agricultural Waste Burning,VOC,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|VOC|Agricultural Waste Burning|Unharmonized,Agricultural Waste Burning,VOC,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|BC|Agriculture|Harmonized,Agriculture,BC,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|BC|Agriculture|Unharmonized,Agriculture,BC,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CH4|Agriculture|Harmonized,Agriculture,CH4,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CH4|Agriculture|Harmonized-DB,Agriculture,CH4,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CH4|Agriculture|Unharmonized,Agriculture,CH4,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO|Agriculture|Harmonized,Agriculture,CO,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO|Agriculture|Unharmonized,Agriculture,CO,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO2|Agriculture|Harmonized,Agriculture,CO2,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO2|Agriculture|Unharmonized,Agriculture,CO2,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NH3|Agriculture|Harmonized,Agriculture,NH3,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NH3|Agriculture|Harmonized-DB,Agriculture,NH3,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NH3|Agriculture|Unharmonized,Agriculture,NH3,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NOx|Agriculture|Harmonized,Agriculture,NOx,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NOx|Agriculture|Harmonized-DB,Agriculture,NOx,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NOx|Agriculture|Unharmonized,Agriculture,NOx,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|OC|Agriculture|Harmonized,Agriculture,OC,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|OC|Agriculture|Unharmonized,Agriculture,OC,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|Sulfur|Agriculture|Harmonized,Agriculture,Sulfur,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|Sulfur|Agriculture|Unharmonized,Agriculture,Sulfur,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|VOC|Agriculture|Harmonized,Agriculture,VOC,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|VOC|Agriculture|Unharmonized,Agriculture,VOC,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|BC|Aircraft|Harmonized,Aircraft,BC,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|BC|Aircraft|Harmonized-DB,Aircraft,BC,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|BC|Aircraft|Unharmonized,Aircraft,BC,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CH4|Aircraft|Harmonized,Aircraft,CH4,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CH4|Aircraft|Unharmonized,Aircraft,CH4,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO|Aircraft|Harmonized,Aircraft,CO,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO|Aircraft|Harmonized-DB,Aircraft,CO,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO|Aircraft|Unharmonized,Aircraft,CO,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO2|Aircraft|Harmonized,Aircraft,CO2,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO2|Aircraft|Harmonized-DB,Aircraft,CO2,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO2|Aircraft|Unharmonized,Aircraft,CO2,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NH3|Aircraft|Harmonized,Aircraft,NH3,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NH3|Aircraft|Harmonized-DB,Aircraft,NH3,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NH3|Aircraft|Unharmonized,Aircraft,NH3,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NOx|Aircraft|Harmonized,Aircraft,NOx,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NOx|Aircraft|Harmonized-DB,Aircraft,NOx,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NOx|Aircraft|Unharmonized,Aircraft,NOx,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|OC|Aircraft|Harmonized,Aircraft,OC,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|OC|Aircraft|Harmonized-DB,Aircraft,OC,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|OC|Aircraft|Unharmonized,Aircraft,OC,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|Sulfur|Aircraft|Harmonized,Aircraft,Sulfur,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|Sulfur|Aircraft|Harmonized-DB,Aircraft,Sulfur,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|Sulfur|Aircraft|Unharmonized,Aircraft,Sulfur,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|VOC|Aircraft|Harmonized,Aircraft,VOC,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|VOC|Aircraft|Harmonized-DB,Aircraft,VOC,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|VOC|Aircraft|Unharmonized,Aircraft,VOC,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|BC|Energy Sector|Harmonized,Energy Sector,BC,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|BC|Energy Sector|Harmonized-DB,Energy Sector,BC,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|BC|Energy Sector|Unharmonized,Energy Sector,BC,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CH4|Energy Sector|Harmonized,Energy Sector,CH4,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CH4|Energy Sector|Harmonized-DB,Energy Sector,CH4,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CH4|Energy Sector|Unharmonized,Energy Sector,CH4,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO|Energy Sector|Harmonized,Energy Sector,CO,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO|Energy Sector|Harmonized-DB,Energy Sector,CO,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO|Energy Sector|Unharmonized,Energy Sector,CO,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO2|Energy Sector|Harmonized,Energy Sector,CO2,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO2|Energy Sector|Harmonized-DB,Energy Sector,CO2,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO2|Energy Sector|Unharmonized,Energy Sector,CO2,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NH3|Energy Sector|Harmonized,Energy Sector,NH3,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NH3|Energy Sector|Harmonized-DB,Energy Sector,NH3,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NH3|Energy Sector|Unharmonized,Energy Sector,NH3,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NOx|Energy Sector|Harmonized,Energy Sector,NOx,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NOx|Energy Sector|Harmonized-DB,Energy Sector,NOx,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NOx|Energy Sector|Unharmonized,Energy Sector,NOx,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|OC|Energy Sector|Harmonized,Energy Sector,OC,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|OC|Energy Sector|Harmonized-DB,Energy Sector,OC,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|OC|Energy Sector|Unharmonized,Energy Sector,OC,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|Sulfur|Energy Sector|Harmonized,Energy Sector,Sulfur,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|Sulfur|Energy Sector|Harmonized-DB,Energy Sector,Sulfur,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|Sulfur|Energy Sector|Unharmonized,Energy Sector,Sulfur,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|VOC|Energy Sector|Harmonized,Energy Sector,VOC,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|VOC|Energy Sector|Harmonized-DB,Energy Sector,VOC,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|VOC|Energy Sector|Unharmonized,Energy Sector,VOC,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|BC|Forest Burning|Harmonized,Forest Burning,BC,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|BC|Forest Burning|Harmonized-DB,Forest Burning,BC,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|BC|Forest Burning|Unharmonized,Forest Burning,BC,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CH4|Forest Burning|Harmonized,Forest Burning,CH4,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CH4|Forest Burning|Harmonized-DB,Forest Burning,CH4,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CH4|Forest Burning|Unharmonized,Forest Burning,CH4,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO|Forest Burning|Harmonized,Forest Burning,CO,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO|Forest Burning|Harmonized-DB,Forest Burning,CO,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO|Forest Burning|Unharmonized,Forest Burning,CO,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO2|Forest Burning|Harmonized,Forest Burning,CO2,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO2|Forest Burning|Unharmonized,Forest Burning,CO2,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NH3|Forest Burning|Harmonized,Forest Burning,NH3,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NH3|Forest Burning|Harmonized-DB,Forest Burning,NH3,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NH3|Forest Burning|Unharmonized,Forest Burning,NH3,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NOx|Forest Burning|Harmonized,Forest Burning,NOx,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NOx|Forest Burning|Harmonized-DB,Forest Burning,NOx,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NOx|Forest Burning|Unharmonized,Forest Burning,NOx,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|OC|Forest Burning|Harmonized,Forest Burning,OC,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|OC|Forest Burning|Harmonized-DB,Forest Burning,OC,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|OC|Forest Burning|Unharmonized,Forest Burning,OC,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|Sulfur|Forest Burning|Harmonized,Forest Burning,Sulfur,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|Sulfur|Forest Burning|Harmonized-DB,Forest Burning,Sulfur,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|Sulfur|Forest Burning|Unharmonized,Forest Burning,Sulfur,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|VOC|Forest Burning|Harmonized,Forest Burning,VOC,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|VOC|Forest Burning|Harmonized-DB,Forest Burning,VOC,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|VOC|Forest Burning|Unharmonized,Forest Burning,VOC,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|BC|Grassland Burning|Harmonized,Grassland Burning,BC,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|BC|Grassland Burning|Harmonized-DB,Grassland Burning,BC,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|BC|Grassland Burning|Unharmonized,Grassland Burning,BC,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CH4|Grassland Burning|Harmonized,Grassland Burning,CH4,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CH4|Grassland Burning|Harmonized-DB,Grassland Burning,CH4,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CH4|Grassland Burning|Unharmonized,Grassland Burning,CH4,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO|Grassland Burning|Harmonized,Grassland Burning,CO,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO|Grassland Burning|Harmonized-DB,Grassland Burning,CO,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO|Grassland Burning|Unharmonized,Grassland Burning,CO,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO2|Grassland Burning|Harmonized,Grassland Burning,CO2,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO2|Grassland Burning|Unharmonized,Grassland Burning,CO2,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NH3|Grassland Burning|Harmonized,Grassland Burning,NH3,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NH3|Grassland Burning|Harmonized-DB,Grassland Burning,NH3,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NH3|Grassland Burning|Unharmonized,Grassland Burning,NH3,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NOx|Grassland Burning|Harmonized,Grassland Burning,NOx,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NOx|Grassland Burning|Harmonized-DB,Grassland Burning,NOx,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NOx|Grassland Burning|Unharmonized,Grassland Burning,NOx,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|OC|Grassland Burning|Harmonized,Grassland Burning,OC,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|OC|Grassland Burning|Harmonized-DB,Grassland Burning,OC,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|OC|Grassland Burning|Unharmonized,Grassland Burning,OC,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|Sulfur|Grassland Burning|Harmonized,Grassland Burning,Sulfur,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|Sulfur|Grassland Burning|Harmonized-DB,Grassland Burning,Sulfur,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|Sulfur|Grassland Burning|Unharmonized,Grassland Burning,Sulfur,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|VOC|Grassland Burning|Harmonized,Grassland Burning,VOC,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|VOC|Grassland Burning|Harmonized-DB,Grassland Burning,VOC,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|VOC|Grassland Burning|Unharmonized,Grassland Burning,VOC,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|BC|Industrial Sector|Harmonized,Industrial Sector,BC,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|BC|Industrial Sector|Harmonized-DB,Industrial Sector,BC,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|BC|Industrial Sector|Unharmonized,Industrial Sector,BC,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CH4|Industrial Sector|Harmonized,Industrial Sector,CH4,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CH4|Industrial Sector|Harmonized-DB,Industrial Sector,CH4,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CH4|Industrial Sector|Unharmonized,Industrial Sector,CH4,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO|Industrial Sector|Harmonized,Industrial Sector,CO,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO|Industrial Sector|Harmonized-DB,Industrial Sector,CO,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO|Industrial Sector|Unharmonized,Industrial Sector,CO,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO2|Industrial Sector|Harmonized,Industrial Sector,CO2,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO2|Industrial Sector|Harmonized-DB,Industrial Sector,CO2,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO2|Industrial Sector|Unharmonized,Industrial Sector,CO2,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NH3|Industrial Sector|Harmonized,Industrial Sector,NH3,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NH3|Industrial Sector|Harmonized-DB,Industrial Sector,NH3,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NH3|Industrial Sector|Unharmonized,Industrial Sector,NH3,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NOx|Industrial Sector|Harmonized,Industrial Sector,NOx,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NOx|Industrial Sector|Harmonized-DB,Industrial Sector,NOx,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NOx|Industrial Sector|Unharmonized,Industrial Sector,NOx,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|OC|Industrial Sector|Harmonized,Industrial Sector,OC,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|OC|Industrial Sector|Harmonized-DB,Industrial Sector,OC,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|OC|Industrial Sector|Unharmonized,Industrial Sector,OC,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|Sulfur|Industrial Sector|Harmonized,Industrial Sector,Sulfur,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|Sulfur|Industrial Sector|Harmonized-DB,Industrial Sector,Sulfur,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|Sulfur|Industrial Sector|Unharmonized,Industrial Sector,Sulfur,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|VOC|Industrial Sector|Harmonized,Industrial Sector,VOC,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|VOC|Industrial Sector|Harmonized-DB,Industrial Sector,VOC,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|VOC|Industrial Sector|Unharmonized,Industrial Sector,VOC,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|BC|International Shipping|Harmonized,International Shipping,BC,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|BC|International Shipping|Harmonized-DB,International Shipping,BC,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|BC|International Shipping|Unharmonized,International Shipping,BC,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CH4|International Shipping|Harmonized,International Shipping,CH4,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CH4|International Shipping|Harmonized-DB,International Shipping,CH4,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CH4|International Shipping|Unharmonized,International Shipping,CH4,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO|International Shipping|Harmonized,International Shipping,CO,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO|International Shipping|Harmonized-DB,International Shipping,CO,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO|International Shipping|Unharmonized,International Shipping,CO,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO2|International Shipping|Harmonized,International Shipping,CO2,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO2|International Shipping|Harmonized-DB,International Shipping,CO2,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO2|International Shipping|Unharmonized,International Shipping,CO2,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NH3|International Shipping|Harmonized,International Shipping,NH3,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NH3|International Shipping|Harmonized-DB,International Shipping,NH3,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NH3|International Shipping|Unharmonized,International Shipping,NH3,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NOx|International Shipping|Harmonized,International Shipping,NOx,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NOx|International Shipping|Harmonized-DB,International Shipping,NOx,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NOx|International Shipping|Unharmonized,International Shipping,NOx,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|OC|International Shipping|Harmonized,International Shipping,OC,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|OC|International Shipping|Harmonized-DB,International Shipping,OC,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|OC|International Shipping|Unharmonized,International Shipping,OC,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|Sulfur|International Shipping|Harmonized,International Shipping,Sulfur,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|Sulfur|International Shipping|Harmonized-DB,International Shipping,Sulfur,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|Sulfur|International Shipping|Unharmonized,International Shipping,Sulfur,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|VOC|International Shipping|Harmonized,International Shipping,VOC,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|VOC|International Shipping|Harmonized-DB,International Shipping,VOC,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|VOC|International Shipping|Unharmonized,International Shipping,VOC,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|BC|Peat Burning|Harmonized-DB,Peat Burning,BC,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CH4|Peat Burning|Harmonized-DB,Peat Burning,CH4,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO|Peat Burning|Harmonized-DB,Peat Burning,CO,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NH3|Peat Burning|Harmonized-DB,Peat Burning,NH3,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NOx|Peat Burning|Harmonized-DB,Peat Burning,NOx,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|OC|Peat Burning|Harmonized-DB,Peat Burning,OC,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|Sulfur|Peat Burning|Harmonized-DB,Peat Burning,Sulfur,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|VOC|Peat Burning|Harmonized-DB,Peat Burning,VOC,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|BC|Residential Commercial Other|Harmonized,Residential Commercial Other,BC,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|BC|Residential Commercial Other|Harmonized-DB,Residential Commercial Other,BC,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|BC|Residential Commercial Other|Unharmonized,Residential Commercial Other,BC,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CH4|Residential Commercial Other|Harmonized,Residential Commercial Other,CH4,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CH4|Residential Commercial Other|Harmonized-DB,Residential Commercial Other,CH4,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CH4|Residential Commercial Other|Unharmonized,Residential Commercial Other,CH4,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO|Residential Commercial Other|Harmonized,Residential Commercial Other,CO,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO|Residential Commercial Other|Harmonized-DB,Residential Commercial Other,CO,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO|Residential Commercial Other|Unharmonized,Residential Commercial Other,CO,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO2|Residential Commercial Other|Harmonized,Residential Commercial Other,CO2,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO2|Residential Commercial Other|Harmonized-DB,Residential Commercial Other,CO2,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO2|Residential Commercial Other|Unharmonized,Residential Commercial Other,CO2,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NH3|Residential Commercial Other|Harmonized,Residential Commercial Other,NH3,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NH3|Residential Commercial Other|Harmonized-DB,Residential Commercial Other,NH3,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NH3|Residential Commercial Other|Unharmonized,Residential Commercial Other,NH3,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NOx|Residential Commercial Other|Harmonized,Residential Commercial Other,NOx,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NOx|Residential Commercial Other|Harmonized-DB,Residential Commercial Other,NOx,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NOx|Residential Commercial Other|Unharmonized,Residential Commercial Other,NOx,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|OC|Residential Commercial Other|Harmonized,Residential Commercial Other,OC,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|OC|Residential Commercial Other|Harmonized-DB,Residential Commercial Other,OC,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|OC|Residential Commercial Other|Unharmonized,Residential Commercial Other,OC,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|Sulfur|Residential Commercial Other|Harmonized,Residential Commercial Other,Sulfur,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|Sulfur|Residential Commercial Other|Harmonized-DB,Residential Commercial Other,Sulfur,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|Sulfur|Residential Commercial Other|Unharmonized,Residential Commercial Other,Sulfur,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|VOC|Residential Commercial Other|Harmonized,Residential Commercial Other,VOC,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|VOC|Residential Commercial Other|Harmonized-DB,Residential Commercial Other,VOC,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|VOC|Residential Commercial Other|Unharmonized,Residential Commercial Other,VOC,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|BC|Solvents Production and Application|Harmonized,Solvents Production and Application,BC,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|BC|Solvents Production and Application|Unharmonized,Solvents Production and Application,BC,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CH4|Solvents Production and Application|Harmonized,Solvents Production and Application,CH4,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CH4|Solvents Production and Application|Unharmonized,Solvents Production and Application,CH4,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO|Solvents Production and Application|Harmonized,Solvents Production and Application,CO,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO|Solvents Production and Application|Unharmonized,Solvents Production and Application,CO,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO2|Solvents Production and Application|Harmonized,Solvents Production and Application,CO2,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO2|Solvents Production and Application|Harmonized-DB,Solvents Production and Application,CO2,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO2|Solvents Production and Application|Unharmonized,Solvents Production and Application,CO2,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NH3|Solvents Production and Application|Harmonized,Solvents Production and Application,NH3,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NH3|Solvents Production and Application|Unharmonized,Solvents Production and Application,NH3,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NOx|Solvents Production and Application|Harmonized,Solvents Production and Application,NOx,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NOx|Solvents Production and Application|Unharmonized,Solvents Production and Application,NOx,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|OC|Solvents Production and Application|Harmonized,Solvents Production and Application,OC,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|OC|Solvents Production and Application|Unharmonized,Solvents Production and Application,OC,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|Sulfur|Solvents Production and Application|Harmonized,Solvents Production and Application,Sulfur,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|Sulfur|Solvents Production and Application|Unharmonized,Solvents Production and Application,Sulfur,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|VOC|Solvents Production and Application|Harmonized,Solvents Production and Application,VOC,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|VOC|Solvents Production and Application|Harmonized-DB,Solvents Production and Application,VOC,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|VOC|Solvents Production and Application|Unharmonized,Solvents Production and Application,VOC,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|BC|Transportation Sector|Harmonized,Transportation Sector,BC,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|BC|Transportation Sector|Harmonized-DB,Transportation Sector,BC,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|BC|Transportation Sector|Unharmonized,Transportation Sector,BC,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CH4|Transportation Sector|Harmonized,Transportation Sector,CH4,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CH4|Transportation Sector|Harmonized-DB,Transportation Sector,CH4,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CH4|Transportation Sector|Unharmonized,Transportation Sector,CH4,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO|Transportation Sector|Harmonized,Transportation Sector,CO,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO|Transportation Sector|Harmonized-DB,Transportation Sector,CO,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO|Transportation Sector|Unharmonized,Transportation Sector,CO,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO2|Transportation Sector|Harmonized,Transportation Sector,CO2,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO2|Transportation Sector|Harmonized-DB,Transportation Sector,CO2,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO2|Transportation Sector|Unharmonized,Transportation Sector,CO2,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NH3|Transportation Sector|Harmonized,Transportation Sector,NH3,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NH3|Transportation Sector|Harmonized-DB,Transportation Sector,NH3,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NH3|Transportation Sector|Unharmonized,Transportation Sector,NH3,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NOx|Transportation Sector|Harmonized,Transportation Sector,NOx,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NOx|Transportation Sector|Harmonized-DB,Transportation Sector,NOx,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NOx|Transportation Sector|Unharmonized,Transportation Sector,NOx,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|OC|Transportation Sector|Harmonized,Transportation Sector,OC,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|OC|Transportation Sector|Harmonized-DB,Transportation Sector,OC,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|OC|Transportation Sector|Unharmonized,Transportation Sector,OC,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|Sulfur|Transportation Sector|Harmonized,Transportation Sector,Sulfur,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|Sulfur|Transportation Sector|Harmonized-DB,Transportation Sector,Sulfur,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|Sulfur|Transportation Sector|Unharmonized,Transportation Sector,Sulfur,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|VOC|Transportation Sector|Harmonized,Transportation Sector,VOC,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|VOC|Transportation Sector|Harmonized-DB,Transportation Sector,VOC,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|VOC|Transportation Sector|Unharmonized,Transportation Sector,VOC,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|BC|Waste|Harmonized,Waste,BC,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|BC|Waste|Harmonized-DB,Waste,BC,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|BC|Waste|Unharmonized,Waste,BC,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CH4|Waste|Harmonized,Waste,CH4,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CH4|Waste|Harmonized-DB,Waste,CH4,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CH4|Waste|Unharmonized,Waste,CH4,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO|Waste|Harmonized,Waste,CO,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO|Waste|Harmonized-DB,Waste,CO,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO|Waste|Unharmonized,Waste,CO,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO2|Waste|Harmonized,Waste,CO2,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO2|Waste|Harmonized-DB,Waste,CO2,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO2|Waste|Unharmonized,Waste,CO2,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NH3|Waste|Harmonized,Waste,NH3,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NH3|Waste|Harmonized-DB,Waste,NH3,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NH3|Waste|Unharmonized,Waste,NH3,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NOx|Waste|Harmonized,Waste,NOx,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NOx|Waste|Harmonized-DB,Waste,NOx,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NOx|Waste|Unharmonized,Waste,NOx,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|OC|Waste|Harmonized,Waste,OC,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|OC|Waste|Harmonized-DB,Waste,OC,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|OC|Waste|Unharmonized,Waste,OC,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|Sulfur|Waste|Harmonized,Waste,Sulfur,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|Sulfur|Waste|Harmonized-DB,Waste,Sulfur,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|Sulfur|Waste|Unharmonized,Waste,Sulfur,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|VOC|Waste|Harmonized,Waste,VOC,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|VOC|Waste|Harmonized-DB,Waste,VOC,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|VOC|Waste|Unharmonized,Waste,VOC,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|BC|Harmonized,,BC,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|BC|Harmonized-DB,,BC,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|BC|Unharmonized,,BC,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CH4|Harmonized,,CH4,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CH4|Harmonized-DB,,CH4,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CH4|Unharmonized,,CH4,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO|Harmonized,,CO,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO|Harmonized-DB,,CO,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO|Unharmonized,,CO,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO2|Harmonized,,CO2,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO2|Harmonized-DB,,CO2,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|CO2|Unharmonized,,CO2,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NH3|Harmonized,,NH3,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NH3|Harmonized-DB,,NH3,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NH3|Unharmonized,,NH3,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NOx|Harmonized,,NOx,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NOx|Harmonized-DB,,NOx,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|NOx|Unharmonized,,NOx,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|OC|Harmonized,,OC,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|OC|Harmonized-DB,,OC,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|OC|Unharmonized,,OC,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|Sulfur|Harmonized,,Sulfur,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|Sulfur|Harmonized-DB,,Sulfur,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|Sulfur|Unharmonized,,Sulfur,Unharmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|VOC|Harmonized,,VOC,Harmonized
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|VOC|Harmonized-DB,,VOC,Harmonized-DB
-REMIND-MAGPIE,CEDS+|9+ Sectors|Emissions|VOC|Unharmonized,,VOC,Unharmonized
+"model","em","variable","sector","harm_status"
+"REMIND-MAGPIE","BC","CEDS+|9+ Sectors|Emissions|BC|Agriculture|Harmonized","Agriculture","Harmonized"
+"REMIND-MAGPIE","BC","CEDS+|9+ Sectors|Emissions|BC|Agricultural Waste Burning|Harmonized","Agricultural Waste Burning","Harmonized"
+"REMIND-MAGPIE","BC","CEDS+|9+ Sectors|Emissions|BC|Forest Burning|Harmonized","Forest Burning","Harmonized"
+"REMIND-MAGPIE","BC","CEDS+|9+ Sectors|Emissions|BC|Grassland Burning|Harmonized","Grassland Burning","Harmonized"
+"REMIND-MAGPIE","BC","CEDS+|9+ Sectors|Emissions|BC|Peat Burning|Harmonized","Peat Burning","Harmonized"
+"REMIND-MAGPIE","BC","CEDS+|9+ Sectors|Emissions|BC|Industrial Sector|Harmonized","Industrial Sector","Harmonized"
+"REMIND-MAGPIE","BC","CEDS+|9+ Sectors|Emissions|BC|Residential Commercial Other|Harmonized","Residential Commercial Other","Harmonized"
+"REMIND-MAGPIE","BC","CEDS+|9+ Sectors|Emissions|BC|Aircraft|Harmonized","Aircraft","Harmonized"
+"REMIND-MAGPIE","BC","CEDS+|9+ Sectors|Emissions|BC|Transportation Sector|Harmonized","Transportation Sector","Harmonized"
+"REMIND-MAGPIE","BC","CEDS+|9+ Sectors|Emissions|BC|International Shipping|Harmonized","International Shipping","Harmonized"
+"REMIND-MAGPIE","BC","CEDS+|9+ Sectors|Emissions|BC|Energy Sector|Harmonized","Energy Sector","Harmonized"
+"REMIND-MAGPIE","BC","CEDS+|9+ Sectors|Emissions|BC|Solvents Production and Application|Harmonized","Solvents Production and Application","Harmonized"
+"REMIND-MAGPIE","BC","CEDS+|9+ Sectors|Emissions|BC|Waste|Harmonized","Waste","Harmonized"
+"REMIND-MAGPIE","BC","CEDS+|9+ Sectors|Emissions|BC|Agriculture|Harmonized-DB","Agriculture","Harmonized-DB"
+"REMIND-MAGPIE","BC","CEDS+|9+ Sectors|Emissions|BC|Agricultural Waste Burning|Harmonized-DB","Agricultural Waste Burning","Harmonized-DB"
+"REMIND-MAGPIE","BC","CEDS+|9+ Sectors|Emissions|BC|Forest Burning|Harmonized-DB","Forest Burning","Harmonized-DB"
+"REMIND-MAGPIE","BC","CEDS+|9+ Sectors|Emissions|BC|Grassland Burning|Harmonized-DB","Grassland Burning","Harmonized-DB"
+"REMIND-MAGPIE","BC","CEDS+|9+ Sectors|Emissions|BC|Peat Burning|Harmonized-DB","Peat Burning","Harmonized-DB"
+"REMIND-MAGPIE","BC","CEDS+|9+ Sectors|Emissions|BC|Industrial Sector|Harmonized-DB","Industrial Sector","Harmonized-DB"
+"REMIND-MAGPIE","BC","CEDS+|9+ Sectors|Emissions|BC|Residential Commercial Other|Harmonized-DB","Residential Commercial Other","Harmonized-DB"
+"REMIND-MAGPIE","BC","CEDS+|9+ Sectors|Emissions|BC|Aircraft|Harmonized-DB","Aircraft","Harmonized-DB"
+"REMIND-MAGPIE","BC","CEDS+|9+ Sectors|Emissions|BC|Transportation Sector|Harmonized-DB","Transportation Sector","Harmonized-DB"
+"REMIND-MAGPIE","BC","CEDS+|9+ Sectors|Emissions|BC|International Shipping|Harmonized-DB","International Shipping","Harmonized-DB"
+"REMIND-MAGPIE","BC","CEDS+|9+ Sectors|Emissions|BC|Energy Sector|Harmonized-DB","Energy Sector","Harmonized-DB"
+"REMIND-MAGPIE","BC","CEDS+|9+ Sectors|Emissions|BC|Solvents Production and Application|Harmonized-DB","Solvents Production and Application","Harmonized-DB"
+"REMIND-MAGPIE","BC","CEDS+|9+ Sectors|Emissions|BC|Waste|Harmonized-DB","Waste","Harmonized-DB"
+"REMIND-MAGPIE","BC","CEDS+|9+ Sectors|Emissions|BC|Agriculture|Unharmonized","Agriculture","Unharmonized"
+"REMIND-MAGPIE","BC","CEDS+|9+ Sectors|Emissions|BC|Agricultural Waste Burning|Unharmonized","Agricultural Waste Burning","Unharmonized"
+"REMIND-MAGPIE","BC","CEDS+|9+ Sectors|Emissions|BC|Forest Burning|Unharmonized","Forest Burning","Unharmonized"
+"REMIND-MAGPIE","BC","CEDS+|9+ Sectors|Emissions|BC|Grassland Burning|Unharmonized","Grassland Burning","Unharmonized"
+"REMIND-MAGPIE","BC","CEDS+|9+ Sectors|Emissions|BC|Peat Burning|Unharmonized","Peat Burning","Unharmonized"
+"REMIND-MAGPIE","BC","CEDS+|9+ Sectors|Emissions|BC|Industrial Sector|Unharmonized","Industrial Sector","Unharmonized"
+"REMIND-MAGPIE","BC","CEDS+|9+ Sectors|Emissions|BC|Residential Commercial Other|Unharmonized","Residential Commercial Other","Unharmonized"
+"REMIND-MAGPIE","BC","CEDS+|9+ Sectors|Emissions|BC|Aircraft|Unharmonized","Aircraft","Unharmonized"
+"REMIND-MAGPIE","BC","CEDS+|9+ Sectors|Emissions|BC|Transportation Sector|Unharmonized","Transportation Sector","Unharmonized"
+"REMIND-MAGPIE","BC","CEDS+|9+ Sectors|Emissions|BC|International Shipping|Unharmonized","International Shipping","Unharmonized"
+"REMIND-MAGPIE","BC","CEDS+|9+ Sectors|Emissions|BC|Energy Sector|Unharmonized","Energy Sector","Unharmonized"
+"REMIND-MAGPIE","BC","CEDS+|9+ Sectors|Emissions|BC|Solvents Production and Application|Unharmonized","Solvents Production and Application","Unharmonized"
+"REMIND-MAGPIE","BC","CEDS+|9+ Sectors|Emissions|BC|Waste|Unharmonized","Waste","Unharmonized"
+"REMIND-MAGPIE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Agriculture|Harmonized","Agriculture","Harmonized"
+"REMIND-MAGPIE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Agricultural Waste Burning|Harmonized","Agricultural Waste Burning","Harmonized"
+"REMIND-MAGPIE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Forest Burning|Harmonized","Forest Burning","Harmonized"
+"REMIND-MAGPIE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Grassland Burning|Harmonized","Grassland Burning","Harmonized"
+"REMIND-MAGPIE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Peat Burning|Harmonized","Peat Burning","Harmonized"
+"REMIND-MAGPIE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Industrial Sector|Harmonized","Industrial Sector","Harmonized"
+"REMIND-MAGPIE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Residential Commercial Other|Harmonized","Residential Commercial Other","Harmonized"
+"REMIND-MAGPIE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Aircraft|Harmonized","Aircraft","Harmonized"
+"REMIND-MAGPIE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Transportation Sector|Harmonized","Transportation Sector","Harmonized"
+"REMIND-MAGPIE","CH4","CEDS+|9+ Sectors|Emissions|CH4|International Shipping|Harmonized","International Shipping","Harmonized"
+"REMIND-MAGPIE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Energy Sector|Harmonized","Energy Sector","Harmonized"
+"REMIND-MAGPIE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Solvents Production and Application|Harmonized","Solvents Production and Application","Harmonized"
+"REMIND-MAGPIE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Waste|Harmonized","Waste","Harmonized"
+"REMIND-MAGPIE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Agriculture|Harmonized-DB","Agriculture","Harmonized-DB"
+"REMIND-MAGPIE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Agricultural Waste Burning|Harmonized-DB","Agricultural Waste Burning","Harmonized-DB"
+"REMIND-MAGPIE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Forest Burning|Harmonized-DB","Forest Burning","Harmonized-DB"
+"REMIND-MAGPIE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Grassland Burning|Harmonized-DB","Grassland Burning","Harmonized-DB"
+"REMIND-MAGPIE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Peat Burning|Harmonized-DB","Peat Burning","Harmonized-DB"
+"REMIND-MAGPIE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Industrial Sector|Harmonized-DB","Industrial Sector","Harmonized-DB"
+"REMIND-MAGPIE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Residential Commercial Other|Harmonized-DB","Residential Commercial Other","Harmonized-DB"
+"REMIND-MAGPIE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Aircraft|Harmonized-DB","Aircraft","Harmonized-DB"
+"REMIND-MAGPIE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Transportation Sector|Harmonized-DB","Transportation Sector","Harmonized-DB"
+"REMIND-MAGPIE","CH4","CEDS+|9+ Sectors|Emissions|CH4|International Shipping|Harmonized-DB","International Shipping","Harmonized-DB"
+"REMIND-MAGPIE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Energy Sector|Harmonized-DB","Energy Sector","Harmonized-DB"
+"REMIND-MAGPIE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Solvents Production and Application|Harmonized-DB","Solvents Production and Application","Harmonized-DB"
+"REMIND-MAGPIE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Waste|Harmonized-DB","Waste","Harmonized-DB"
+"REMIND-MAGPIE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Agriculture|Unharmonized","Agriculture","Unharmonized"
+"REMIND-MAGPIE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Agricultural Waste Burning|Unharmonized","Agricultural Waste Burning","Unharmonized"
+"REMIND-MAGPIE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Forest Burning|Unharmonized","Forest Burning","Unharmonized"
+"REMIND-MAGPIE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Grassland Burning|Unharmonized","Grassland Burning","Unharmonized"
+"REMIND-MAGPIE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Peat Burning|Unharmonized","Peat Burning","Unharmonized"
+"REMIND-MAGPIE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Industrial Sector|Unharmonized","Industrial Sector","Unharmonized"
+"REMIND-MAGPIE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Residential Commercial Other|Unharmonized","Residential Commercial Other","Unharmonized"
+"REMIND-MAGPIE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Aircraft|Unharmonized","Aircraft","Unharmonized"
+"REMIND-MAGPIE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Transportation Sector|Unharmonized","Transportation Sector","Unharmonized"
+"REMIND-MAGPIE","CH4","CEDS+|9+ Sectors|Emissions|CH4|International Shipping|Unharmonized","International Shipping","Unharmonized"
+"REMIND-MAGPIE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Energy Sector|Unharmonized","Energy Sector","Unharmonized"
+"REMIND-MAGPIE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Solvents Production and Application|Unharmonized","Solvents Production and Application","Unharmonized"
+"REMIND-MAGPIE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Waste|Unharmonized","Waste","Unharmonized"
+"REMIND-MAGPIE","CO","CEDS+|9+ Sectors|Emissions|CO|Agriculture|Harmonized","Agriculture","Harmonized"
+"REMIND-MAGPIE","CO","CEDS+|9+ Sectors|Emissions|CO|Agricultural Waste Burning|Harmonized","Agricultural Waste Burning","Harmonized"
+"REMIND-MAGPIE","CO","CEDS+|9+ Sectors|Emissions|CO|Forest Burning|Harmonized","Forest Burning","Harmonized"
+"REMIND-MAGPIE","CO","CEDS+|9+ Sectors|Emissions|CO|Grassland Burning|Harmonized","Grassland Burning","Harmonized"
+"REMIND-MAGPIE","CO","CEDS+|9+ Sectors|Emissions|CO|Peat Burning|Harmonized","Peat Burning","Harmonized"
+"REMIND-MAGPIE","CO","CEDS+|9+ Sectors|Emissions|CO|Industrial Sector|Harmonized","Industrial Sector","Harmonized"
+"REMIND-MAGPIE","CO","CEDS+|9+ Sectors|Emissions|CO|Residential Commercial Other|Harmonized","Residential Commercial Other","Harmonized"
+"REMIND-MAGPIE","CO","CEDS+|9+ Sectors|Emissions|CO|Aircraft|Harmonized","Aircraft","Harmonized"
+"REMIND-MAGPIE","CO","CEDS+|9+ Sectors|Emissions|CO|Transportation Sector|Harmonized","Transportation Sector","Harmonized"
+"REMIND-MAGPIE","CO","CEDS+|9+ Sectors|Emissions|CO|International Shipping|Harmonized","International Shipping","Harmonized"
+"REMIND-MAGPIE","CO","CEDS+|9+ Sectors|Emissions|CO|Energy Sector|Harmonized","Energy Sector","Harmonized"
+"REMIND-MAGPIE","CO","CEDS+|9+ Sectors|Emissions|CO|Solvents Production and Application|Harmonized","Solvents Production and Application","Harmonized"
+"REMIND-MAGPIE","CO","CEDS+|9+ Sectors|Emissions|CO|Waste|Harmonized","Waste","Harmonized"
+"REMIND-MAGPIE","CO","CEDS+|9+ Sectors|Emissions|CO|Agriculture|Harmonized-DB","Agriculture","Harmonized-DB"
+"REMIND-MAGPIE","CO","CEDS+|9+ Sectors|Emissions|CO|Agricultural Waste Burning|Harmonized-DB","Agricultural Waste Burning","Harmonized-DB"
+"REMIND-MAGPIE","CO","CEDS+|9+ Sectors|Emissions|CO|Forest Burning|Harmonized-DB","Forest Burning","Harmonized-DB"
+"REMIND-MAGPIE","CO","CEDS+|9+ Sectors|Emissions|CO|Grassland Burning|Harmonized-DB","Grassland Burning","Harmonized-DB"
+"REMIND-MAGPIE","CO","CEDS+|9+ Sectors|Emissions|CO|Peat Burning|Harmonized-DB","Peat Burning","Harmonized-DB"
+"REMIND-MAGPIE","CO","CEDS+|9+ Sectors|Emissions|CO|Industrial Sector|Harmonized-DB","Industrial Sector","Harmonized-DB"
+"REMIND-MAGPIE","CO","CEDS+|9+ Sectors|Emissions|CO|Residential Commercial Other|Harmonized-DB","Residential Commercial Other","Harmonized-DB"
+"REMIND-MAGPIE","CO","CEDS+|9+ Sectors|Emissions|CO|Aircraft|Harmonized-DB","Aircraft","Harmonized-DB"
+"REMIND-MAGPIE","CO","CEDS+|9+ Sectors|Emissions|CO|Transportation Sector|Harmonized-DB","Transportation Sector","Harmonized-DB"
+"REMIND-MAGPIE","CO","CEDS+|9+ Sectors|Emissions|CO|International Shipping|Harmonized-DB","International Shipping","Harmonized-DB"
+"REMIND-MAGPIE","CO","CEDS+|9+ Sectors|Emissions|CO|Energy Sector|Harmonized-DB","Energy Sector","Harmonized-DB"
+"REMIND-MAGPIE","CO","CEDS+|9+ Sectors|Emissions|CO|Solvents Production and Application|Harmonized-DB","Solvents Production and Application","Harmonized-DB"
+"REMIND-MAGPIE","CO","CEDS+|9+ Sectors|Emissions|CO|Waste|Harmonized-DB","Waste","Harmonized-DB"
+"REMIND-MAGPIE","CO","CEDS+|9+ Sectors|Emissions|CO|Agriculture|Unharmonized","Agriculture","Unharmonized"
+"REMIND-MAGPIE","CO","CEDS+|9+ Sectors|Emissions|CO|Agricultural Waste Burning|Unharmonized","Agricultural Waste Burning","Unharmonized"
+"REMIND-MAGPIE","CO","CEDS+|9+ Sectors|Emissions|CO|Forest Burning|Unharmonized","Forest Burning","Unharmonized"
+"REMIND-MAGPIE","CO","CEDS+|9+ Sectors|Emissions|CO|Grassland Burning|Unharmonized","Grassland Burning","Unharmonized"
+"REMIND-MAGPIE","CO","CEDS+|9+ Sectors|Emissions|CO|Peat Burning|Unharmonized","Peat Burning","Unharmonized"
+"REMIND-MAGPIE","CO","CEDS+|9+ Sectors|Emissions|CO|Industrial Sector|Unharmonized","Industrial Sector","Unharmonized"
+"REMIND-MAGPIE","CO","CEDS+|9+ Sectors|Emissions|CO|Residential Commercial Other|Unharmonized","Residential Commercial Other","Unharmonized"
+"REMIND-MAGPIE","CO","CEDS+|9+ Sectors|Emissions|CO|Aircraft|Unharmonized","Aircraft","Unharmonized"
+"REMIND-MAGPIE","CO","CEDS+|9+ Sectors|Emissions|CO|Transportation Sector|Unharmonized","Transportation Sector","Unharmonized"
+"REMIND-MAGPIE","CO","CEDS+|9+ Sectors|Emissions|CO|International Shipping|Unharmonized","International Shipping","Unharmonized"
+"REMIND-MAGPIE","CO","CEDS+|9+ Sectors|Emissions|CO|Energy Sector|Unharmonized","Energy Sector","Unharmonized"
+"REMIND-MAGPIE","CO","CEDS+|9+ Sectors|Emissions|CO|Solvents Production and Application|Unharmonized","Solvents Production and Application","Unharmonized"
+"REMIND-MAGPIE","CO","CEDS+|9+ Sectors|Emissions|CO|Waste|Unharmonized","Waste","Unharmonized"
+"REMIND-MAGPIE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Agriculture|Harmonized","Agriculture","Harmonized"
+"REMIND-MAGPIE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Agricultural Waste Burning|Harmonized","Agricultural Waste Burning","Harmonized"
+"REMIND-MAGPIE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Forest Burning|Harmonized","Forest Burning","Harmonized"
+"REMIND-MAGPIE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Grassland Burning|Harmonized","Grassland Burning","Harmonized"
+"REMIND-MAGPIE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Peat Burning|Harmonized","Peat Burning","Harmonized"
+"REMIND-MAGPIE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Industrial Sector|Harmonized","Industrial Sector","Harmonized"
+"REMIND-MAGPIE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Residential Commercial Other|Harmonized","Residential Commercial Other","Harmonized"
+"REMIND-MAGPIE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Aircraft|Harmonized","Aircraft","Harmonized"
+"REMIND-MAGPIE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Transportation Sector|Harmonized","Transportation Sector","Harmonized"
+"REMIND-MAGPIE","CO2","CEDS+|9+ Sectors|Emissions|CO2|International Shipping|Harmonized","International Shipping","Harmonized"
+"REMIND-MAGPIE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Energy Sector|Harmonized","Energy Sector","Harmonized"
+"REMIND-MAGPIE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Solvents Production and Application|Harmonized","Solvents Production and Application","Harmonized"
+"REMIND-MAGPIE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Waste|Harmonized","Waste","Harmonized"
+"REMIND-MAGPIE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Agriculture|Harmonized-DB","Agriculture","Harmonized-DB"
+"REMIND-MAGPIE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Agricultural Waste Burning|Harmonized-DB","Agricultural Waste Burning","Harmonized-DB"
+"REMIND-MAGPIE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Forest Burning|Harmonized-DB","Forest Burning","Harmonized-DB"
+"REMIND-MAGPIE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Grassland Burning|Harmonized-DB","Grassland Burning","Harmonized-DB"
+"REMIND-MAGPIE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Peat Burning|Harmonized-DB","Peat Burning","Harmonized-DB"
+"REMIND-MAGPIE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Industrial Sector|Harmonized-DB","Industrial Sector","Harmonized-DB"
+"REMIND-MAGPIE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Residential Commercial Other|Harmonized-DB","Residential Commercial Other","Harmonized-DB"
+"REMIND-MAGPIE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Aircraft|Harmonized-DB","Aircraft","Harmonized-DB"
+"REMIND-MAGPIE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Transportation Sector|Harmonized-DB","Transportation Sector","Harmonized-DB"
+"REMIND-MAGPIE","CO2","CEDS+|9+ Sectors|Emissions|CO2|International Shipping|Harmonized-DB","International Shipping","Harmonized-DB"
+"REMIND-MAGPIE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Energy Sector|Harmonized-DB","Energy Sector","Harmonized-DB"
+"REMIND-MAGPIE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Solvents Production and Application|Harmonized-DB","Solvents Production and Application","Harmonized-DB"
+"REMIND-MAGPIE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Waste|Harmonized-DB","Waste","Harmonized-DB"
+"REMIND-MAGPIE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Agriculture|Unharmonized","Agriculture","Unharmonized"
+"REMIND-MAGPIE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Agricultural Waste Burning|Unharmonized","Agricultural Waste Burning","Unharmonized"
+"REMIND-MAGPIE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Forest Burning|Unharmonized","Forest Burning","Unharmonized"
+"REMIND-MAGPIE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Grassland Burning|Unharmonized","Grassland Burning","Unharmonized"
+"REMIND-MAGPIE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Peat Burning|Unharmonized","Peat Burning","Unharmonized"
+"REMIND-MAGPIE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Industrial Sector|Unharmonized","Industrial Sector","Unharmonized"
+"REMIND-MAGPIE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Residential Commercial Other|Unharmonized","Residential Commercial Other","Unharmonized"
+"REMIND-MAGPIE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Aircraft|Unharmonized","Aircraft","Unharmonized"
+"REMIND-MAGPIE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Transportation Sector|Unharmonized","Transportation Sector","Unharmonized"
+"REMIND-MAGPIE","CO2","CEDS+|9+ Sectors|Emissions|CO2|International Shipping|Unharmonized","International Shipping","Unharmonized"
+"REMIND-MAGPIE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Energy Sector|Unharmonized","Energy Sector","Unharmonized"
+"REMIND-MAGPIE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Solvents Production and Application|Unharmonized","Solvents Production and Application","Unharmonized"
+"REMIND-MAGPIE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Waste|Unharmonized","Waste","Unharmonized"
+"REMIND-MAGPIE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Agriculture|Harmonized","Agriculture","Harmonized"
+"REMIND-MAGPIE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Agricultural Waste Burning|Harmonized","Agricultural Waste Burning","Harmonized"
+"REMIND-MAGPIE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Forest Burning|Harmonized","Forest Burning","Harmonized"
+"REMIND-MAGPIE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Grassland Burning|Harmonized","Grassland Burning","Harmonized"
+"REMIND-MAGPIE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Peat Burning|Harmonized","Peat Burning","Harmonized"
+"REMIND-MAGPIE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Industrial Sector|Harmonized","Industrial Sector","Harmonized"
+"REMIND-MAGPIE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Residential Commercial Other|Harmonized","Residential Commercial Other","Harmonized"
+"REMIND-MAGPIE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Aircraft|Harmonized","Aircraft","Harmonized"
+"REMIND-MAGPIE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Transportation Sector|Harmonized","Transportation Sector","Harmonized"
+"REMIND-MAGPIE","NH3","CEDS+|9+ Sectors|Emissions|NH3|International Shipping|Harmonized","International Shipping","Harmonized"
+"REMIND-MAGPIE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Energy Sector|Harmonized","Energy Sector","Harmonized"
+"REMIND-MAGPIE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Solvents Production and Application|Harmonized","Solvents Production and Application","Harmonized"
+"REMIND-MAGPIE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Waste|Harmonized","Waste","Harmonized"
+"REMIND-MAGPIE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Agriculture|Harmonized-DB","Agriculture","Harmonized-DB"
+"REMIND-MAGPIE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Agricultural Waste Burning|Harmonized-DB","Agricultural Waste Burning","Harmonized-DB"
+"REMIND-MAGPIE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Forest Burning|Harmonized-DB","Forest Burning","Harmonized-DB"
+"REMIND-MAGPIE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Grassland Burning|Harmonized-DB","Grassland Burning","Harmonized-DB"
+"REMIND-MAGPIE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Peat Burning|Harmonized-DB","Peat Burning","Harmonized-DB"
+"REMIND-MAGPIE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Industrial Sector|Harmonized-DB","Industrial Sector","Harmonized-DB"
+"REMIND-MAGPIE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Residential Commercial Other|Harmonized-DB","Residential Commercial Other","Harmonized-DB"
+"REMIND-MAGPIE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Aircraft|Harmonized-DB","Aircraft","Harmonized-DB"
+"REMIND-MAGPIE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Transportation Sector|Harmonized-DB","Transportation Sector","Harmonized-DB"
+"REMIND-MAGPIE","NH3","CEDS+|9+ Sectors|Emissions|NH3|International Shipping|Harmonized-DB","International Shipping","Harmonized-DB"
+"REMIND-MAGPIE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Energy Sector|Harmonized-DB","Energy Sector","Harmonized-DB"
+"REMIND-MAGPIE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Solvents Production and Application|Harmonized-DB","Solvents Production and Application","Harmonized-DB"
+"REMIND-MAGPIE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Waste|Harmonized-DB","Waste","Harmonized-DB"
+"REMIND-MAGPIE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Agriculture|Unharmonized","Agriculture","Unharmonized"
+"REMIND-MAGPIE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Agricultural Waste Burning|Unharmonized","Agricultural Waste Burning","Unharmonized"
+"REMIND-MAGPIE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Forest Burning|Unharmonized","Forest Burning","Unharmonized"
+"REMIND-MAGPIE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Grassland Burning|Unharmonized","Grassland Burning","Unharmonized"
+"REMIND-MAGPIE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Peat Burning|Unharmonized","Peat Burning","Unharmonized"
+"REMIND-MAGPIE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Industrial Sector|Unharmonized","Industrial Sector","Unharmonized"
+"REMIND-MAGPIE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Residential Commercial Other|Unharmonized","Residential Commercial Other","Unharmonized"
+"REMIND-MAGPIE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Aircraft|Unharmonized","Aircraft","Unharmonized"
+"REMIND-MAGPIE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Transportation Sector|Unharmonized","Transportation Sector","Unharmonized"
+"REMIND-MAGPIE","NH3","CEDS+|9+ Sectors|Emissions|NH3|International Shipping|Unharmonized","International Shipping","Unharmonized"
+"REMIND-MAGPIE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Energy Sector|Unharmonized","Energy Sector","Unharmonized"
+"REMIND-MAGPIE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Solvents Production and Application|Unharmonized","Solvents Production and Application","Unharmonized"
+"REMIND-MAGPIE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Waste|Unharmonized","Waste","Unharmonized"
+"REMIND-MAGPIE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Agriculture|Harmonized","Agriculture","Harmonized"
+"REMIND-MAGPIE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Agricultural Waste Burning|Harmonized","Agricultural Waste Burning","Harmonized"
+"REMIND-MAGPIE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Forest Burning|Harmonized","Forest Burning","Harmonized"
+"REMIND-MAGPIE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Grassland Burning|Harmonized","Grassland Burning","Harmonized"
+"REMIND-MAGPIE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Peat Burning|Harmonized","Peat Burning","Harmonized"
+"REMIND-MAGPIE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Industrial Sector|Harmonized","Industrial Sector","Harmonized"
+"REMIND-MAGPIE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Residential Commercial Other|Harmonized","Residential Commercial Other","Harmonized"
+"REMIND-MAGPIE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Aircraft|Harmonized","Aircraft","Harmonized"
+"REMIND-MAGPIE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Transportation Sector|Harmonized","Transportation Sector","Harmonized"
+"REMIND-MAGPIE","NOx","CEDS+|9+ Sectors|Emissions|NOx|International Shipping|Harmonized","International Shipping","Harmonized"
+"REMIND-MAGPIE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Energy Sector|Harmonized","Energy Sector","Harmonized"
+"REMIND-MAGPIE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Solvents Production and Application|Harmonized","Solvents Production and Application","Harmonized"
+"REMIND-MAGPIE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Waste|Harmonized","Waste","Harmonized"
+"REMIND-MAGPIE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Agriculture|Harmonized-DB","Agriculture","Harmonized-DB"
+"REMIND-MAGPIE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Agricultural Waste Burning|Harmonized-DB","Agricultural Waste Burning","Harmonized-DB"
+"REMIND-MAGPIE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Forest Burning|Harmonized-DB","Forest Burning","Harmonized-DB"
+"REMIND-MAGPIE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Grassland Burning|Harmonized-DB","Grassland Burning","Harmonized-DB"
+"REMIND-MAGPIE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Peat Burning|Harmonized-DB","Peat Burning","Harmonized-DB"
+"REMIND-MAGPIE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Industrial Sector|Harmonized-DB","Industrial Sector","Harmonized-DB"
+"REMIND-MAGPIE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Residential Commercial Other|Harmonized-DB","Residential Commercial Other","Harmonized-DB"
+"REMIND-MAGPIE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Aircraft|Harmonized-DB","Aircraft","Harmonized-DB"
+"REMIND-MAGPIE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Transportation Sector|Harmonized-DB","Transportation Sector","Harmonized-DB"
+"REMIND-MAGPIE","NOx","CEDS+|9+ Sectors|Emissions|NOx|International Shipping|Harmonized-DB","International Shipping","Harmonized-DB"
+"REMIND-MAGPIE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Energy Sector|Harmonized-DB","Energy Sector","Harmonized-DB"
+"REMIND-MAGPIE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Solvents Production and Application|Harmonized-DB","Solvents Production and Application","Harmonized-DB"
+"REMIND-MAGPIE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Waste|Harmonized-DB","Waste","Harmonized-DB"
+"REMIND-MAGPIE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Agriculture|Unharmonized","Agriculture","Unharmonized"
+"REMIND-MAGPIE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Agricultural Waste Burning|Unharmonized","Agricultural Waste Burning","Unharmonized"
+"REMIND-MAGPIE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Forest Burning|Unharmonized","Forest Burning","Unharmonized"
+"REMIND-MAGPIE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Grassland Burning|Unharmonized","Grassland Burning","Unharmonized"
+"REMIND-MAGPIE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Peat Burning|Unharmonized","Peat Burning","Unharmonized"
+"REMIND-MAGPIE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Industrial Sector|Unharmonized","Industrial Sector","Unharmonized"
+"REMIND-MAGPIE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Residential Commercial Other|Unharmonized","Residential Commercial Other","Unharmonized"
+"REMIND-MAGPIE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Aircraft|Unharmonized","Aircraft","Unharmonized"
+"REMIND-MAGPIE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Transportation Sector|Unharmonized","Transportation Sector","Unharmonized"
+"REMIND-MAGPIE","NOx","CEDS+|9+ Sectors|Emissions|NOx|International Shipping|Unharmonized","International Shipping","Unharmonized"
+"REMIND-MAGPIE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Energy Sector|Unharmonized","Energy Sector","Unharmonized"
+"REMIND-MAGPIE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Solvents Production and Application|Unharmonized","Solvents Production and Application","Unharmonized"
+"REMIND-MAGPIE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Waste|Unharmonized","Waste","Unharmonized"
+"REMIND-MAGPIE","OC","CEDS+|9+ Sectors|Emissions|OC|Agriculture|Harmonized","Agriculture","Harmonized"
+"REMIND-MAGPIE","OC","CEDS+|9+ Sectors|Emissions|OC|Agricultural Waste Burning|Harmonized","Agricultural Waste Burning","Harmonized"
+"REMIND-MAGPIE","OC","CEDS+|9+ Sectors|Emissions|OC|Forest Burning|Harmonized","Forest Burning","Harmonized"
+"REMIND-MAGPIE","OC","CEDS+|9+ Sectors|Emissions|OC|Grassland Burning|Harmonized","Grassland Burning","Harmonized"
+"REMIND-MAGPIE","OC","CEDS+|9+ Sectors|Emissions|OC|Peat Burning|Harmonized","Peat Burning","Harmonized"
+"REMIND-MAGPIE","OC","CEDS+|9+ Sectors|Emissions|OC|Industrial Sector|Harmonized","Industrial Sector","Harmonized"
+"REMIND-MAGPIE","OC","CEDS+|9+ Sectors|Emissions|OC|Residential Commercial Other|Harmonized","Residential Commercial Other","Harmonized"
+"REMIND-MAGPIE","OC","CEDS+|9+ Sectors|Emissions|OC|Aircraft|Harmonized","Aircraft","Harmonized"
+"REMIND-MAGPIE","OC","CEDS+|9+ Sectors|Emissions|OC|Transportation Sector|Harmonized","Transportation Sector","Harmonized"
+"REMIND-MAGPIE","OC","CEDS+|9+ Sectors|Emissions|OC|International Shipping|Harmonized","International Shipping","Harmonized"
+"REMIND-MAGPIE","OC","CEDS+|9+ Sectors|Emissions|OC|Energy Sector|Harmonized","Energy Sector","Harmonized"
+"REMIND-MAGPIE","OC","CEDS+|9+ Sectors|Emissions|OC|Solvents Production and Application|Harmonized","Solvents Production and Application","Harmonized"
+"REMIND-MAGPIE","OC","CEDS+|9+ Sectors|Emissions|OC|Waste|Harmonized","Waste","Harmonized"
+"REMIND-MAGPIE","OC","CEDS+|9+ Sectors|Emissions|OC|Agriculture|Harmonized-DB","Agriculture","Harmonized-DB"
+"REMIND-MAGPIE","OC","CEDS+|9+ Sectors|Emissions|OC|Agricultural Waste Burning|Harmonized-DB","Agricultural Waste Burning","Harmonized-DB"
+"REMIND-MAGPIE","OC","CEDS+|9+ Sectors|Emissions|OC|Forest Burning|Harmonized-DB","Forest Burning","Harmonized-DB"
+"REMIND-MAGPIE","OC","CEDS+|9+ Sectors|Emissions|OC|Grassland Burning|Harmonized-DB","Grassland Burning","Harmonized-DB"
+"REMIND-MAGPIE","OC","CEDS+|9+ Sectors|Emissions|OC|Peat Burning|Harmonized-DB","Peat Burning","Harmonized-DB"
+"REMIND-MAGPIE","OC","CEDS+|9+ Sectors|Emissions|OC|Industrial Sector|Harmonized-DB","Industrial Sector","Harmonized-DB"
+"REMIND-MAGPIE","OC","CEDS+|9+ Sectors|Emissions|OC|Residential Commercial Other|Harmonized-DB","Residential Commercial Other","Harmonized-DB"
+"REMIND-MAGPIE","OC","CEDS+|9+ Sectors|Emissions|OC|Aircraft|Harmonized-DB","Aircraft","Harmonized-DB"
+"REMIND-MAGPIE","OC","CEDS+|9+ Sectors|Emissions|OC|Transportation Sector|Harmonized-DB","Transportation Sector","Harmonized-DB"
+"REMIND-MAGPIE","OC","CEDS+|9+ Sectors|Emissions|OC|International Shipping|Harmonized-DB","International Shipping","Harmonized-DB"
+"REMIND-MAGPIE","OC","CEDS+|9+ Sectors|Emissions|OC|Energy Sector|Harmonized-DB","Energy Sector","Harmonized-DB"
+"REMIND-MAGPIE","OC","CEDS+|9+ Sectors|Emissions|OC|Solvents Production and Application|Harmonized-DB","Solvents Production and Application","Harmonized-DB"
+"REMIND-MAGPIE","OC","CEDS+|9+ Sectors|Emissions|OC|Waste|Harmonized-DB","Waste","Harmonized-DB"
+"REMIND-MAGPIE","OC","CEDS+|9+ Sectors|Emissions|OC|Agriculture|Unharmonized","Agriculture","Unharmonized"
+"REMIND-MAGPIE","OC","CEDS+|9+ Sectors|Emissions|OC|Agricultural Waste Burning|Unharmonized","Agricultural Waste Burning","Unharmonized"
+"REMIND-MAGPIE","OC","CEDS+|9+ Sectors|Emissions|OC|Forest Burning|Unharmonized","Forest Burning","Unharmonized"
+"REMIND-MAGPIE","OC","CEDS+|9+ Sectors|Emissions|OC|Grassland Burning|Unharmonized","Grassland Burning","Unharmonized"
+"REMIND-MAGPIE","OC","CEDS+|9+ Sectors|Emissions|OC|Peat Burning|Unharmonized","Peat Burning","Unharmonized"
+"REMIND-MAGPIE","OC","CEDS+|9+ Sectors|Emissions|OC|Industrial Sector|Unharmonized","Industrial Sector","Unharmonized"
+"REMIND-MAGPIE","OC","CEDS+|9+ Sectors|Emissions|OC|Residential Commercial Other|Unharmonized","Residential Commercial Other","Unharmonized"
+"REMIND-MAGPIE","OC","CEDS+|9+ Sectors|Emissions|OC|Aircraft|Unharmonized","Aircraft","Unharmonized"
+"REMIND-MAGPIE","OC","CEDS+|9+ Sectors|Emissions|OC|Transportation Sector|Unharmonized","Transportation Sector","Unharmonized"
+"REMIND-MAGPIE","OC","CEDS+|9+ Sectors|Emissions|OC|International Shipping|Unharmonized","International Shipping","Unharmonized"
+"REMIND-MAGPIE","OC","CEDS+|9+ Sectors|Emissions|OC|Energy Sector|Unharmonized","Energy Sector","Unharmonized"
+"REMIND-MAGPIE","OC","CEDS+|9+ Sectors|Emissions|OC|Solvents Production and Application|Unharmonized","Solvents Production and Application","Unharmonized"
+"REMIND-MAGPIE","OC","CEDS+|9+ Sectors|Emissions|OC|Waste|Unharmonized","Waste","Unharmonized"
+"REMIND-MAGPIE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Agriculture|Harmonized","Agriculture","Harmonized"
+"REMIND-MAGPIE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Agricultural Waste Burning|Harmonized","Agricultural Waste Burning","Harmonized"
+"REMIND-MAGPIE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Forest Burning|Harmonized","Forest Burning","Harmonized"
+"REMIND-MAGPIE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Grassland Burning|Harmonized","Grassland Burning","Harmonized"
+"REMIND-MAGPIE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Peat Burning|Harmonized","Peat Burning","Harmonized"
+"REMIND-MAGPIE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Industrial Sector|Harmonized","Industrial Sector","Harmonized"
+"REMIND-MAGPIE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Residential Commercial Other|Harmonized","Residential Commercial Other","Harmonized"
+"REMIND-MAGPIE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Aircraft|Harmonized","Aircraft","Harmonized"
+"REMIND-MAGPIE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Transportation Sector|Harmonized","Transportation Sector","Harmonized"
+"REMIND-MAGPIE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|International Shipping|Harmonized","International Shipping","Harmonized"
+"REMIND-MAGPIE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Energy Sector|Harmonized","Energy Sector","Harmonized"
+"REMIND-MAGPIE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Solvents Production and Application|Harmonized","Solvents Production and Application","Harmonized"
+"REMIND-MAGPIE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Waste|Harmonized","Waste","Harmonized"
+"REMIND-MAGPIE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Agriculture|Harmonized-DB","Agriculture","Harmonized-DB"
+"REMIND-MAGPIE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Agricultural Waste Burning|Harmonized-DB","Agricultural Waste Burning","Harmonized-DB"
+"REMIND-MAGPIE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Forest Burning|Harmonized-DB","Forest Burning","Harmonized-DB"
+"REMIND-MAGPIE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Grassland Burning|Harmonized-DB","Grassland Burning","Harmonized-DB"
+"REMIND-MAGPIE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Peat Burning|Harmonized-DB","Peat Burning","Harmonized-DB"
+"REMIND-MAGPIE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Industrial Sector|Harmonized-DB","Industrial Sector","Harmonized-DB"
+"REMIND-MAGPIE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Residential Commercial Other|Harmonized-DB","Residential Commercial Other","Harmonized-DB"
+"REMIND-MAGPIE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Aircraft|Harmonized-DB","Aircraft","Harmonized-DB"
+"REMIND-MAGPIE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Transportation Sector|Harmonized-DB","Transportation Sector","Harmonized-DB"
+"REMIND-MAGPIE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|International Shipping|Harmonized-DB","International Shipping","Harmonized-DB"
+"REMIND-MAGPIE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Energy Sector|Harmonized-DB","Energy Sector","Harmonized-DB"
+"REMIND-MAGPIE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Solvents Production and Application|Harmonized-DB","Solvents Production and Application","Harmonized-DB"
+"REMIND-MAGPIE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Waste|Harmonized-DB","Waste","Harmonized-DB"
+"REMIND-MAGPIE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Agriculture|Unharmonized","Agriculture","Unharmonized"
+"REMIND-MAGPIE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Agricultural Waste Burning|Unharmonized","Agricultural Waste Burning","Unharmonized"
+"REMIND-MAGPIE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Forest Burning|Unharmonized","Forest Burning","Unharmonized"
+"REMIND-MAGPIE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Grassland Burning|Unharmonized","Grassland Burning","Unharmonized"
+"REMIND-MAGPIE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Peat Burning|Unharmonized","Peat Burning","Unharmonized"
+"REMIND-MAGPIE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Industrial Sector|Unharmonized","Industrial Sector","Unharmonized"
+"REMIND-MAGPIE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Residential Commercial Other|Unharmonized","Residential Commercial Other","Unharmonized"
+"REMIND-MAGPIE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Aircraft|Unharmonized","Aircraft","Unharmonized"
+"REMIND-MAGPIE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Transportation Sector|Unharmonized","Transportation Sector","Unharmonized"
+"REMIND-MAGPIE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|International Shipping|Unharmonized","International Shipping","Unharmonized"
+"REMIND-MAGPIE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Energy Sector|Unharmonized","Energy Sector","Unharmonized"
+"REMIND-MAGPIE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Solvents Production and Application|Unharmonized","Solvents Production and Application","Unharmonized"
+"REMIND-MAGPIE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Waste|Unharmonized","Waste","Unharmonized"
+"REMIND-MAGPIE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Agriculture|Harmonized","Agriculture","Harmonized"
+"REMIND-MAGPIE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Agricultural Waste Burning|Harmonized","Agricultural Waste Burning","Harmonized"
+"REMIND-MAGPIE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Forest Burning|Harmonized","Forest Burning","Harmonized"
+"REMIND-MAGPIE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Grassland Burning|Harmonized","Grassland Burning","Harmonized"
+"REMIND-MAGPIE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Peat Burning|Harmonized","Peat Burning","Harmonized"
+"REMIND-MAGPIE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Industrial Sector|Harmonized","Industrial Sector","Harmonized"
+"REMIND-MAGPIE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Residential Commercial Other|Harmonized","Residential Commercial Other","Harmonized"
+"REMIND-MAGPIE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Aircraft|Harmonized","Aircraft","Harmonized"
+"REMIND-MAGPIE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Transportation Sector|Harmonized","Transportation Sector","Harmonized"
+"REMIND-MAGPIE","VOC","CEDS+|9+ Sectors|Emissions|VOC|International Shipping|Harmonized","International Shipping","Harmonized"
+"REMIND-MAGPIE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Energy Sector|Harmonized","Energy Sector","Harmonized"
+"REMIND-MAGPIE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Solvents Production and Application|Harmonized","Solvents Production and Application","Harmonized"
+"REMIND-MAGPIE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Waste|Harmonized","Waste","Harmonized"
+"REMIND-MAGPIE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Agriculture|Harmonized-DB","Agriculture","Harmonized-DB"
+"REMIND-MAGPIE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Agricultural Waste Burning|Harmonized-DB","Agricultural Waste Burning","Harmonized-DB"
+"REMIND-MAGPIE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Forest Burning|Harmonized-DB","Forest Burning","Harmonized-DB"
+"REMIND-MAGPIE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Grassland Burning|Harmonized-DB","Grassland Burning","Harmonized-DB"
+"REMIND-MAGPIE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Peat Burning|Harmonized-DB","Peat Burning","Harmonized-DB"
+"REMIND-MAGPIE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Industrial Sector|Harmonized-DB","Industrial Sector","Harmonized-DB"
+"REMIND-MAGPIE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Residential Commercial Other|Harmonized-DB","Residential Commercial Other","Harmonized-DB"
+"REMIND-MAGPIE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Aircraft|Harmonized-DB","Aircraft","Harmonized-DB"
+"REMIND-MAGPIE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Transportation Sector|Harmonized-DB","Transportation Sector","Harmonized-DB"
+"REMIND-MAGPIE","VOC","CEDS+|9+ Sectors|Emissions|VOC|International Shipping|Harmonized-DB","International Shipping","Harmonized-DB"
+"REMIND-MAGPIE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Energy Sector|Harmonized-DB","Energy Sector","Harmonized-DB"
+"REMIND-MAGPIE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Solvents Production and Application|Harmonized-DB","Solvents Production and Application","Harmonized-DB"
+"REMIND-MAGPIE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Waste|Harmonized-DB","Waste","Harmonized-DB"
+"REMIND-MAGPIE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Agriculture|Unharmonized","Agriculture","Unharmonized"
+"REMIND-MAGPIE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Agricultural Waste Burning|Unharmonized","Agricultural Waste Burning","Unharmonized"
+"REMIND-MAGPIE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Forest Burning|Unharmonized","Forest Burning","Unharmonized"
+"REMIND-MAGPIE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Grassland Burning|Unharmonized","Grassland Burning","Unharmonized"
+"REMIND-MAGPIE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Peat Burning|Unharmonized","Peat Burning","Unharmonized"
+"REMIND-MAGPIE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Industrial Sector|Unharmonized","Industrial Sector","Unharmonized"
+"REMIND-MAGPIE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Residential Commercial Other|Unharmonized","Residential Commercial Other","Unharmonized"
+"REMIND-MAGPIE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Aircraft|Unharmonized","Aircraft","Unharmonized"
+"REMIND-MAGPIE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Transportation Sector|Unharmonized","Transportation Sector","Unharmonized"
+"REMIND-MAGPIE","VOC","CEDS+|9+ Sectors|Emissions|VOC|International Shipping|Unharmonized","International Shipping","Unharmonized"
+"REMIND-MAGPIE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Energy Sector|Unharmonized","Energy Sector","Unharmonized"
+"REMIND-MAGPIE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Solvents Production and Application|Unharmonized","Solvents Production and Application","Unharmonized"
+"REMIND-MAGPIE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Waste|Unharmonized","Waste","Unharmonized"
