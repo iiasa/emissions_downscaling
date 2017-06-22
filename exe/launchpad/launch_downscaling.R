@@ -37,10 +37,10 @@ initialize( script_name, log_msg, headers )
 # 1. Set up desired IAM to be processing
 
 # debug
- args_from_makefile <- c( 'MESSAGE-GLOBIOM', 
-                          'Unharmonized',
-                          'C:/Users/feng999/Documents/emissions_downscaling/input/IAM_emissions/MESSAGE-GLOBIOM_SSP2-Ref-SPA0-V25_unharmonized.xlsx',
-                          'C:/Users/feng999/Documents/emissions_downscaling/final-output/module-B' )
+# args_from_makefile <- c( 'MESSAGE-GLOBIOM', 
+#                          'Unharmonized',
+#                          'C:/Users/feng999/Documents/emissions_downscaling/input/IAM_emissions/MESSAGE-GLOBIOM_SSP2-Ref-SPA0-V25_unharmonized.xlsx',
+#                          'C:/Users/feng999/Documents/emissions_downscaling/final-output/module-B' )
 
 # debug CLI
 
