@@ -37,8 +37,8 @@ initialize( script_name, log_msg, headers )
 # 1. Set up desired IAM to be processing
 
 # debug
-#args_from_makefile <- c( 'REMIND-MAGPIE', 
-#                         'Harmonized',
+#args_from_makefile <- c( 'MESSAGE-GLOBIOM', 
+#                         'Unharmonized',
 #                         'C:/Users/feng999/Documents/emissions_downscaling/final-output/module-C' )
 
 # debug CLI

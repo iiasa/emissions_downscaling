@@ -70,7 +70,7 @@ write.csv( domainmapping, DOMAINPATHMAP, row.names = F )
 
 # -----------------------------------------------------------------------------
 # 3. Source module-B script in order
-source( '../code/module-B/B.1.IAM_snapshot_reformatting.R' )
+source( '../code/module-B/B.1.IAM_input_reformatting.R' )
 source( '../code/module-B/B.2.IAM_reference_emission_preparation.R' )
 source( '../code/module-B/B.3.regional_pop_gdp_preparation.R' )
 source( '../code/module-B/B.4.1.IAM_emissions_downscaling_linear.R' )
