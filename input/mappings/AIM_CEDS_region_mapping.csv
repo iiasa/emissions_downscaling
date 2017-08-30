@@ -1,0 +1,218 @@
+iso,country_name,region,region_name
+abw,Aruba,XLM,Rest of Brazil
+afg,Afghanistan,XSA,Rest of Asia
+ago,Angola,XAF,Other Africa
+alb,Albania,XER,Rest of Europe
+are,United Arab Emirates,XME,Middle East
+arg,Argentina,XLM,Rest of Brazil
+arm,Armenia,CIS,Former USSR
+asm,American Samoa,XSA,Rest of Asia
+atg,Antigua & Barbuda,XLM,Rest of Brazil
+aus,Australia,XOC,New Zealand and Australia
+aut,Austria,XE25,EU
+aze,Azerbaijan,CIS,Former USSR
+bdi,Burundi,XAF,Other Africa
+bel,Belgium,XE25,EU
+ben,Benin,XAF,Other Africa
+bfa,Burkina Faso,XAF,Other Africa
+bgd,Bangladesh,XSA,Rest of Asia
+bgr,Bulgaria,XER,Rest of Europe
+bhr,Bahrain,XME,Middle East
+bhs,Bahamas,XLM,Rest of Brazil
+bih,Bosnia and Herzegovina,XER,Rest of Europe
+blr,Belarus,CIS,Former USSR
+blz,Belize,XLM,Rest of Brazil
+bmu,Bermuda,XLM,Rest of Brazil
+bol,Bolivia,XLM,Rest of Brazil
+bra,Brazil,BRA,Brazil
+brb,Barbados,XLM,Rest of Brazil
+brn,Brunei Darussalam,XSA,Rest of Asia
+btn,Bhutan,XSA,Rest of Asia
+bwa,Botswana,XAF,Other Africa
+caf,Central African Republic,XAF,Other Africa
+can,Canada,CAN,Canada
+che,Switzerland,XER,Rest of Europe
+chl,Chile,XLM,Rest of Brazil
+chn,China,CHN,China
+civ,Cote dIvoire,XAF,Other Africa
+cmr,Cameroon,XAF,Other Africa
+cod,"Congo, the Democratic Republic of the",XAF,Other Africa
+cog,Congo,XAF,Other Africa
+cok,Cook Islands,XSA,Rest of Asia
+col,Colombia,XLM,Rest of Brazil
+com,Comoros,XAF,Other Africa
+cpv,Cape Verde,XAF,Other Africa
+cri,Costa Rica,XLM,Rest of Brazil
+cub,Cuba,XLM,Rest of Brazil
+cym,Cayman Islands,XLM,Rest of Brazil
+cyp,Cyprus,XE25,EU
+cze,Czech Republic,XE25,EU
+deu,Germany,XE25,EU
+dji,Djibouti,XAF,Other Africa
+dma,Dominica,XLM,Rest of Brazil
+dnk,Denmark,XE25,EU
+dom,Dominican Republic,XLM,Rest of Brazil
+dza,Algeria,XNF,North Africa
+ecu,Ecuador,XLM,Rest of Brazil
+egy,Egypt,XNF,North Africa
+eri,Eritrea,XAF,Other Africa
+esh,Western Sahara,XAF,Other Africa
+esp,Spain,XE25,EU
+est,Estonia,XE25,EU
+eth,Ethiopia,XAF,Other Africa
+fin,Finland,XE25,EU
+fji,Fiji,XSA,Rest of Asia
+flk,Falkland Islands (Malvinas),XLM,Rest of Brazil
+fra,France,XE25,EU
+fro,Faroe Islands,XER,Rest of Europe
+fsm,"Micronesia, Federated States of",XSA,Rest of Asia
+gab,Gabon,XAF,Other Africa
+gbr,United Kingdom,XE25,EU
+geo,Georgia,CIS,Former USSR
+gha,Ghana,XAF,Other Africa
+gib,Gibraltar,XER,Rest of Europe
+gin,Guinea,XAF,Other Africa
+glp,Guadeloupe,XLM,Rest of Brazil
+gmb,Gambia,XAF,Other Africa
+gnb,Guinea-Bissau,XAF,Other Africa
+gnq,Equatorial Guinea,XAF,Other Africa
+grc,Greece,XE25,EU
+grd,Grenada,XLM,Rest of Brazil
+grl,Greenland,XLM,Rest of Brazil
+gtm,Guatemala,XLM,Rest of Brazil
+guf,French Guiana,XLM,Rest of Brazil
+gum,Guam,XSA,Rest of Asia
+guy,Guyana,XLM,Rest of Brazil
+hkg,Hong Kong,CHN,China
+hnd,Honduras,XLM,Rest of Brazil
+hrv,Croatia,XER,Rest of Europe
+hti,Haiti,XLM,Rest of Brazil
+hun,Hungary,XE25,EU
+idn,Indonesia,XSE,Rest of East and South East Asia
+ind,India,IND,India
+irl,Ireland,XE25,EU
+irn,"Iran, Islamic Republic of",XME,Middle East
+irq,Iraq,XME,Middle East
+isl,Iceland,XER,Rest of Europe
+isr,Israel,XME,Middle East
+ita,Italy,XE25,EU
+jam,Jamaica,XLM,Rest of Brazil
+jor,Jordan,XME,Middle East
+jpn,Japan,JPN,Japan
+kaz,Kazakhstan,CIS,Former USSR
+ken,Kenya,XAF,Other Africa
+kgz,Kyrgyzstan,CIS,Former USSR
+khm,Cambodia,XSE,Rest of East and South East Asia
+kir,Kiribati,XSA,Rest of Asia
+kna,Saint Kitts and Nevis,XLM,Rest of Brazil
+kor,"Korea, Republic of",XSE,Rest of East and South East Asia
+kwt,Kuwait,XME,Middle East
+lao,Lao Peoples Democratic Republic,XSE,Rest of East and South East Asia
+lbn,Lebanon,XME,Middle East
+lbr,Liberia,XAF,Other Africa
+lby,Libyan Arab Jamahiriya,XNF,North Africa
+lca,Saint Lucia,XLM,Rest of Brazil
+lie,Liechtenstein,XER,Rest of Europe
+lka,Sri Lanka,XSA,Rest of Asia
+lso,Lesotho,XAF,Other Africa
+ltu,Lithuania,XE25,EU
+lux,Luxembourg,XE25,EU
+lva,Latvia,XE25,EU
+mac,Macau,XSE,Rest of East and South East Asia
+mar,Morocco,XNF,North Africa
+mda,"Moldova, Republic of",CIS,Former USSR
+mdg,Madagascar,XAF,Other Africa
+mdv,Maldives,XSA,Rest of Asia
+mex,Mexico,XLM,Rest of Brazil
+mhl,Marshall Islands,XSA,Rest of Asia
+mkd,"Macedonia, the former Yugoslav Republic of",XER,Rest of Europe
+mli,Mali,XAF,Other Africa
+mlt,Malta,XE25,EU
+mmr,Myanmar,XSE,Rest of East and South East Asia
+mne,Montenegro,XER,Rest of Europe
+mng,Mongolia,XSE,Rest of East and South East Asia
+moz,Mozambique,XAF,Other Africa
+mrt,Mauritania,XAF,Other Africa
+msr,Montserrat,XLM,Rest of Brazil
+mtq,Martinique,XLM,Rest of Brazil
+mus,Mauritius,XAF,Other Africa
+mwi,Malawi,XAF,Other Africa
+mys,Malaysia,XSE,Rest of East and South East Asia
+nam,Namibia,XAF,Other Africa
+ncl,New Caledonia,XSA,Rest of Asia
+ner,Niger,XAF,Other Africa
+nga,Nigeria,XAF,Other Africa
+nic,Nicaragua,XLM,Rest of Brazil
+niu,Niue,XSA,Rest of Asia
+nld,Netherlands,XE25,EU
+nor,Norway,XER,Rest of Europe
+npl,Nepal,XSA,Rest of Asia
+nzl,New Zealand,XOC,New Zealand and Australia
+omn,Oman,XME,Middle East
+pak,Pakistan,XSA,Rest of Asia
+pan,Panama,XLM,Rest of Brazil
+per,Peru,XLM,Rest of Brazil
+phl,Philippines,XSE,Rest of East and South East Asia
+plw,Palau,XSA,Rest of Asia
+png,Papua New Guinea,XSA,Rest of Asia
+pol,Poland,XE25,EU
+pri,Puerto Rico,XLM,Rest of Brazil
+prk,"Korea, Democratic Peoples Republic of",XSE,Rest of East and South East Asia
+prt,Portugal,XE25,EU
+pry,Paraguay,XLM,Rest of Brazil
+pse,"Palestinian Territory, Occupied",XME,Middle East
+pyf,French Polynesia,XSA,Rest of Asia
+qat,Qatar,XME,Middle East
+reu,Reunion,XAF,Other Africa
+rou,Romania,XER,Rest of Europe
+rus,Russian Federation,CIS,Former USSR
+rwa,Rwanda,XAF,Other Africa
+sau,Saudi Arabia,XME,Middle East
+sdn,Sudan,XAF,Other Africa
+sen,Senegal,XAF,Other Africa
+sgp,Singapore,XSE,Rest of East and South East Asia
+slb,Solomon Islands,XSA,Rest of Asia
+sle,Sierra Leone,XAF,Other Africa
+slv,El Salvador,XLM,Rest of Brazil
+som,Somalia,XAF,Other Africa
+spm,Saint Pierre and Miquelon,XLM,Rest of Brazil
+srb,Serbia,XER,Rest of Europe
+stp,Sao Tome and Principe,XAF,Other Africa
+sur,Suriname,XLM,Rest of Brazil
+svk,Slovakia,XE25,EU
+svn,Slovenia,XE25,EU
+swe,Sweden,XE25,EU
+swz,Swaziland,XAF,Other Africa
+syc,Seychelles,XAF,Other Africa
+syr,Syrian Arab Republic,XME,Middle East
+tca,Turks and Caicos,XLM,Rest of Brazil
+tcd,Chad,XAF,Other Africa
+tgo,Togo,XAF,Other Africa
+tha,Thailand,XSE,Rest of East and South East Asia
+tjk,Tajikistan,CIS,Former USSR
+tkl,Tokelau,XSA,Rest of Asia
+tkm,Turkmenistan,CIS,Former USSR
+tls,Timor Leste,XSE,Rest of East and South East Asia
+ton,Tonga,XSA,Rest of Asia
+tto,Trinidad and Tobago,XLM,Rest of Brazil
+tun,Tunisia,XNF,North Africa
+tur,Turkey,TUR,Turkey
+twn,Taiwan,XSE,Rest of East and South East Asia
+tza,"Tanzania, United Republic of",XAF,Other Africa
+uga,Uganda,XAF,Other Africa
+ukr,Ukraine,CIS,Former USSR
+ury,Uruguay,XLM,Rest of Brazil
+usa,United States of America,USA,USA
+uzb,Uzbekistan,CIS,Former USSR
+vct,Saint Vincent and the Grenadines,XLM,Rest of Brazil
+ven,Venezuela,XLM,Rest of Brazil
+vgb,"Virgin Islands, British",XLM,Rest of Brazil
+vir,"Virgin Islands, U.S.",XLM,Rest of Brazil
+vnm,Viet Nam,XSE,Rest of East and South East Asia
+vut,Vanuatu,XSA,Rest of Asia
+wlf,Wallis and Futuna,XSA,Rest of Asia
+wsm,Samoa,XSA,Rest of Asia
+yem,Yemen,XME,Middle East
+zaf,South Africa,XAF,Other Africa
+zmb,Zambia,XAF,Other Africa
+zwe,Zimbabwe,XAF,Other Africa

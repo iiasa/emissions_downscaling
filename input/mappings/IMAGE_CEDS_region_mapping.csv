@@ -1,0 +1,220 @@
+iso,country_name,region,region_name
+abw,Aruba,RCAM,Rest C. America
+afg,Afghanistan,RSAS,Rest S. Asia
+ago,Angola,RSAF,Rest S. Africa
+alb,Albania,CEU,C. Europe
+are,United Arab Emirates,ME,Middle East
+arg,Argentina,RSAM,Rest S. America
+arm,Armenia,RUS,Russia
+asm,American Samoa,OCE,Oceania
+atg,Antigua & Barbuda,RCAM,Rest C. America
+aus,Australia,OCE,Oceania
+aut,Austria,WEU,W. Europe
+aze,Azerbaijan,RUS,Russia
+bdi,Burundi,EAF,E. Africa
+bel,Belgium,WEU,W. Europe
+ben,Benin,WAF,W. Africa
+bfa,Burkina Faso,WAF,W. Africa
+bgd,Bangladesh,RSAS,Rest S. Asia
+bgr,Bulgaria,CEU,C. Europe
+bhr,Bahrain,ME,Middle East
+bhs,Bahamas,RCAM,Rest C. America
+bih,Bosnia and Herzegovina,CEU,C. Europe
+blr,Belarus,UKR,Ukraine region
+blz,Belize,RCAM,Rest C. America
+bmu,Bermuda,RCAM,Rest C. America
+bol,Bolivia,RSAM,Rest S. America
+bra,Brazil,BRA,Brazil
+brb,Barbados,RCAM,Rest C. America
+brn,Brunei Darussalam,SEAS,SE. Asia
+btn,Bhutan,RSAS,Rest S. Asia
+bwa,Botswana,RSAF,Rest S. Africa
+caf,Central African Republic,WAF,W. Africa
+can,Canada,CAN,Canada
+che,Switzerland,WEU,W. Europe
+chl,Chile,RSAM,Rest S. America
+chn,China,CHN,China
+civ,Cote dIvoire,WAF,W. Africa
+cmr,Cameroon,WAF,W. Africa
+cod,"Congo, the Democratic Republic of the",WAF,W. Africa
+cog,Congo,WAF,W. Africa
+cok,Cook Islands,OCE,Oceania
+col,Colombia,RSAM,Rest S. America
+com,Comoros,EAF,E. Africa
+cpv,Cape Verde,WAF,W. Africa
+cri,Costa Rica,RCAM,Rest C. America
+cub,Cuba,RCAM,Rest C. America
+cuw,Curacao,RCAM,Rest C. America
+cym,Cayman Islands,RCAM,Rest C. America
+cyp,Cyprus,CEU,C. Europe
+cze,Czech Republic,CEU,C. Europe
+deu,Germany,WEU,W. Europe
+dji,Djibouti,EAF,E. Africa
+dma,Dominica,RCAM,Rest C. America
+dnk,Denmark,WEU,W. Europe
+dom,Dominican Republic,RCAM,Rest C. America
+dza,Algeria,NAF,N. Africa
+ecu,Ecuador,RSAM,Rest S. America
+egy,Egypt,NAF,N. Africa
+eri,Eritrea,EAF,E. Africa
+esh,Western Sahara,NAF,N. Africa
+esp,Spain,WEU,W. Europe
+est,Estonia,CEU,C. Europe
+eth,Ethiopia,EAF,E. Africa
+fin,Finland,WEU,W. Europe
+fji,Fiji,OCE,Oceania
+flk,Falkland Islands (Malvinas),RSAM,Rest S. America
+fra,France,WEU,W. Europe
+fro,Faroe Islands,WEU,W. Europe
+fsm,"Micronesia, Federated States of",OCE,Oceania
+gab,Gabon,WAF,W. Africa
+gbr,United Kingdom,WEU,W. Europe
+geo,Georgia,RUS,Russia
+gha,Ghana,WAF,W. Africa
+gib,Gibraltar,WEU,W. Europe
+gin,Guinea,WAF,W. Africa
+glp,Guadeloupe,RCAM,Rest C. America
+gmb,Gambia,WAF,W. Africa
+gnb,Guinea-Bissau,WAF,W. Africa
+gnq,Equatorial Guinea,WAF,W. Africa
+grc,Greece,WEU,W. Europe
+grd,Grenada,RCAM,Rest C. America
+grl,Greenland,RSAF,Rest S. Africa
+gtm,Guatemala,RCAM,Rest C. America
+guf,French Guiana,RSAM,Rest S. America
+gum,Guam,USA,USA
+guy,Guyana,RSAM,Rest S. America
+hkg,Hong Kong,CHN,China
+hnd,Honduras,RCAM,Rest C. America
+hrv,Croatia,CEU,C. Europe
+hti,Haiti,RCAM,Rest C. America
+hun,Hungary,CEU,C. Europe
+idn,Indonesia,INDO,Indonesia
+ind,India,INDIA,India
+irl,Ireland,WEU,W. Europe
+irn,"Iran, Islamic Republic of",ME,Middle East
+irq,Iraq,ME,Middle East
+isl,Iceland,WEU,W. Europe
+isr,Israel,ME,Middle East
+ita,Italy,WEU,W. Europe
+jam,Jamaica,RCAM,Rest C. America
+jor,Jordan,ME,Middle East
+jpn,Japan,JAP,Japan
+kaz,Kazakhstan,STAN,Kazakhstan region
+ken,Kenya,EAF,E. Africa
+kgz,Kyrgyzstan,STAN,Kazakhstan region
+khm,Cambodia,SEAS,SE. Asia
+kir,Kiribati,OCE,Oceania
+kna,Saint Kitts and Nevis,RCAM,Rest C. America
+kor,"Korea, Republic of",KOR,Korea
+kwt,Kuwait,ME,Middle East
+lao,Lao Peoples Democratic Republic,SEAS,SE. Asia
+lbn,Lebanon,ME,Middle East
+lbr,Liberia,WAF,W. Africa
+lby,Libyan Arab Jamahiriya,NAF,N. Africa
+lca,Saint Lucia,RCAM,Rest C. America
+lie,Liechtenstein,WEU,W. Europe
+lka,Sri Lanka,RSAS,Rest S. Asia
+lso,Lesotho,RSAF,Rest S. Africa
+ltu,Lithuania,CEU,C. Europe
+lux,Luxembourg,WEU,W. Europe
+lva,Latvia,CEU,C. Europe
+mac,Macau,CHN,China
+mar,Morocco,NAF,N. Africa
+mda,"Moldova, Republic of",UKR,Ukraine region
+mdg,Madagascar,EAF,E. Africa
+mdv,Maldives,RSAS,Rest S. Asia
+mex,Mexico,MEX,Mexico
+mhl,Marshall Islands,OCE,Oceania
+mkd,"Macedonia, the former Yugoslav Republic of",CEU,C. Europe
+mli,Mali,WAF,W. Africa
+mlt,Malta,WEU,W. Europe
+mmr,Myanmar,SEAS,SE. Asia
+mne,Montenegro,CEU,C. Europe
+mng,Mongolia,CHN,China
+moz,Mozambique,RSAF,Rest S. Africa
+mrt,Mauritania,WAF,W. Africa
+msr,Montserrat,RCAM,Rest C. America
+mtq,Martinique,RCAM,Rest C. America
+mus,Mauritius,EAF,E. Africa
+mwi,Malawi,RSAF,Rest S. Africa
+mys,Malaysia,SEAS,SE. Asia
+nam,Namibia,RSAF,Rest S. Africa
+ncl,New Caledonia,OCE,Oceania
+ner,Niger,WAF,W. Africa
+nga,Nigeria,WAF,W. Africa
+nic,Nicaragua,RCAM,Rest C. America
+niu,Niue,OCE,Oceania
+nld,Netherlands,WEU,W. Europe
+nor,Norway,WEU,W. Europe
+npl,Nepal,RSAS,Rest S. Asia
+nzl,New Zealand,OCE,Oceania
+omn,Oman,ME,Middle East
+pak,Pakistan,RSAS,Rest S. Asia
+pan,Panama,RCAM,Rest C. America
+per,Peru,RSAM,Rest S. America
+phl,Philippines,SEAS,SE. Asia
+plw,Palau,OCE,Oceania
+png,Papua New Guinea,INDO,Indonesia
+pol,Poland,CEU,C. Europe
+pri,Puerto Rico,RCAM,Rest C. America
+prk,"Korea, Democratic Peoples Republic of",KOR,Korea
+prt,Portugal,WEU,W. Europe
+pry,Paraguay,RSAM,Rest S. America
+pse,"Palestinian Territory, Occupied",ME,Middle East
+pyf,French Polynesia,OCE,Oceania
+qat,Qatar,ME,Middle East
+reu,Reunion,EAF,E. Africa
+rou,Romania,CEU,C. Europe
+rus,Russian Federation,RUS,Russia
+rwa,Rwanda,EAF,E. Africa
+sau,Saudi Arabia,ME,Middle East
+sdn,Sudan,EAF,E. Africa
+sen,Senegal,WAF,W. Africa
+sgp,Singapore,SEAS,SE. Asia
+slb,Solomon Islands,OCE,Oceania
+sle,Sierra Leone,WAF,W. Africa
+slv,El Salvador,RCAM,Rest C. America
+som,Somalia,EAF,E. Africa
+spm,Saint Pierre and Miquelon,USA,USA
+srb,Serbia,CEU,C. Europe
+stp,Sao Tome and Principe,WAF,W. Africa
+sur,Suriname,RSAM,Rest S. America
+svk,Slovakia,CEU,C. Europe
+svn,Slovenia,CEU,C. Europe
+swe,Sweden,WEU,W. Europe
+swz,Swaziland,RSAF,Rest S. Africa
+sxm,Sint Maarten,RCAM,Rest C. America
+syc,Seychelles,EAF,E. Africa
+syr,Syrian Arab Republic,ME,Middle East
+tca,Turks and Caicos,RCAM,Rest C. America
+tcd,Chad,WAF,W. Africa
+tgo,Togo,WAF,W. Africa
+tha,Thailand,SEAS,SE. Asia
+tjk,Tajikistan,STAN,Kazakhstan region
+tkl,Tokelau,OCE,Oceania
+tkm,Turkmenistan,STAN,Kazakhstan region
+tls,Timor Leste,SEAS,SE. Asia
+ton,Tonga,OCE,Oceania
+tto,Trinidad and Tobago,RCAM,Rest C. America
+tun,Tunisia,NAF,N. Africa
+tur,Turkey,TUR,Turkey
+twn,Taiwan,CHN,China
+tza,"Tanzania, United Republic of",RSAF,Rest S. Africa
+uga,Uganda,EAF,E. Africa
+ukr,Ukraine,UKR,Ukraine region
+ury,Uruguay,RSAM,Rest S. America
+usa,United States of America,USA,USA
+uzb,Uzbekistan,STAN,Kazakhstan region
+vct,Saint Vincent and the Grenadines,RCAM,Rest C. America
+ven,Venezuela,RSAM,Rest S. America
+vgb,"Virgin Islands, British",RCAM,Rest C. America
+vir,"Virgin Islands, U.S.",RCAM,Rest C. America
+vnm,Viet Nam,SEAS,SE. Asia
+vut,Vanuatu,OCE,Oceania
+wlf,Wallis and Futuna,OCE,Oceania
+wsm,Samoa,OCE,Oceania
+yem,Yemen,ME,Middle East
+zaf,South Africa,SAF,South Africa
+zmb,Zambia,RSAF,Rest S. Africa
+zwe,Zimbabwe,RSAF,Rest S. Africa
