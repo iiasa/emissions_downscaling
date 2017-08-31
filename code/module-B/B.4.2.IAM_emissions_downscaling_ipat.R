@@ -56,14 +56,14 @@ x_baseyear <- paste0( 'X', base_year )
 convergence_year <- 'con_year'
 
 con_year_mapping <- readData( domain = 'MAPPINGS', file_name = ds_convergence_year_mapping )
-con_year_mapping <- con_year_mapping[ con_year_mapping$model == iam_name, c( "scenario_label", "convergence_year" ) ]
+con_year_mapping <- con_year_mapping[ con_year_mapping$model == iam, c( "scenario_label", "convergence_year" ) ]
 
 # -----------------------------------------------------------------------------
 # 2. Read IAM emissions, baseyear reference emissions, population data and GDP data 
-iam_em <- readData( domain = 'MED_OUT', file_name = paste0( 'B.', iam_name, '_emissions_ipat' ) )
+iam_em <- readData( domain = 'MED_OUT', file_name = paste0( 'B.', iam, '_emissions_ipat' ) )
 ref_em <- readData( domain = 'MED_OUT', file_name = paste0( 'B.', ref_name, '_emissions_baseyear_ipat' ) )
-pop_data <- readData( domain = 'MED_OUT', file_name = paste0( 'B.iiasa_pop_iso_', iam_name, '_region' ) )
-gdp_data <- readData( domain = 'MED_OUT', file_name = paste0( 'B.iiasa_gdp_iso_', iam_name, '_region' ) )
+pop_data <- readData( domain = 'MED_OUT', file_name = paste0( 'B.iiasa_pop_iso_', iam, '_region' ) )
+gdp_data <- readData( domain = 'MED_OUT', file_name = paste0( 'B.iiasa_gdp_iso_', iam, '_region' ) )
 
 # -----------------------------------------------------------------------------
 # 3. create short ssp label for iam_em 
@@ -160,7 +160,7 @@ ds_df <- downscaleIAMemissions( wide_df )
 # -----------------------------------------------------------------------------
 # 5 Write out
 # write baseyear reference emissions for aircraft and shipping sectors 
-out_filename <- paste0( 'B.', iam_name, '_emissions_downscaled_ipat' )
+out_filename <- paste0( 'B.', iam, '_emissions_downscaled_ipat' )
 writeData( ds_df, 'MED_OUT', out_filename, meta = F )  
 
 # END

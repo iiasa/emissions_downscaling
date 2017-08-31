@@ -58,7 +58,7 @@ x_baseyear <- paste0( 'X', base_year )
 # read in ref sector mapping file 
 region_mapping <- readData( domain = 'MAPPINGS', file_name = ref_region_mapping ) 
 con_year_mapping <- readData( domain = 'MAPPINGS', file_name = ds_convergence_year_mapping )
-con_year_mapping <- con_year_mapping[ con_year_mapping$model == iam_name, c( "scenario_label", "convergence_year" ) ]
+con_year_mapping <- con_year_mapping[ con_year_mapping$model == iam, c( "scenario_label", "convergence_year" ) ]
 
 # -----------------------------------------------------------------------------
 # 2. Read IAM_emissions and reference emission data 
@@ -131,11 +131,11 @@ gdp_iso_region<- calculateCeonYear( gdp_iso_region )
 # -----------------------------------------------------------------------------
 # 5. Write out
 # write pop_iso_region
-out_filname <- paste0( 'B.', 'iiasa_pop_iso_', iam_name, '_region' )
+out_filname <- paste0( 'B.', 'iiasa_pop_iso_', iam, '_region' )
 writeData( pop_iso_region, 'MED_OUT', out_filname, meta = F )  
 
 # write gdp_iso_region
-out_filname <- paste0( 'B.', 'iiasa_gdp_iso_', iam_name, '_region' )
+out_filname <- paste0( 'B.', 'iiasa_gdp_iso_', iam, '_region' )
 writeData( gdp_iso_region, 'MED_OUT', out_filname, meta = F )  
 
 

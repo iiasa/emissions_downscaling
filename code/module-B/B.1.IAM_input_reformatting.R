@@ -6,7 +6,7 @@
 #                  in 'Variable' column, then write the df into intermediate_out 
 #                  folder as input for next script.  
 # Input Files: 
-# Output Files: B.[iam_name]_emissions_reformatted 
+# Output Files: B.[iam]_emissions_reformatted 
 # Notes: 
 # TODO: Find a more smart way to deal with emissions only for world region 
 # ------------------------------------------------------------------------------
@@ -66,7 +66,6 @@
   data_df <- read_excel( input_file ) 
   colnames( data_df ) <- tolower( colnames( data_df ) )
   
-  
 # -----------------------------------------------------------------------------
 # 3. Reformat the IAM data
   year_list <- c( 2015, 2020, 2030, 2040, 2050, 2060, 2070, 2080, 2090, 2100 )
@@ -99,72 +98,23 @@
       em_res_list <- lapply( em_list, function( em ) { 
         sec_res_list <- lapply( sector_list, function( sec ) { 
           reg_res_list <- lapply( native_reg_list, function( reg ) {
-            year_res_list <- lapply( year_list, function( year ) { 
-              out_df <- data.frame( scenario = sce, 
-                                    em = em, 
-                                    region = reg,
-                                    sector = sec, 
-                                    year = year, 
-                                    stringsAsFactors = F )
-              } )
-            year_res <- do.call( 'rbind', year_res_list )
-            } ) 
+            
+            out_df <- data.frame( scenario = sce, 
+                                  em = em, 
+                                  region = reg,
+                                  sector = sec,
+                                  stringsAsFactors = F )
+            
+          } ) 
           reg_res <- do.call( 'rbind', reg_res_list )
-          } )
-        sec_res <- do.call( 'rbind', sec_res_list )
-        
-        if ( iam == 'GCAM4' ) model_world <- 'World'
-        if ( iam == 'REMIND-MAGPIE' ) model_world <- 'World'
-        if ( iam == 'MESSAGE-GLOBIOM' ) model_world <- 'World'
-        
-        air_res <- data.frame( scenario = sce, 
-                               em = em, 
-                               region = model_world,
-                               sector = "Aircraft", 
-                               year = year_list, 
-                               stringsAsFactors = F )
-        shp_res <- data.frame( scenario = sce, 
-                               em = em, 
-                               region = model_world,
-                               sector = "International Shipping", 
-                               year = year_list, 
-                               stringsAsFactors = F )
-        sec_res <- rbind( sec_res, air_res, shp_res )
         } )
-      em_res <- do.call( 'rbind', em_res_list )
-      } )
-    sce_res <- do.call( 'rbind', sce_res_list )
-    sce_res$model <- unique( iam_data$model )
-    sce_res$harm_status <- unique( iam_data$harm_status )
-    #sce_res$unit <- unique( iam_data$unit )
-    
-    return( sce_res )
-    }
-  complete_layout <- genCompleteLayout( )
-
-  
-genCompleteLayout <- function( ) { 
-    sector_list <- sector_list[ sector_list != "International Shipping" ]
-    sector_list <- sector_list[ sector_list != "Aircraft" ]
-    sce_res_list <- lapply( scenario_list, function( sce ) { 
-      em_res_list <- lapply( em_list, function( em ) { 
-        sec_res_list <- lapply( sector_list, function( sec ) { 
-          reg_res_list <- lapply( native_reg_list, function( reg ) {
-
-              out_df <- data.frame( scenario = sce, 
-                                    em = em, 
-                                    region = reg,
-                                    sector = sec,
-                                    stringsAsFactors = F )
-
-            } ) 
-          reg_res <- do.call( 'rbind', reg_res_list )
-          } )
         sec_res <- do.call( 'rbind', sec_res_list )
         
         if ( iam == 'GCAM4' ) model_world <- 'World'
         if ( iam == 'REMIND-MAGPIE' ) model_world <- 'World'
         if ( iam == 'MESSAGE-GLOBIOM' ) model_world <- 'World'
+        if ( iam == 'AIM' ) model_world <- 'World'
+        if ( iam == 'IMAGE' ) model_world <- 'World'
         
         air_res <- data.frame( scenario = sce, 
                                em = em, 
@@ -177,16 +127,16 @@ genCompleteLayout <- function( ) {
                                sector = "International Shipping", 
                                stringsAsFactors = F )
         sec_res <- rbind( sec_res, air_res, shp_res )
-        } )
-      em_res <- do.call( 'rbind', em_res_list )
       } )
+      em_res <- do.call( 'rbind', em_res_list )
+    } )
     sce_res <- do.call( 'rbind', sce_res_list )
     sce_res$model <- unique( iam_data$model )
     sce_res$harm_status <- unique( iam_data$harm_status )
     sce_res$unit <- unique( iam_data$unit )
     
     return( sce_res )
-    }
+  }
   complete_layout <- genCompleteLayout( )  
 
   iam_data <- merge( iam_data, 
@@ -207,7 +157,7 @@ genCompleteLayout <- function( ) {
 # -----------------------------------------------------------------------------
 # 6. Write out
 # write the interpolated iam_data into intermediate output folder
-  out_filname <- paste0( 'B.', iam_name, '_emissions_reformatted' )
+  out_filname <- paste0( 'B.', iam, '_emissions_reformatted' )
   writeData( iam_int, 'MED_OUT', out_filname, meta = F )
 
 # END

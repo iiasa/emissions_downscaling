@@ -5,14 +5,14 @@
 # Program Purpose: The script Split IAM/reference emissions into separate 
 #                  intermediate files based on downscaling method then compute
 #                  convergence year IAM emissions 
-# Input Files: B.[iam_name]_emissions_reformatted 
+# Input Files: B.[iam]_emissions_reformatted 
 #              CEDS_by_country_by_CEDS_sector_with_luc_all_em.csv
 # Output Files: B.[ref_name]_emissions_baseyear_nods
 #               B.[ref_name]_emissions_baseyear_linear 
 #               B.[ref_name]_emissions_baseyear_ipat 
-#               B.[iam_name]_emissions_nods 
-#               B.[iam_name]_emissions_linear 
-#               B.[iam_name]_emissions_ipat 
+#               B.[iam]_emissions_nods 
+#               B.[iam]_emissions_linear 
+#               B.[iam]_emissions_ipat 
 # Notes: nods -- sectors do not need to be downscaled 
 #        linear -- sectors will be downscaled using linear method 
 #        ipat -- sectors will be downscaled uing ipat approach 
@@ -66,12 +66,12 @@ x_baseyear <- paste0( 'X', base_year )
 sector_mapping <- readData( domain = 'MAPPINGS', file_name = ref_sector_mapping ) 
 region_mapping <- readData( domain = 'MAPPINGS', file_name = ref_region_mapping ) 
 con_year_mapping <- readData( domain = 'MAPPINGS', file_name = ds_convergence_year_mapping )
-con_year_mapping <- con_year_mapping[ con_year_mapping$model == iam_name, c( "scenario_label", "convergence_year" ) ]
+con_year_mapping <- con_year_mapping[ con_year_mapping$model == iam, c( "scenario_label", "convergence_year" ) ]
 method_mapping <- readData( domain = 'MAPPINGS', file_name = ds_method_mapping ) 
 
 # -----------------------------------------------------------------------------
 # 2. Read IAM_emissions and reference emission data 
-iam_em <- readData( domain = 'MED_OUT', file_name = paste0( 'B.', iam_name, '_emissions_reformatted' ) )
+iam_em <- readData( domain = 'MED_OUT', file_name = paste0( 'B.', iam, '_emissions_reformatted' ) )
 
 ref_em <- readData( domain = 'REF_EM', file_name = 'CEDS_by_country_by_CEDS_sector_with_luc_all_em',
                     domain_extension = ref_domain_extension )
@@ -192,15 +192,15 @@ out_filname <- paste0( 'B.', ref_name, '_emissions_baseyear_ipat' )
 writeData( ref_em_baseyear_ipat, 'MED_OUT', out_filname, meta = F )  
 
 # write IAM emissions for aircraft and shipping sectors 
-out_filname <- paste0( 'B.', iam_name, '_emissions_nods' )
+out_filname <- paste0( 'B.', iam, '_emissions_nods' )
 writeData( iam_em_nods, 'MED_OUT', out_filname, meta = F )  
 
 # write IAM emissions for agriculture related sectors 
-out_filname <- paste0( 'B.', iam_name, '_emissions_linear' )
+out_filname <- paste0( 'B.', iam, '_emissions_linear' )
 writeData( iam_em_linear, 'MED_OUT', out_filname, meta = F ) 
 
 # write IAM emissions for energy related sectors 
-out_filname <- paste0( 'B.', iam_name, '_emissions_ipat' )
+out_filname <- paste0( 'B.', iam, '_emissions_ipat' )
 writeData( iam_em_ipat, 'MED_OUT', out_filname, meta = F )  
 
 # END
