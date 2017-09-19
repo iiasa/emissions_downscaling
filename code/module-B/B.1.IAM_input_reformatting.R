@@ -157,7 +157,7 @@
 # -----------------------------------------------------------------------------
 # 6. Write out
 # write the interpolated iam_data into intermediate output folder
-  out_filname <- paste0( 'B.', iam, '_emissions_reformatted' )
+  out_filname <- paste0( 'B.', iam, '_emissions_reformatted', '_', RUNSUFFIX )
   writeData( iam_int, 'MED_OUT', out_filname, meta = F )
 
 # END

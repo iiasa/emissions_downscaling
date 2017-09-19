@@ -59,7 +59,7 @@ agg_reg_mapping <- readData( 'MAPPINGS', 'REMIND_CEDS_region_mapping' )
 
 # -----------------------------------------------------------------------------
 # 2. Read downscaled IAM emissions 
-iam_em <- readData( domain = 'MODB_OUT', file_name = paste0( 'B.', iam_name, '_', harm_status, '_emissions_downscaled' ) )
+iam_em <- readData( domain = 'MODB_OUT', file_name = paste0( 'B.', iam_name, '_', harm_status, '_emissions_downscaled', '_', RUNSUFFIX ) )
 
 # -----------------------------------------------------------------------------
 # 3. Aggregate country level IAM emissions to regional level 

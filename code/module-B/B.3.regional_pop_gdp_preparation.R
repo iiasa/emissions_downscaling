@@ -131,12 +131,11 @@ gdp_iso_region<- calculateCeonYear( gdp_iso_region )
 # -----------------------------------------------------------------------------
 # 5. Write out
 # write pop_iso_region
-out_filname <- paste0( 'B.', 'iiasa_pop_iso_', iam, '_region' )
+out_filname <- paste0( 'B.', 'iiasa_pop_iso_', iam, '_region', '_', RUNSUFFIX )
 writeData( pop_iso_region, 'MED_OUT', out_filname, meta = F )  
 
 # write gdp_iso_region
-out_filname <- paste0( 'B.', 'iiasa_gdp_iso_', iam, '_region' )
+out_filname <- paste0( 'B.', 'iiasa_gdp_iso_', iam, '_region', '_', RUNSUFFIX )
 writeData( gdp_iso_region, 'MED_OUT', out_filname, meta = F )  
-
 
 # END

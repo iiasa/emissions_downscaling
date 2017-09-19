@@ -71,7 +71,7 @@ method_mapping <- readData( domain = 'MAPPINGS', file_name = ds_method_mapping )
 
 # -----------------------------------------------------------------------------
 # 2. Read IAM_emissions and reference emission data 
-iam_em <- readData( domain = 'MED_OUT', file_name = paste0( 'B.', iam, '_emissions_reformatted' ) )
+iam_em <- readData( domain = 'MED_OUT', file_name = paste0( 'B.', iam, '_emissions_reformatted', '_', RUNSUFFIX ) )
 
 ref_em <- readData( domain = 'REF_EM', file_name = 'CEDS_by_country_by_CEDS_sector_with_luc_all_em',
                     domain_extension = ref_domain_extension )
@@ -180,27 +180,27 @@ iam_em_ipat <- calculateCeonYear( iam_em_ipat )
 # -----------------------------------------------------------------------------
 # 5 Write out
 # write baseyear reference emissions for no-downscaling sectors 
-out_filname <- paste0( 'B.', ref_name, '_emissions_baseyear_nods' )
+out_filname <- paste0( 'B.', ref_name, '_emissions_baseyear_nods', '_', RUNSUFFIX )
 writeData( ref_em_nods, 'MED_OUT', out_filname, meta = F )  
 
 # write baseyear reference emissions for linear sectors 
-out_filname <- paste0( 'B.', ref_name, '_emissions_baseyear_linear' )
+out_filname <- paste0( 'B.', ref_name, '_emissions_baseyear_linear', '_', RUNSUFFIX )
 writeData( ref_em_baseyear_linear, 'MED_OUT', out_filname, meta = F )  
 
 # write baseyear reference emissions for ipat sectors 
-out_filname <- paste0( 'B.', ref_name, '_emissions_baseyear_ipat' )
+out_filname <- paste0( 'B.', ref_name, '_emissions_baseyear_ipat', '_', RUNSUFFIX )
 writeData( ref_em_baseyear_ipat, 'MED_OUT', out_filname, meta = F )  
 
 # write IAM emissions for aircraft and shipping sectors 
-out_filname <- paste0( 'B.', iam, '_emissions_nods' )
+out_filname <- paste0( 'B.', iam, '_emissions_nods', '_', RUNSUFFIX )
 writeData( iam_em_nods, 'MED_OUT', out_filname, meta = F )  
 
 # write IAM emissions for agriculture related sectors 
-out_filname <- paste0( 'B.', iam, '_emissions_linear' )
+out_filname <- paste0( 'B.', iam, '_emissions_linear', '_', RUNSUFFIX )
 writeData( iam_em_linear, 'MED_OUT', out_filname, meta = F ) 
 
 # write IAM emissions for energy related sectors 
-out_filname <- paste0( 'B.', iam, '_emissions_ipat' )
+out_filname <- paste0( 'B.', iam, '_emissions_ipat', '_', RUNSUFFIX )
 writeData( iam_em_ipat, 'MED_OUT', out_filname, meta = F )  
 
 # END

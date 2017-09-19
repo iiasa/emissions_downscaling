@@ -57,8 +57,8 @@ x_baseyear <- paste0( 'X', base_year )
 
 # -----------------------------------------------------------------------------
 # 2. Read IAM emissions, baseyear reference emissions, population data and GDP data 
-iam_em <- readData( domain = 'MED_OUT', file_name = paste0( 'B.', iam, '_emissions_linear' ) )
-ref_em <- readData( domain = 'MED_OUT', file_name = paste0( 'B.', ref_name, '_emissions_baseyear_linear' ) )
+iam_em <- readData( domain = 'MED_OUT', file_name = paste0( 'B.', iam, '_emissions_linear', '_', RUNSUFFIX ) )
+ref_em <- readData( domain = 'MED_OUT', file_name = paste0( 'B.', ref_name, '_emissions_baseyear_linear', '_', RUNSUFFIX ) )
 
 # -----------------------------------------------------------------------------
 # 3. add region information to ref_em 
@@ -86,7 +86,7 @@ ds_iam_em_agr <- iam_em_ref[ , c( iam_em_header_cols, paste0( 'X', ds_start_year
 # -----------------------------------------------------------------------------
 # 5 Write out
 # write baseyear reference emissions for aircraft and shipping sectors 
-out_filname <- paste0( 'B.', iam, '_emissions_downscaled_linear' )
+out_filname <- paste0( 'B.', iam, '_emissions_downscaled_linear', '_', RUNSUFFIX )
 writeData( ds_iam_em_agr, 'MED_OUT', out_filname, meta = F )  
 
 # END

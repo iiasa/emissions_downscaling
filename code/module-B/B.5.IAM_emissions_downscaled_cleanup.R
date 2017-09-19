@@ -60,9 +60,9 @@ var_mapping$IAMC <- paste0( var_mapping$IAMC, '|', harm_status )
 
 # -----------------------------------------------------------------------------
 # 2. Read different parts of IAM emissions: IAM nods, IAM_linear_downscaled, IAM_ipat_downscaled 
-iam_em_nods <- readData( domain = 'MED_OUT', file_name = paste0( 'B.', iam, '_emissions_nods' ) )
-iam_em_linear <- readData( domain = 'MED_OUT', file_name = paste0( 'B.', iam, '_emissions_downscaled_linear' ) )
-iam_em_ipat <- readData( domain = 'MED_OUT', file_name = paste0( 'B.', iam, '_emissions_downscaled_ipat' ) )
+iam_em_nods <- readData( domain = 'MED_OUT', file_name = paste0( 'B.', iam, '_emissions_nods', '_', RUNSUFFIX ) )
+iam_em_linear <- readData( domain = 'MED_OUT', file_name = paste0( 'B.', iam, '_emissions_downscaled_linear', '_', RUNSUFFIX ) )
+iam_em_ipat <- readData( domain = 'MED_OUT', file_name = paste0( 'B.', iam, '_emissions_downscaled_ipat', '_', RUNSUFFIX ) )
 
 # -----------------------------------------------------------------------------
 # 3. Combine different parts of downscaled IAM emissions
@@ -109,10 +109,10 @@ colnames( final_out ) <- gsub( 'X', '', colnames( final_out ) )
 # -----------------------------------------------------------------------------
 # 5 Write out
 
-out_filename <- paste0( 'B.', iam, '_', harm_status, '_emissions_downscaled' )
+out_filename <- paste0( 'B.', iam, '_', harm_status, '_emissions_downscaled', '_', RUNSUFFIX )
 writeData( final_out , 'MODB_OUT', out_filename, meta = F )  
 
-out_filename <- paste0( 'B.', iam, '_', harm_status, '_emissions_downscaled_for_gridding' )
+out_filename <- paste0( 'B.', iam, '_', harm_status, '_emissions_downscaled_for_gridding', '_', RUNSUFFIX )
 writeData( iam_em_gridding_full , 'MED_OUT', out_filename, meta = F )  
 # END
 

@@ -51,6 +51,8 @@ iam <- args_from_makefile[ 1 ]
 harm_status <- args_from_makefile[ 2 ]
 input_file <- args_from_makefile[ 3 ]   
 modb_out <- args_from_makefile[ 4 ]    
+input_file_wo_path <- tail( unlist( strsplit( input_file, '/' ) ), n = 1 ) 
+RUNSUFFIX <- substr( sha1( input_file_wo_path ), 1, 6 ) 
 
 domainmapping <- read.csv( DOMAINPATHMAP, stringsAsFactors = F )
 domainmapping[ domainmapping$Domain == 'MODB_OUT', "PathToDomain" ] <- modb_out
