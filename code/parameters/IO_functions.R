@@ -209,7 +209,7 @@ logStop <- function() {
 readDomainPathMap <- function() {
 	fn <- DOMAINPATHMAP
 	fpm <- tryCatch( {
-		 read.csv( fn, comment.char="#" )
+		 get( 'domainmapping' )
 #	}, warning=function( war ) {
 #		warning( "Warning in read of", fn )
 #		warning( war )

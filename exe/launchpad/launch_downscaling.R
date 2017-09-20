@@ -1,7 +1,7 @@
 # ------------------------------------------------------------------------------
 # Program Name: luanch_downscaling.R
 # Author(s): Leyang Feng
-# Date Last Updated: Mar 20, 2017 
+# Date Last Updated: Sep 20, 2017 
 # Program Purpose: The script runs all downscaling scripts (module-B). 
 # Input Files: 
 # Output Files:
@@ -56,7 +56,7 @@ RUNSUFFIX <- substr( sha1( input_file_wo_path ), 1, 6 )
 
 domainmapping <- read.csv( DOMAINPATHMAP, stringsAsFactors = F )
 domainmapping[ domainmapping$Domain == 'MODB_OUT', "PathToDomain" ] <- modb_out
-write.csv( domainmapping, DOMAINPATHMAP, row.names = F )
+#write.csv( domainmapping, DOMAINPATHMAP, row.names = F )
 
 # -----------------------------------------------------------------------------
 # 2. Clean up relics
