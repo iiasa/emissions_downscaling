@@ -255,7 +255,10 @@ grid_one_sector <- function( sector,
     global_em_spatial <- aggregate_all_isos( iso_list, iso_em_spatial_list, location_index, grid_resolution, flux_factor )
     }
 
-  return( global_em_spatial )
+  # add seasonality
+  global_em_spatial_fin <- add_seasonality( global_em_spatial, em, sector, year, days_in_month, grid_resolution, seasonality_mapping )
+  
+  return( global_em_spatial_fin )
 }
 
 # ------------------------------------------------------------------------------
@@ -286,7 +289,7 @@ grid_all_sectors <- function( sector_list,
                       location_index, 
                       proxy_mapping, 
                       proxy_substitution_mapping ) 
-  names( res_list ) <- paste0( sector_list, '_int_grid' )
+  names( res_list ) <- paste0( sector_list )
   return( res_list )
 }
 
@@ -327,6 +330,39 @@ grid_one_year <- function( em,
                                          proxy_substitution_mapping )
   
   return( sector_grids_list )
+}
+
+# ------------------------------------------------------------------------------
+# grid_one_year
+# Brief: Generates one year's gridded emission
+# Dependencies: grid_all_sectors 
+# Author: Leyang Feng
+# parameters: em - the current gridding emission species
+#             year - the vurrent gridding year
+#             grid_resolution - gridding resolution 
+#             location_index - location index table, contains matrix index information for the country in global extent
+#             proxy_mapping - proxy mapping file 
+#             proxy_substitution_mapping - proxy substitution mapping file 
+# return: sector_grids_list - a list contains one year's gridded emission for each sector
+# input files: null
+# output: null 
+
+grid_all_years <- function( year_list, em, grid_resolution, gridding_em, location_index, proxy_mapping, proxy_substitution_mapping ) {
+  
+  allyear_grids_list <- lapply( year_list, function( year ) { 
+    
+    fin_grids_list <- grid_one_year( em, 
+                                     year, 
+                                     grid_resolution,
+                                     gridding_em, 
+                                     location_index, 
+                                     proxy_mapping, 
+                                     proxy_substitution_mapping )
+  } )  
+  
+  names( allyear_grids_list ) <- paste0( 'X', year_list )
+  
+  return( allyear_grids_list )
 }
 
 # ------------------------------------------------------------------------------
@@ -619,7 +655,17 @@ gridding_initialize <- function( grid_resolution = 0.5,
   
   start_year <- start_year
   end_year <- end_year
-  year_list <<- seq( start_year, end_year )
+  
+  # for years only 2xx0 years are supported (except 2015)
+  if ( start_year %!in% c( 2015, seq( 2020, 2100, 10 ) ) ) { stop( 'Unsupported gridding start year') }
+  if ( end_year %!in% c( 2015, seq( 2020, 2100, 10 ) ) )  { stop( 'Unsupported gridding end year') }
+
+  if ( start_year == 2015 ) { 
+    year_list <<- c( 2015, seq( 2020, end_year, 10 ) )
+  } else { 
+      year_list <<- seq( start_year, end_year ) 
+      }
+
   printLog( paste0( 'Gridding from year ', start_year, ' to year ', end_year ) )
   
   # load country masks 
@@ -636,7 +682,10 @@ gridding_initialize <- function( grid_resolution = 0.5,
   if ( load_seasonality_profile ) { 
     invisible( lapply( common_seasonality_list, function( common_seasonality ) { load( paste0( seasonality_dir, common_seasonality ), .GlobalEnv ) } ) )
     printLog( 'Seasonality profile initialized' )
-    }
+  }
+  
+  # other pre-set values
+  days_in_month <- c( 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 )
 }
 
 

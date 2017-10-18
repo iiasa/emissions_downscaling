@@ -55,14 +55,11 @@ print( paste0( 'The IAM to be processed is: ', iam_name  ) )
 # -----------------------------------------------------------------------------
 # 2. Read in the downscaled emissions and gridding mapping file 
 iam_data <- readData( domain = 'MED_OUT', 
-                      file_name = paste0( 'B.', iam_name, '_', harm_status, '_emissions_downscaled_for_gridding' ) )
+                      file_name = paste0( 'B.', iam, '_', harm_status, '_emissions_downscaled_for_gridding', '_', RUNSUFFIX ) )
 sector_mapping <- readData( domain = 'GRIDDING', domain_extension = 'gridding-mappings/', file_name = gridding_sector_mapping )
 
 # -----------------------------------------------------------------------------
 # 3. Make necessary change
-iam_data$X2015 <- ifelse( iam_data$X2015 == 'NA', NA, iam_data$X2015 )
-iam_data$X2015 <- as.numeric( iam_data$X2015 )
-
 iam_em <- merge( iam_data, sector_mapping, 
                  by.x = 'sector', by.y = 'sector_name' )
 iam_em$sector <- NULL
@@ -71,7 +68,7 @@ colnames( iam_em )[ which( colnames( iam_em ) == 'sector_short' ) ] <- 'sector'
 # -----------------------------------------------------------------------------
 # 4. Write out
 # write the interpolated iam_data into intermediate output folder 
-out_filname <- paste0( 'C.', iam_name, '_', harm_status, '_emissions_reformatted' )
+out_filname <- paste0( 'C.', iam, '_', harm_status, '_emissions_reformatted', '_', RUNSUFFIX )
 writeData( iam_em , 'MED_OUT', out_filname, meta = F )  
 
 # END

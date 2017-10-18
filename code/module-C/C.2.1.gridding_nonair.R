@@ -39,8 +39,9 @@ initialize( script_name, log_msg, headers )
 if ( !exists( 'args_from_makefile' ) ) args_from_makefile <- commandArgs( TRUE )
 iam <- args_from_makefile[ 1 ]
 harm_status <- args_from_makefile[ 2 ]
-modc_out <- args_from_makefile[ 3 ]   
+modc_out <- args_from_makefile[ 5 ]  
 if ( is.na( iam ) ) iam <- "GCAM4"
+if ( is.na( modc_out ) ) iam <- "../final-output/module-C"
 
 MODULE_C <- "../code/module-C/"
 
@@ -67,13 +68,12 @@ gridding_initialize( grid_resolution = grid_resolution,
                      load_masks = T, 
                      load_seasonality_profile = T )
 
+dataset_version_number <- 'V1'
+
 # -----------------------------------------------------------------------------
 # 3. Read in emissions file and mappings 
 iam_data <- readData( domain = 'MED_OUT', 
-                      file_name = paste0( 'C.', iam_name, '_',  harm_status, '_emissions_reformatted' ) )
-
-iam_data$X2015 <- ifelse( iam_data$X2015 == 'NA', 0, iam_data$X2015 )
-iam_data$X2015 <- as.numeric( iam_data$X2015 )
+                      file_name = paste0( 'C.', iam, '_',  harm_status, '_emissions_reformatted', '_', RUNSUFFIX ) )
 
 proxy_mapping  <- readData( domain = 'GRIDDING', 
                             domain_extension = 'gridding-mappings/',
@@ -98,38 +98,44 @@ iam_em <- iam_data[ iam_data$sector != 'AIR', ]
 
 em_list <- sort( unique( iam_em$em ) )
 
-sce_list <- sort( unique( iam_em$scenario ) )
+scenario_list <- sort( unique( iam_em$scenario ) )
 
 # -----------------------------------------------------------------------------
-# 3. Gridding and writing output data 
+# 5. Gridding and writing output data 
 
-for ( sce in sce_list ) { 
+for ( scenario in scenario_list ) { 
   for ( em in em_list ) { 
-    gridding_em <- iam_em[ iam_em$scenario == sce & iam_em$em == em, ]
+    gridding_em <- iam_em[ iam_em$scenario == scenario & iam_em$em == em, ]
     
-    for ( year in year_list ) { 
-      
-      int_grids_list <- grid_one_year( em, 
-                                       year, 
-                                       grid_resolution,
-                                       gridding_em, 
-                                       location_index, 
-                                       proxy_mapping, 
-                                       proxy_substitution_mapping )
-      generate_final_grids_nc( int_grids_list,
-                               output_dir,
-                               grid_resolution,
-                               year,
-                               em,
-                               sector_name_mapping,
-                               seasonality_mapping )
-      }
-    } 
-  }
+    allyear_grids_list <- grid_all_years( year_list, 
+                                          em, 
+                                          grid_resolution, 
+                                          gridding_em, 
+                                          location_index, 
+                                          proxy_mapping, 
+                                          proxy_substitution_mapping )
+    
+    generate_bulk_grids_nc( allyear_grids_list, 
+                            output_dir, 
+                            grid_resolution, 
+                            year_list, 
+                            em, 
+                            sector_name_mapping,
+                            seasonality_mapping )  
+    
+    generate_openburning_grids_nc( allyear_grids_list, 
+                                   output_dir, 
+                                   grid_resolution, 
+                                   year_list, 
+                                   em, 
+                                   sector_name_mapping,
+                                   seasonality_mapping ) 
+  } 
+}
 
 # -----------------------------------------------------------------------------
-# 4. Write out
- 
+# 6. Write out
+
 
 # END
 
