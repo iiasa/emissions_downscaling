@@ -685,7 +685,7 @@ gridding_initialize <- function( grid_resolution = 0.5,
   }
   
   # other pre-set values
-  days_in_month <- c( 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 )
+  days_in_month <<- c( 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 )
 }
 
 
