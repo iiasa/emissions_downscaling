@@ -333,7 +333,7 @@ grid_one_year <- function( em,
 }
 
 # ------------------------------------------------------------------------------
-# grid_one_year
+# grid_all_years
 # Brief: Generates one year's gridded emission
 # Dependencies: grid_all_sectors 
 # Author: Leyang Feng

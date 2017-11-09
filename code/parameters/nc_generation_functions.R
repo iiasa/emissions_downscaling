@@ -44,17 +44,38 @@ generate_bulk_grids_nc <- function( allyear_grids_list,
     current_year_sector_array <- array( dim = c( 360 / grid_resolution, # lat lon flipped to accommodate nc write-in
                                                  180 / grid_resolution, 
                                                  length( bulk_sectors ), length( year ) * 12 ) ) 
+    temp_checksum_storage <- c()
     for ( i in seq_along( bulk_sectors ) ) { 
 
       temp_array <- current_year_grids_list[[ bulk_sectors[ i ] ]]
+      temp_array_checksum <- temp_array 
       # flip each time slice of tmep_array 
       temp_array <- array( unlist( lapply( 1 : 12, function( i ) { t( flip_a_matrix( temp_array[ , , i ] ) ) } ) ), dim = c( 360 / grid_resolution, 180 / grid_resolution, 12 ) )
       
       current_year_sector_array[ , , i, ] <- temp_array
+      
+      # convert from kg m-2 s-1 to Mt 
+      temp_array_checksum <- unlist( lapply( 1  : 12, function( i ) { 
+        sum( temp_array_checksum[ , , i ] * 
+               grid_area( grid_resolution, all_lon = T ) * 
+               ( days_in_month[ i ] * 24 * 60 * 60 ) / 
+               1000000000 ) # convert from kg m-2 s-1 to Mt for sum 
+        } ) )
+      temp_checksum_storage <- c( temp_checksum_storage, temp_array_checksum )
     }
-    return( current_year_sector_array )
+    
+    temp_checksum_df <- data.frame( em = em, 
+                                    sector = unlist( lapply( bulk_sectors, rep, 12 ) ),
+                                    year = year,
+                                    month = rep( 1 : 12, length( bulk_sectors ) ),
+                                    unit = 'Mt',
+                                    value = temp_checksum_storage,
+                                    stringsAsFactors = F )
+    
+    return( list( current_year_sector_array, temp_checksum_df ) )
     } )
-  
+  checksum_df_list <- lapply( year_data_list, '[[', 2 )
+  year_data_list <- lapply( year_data_list, '[[', 1 )
   em_array <- array( unlist( year_data_list ),  dim = c( 360 / grid_resolution, # lat lon flipped to accommodate nc write-in
                                                          180 / grid_resolution, 
                                                          length( bulk_sectors ), length( year_list ) * 12 ) ) 
@@ -212,6 +233,12 @@ generate_bulk_grids_nc <- function( allyear_grids_list,
   # ---
   # 9. close nc_new
   nc_close( nc_new )
+  
+  # ---
+  # 10. add checksum file 
+  out_name <- gsub( '.nc', '.csv', nc_file_name_w_path, fixed = T )
+  out_df <- do.call( 'rbind', checksum_df_list )
+  write.csv( out_df, out_name, row.names = F )                      
 } 
 
 # -------------------------------------------------
@@ -244,17 +271,37 @@ generate_openburning_grids_nc <- function( allyear_grids_list,
     current_year_sector_array <- array( dim = c( 360 / grid_resolution, # lat lon flipped to accommodate nc write-in
                                                  180 / grid_resolution, 
                                                  length( openburning_sectors ), length( year ) * 12 ) ) 
+    temp_checksum_storage <- c()
     for ( i in seq_along( openburning_sectors ) ) { 
       
       temp_array <- current_year_grids_list[[ openburning_sectors[ i ] ]]
+      temp_array_checksum <- temp_array 
       # flip each time slice of tmep_array 
       temp_array <- array( unlist( lapply( 1 : 12, function( i ) { t( flip_a_matrix( temp_array[ , , i ] ) ) } ) ), dim = c( 360 / grid_resolution, 180 / grid_resolution, 12 ) )
       
       current_year_sector_array[ , , i, ] <- temp_array
+      
+      # convert from kg m-2 s-1 to Mt 
+      temp_array_checksum <- unlist( lapply( 1  : 12, function( i ) { 
+        sum( temp_array_checksum[ , , i ] * 
+               grid_area( grid_resolution, all_lon = T ) * 
+               ( days_in_month[ i ] * 24 * 60 * 60 ) / 
+               1000000000 ) # convert from kg m-2 s-1 to Mt for sum 
+      } ) )
+      temp_checksum_storage <- c( temp_checksum_storage, temp_array_checksum )
     }
-    return( current_year_sector_array )
+    temp_checksum_df <- data.frame( em = em, 
+                                    sector = unlist( lapply( openburning_sectors, rep, 12 ) ),
+                                    year = year,
+                                    month = rep( 1 : 12, length( openburning_sectors ) ),
+                                    unit = 'Mt',
+                                    value = temp_checksum_storage,
+                                    stringsAsFactors = F )
+    
+    return( list( current_year_sector_array, temp_checksum_df ) )
   } )
-  
+  checksum_df_list <- lapply( year_data_list, '[[', 2 )
+  year_data_list <- lapply( year_data_list, '[[', 1 )
   em_array <- array( unlist( year_data_list ),  dim = c( 360 / grid_resolution, # lat lon flipped to accommodate nc write-in
                                                          180 / grid_resolution, 
                                                          length( openburning_sectors ), length( year_list ) * 12 ) ) 
@@ -405,12 +452,18 @@ generate_openburning_grids_nc <- function( allyear_grids_list,
   
   # some other metadata
   ncatt_put( nc_new, 0, 'data_usage_tips', 'Note that these are monthly average fluxes. Note that emissions are provided in uneven year intervals (2015, 2020, then at 10 year intervals) as these are the years for which projection data is available.' )
-  reporting_info <- data.frame( em = c( 'Sulfur', 'NOx', 'CO', 'VOC', 'NH3', 'BC', 'OC', 'CO2', 'CH4' ), info = c( 'Mass flux of SOx, reported as SO2', 'Mass flux of NOx, reported as NO2', 'Mass flux of CO', 'Mass flux of NMVOC (total mass emitted)', 'Mass flux of NH3', 'Mass flux of BC, reported as carbon mass', 'Mass flux of OC, reported as carbon mass', 'Mass flux of CO2', 'Mass flux of CH4' ), stringsAsFactors = F )
+  reporting_info <- data.frame( em = c( 'Sulfur', 'NOx', 'CO', ' VOC', 'NH3', 'BC', 'OC', 'CO2', 'CH4' ), info = c( 'Mass flux of SOx, reported as SO2', 'Mass flux of NOx, reported as NO2', 'Mass flux of CO', 'Mass flux of NMVOC (total mass emitted)', 'Mass flux of NH3', 'Mass flux of BC, reported as carbon mass', 'Mass flux of OC, reported as carbon mass', 'Mass flux of CO2', 'Mass flux of CH4' ), stringsAsFactors = F )
   info_line <- reporting_info[ reporting_info$em == em, 'info' ] 
   ncatt_put( nc_new, 0, 'reporting_unit', info_line )
   
   # ---
   # 9. close nc_new
   nc_close( nc_new )
+  
+  # ---
+  # 10. add checksum file 
+  out_name <- gsub( '.nc', '.csv', nc_file_name_w_path, fixed = T )
+  out_df <- do.call( 'rbind', checksum_df_list )
+  write.csv( out_df, out_name, row.names = F )   
 } 
 
