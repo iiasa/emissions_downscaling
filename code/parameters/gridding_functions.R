@@ -388,23 +388,59 @@ grid_one_year_air <- function( em,
   gridding_emissions_xyear <- gridding_emissions[ c( 'iso', 'sector', current_x_year ) ]
   
   global_grid_area <- grid_area( grid_resolution, all_lon = T )
-  flux_factor <- 1000000 / global_grid_area / ( 365 * 24 * 60 * 60 )
+  flux_factor <- 1000000000 / global_grid_area / ( 365 * 24 * 60 * 60 ) # from Mt to kg m-2 s-1
   
   emissions_value <- unlist( gridding_emissions_xyear[ current_x_year ] )
   
   if ( emissions_value <= 0 ) { 
     AIR_global_em_spatial <- array( 0, dim = c( 180 / grid_resolution, 360 / grid_resolution, 25 ) ) 
   } else {
-      proxy <- get_proxy( em, year, 'AIR', proxy_mapping, proxy_type = 'primary' )
-      proxy_norm <- proxy / sum( proxy )
-      AIR_global_em_spatial <- proxy_norm * emissions_value
-      
-      # convert to flux
-      flux_factor_array <- array( rep( as.vector( flux_factor ), dim( AIR_global_em_spatial )[ 3 ]), dim = dim( AIR_global_em_spatial ) )
-      AIR_global_em_spatial <- AIR_global_em_spatial * flux_factor_array 
+    proxy <- get_proxy( em, year, 'AIR', proxy_mapping, proxy_type = 'primary' )
+    proxy_norm <- proxy / sum( proxy )
+    AIR_global_em_spatial <- proxy_norm * emissions_value
+    
+    # convert to flux
+    flux_factor_array <- array( rep( as.vector( flux_factor ), dim( AIR_global_em_spatial )[ 3 ]), dim = dim( AIR_global_em_spatial ) )
+    AIR_global_em_spatial <- AIR_global_em_spatial * flux_factor_array 
   }
-
+  
+  AIR_global_em_spatial <- add_seasonality( AIR_global_em_spatial, em, 'AIR', year, days_in_month, grid_resolution, seasonality_mapping )
+  
   return( AIR_global_em_spatial )
+}
+
+# ------------------------------------------------------------------------------
+# grid_all_years_air
+# Brief: Generates one year's gridded emission for sector AIR 
+# Dependencies: get_proxy 
+# Author: Leyang Feng
+# parameters: em - the current gridding emission species
+#             year - the current gridding year
+#             grid_resolution - gridding resolution  
+#             gridding_emissions - emissions df used for gridding
+#             proxy_mapping - proxy mapping file
+# return: AIR_global_em_spatial - a 3D array of distributed aircraft emissions
+# input files: null
+# output: null 
+grid_all_years_air <- function( year_list, 
+                                em, 
+                                grid_resolution, 
+                                gridding_em, 
+                                proxy_mapping ) {
+  
+  
+  allyear_grids_list <- lapply( year_list, function( year ) { 
+    
+    fin_grids_list <- grid_one_year_air( em, 
+                                          year, 
+                                          grid_resolution,
+                                          gridding_em, 
+                                          proxy_mapping ) 
+  } )  
+  
+  names( allyear_grids_list ) <- paste0( 'X', year_list )
+  
+  return( allyear_grids_list )
 }
 
 # ==============================================================================

@@ -89,3 +89,4 @@ if ( iam == 'REMIND-MAGPIE' ) {
 # 4. Source module-C script in order
 source( '../code/module-C/C.1.gridding_data_reformatting.R' )
 source( '../code/module-C/C.2.1.gridding_nonair.R' )
+source( '../code/module-C/C.2.2.gridding_air.R' )

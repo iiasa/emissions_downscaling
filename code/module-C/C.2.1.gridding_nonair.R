@@ -120,16 +120,14 @@ for ( scenario in scenario_list ) {
                             grid_resolution, 
                             year_list, 
                             em, 
-                            sector_name_mapping,
-                            seasonality_mapping )  
+                            sector_name_mapping )  
     
     generate_openburning_grids_nc( allyear_grids_list, 
                                    output_dir, 
                                    grid_resolution, 
                                    year_list, 
                                    em, 
-                                   sector_name_mapping,
-                                   seasonality_mapping ) 
+                                   sector_name_mapping ) 
   } 
 }
 
