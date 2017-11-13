@@ -37,11 +37,12 @@ initialize( script_name, log_msg, headers )
 # 1. Set up desired IAM to be processing
 
 # debug
-args_from_makefile <- c( 'MESSAGE-GLOBIOM', 
-                         'Unharmonized',
-                         'C:/Users/feng999/Documents/emissions_downscaling/input/IAM_emissions/MESSAGE-GLOBIOM_SSP2-Ref-SPA0-V25_unharmonized.xlsx',
-                         'C:/Users/feng999/Documents/emissions_downscaling/final-output/module-B', 
-                         'C:/Users/feng999/Documents/emissions_downscaling/final-output/module-C')
+#args_from_makefile <- c( 'MESSAGE-GLOBIOM', 
+#                         'Unharmonized',
+#                         'C:/Users/feng999/Documents/emissions_downscaling/input/IAM_emissions/MESSAGE-GLOBIOM_SSP2-Ref-SPA0-V25_unharmonized.xlsx',
+#                         'C:/Users/feng999/Documents/emissions_downscaling/final-output/module-B', 
+#                         'C:/Users/feng999/Documents/emissions_downscaling/final-output/module-C',
+#                         'gridding' )
 
 # debug CLI
 
@@ -53,6 +54,7 @@ harm_status <- args_from_makefile[ 2 ]
 input_file <- args_from_makefile[ 3 ]   
 modb_out <- args_from_makefile[ 4 ]    
 modc_out <- args_from_makefile[ 5 ]
+gridding_flag <- args_from_makefile[ 6 ]
 input_file_wo_path <- tail( unlist( strsplit( input_file, '/' ) ), n = 1 ) 
 RUNSUFFIX <- substr( sha1( input_file_wo_path ), 1, 6 ) 
 
@@ -87,6 +89,8 @@ if ( iam == 'REMIND-MAGPIE' ) {
 
 # -----------------------------------------------------------------------------
 # 4. Source module-C script in order
-source( '../code/module-C/C.1.gridding_data_reformatting.R' )
-source( '../code/module-C/C.2.1.gridding_nonair.R' )
-source( '../code/module-C/C.2.2.gridding_air.R' )
+if ( gridding_flag == 'gridding' ) { 
+  source( '../code/module-C/C.1.gridding_data_reformatting.R' )
+  source( '../code/module-C/C.2.1.gridding_nonair.R' )
+  source( '../code/module-C/C.2.2.gridding_air.R' ) 
+}
