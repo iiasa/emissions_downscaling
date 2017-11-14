@@ -58,6 +58,11 @@ gridding_flag <- args_from_makefile[ 6 ]
 input_file_wo_path <- tail( unlist( strsplit( input_file, '/' ) ), n = 1 ) 
 RUNSUFFIX <- substr( sha1( input_file_wo_path ), 1, 6 ) 
 
+dir.create( modb_out )
+if ( !is.na( modc_out ) ) { 
+dir.create( modc_out )
+}
+  
 domainmapping <- read.csv( DOMAINPATHMAP, stringsAsFactors = F )
 domainmapping[ domainmapping$Domain == 'MODB_OUT', "PathToDomain" ] <- modb_out
 domainmapping[ domainmapping$Domain == 'MODC_OUT', "PathToDomain" ] <- modc_out
