@@ -53,7 +53,6 @@ iam_info_list <- iamInfoExtract( master_config, iam )
 # extract target IAM and reference_em info from master mapping 
 base_year <- as.numeric( base_year )
 x_baseyear <- paste0( 'X', base_year )
-convergence_year <- 'con_year'
 
 con_year_mapping <- readData( domain = 'MAPPINGS', file_name = ds_convergence_year_mapping )
 con_year_mapping <- con_year_mapping[ con_year_mapping$model == iam, c( "scenario_label", "convergence_year" ) ]
@@ -88,14 +87,14 @@ wide_df <- merge( wide_df, gdp_data[ , c( 'scenario', 'region', 'iso', gdp_data_
 # -----------------------------------------------------------------------------
 # 5. Downscaling
 
-downscaleIAMemissions <- function( wide_df ) { 
+downscaleIAMemissions <- function( wide_df, con_year_mapping ) { 
     
     # set up two working df: parameter data frame and results data frame
     par_df <- wide_df[ , c( "region", "iso", "ssp_label", "em", "sector", "model", "scenario", "unit" ) ] 
     res_df <- wide_df[ , c( "region", "iso", "ssp_label", "em", "sector", "model", "scenario", "unit", paste0( 'ctry_ref_em_X', base_year ) ) ] 
     
     # equation (1)
-    par_df$EIRCY <- wide_df[ , paste0( 'reg_iam_em_X', convergence_year ) ] / wide_df[ , paste0( 'reg_gdp_X', convergence_year ) ]
+    par_df$EIRCY <- wide_df[ , 'reg_iam_em_Xcon_year' ] / wide_df[ , 'reg_gdp_Xcon_year' ]
     par_df$EICBY <- wide_df[ , paste0( 'ctry_ref_em_X', base_year ) ] / wide_df[ , paste0( 'ctry_gdp_X', base_year ) ]
     
     out_df_list <- lapply( unique( wide_df$ssp_label ), function( ssp ) { 
@@ -155,7 +154,7 @@ downscaleIAMemissions <- function( wide_df ) {
   return( out_df )
 }
 
-ds_df <- downscaleIAMemissions( wide_df )
+ds_df <- downscaleIAMemissions( wide_df, con_year_mapping )
 
 # -----------------------------------------------------------------------------
 # 5 Write out
