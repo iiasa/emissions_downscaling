@@ -237,7 +237,9 @@ generate_bulk_grids_nc <- function( allyear_grids_list,
   # 10. add checksum file 
   out_name <- gsub( '.nc', '.csv', nc_file_name_w_path, fixed = T )
   out_df <- do.call( 'rbind', checksum_df_list )
-  write.csv( out_df, out_name, row.names = F )                      
+  write.csv( out_df, out_name, row.names = F )          
+  
+  invisible( gc( ) )
 } 
 
 # -------------------------------------------------
@@ -463,6 +465,8 @@ generate_openburning_grids_nc <- function( allyear_grids_list,
   out_name <- gsub( '.nc', '.csv', nc_file_name_w_path, fixed = T )
   out_df <- do.call( 'rbind', checksum_df_list )
   write.csv( out_df, out_name, row.names = F )   
+  
+  invisible( gc( ) )
 } 
 
 # -------------------------------------------------

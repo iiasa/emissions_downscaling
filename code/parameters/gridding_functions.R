@@ -362,6 +362,8 @@ grid_all_years <- function( year_list, em, grid_resolution, gridding_em, locatio
   
   names( allyear_grids_list ) <- paste0( 'X', year_list )
   
+  invisible( gc( ) )
+  
   return( allyear_grids_list )
 }
 
@@ -439,6 +441,8 @@ grid_all_years_air <- function( year_list,
   } )  
   
   names( allyear_grids_list ) <- paste0( 'X', year_list )
+  
+  invisible( gc( ) )
   
   return( allyear_grids_list )
 }
