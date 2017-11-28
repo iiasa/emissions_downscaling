@@ -109,10 +109,10 @@ colnames( final_out ) <- gsub( 'X', '', colnames( final_out ) )
 # -----------------------------------------------------------------------------
 # 5 Write out
 
-out_filename <- paste0( 'B.', iam, '_', harm_status, '_emissions_downscaled', '_', RUNSUFFIX )
-writeData( final_out , 'MODB_OUT', out_filename, meta = F )  
+out_filename <- paste0( 'B.', iam, '_', harm_status, '_emissions_downscaled' )
+writeData( final_out, 'MODB_OUT', out_filename, meta = F )  
 
 out_filename <- paste0( 'B.', iam, '_', harm_status, '_emissions_downscaled_for_gridding', '_', RUNSUFFIX )
-writeData( iam_em_gridding_full , 'MED_OUT', out_filename, meta = F )  
+writeData( iam_em_gridding_full, 'MED_OUT', out_filename, meta = F )  
 # END
-
+logStop()

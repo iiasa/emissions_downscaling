@@ -139,3 +139,4 @@ out_filname <- paste0( 'B.', 'iiasa_gdp_iso_', iam, '_region', '_', RUNSUFFIX )
 writeData( gdp_iso_region, 'MED_OUT', out_filname, meta = F )  
 
 # END
+logStop()

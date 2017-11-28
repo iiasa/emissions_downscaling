@@ -161,4 +161,4 @@
   writeData( iam_int, 'MED_OUT', out_filname, meta = F )
 
 # END
-
+logStop()

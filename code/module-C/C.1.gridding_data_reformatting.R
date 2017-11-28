@@ -72,4 +72,4 @@ out_filname <- paste0( 'C.', iam, '_', harm_status, '_emissions_reformatted', '_
 writeData( iam_em , 'MED_OUT', out_filname, meta = F )  
 
 # END
-
+logStop()

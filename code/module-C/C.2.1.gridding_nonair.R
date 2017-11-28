@@ -133,7 +133,8 @@ for ( scenario in scenario_list ) {
 
 # -----------------------------------------------------------------------------
 # 6. Write out
-
+# nothing to write
 
 # END
+logStop()
 

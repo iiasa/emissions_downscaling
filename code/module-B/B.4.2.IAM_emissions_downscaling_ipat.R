@@ -163,4 +163,4 @@ out_filename <- paste0( 'B.', iam, '_emissions_downscaled_ipat', '_', RUNSUFFIX 
 writeData( ds_df, 'MED_OUT', out_filename, meta = F )  
 
 # END
-
+logStop()

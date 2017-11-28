@@ -90,4 +90,4 @@ out_filname <- paste0( 'B.', iam, '_emissions_downscaled_linear', '_', RUNSUFFIX
 writeData( ds_iam_em_agr, 'MED_OUT', out_filname, meta = F )  
 
 # END
-
+logStop()

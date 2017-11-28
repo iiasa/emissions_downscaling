@@ -80,4 +80,5 @@ out_filename <- paste0( 'B.', iam_name, '_', harm_status, '_emissions_downscaled
 writeData( iam_em_reg, 'MODB_OUT', out_filename, meta = F )  
 
 # END
+logStop()
 

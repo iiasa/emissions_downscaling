@@ -204,4 +204,5 @@ out_filname <- paste0( 'B.', iam, '_emissions_ipat', '_', RUNSUFFIX )
 writeData( iam_em_ipat, 'MED_OUT', out_filname, meta = F )  
 
 # END
+logStop()
 
