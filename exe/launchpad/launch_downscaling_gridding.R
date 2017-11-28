@@ -1,8 +1,8 @@
 # ------------------------------------------------------------------------------
-# Program Name: luanch_downscaling.R
+# Program Name: luanch_downscaling_gridding.R
 # Author(s): Leyang Feng
-# Date Last Updated: Sep 20, 2017 
-# Program Purpose: The script runs all downscaling scripts (module-B). 
+# Date Last Updated: Nov 28, 2017 
+# Program Purpose: The script runs downscaling and gridding
 # Input Files: 
 # Output Files:
 # Notes: 
@@ -44,8 +44,8 @@ initialize( script_name, log_msg, headers )
 #                         'C:/Users/feng999/Documents/emissions_downscaling/final-output/module-C',
 #                         'gridding' )
 
-# debug CLI
-
+# the flag for intermediate file cleaning
+MED_OUT_CLEAN <- T
 
 # getting target IAM from command line arguement
 if ( !exists( 'args_from_makefile' ) ) args_from_makefile <- commandArgs( TRUE )
@@ -55,33 +55,33 @@ input_file <- args_from_makefile[ 3 ]
 modb_out <- args_from_makefile[ 4 ]    
 modc_out <- args_from_makefile[ 5 ]
 gridding_flag <- args_from_makefile[ 6 ]
-input_file_wo_path <- tail( unlist( strsplit( input_file, '/' ) ), n = 1 ) 
-RUNSUFFIX <- substr( sha1( input_file_wo_path ), 1, 6 ) 
+#input_file_wo_path <- tail( unlist( strsplit( input_file, '/' ) ), n = 1 ) 
+#RUNSUFFIX <- substr( sha1( input_file_wo_path ), 1, 6 ) 
+RUNSUFFIX <- substr( sha1( runif(1) ), 1, 6 ) 
 
-dir.create( modb_out )
-if ( !is.na( modc_out ) ) { 
-dir.create( modc_out )
-}
-  
+# update domainmapping for current run 
 domainmapping <- read.csv( DOMAINPATHMAP, stringsAsFactors = F )
+
+# create modb_out 
+dir.create( modb_out )
+# create modc_out if only the gridding flag is given  
+if ( gridding_flag == 'gridding' ) { 
+dir.create( modc_out )
+} else { 
+  modc_out <- NA 
+  }
+
+# create unique directory for intermediate files 
+med_out <- paste0( '../intermediate-output', '/', RUNSUFFIX )
+dir.create( med_out )
+
+domainmapping[ domainmapping$Domain == 'MED_OUT', "PathToDomain" ] <- med_out
 domainmapping[ domainmapping$Domain == 'MODB_OUT', "PathToDomain" ] <- modb_out
 domainmapping[ domainmapping$Domain == 'MODC_OUT', "PathToDomain" ] <- modc_out
 #write.csv( domainmapping, DOMAINPATHMAP, row.names = F )
 
 # -----------------------------------------------------------------------------
-# 2. Clean up relics
-#fin_filelist <- list.files( '../final-output/module-B/'  )
-#fin_file_list <- fin_filelist[ fin_filelist != 'README' ]
-#if ( length( fin_file_list ) > 0 ) { 
-#  invisible( file.remove( paste0( '../final-output/module-B/', fin_file_list ) ) )
-#}
-
-#if ( length( list.files( path = '../intermediate-output/', pattern = 'B.' ) ) > 0 ) {  
-#  invisible( file.remove( paste0( '../intermediate-output/', list.files( path = '../intermediate-output/', pattern = 'B.' ) ) ) )
-#}
-
-# -----------------------------------------------------------------------------
-# 3. Source module-B script in order
+# 2. Source module-B script in order
 source( '../code/module-B/B.1.IAM_input_reformatting.R' )
 source( '../code/module-B/B.2.IAM_reference_emission_preparation.R' )
 source( '../code/module-B/B.3.regional_pop_gdp_preparation.R' )
@@ -93,9 +93,16 @@ if ( iam == 'REMIND-MAGPIE' ) {
 }
 
 # -----------------------------------------------------------------------------
-# 4. Source module-C script in order
+# 3. Source module-C script in order
 if ( gridding_flag == 'gridding' ) { 
   source( '../code/module-C/C.1.gridding_data_reformatting.R' )
   source( '../code/module-C/C.2.1.gridding_nonair.R' )
   source( '../code/module-C/C.2.2.gridding_air.R' ) 
+}
+
+# -----------------------------------------------------------------------------
+# 4. clean the intermediate files
+if ( MED_OUT_CLEAN ) { 
+  invisible( unlink( med_out, recursive = T ) )
+  invisible( file.remove( paste0( '../documentation/IO_documentation_', RUNSUFFIX, '.csv' ) ) )
 }
