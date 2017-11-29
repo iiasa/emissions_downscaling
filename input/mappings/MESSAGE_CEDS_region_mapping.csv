@@ -169,6 +169,7 @@ rus,Russian Federation,FSU,R5REF
 rwa,Rwanda,AFR,R5MAF
 sau,Saudi Arabia,MEA,R5MAF
 sdn,Sudan,MEA,R5MAF
+ssd,South Sudan,MEA,R5MAF
 sen,Senegal,AFR,R5MAF
 sgp,Singapore,PAS,R5ASIA
 slb,Solomon Islands,PAS,R5ASIA
@@ -177,6 +178,7 @@ slv,El Salvador,LAM,R5LAM
 som,Somalia,AFR,R5MAF
 spm,Saint Pierre and Miquelon,WEU,R5OECD
 srb,Serbia,EEU,R5OECD
+srb (kosovo),Kosovo,EEU,R5OECD
 stp,Sao Tome and Principe,AFR,R5MAF
 sur,Suriname,LAM,R5LAM
 svk,Slovakia,EEU,R5OECD
@@ -216,3 +218,5 @@ yem,Yemen,MEA,R5MAF
 zaf,South Africa,AFR,R5MAF
 zmb,Zambia,AFR,R5MAF
 zwe,Zimbabwe,AFR,R5MAF
+cuw,Curacao,LAM,R5LAM
+sxm,Sint Maarten,LAM,R5LAM
