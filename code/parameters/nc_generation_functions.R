@@ -168,7 +168,7 @@ generate_bulk_grids_nc <- function( allyear_grids_list,
   ncvar_put( nc_new, flat_var, em_array )
   ncvar_put( nc_new, lon_bnds, t( lon_bnds_data ) )
   ncvar_put( nc_new, lat_bnds, t( lat_bnds_data ) )
-  ncvar_put( nc_new, time_bnds, time_bnds_data )
+  ncvar_put( nc_new, time_bnds, t( time_bnds_data ) )
   ncvar_put( nc_new, sector_bnds, t( sector_bnds_data ) )
   
   # ---
@@ -395,7 +395,7 @@ generate_openburning_grids_nc <- function( allyear_grids_list,
   ncvar_put( nc_new, flat_var, em_array )
   ncvar_put( nc_new, lon_bnds, t( lon_bnds_data ) )
   ncvar_put( nc_new, lat_bnds, t( lat_bnds_data ) )
-  ncvar_put( nc_new, time_bnds, time_bnds_data )
+  ncvar_put( nc_new, time_bnds, t( time_bnds_data ) )
   ncvar_put( nc_new, sector_bnds, t( sector_bnds_data ) )
   
   # ---
@@ -617,7 +617,7 @@ generate_air_grids_nc <- function( allyear_grids_list,
   ncvar_put( nc_new, flat_var, em_array )
   ncvar_put( nc_new, lon_bnds, t( lon_bnds_data ) )
   ncvar_put( nc_new, lat_bnds, t( lat_bnds_data ) )
-  ncvar_put( nc_new, time_bnds, time_bnds_data )
+  ncvar_put( nc_new, time_bnds, t( time_bnds_data ) )
 
   # ---
   # 8. nc variable attributes
