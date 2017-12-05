@@ -33,6 +33,7 @@ script_name <- "launch_downscaling.R"
 
 source( paste0( PARAM_DIR, "header.R" ) )
 initialize( script_name, log_msg, headers )
+
 # -----------------------------------------------------------------------------
 # 1. Set up desired IAM to be processing
 
@@ -88,9 +89,6 @@ source( '../code/module-B/B.3.regional_pop_gdp_preparation.R' )
 source( '../code/module-B/B.4.1.IAM_emissions_downscaling_linear.R' )
 source( '../code/module-B/B.4.2.IAM_emissions_downscaling_ipat.R' )
 source( '../code/module-B/B.5.IAM_emissions_downscaled_cleanup.R' )
-if ( iam == 'REMIND-MAGPIE' ) { 
-  source( '../code/module-B/B.6.IAM_emissions_regional_aggregation.R' )
-}
 
 # -----------------------------------------------------------------------------
 # 3. Source module-C script in order
