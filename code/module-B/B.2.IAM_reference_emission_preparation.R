@@ -154,7 +154,7 @@ iam_em_ipat <- iam_em_iso_added[ iam_em_iso_added$sector %in% sector_ipat, ]
 
 # -----------------------------------------------------------------------------
 # 4.5 Convergence year value calculation for energy relatd  
-calculateCeonYear <- function( iam_em_ipat ) { 
+calculateConYear <- function( iam_em_ipat ) { 
   
   calc_baseyears <- c( 2090, 2100 )  
   iam_em_ipat_header_cols <- grep( 'X', colnames( iam_em_ipat ), value = T, invert = T  )
@@ -175,7 +175,7 @@ calculateCeonYear <- function( iam_em_ipat ) {
   return( iam_em_ipat )
 }
 
-iam_em_ipat <- calculateCeonYear( iam_em_ipat )
+iam_em_ipat <- calculateConYear( iam_em_ipat )
 
 # -----------------------------------------------------------------------------
 # 5 Write out

@@ -56,8 +56,6 @@ input_file <- args_from_makefile[ 3 ]
 modb_out <- args_from_makefile[ 4 ]    
 modc_out <- args_from_makefile[ 5 ]
 gridding_flag <- args_from_makefile[ 6 ]
-#input_file_wo_path <- tail( unlist( strsplit( input_file, '/' ) ), n = 1 ) 
-#RUNSUFFIX <- substr( sha1( input_file_wo_path ), 1, 6 ) 
 RUNSUFFIX <- substr( sha1( runif(1) ), 1, 6 ) 
 
 # update domainmapping for current run 
