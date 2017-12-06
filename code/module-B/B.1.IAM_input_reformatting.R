@@ -58,7 +58,7 @@
   ds_sector_mapping <- readData( 'MAPPINGS', ds_sector_mapping )
   region_mapping <- readData( 'MAPPINGS', ref_region_mapping )
 
-  print( paste0( 'The IAM to be processed is: ', iam_name  ) )
+  printLog( paste0( 'The IAM to be processed is: ', iam_name  ) )
 
 # -----------------------------------------------------------------------------
 # 2. Read in the input data
@@ -71,7 +71,6 @@
   year_list <- c( 2015, 2020, 2030, 2040, 2050, 2060, 2070, 2080, 2090, 2100 )
   x_year_list <- paste0( 'X', year_list )
   native_reg_list <- sort( unique( region_mapping$region ) )  
-  #R5_regions <- c( "R5ASIA", "R5LAM", "R5MAF", "R5OECD", "R5REF" )
 
   iam_data <- data_df[ , c( 'model', 'scenario', 'region', 'variable', year_list ) ]
   iam_data <- iam_data[ iam_data$model %in% iam_name, ]
@@ -145,6 +144,14 @@
                      all.y = T )
   iam_data[ is.na( iam_data ) ] <- 0 
 
+# -----------------------------------------------------------------------------
+# 4.5 checknon-CO2 negative emissions in 2100
+  if ( any( iam_data[ iam_data$em != 'CO2', 'X2100' ] < 0 ) ) { 
+    printLog( 'There are negative non-CO2 emissions in given input file!' )
+  } else { 
+    printLog( 'All non-CO2 emissions are positive' )
+    }
+    
 # -----------------------------------------------------------------------------
 # 5. Interpolate the iam_data into all years
   all_x_years <- paste0( 'X', year_list[ 1 ] : year_list[ length( year_list ) ] )
