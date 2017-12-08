@@ -1,0 +1,3 @@
+# ignore IO_documentation files 
+
+IO_documentation_*.csv

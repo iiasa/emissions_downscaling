@@ -39,8 +39,8 @@ initialize( script_name, log_msg, headers )
 
 # debug
 #args_from_makefile <- c( 'MESSAGE-GLOBIOM', 
-#                         'Unharmonized',
-#                         'C:/Users/feng999/Documents/emissions_downscaling/input/IAM_emissions/MESSAGE-GLOBIOM_SSP2-Ref-SPA0-V25_unharmonized.xlsx',
+#                         'Harmonized-DB',
+#                         'C:/Users/feng999/Documents/emissions_downscaling/input/IAM_emissions/MESSAGE-GLOBIOM_SSP2-Ref-SPA0-V25_unharmonized_harmonized.xlsx',
 #                         'C:/Users/feng999/Documents/emissions_downscaling/final-output/module-B', 
 #                         'C:/Users/feng999/Documents/emissions_downscaling/final-output/module-C',
 #                         'gridding' )
