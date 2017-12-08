@@ -91,6 +91,10 @@ sector_name_mapping <- readData( domain = 'GRIDDING',
                                  domain_extension = 'gridding-mappings/', 
                                  file_name = gridding_sector_mapping ) 
 
+diagnostic_cells <- readData( domain = 'GRIDDING',
+                              domain_extension = 'gridding-mappings/',
+                              file_name = 'diagnostic_cells' )
+
 # -----------------------------------------------------------------------------
 # 4. Pre-processing of iam emissions
 # remove AIR sector which will be gridded in a separate routine 
