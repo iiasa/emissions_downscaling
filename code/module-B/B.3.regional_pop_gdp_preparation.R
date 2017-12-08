@@ -95,12 +95,11 @@ colnames( gdp_data ) <- c( gdp_header_columns, paste0( 'ctry_gdp_', gdp_xyears )
 
 gdp_data_region_added <- merge( gdp_data, region_mapping[ , c( 'iso', 'region' ) ], by = 'iso' )
 gdp_region <- aggregate( gdp_data_region_added[ , paste0( 'ctry_gdp_', gdp_xyears ) ], 
-                         by = list( gdp_data_region_added$model, gdp_data_region_added$scenario,
-                                    gdp_data_region_added$variable, gdp_data_region_added$unit, gdp_data_region_added$region ), 
+                         by = list( gdp_data_region_added$scenario, gdp_data_region_added$variable, gdp_data_region_added$unit, gdp_data_region_added$region ), 
                          FUN = sum )
-colnames( gdp_region ) <- c( 'model', 'scenario', 'variable', 'unit', 'region', paste0( 'reg_gdp_', gdp_xyears ) )
+colnames( gdp_region ) <- c( 'scenario', 'variable', 'unit', 'region', paste0( 'reg_gdp_', gdp_xyears ) )
 gdp_iso_region <- merge( gdp_data_region_added, gdp_region, 
-                         by = c( 'model', 'scenario', 'variable', 'unit', 'region' ), 
+                         by = c( 'scenario', 'variable', 'unit', 'region' ), 
                          all.x = T )
 # ------------------------------------------------------------------------------
 # 4.2 Add convergence year gdp data 
@@ -125,8 +124,6 @@ calculateCeonYear <- function( gdp_iso_region ) {
 }
 
 gdp_iso_region<- calculateCeonYear( gdp_iso_region )
-
-
 
 # -----------------------------------------------------------------------------
 # 5. Write out
