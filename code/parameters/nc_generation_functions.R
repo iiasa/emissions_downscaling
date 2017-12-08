@@ -44,23 +44,49 @@ generate_bulk_grids_nc <- function( allyear_grids_list,
                                                  180 / grid_resolution, 
                                                  length( bulk_sectors ), length( year ) * 12 ) ) 
     temp_checksum_storage <- c()
+    temp_cell_value_storage <- data.frame() 
     for ( i in seq_along( bulk_sectors ) ) { 
-
-      temp_array <- current_year_grids_list[[ bulk_sectors[ i ] ]]
+      current_sector <- bulk_sectors[ i ]
+      temp_array <- current_year_grids_list[[ current_sector ]]
       temp_array_checksum <- temp_array 
       # flip each time slice of tmep_array 
       temp_array <- array( unlist( lapply( 1 : 12, function( i ) { t( flip_a_matrix( temp_array[ , , i ] ) ) } ) ), dim = c( 360 / grid_resolution, 180 / grid_resolution, 12 ) )
       
       current_year_sector_array[ , , i, ] <- temp_array
       
-      # convert from kg m-2 s-1 to Mt 
-      temp_array_checksum <- unlist( lapply( 1  : 12, function( i ) { 
-        sum( temp_array_checksum[ , , i ] * 
-               grid_area( grid_resolution, all_lon = T ) * 
-               ( days_in_month[ i ] * 24 * 60 * 60 ) / 
-               1000000000 ) # convert from kg m-2 s-1 to Mt for sum 
-        } ) )
+      # checksum and diagnostic cells computation
+      checksum_diag_list <- lapply( 1 : 12, function( i ) {
+        current_month <- i 
+        # convert the matrix from from kg m-2 s-1 to Mt   
+        conv_mat <- temp_array_checksum[ , , i ] * 
+          grid_area( grid_resolution, all_lon = T ) * 
+          ( days_in_month[ i ] * 24 * 60 * 60 ) / 
+          1000000000
+        
+        # computation for checksum 
+        conv_mat_sum <- sum( conv_mat )
+        
+        # computation for diagnostic cells 
+        cell_value_list <- lapply( 1 : nrow( diagnostic_cells ) , function( i ) { 
+          out_df <- data.frame( em = em, 
+                                sector = current_sector,
+                                year = year,
+                                month = current_month,
+                                unit = 'Mt',
+                                value = conv_mat[ diagnostic_cells$row[ i ], diagnostic_cells$col[ i ] ],
+                                stringsAsFactors = F )
+          } )
+        cell_value_df <- do.call( 'rbind', cell_value_list )
+        cell_value_df <- cbind( diagnostic_cells, cell_value_df )
+        
+        return( list( conv_mat_sum, cell_value_df ) ) 
+      } )
+
+      temp_array_checksum <- unlist( lapply( checksum_diag_list, '[[', 1 ) )
       temp_checksum_storage <- c( temp_checksum_storage, temp_array_checksum )
+      
+      temp_cell_value_df <- do.call( 'rbind', lapply( checksum_diag_list, '[[', 2 ) ) 
+      temp_cell_value_storage <- rbind( temp_cell_value_storage, temp_cell_value_df )
     }
     
     temp_checksum_df <- data.frame( em = em, 
@@ -71,9 +97,10 @@ generate_bulk_grids_nc <- function( allyear_grids_list,
                                     value = temp_checksum_storage,
                                     stringsAsFactors = F )
     
-    return( list( current_year_sector_array, temp_checksum_df ) )
+    return( list( current_year_sector_array, temp_checksum_df, temp_cell_value_storage ) )
     } )
   checksum_df_list <- lapply( year_data_list, '[[', 2 )
+  diagnostic_cells_list <- lapply( year_data_list, '[[', 3 )
   year_data_list <- lapply( year_data_list, '[[', 1 )
   em_array <- array( unlist( year_data_list ),  dim = c( 360 / grid_resolution, # lat lon flipped to accommodate nc write-in
                                                          180 / grid_resolution, 
@@ -237,8 +264,33 @@ generate_bulk_grids_nc <- function( allyear_grids_list,
   # 10. add checksum file 
   out_name <- gsub( '.nc', '.csv', nc_file_name_w_path, fixed = T )
   out_df <- do.call( 'rbind', checksum_df_list )
-  write.csv( out_df, out_name, row.names = F )          
+  write.csv( out_df, out_name, row.names = F )   
   
+  # ---
+  # 11. add diagnostic cells plots
+  diagnostic_cells <- do.call( 'rbind', diagnostic_cells_list )
+  out_name <- gsub( '.nc', '_cells', nc_file_name, fixed = T ) 
+  writeData( diagnostic_cells, 'DIAG_OUT', out_name, meta = F )  
+  diagnostic_cells <- aggregate( diagnostic_cells$value, by = list( diagnostic_cells$loc, diagnostic_cells$em, 
+                                                                    diagnostic_cells$year, diagnostic_cells$month, 
+                                                                    diagnostic_cells$unit ),
+                                 FUN = sum )
+  names( diagnostic_cells ) <- c( 'loc', 'em', 'year', 'month', 'unit', 'value' )
+  diagnostic_cells <- arrange( diagnostic_cells, loc, em, year, month )
+  for ( em in unique( diagnostic_cells$em ) ) { 
+    for ( loc in unique( diagnostic_cells$loc ) ) { 
+      plot_df <- diagnostic_cells[ diagnostic_cells$loc == loc & diagnostic_cells$em == em, ]
+      plot_df$time_line <- 1 : nrow( plot_df )
+      plot_df$time_label <- paste0( plot_df$year, sprintf( '%02d', plot_df$month ) )
+      plot <- ggplot( plot_df ) + 
+        geom_line( aes( x = time_line, y = value ) ) + 
+        ylab( paste0( em, ' Mt' ) ) + 
+        xlab( '' ) + 
+        scale_x_continuous( breaks = seq( 1, nrow( plot_df ), 10 ), labels = plot_df$time_label[ seq( 1, nrow( plot_df ), 10 ) ] ) +
+        ggtitle( paste0( gsub( '_cells', '', out_name ), '\n', loc ) )
+      ggsave( filePath( "DIAG_OUT", paste0( out_name, '_', em, '_', loc ), extension = ".jpeg" ), units = 'in', width = 13, height = 5 )
+      } 
+    }
   invisible( gc( ) )
 } 
 
@@ -272,8 +324,9 @@ generate_openburning_grids_nc <- function( allyear_grids_list,
                                                  180 / grid_resolution, 
                                                  length( openburning_sectors ), length( year ) * 12 ) ) 
     temp_checksum_storage <- c()
+    temp_cell_value_storage <- data.frame() 
     for ( i in seq_along( openburning_sectors ) ) { 
-      
+      current_sector <- openburning_sectors[ i ]
       temp_array <- current_year_grids_list[[ openburning_sectors[ i ] ]]
       temp_array_checksum <- temp_array 
       # flip each time slice of tmep_array 
@@ -281,15 +334,41 @@ generate_openburning_grids_nc <- function( allyear_grids_list,
       
       current_year_sector_array[ , , i, ] <- temp_array
       
-      # convert from kg m-2 s-1 to Mt 
-      temp_array_checksum <- unlist( lapply( 1  : 12, function( i ) { 
-        sum( temp_array_checksum[ , , i ] * 
-               grid_area( grid_resolution, all_lon = T ) * 
-               ( days_in_month[ i ] * 24 * 60 * 60 ) / 
-               1000000000 ) # convert from kg m-2 s-1 to Mt for sum 
-      } ) )
+      # checksum and diagnostic cells computation
+      checksum_diag_list <- lapply( 1 : 12, function( i ) {
+        current_month <- i 
+        # convert the matrix from from kg m-2 s-1 to Mt   
+        conv_mat <- temp_array_checksum[ , , i ] * 
+          grid_area( grid_resolution, all_lon = T ) * 
+          ( days_in_month[ i ] * 24 * 60 * 60 ) / 
+          1000000000
+        
+        # computation for checksum 
+        conv_mat_sum <- sum( conv_mat )
+        
+        # computation for diagnostic cells 
+        cell_value_list <- lapply( 1 : nrow( diagnostic_cells ) , function( i ) { 
+          out_df <- data.frame( em = em, 
+                                sector = current_sector,
+                                year = year,
+                                month = current_month,
+                                unit = 'Mt',
+                                value = conv_mat[ diagnostic_cells$row[ i ],  diagnostic_cells$col[ i ] ],
+                                stringsAsFactors = F )
+        } )
+        cell_value_df <- do.call( 'rbind', cell_value_list )
+        cell_value_df <- cbind( diagnostic_cells, cell_value_df )
+        
+        return( list( conv_mat_sum, cell_value_df ) ) 
+      } )
+      
+      temp_array_checksum <- unlist( lapply( checksum_diag_list, '[[', 1 ) )
       temp_checksum_storage <- c( temp_checksum_storage, temp_array_checksum )
+      
+      temp_cell_value_df <- do.call( 'rbind', lapply( checksum_diag_list, '[[', 2 ) ) 
+      temp_cell_value_storage <- rbind( temp_cell_value_storage, temp_cell_value_df )
     }
+    
     temp_checksum_df <- data.frame( em = em, 
                                     sector = unlist( lapply( openburning_sectors, rep, 12 ) ),
                                     year = year,
@@ -298,9 +377,11 @@ generate_openburning_grids_nc <- function( allyear_grids_list,
                                     value = temp_checksum_storage,
                                     stringsAsFactors = F )
     
-    return( list( current_year_sector_array, temp_checksum_df ) )
+    return( list( current_year_sector_array, temp_checksum_df, temp_cell_value_storage ) )
   } )
+  
   checksum_df_list <- lapply( year_data_list, '[[', 2 )
+  diagnostic_cells_list <- lapply( year_data_list, '[[', 3 )
   year_data_list <- lapply( year_data_list, '[[', 1 )
   em_array <- array( unlist( year_data_list ),  dim = c( 360 / grid_resolution, # lat lon flipped to accommodate nc write-in
                                                          180 / grid_resolution, 
@@ -465,6 +546,32 @@ generate_openburning_grids_nc <- function( allyear_grids_list,
   out_name <- gsub( '.nc', '.csv', nc_file_name_w_path, fixed = T )
   out_df <- do.call( 'rbind', checksum_df_list )
   write.csv( out_df, out_name, row.names = F )   
+  
+  # ---
+  # 11. add diagnostic cells plots
+  diagnostic_cells <- do.call( 'rbind', diagnostic_cells_list )
+  out_name <- gsub( '.nc', '_cells', nc_file_name, fixed = T ) 
+  writeData( diagnostic_cells, 'DIAG_OUT', out_name, meta = F )  
+  diagnostic_cells <- aggregate( diagnostic_cells$value, by = list( diagnostic_cells$loc, diagnostic_cells$em, 
+                                                                    diagnostic_cells$year, diagnostic_cells$month, 
+                                                                    diagnostic_cells$unit ),
+                                 FUN = sum )
+  names( diagnostic_cells ) <- c( 'loc', 'em', 'year', 'month', 'unit', 'value' )
+  diagnostic_cells <- arrange( diagnostic_cells, loc, em, year, month )
+  for ( em in unique( diagnostic_cells$em ) ) { 
+    for ( loc in unique( diagnostic_cells$loc ) ) { 
+      plot_df <- diagnostic_cells[ diagnostic_cells$loc == loc & diagnostic_cells$em == em, ]
+      plot_df$time_line <- 1 : nrow( plot_df )
+      plot_df$time_label <- paste0( plot_df$year, sprintf( '%02d', plot_df$month ) )
+      plot <- ggplot( plot_df ) + 
+        geom_line( aes( x = time_line, y = value ) ) + 
+        ylab( paste0( em, ' Mt' ) ) + 
+        xlab( '' ) + 
+        scale_x_continuous( breaks = seq( 1, nrow( plot_df ), 10 ), labels = plot_df$time_label[ seq( 1, nrow( plot_df ), 10 ) ] ) +
+        ggtitle( paste0( gsub( '_cells', '', out_name ), '\n', loc ) )
+      ggsave( filePath( "DIAG_OUT", paste0( out_name, '_', em, '_', loc ), extension = ".jpeg" ), units = 'in', width = 13, height = 5 )
+    } 
+  }
   
   invisible( gc( ) )
 } 
