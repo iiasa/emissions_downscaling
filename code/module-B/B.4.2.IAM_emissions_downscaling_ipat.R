@@ -85,8 +85,12 @@ wide_df <- merge( wide_df, gdp_data[ , c( 'scenario', 'region', 'iso', gdp_data_
                   by.y = c( 'region', 'iso', 'scenario' ), all.x = T  ) 
 
 # seperate CO2 from wide_df 
-wide_df_nonCO2 <- wide_df[ wide_df$em != 'CO2', ]
-wide_df_CO2 <- wide_df[ wide_df$em == 'CO2', ]
+#wide_df_nonCO2 <- wide_df[ wide_df$em != 'CO2', ]
+#wide_df_CO2 <- wide_df[ wide_df$em == 'CO2', ]
+
+# separate emissions that has 0 or less values in convergence year 
+wide_df_nonCO2 <- wide_df[ wide_df$reg_iam_em_Xcon_year > 0, ]
+wide_df_CO2 <- wide_df[ wide_df$reg_iam_em_Xcon_year <= 0, ]
 
 # -----------------------------------------------------------------------------
 # 5. Downscaling
