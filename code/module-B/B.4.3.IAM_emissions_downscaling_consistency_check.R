@@ -83,12 +83,38 @@ ds_lin_in.agg <- ds_lin_in %>%
 
 ds_lin_out.agg <- ds_lin_out %>% 
   gather(x_year, value, -model, -scenario, -region, -em, -sector, -harm_status,-unit, -iso) %>% 
-  group_by(model, scenario, region, em, sector, harm_status, unit, iso) %>% 
+  group_by(model, scenario, region, em, harm_status, unit, x_year) %>% 
   summarise(value=sum(value)) %>% # aggregate over sectors
   ungroup()
-
-  
 
 
 # -----------------------------------------------------------------------------
 # 3. Confirm region-consistency for ipat downscaling
+# 
+# in order to perform the consistency check, we are collapsing the 'iso' and 
+# 'sector' columns. 
+#
+# Before downscaling, 'iso' isn't used as a uniquely-identifying key, meaning
+# values are the same for all rows of the same region, regardless of iso. 
+# To collapse the 'iso' column, we select all columns != iso and grab all 
+# distinct rows. 
+# 
+# To collapse the 'sector' column, we aggregate (sum) by all columns except sector
+# and value. 
+
+ds_ipat_in.agg <- ds_ipat_in %>% 
+  rename_all(funs(gsub("reg_iam_em_", "", .))) %>% 
+  select(-harm_status) %>% # not used in ds_ipat_out so dropping from input
+  select(-Xcon_year) %>% # not a year included in output 
+  gather(x_year, value, -model, -scenario, -region, -em, -sector, -unit, -iso) %>% 
+  select(model, scenario, region, em, sector, unit, x_year, value) %>% 
+  distinct() %>% 
+  group_by(model, scenario, region, em, unit, x_year) %>% 
+  summarise(value=sum(value)) %>% # aggregate over sectors
+  ungroup()
+
+ds_ipat_out.agg <- ds_ipat_out %>% 
+  gather(x_year, value, -model, -scenario, -region, -em, -sector,-unit, -iso) %>% 
+  group_by(model, scenario, region, em, unit, x_year) %>% 
+  summarise(value=sum(value)) %>% # aggregate over sectors
+  ungroup()
