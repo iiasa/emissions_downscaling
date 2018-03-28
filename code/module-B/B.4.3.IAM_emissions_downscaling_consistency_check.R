@@ -131,3 +131,5 @@ ds_ipat_out.agg <- ds_ipat_out %>%
 df <- anti_join(ds_ipat_in.agg, ds_ipat_out.agg) # rows from input that don't match output
 df2 <- anti_join(ds_ipat_out.agg, ds_ipat_in.agg) # rows from output that don't match input
 
+# END
+logStop()
