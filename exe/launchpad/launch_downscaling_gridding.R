@@ -46,7 +46,7 @@ args_from_makefile <- c( 'REMIND-MAGPIE',
                         'NOTgridding' )
 
 # the flag for intermediate file cleaning
-MED_OUT_CLEAN <- T
+MED_OUT_CLEAN <- F
 
 # getting target IAM from command line arguement
 if ( !exists( 'args_from_makefile' ) ) args_from_makefile <- commandArgs( TRUE )
