@@ -38,12 +38,12 @@ initialize( script_name, log_msg, headers )
 # 1. Set up desired IAM to be processing
 
 # debug
-#args_from_makefile <- c( 'MESSAGE-GLOBIOM', 
-#                         'Harmonized-DB',
-#                         'C:/Users/feng999/Documents/emissions_downscaling/input/IAM_emissions/MESSAGE-GLOBIOM_SSP2-Ref-SPA0-V25_unharmonized_harmonized.xlsx',
-#                         'C:/Users/feng999/Documents/emissions_downscaling/final-output/module-B', 
-#                         'C:/Users/feng999/Documents/emissions_downscaling/final-output/module-C',
-#                         'gridding' )
+args_from_makefile <- c( 'REMIND-MAGPIE',
+                        'Harmonized-DB',
+                        'C:/Users/guti220/Desktop/emissions_downscaling/input/IAM_emissions/output_harmonized.xlsx',
+                        'C:/Users/guti220/Desktop/emissions_downscaling/final-output/module-B',
+                        'C:/Users/guti220/Desktop/emissions_downscaling/final-output/module-C',
+                        'NOTgridding' )
 
 # the flag for intermediate file cleaning
 MED_OUT_CLEAN <- T
