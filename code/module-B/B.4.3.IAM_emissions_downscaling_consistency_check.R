@@ -79,14 +79,20 @@ ds_lin_in.agg <- ds_lin_in %>%
   distinct() %>% 
   group_by(model, scenario, region, em, harm_status, unit, x_year) %>% 
   summarise(value=sum(value)) %>% # aggregate over sectors
-  ungroup()
+  ungroup() %>% 
+  mutate(value = round(value, 5)) # in order to compare two df's, must round to same precision
 
 ds_lin_out.agg <- ds_lin_out %>% 
   gather(x_year, value, -model, -scenario, -region, -em, -sector, -harm_status,-unit, -iso) %>% 
   group_by(model, scenario, region, em, harm_status, unit, x_year) %>% 
   summarise(value=sum(value)) %>% # aggregate over sectors
-  ungroup()
+  ungroup() %>% 
+  mutate(value = round(value, 5)) # in order to compare two df's, must round to same precision
 
+
+# don't provide 'by' argument so that join(x,y) compares on all columns 
+df <- anti_join(ds_lin_in.agg, ds_lin_out.agg) # rows from input that don't match output
+df2 <- anti_join(ds_lin_out.agg, ds_lin_in.agg) # rows from output that don't match input
 
 # -----------------------------------------------------------------------------
 # 3. Confirm region-consistency for ipat downscaling
@@ -110,11 +116,18 @@ ds_ipat_in.agg <- ds_ipat_in %>%
   select(model, scenario, region, em, sector, unit, x_year, value) %>% 
   distinct() %>% 
   group_by(model, scenario, region, em, unit, x_year) %>% 
-  summarise(value=sum(value)) %>% # aggregate over sectors
-  ungroup()
+  summarise(value=sum(value)) %>% # aggregate over sectors, 
+  ungroup() %>% 
+  mutate(value = round(value, 5)) # in order to compare two df's, must round to same precision
 
 ds_ipat_out.agg <- ds_ipat_out %>% 
   gather(x_year, value, -model, -scenario, -region, -em, -sector,-unit, -iso) %>% 
   group_by(model, scenario, region, em, unit, x_year) %>% 
-  summarise(value=sum(value)) %>% # aggregate over sectors
-  ungroup()
+  summarise(value=sum(value)) %>% # aggregate over sectors, 
+  ungroup() %>% 
+  mutate(value = round(value, 5)) # in order to compare two df's, must round to same precision
+
+# don't provide 'by' argument so that join(x,y) compares on all columns 
+df <- anti_join(ds_ipat_in.agg, ds_ipat_out.agg) # rows from input that don't match output
+df2 <- anti_join(ds_ipat_out.agg, ds_ipat_in.agg) # rows from output that don't match input
+
