@@ -90,7 +90,7 @@ wide_df <- merge( wide_df, gdp_data[ , c( 'scenario', 'region', 'iso', gdp_data_
 
 # separate emissions that has 0 or less values in convergence year 
 wide_df_nonCO2 <- wide_df[ wide_df$reg_iam_em_Xcon_year > 0, ]
-wide_df_CO2 <- wide_df[ wide_df$reg_iam_em_Xcon_year <= 0, ]
+wide_df_zero_or_neg <- wide_df[ wide_df$reg_iam_em_Xcon_year <= 0, ]
 
 # -----------------------------------------------------------------------------
 # 5. Downscaling
@@ -234,10 +234,10 @@ downscaleIAMemissions_CO2 <- function( wide_df, con_year_mapping ) {
   return( out_df )
 }
 
-ds_df_CO2 <- downscaleIAMemissions_CO2( wide_df_CO2, con_year_mapping )
+ds_df_zero_or_neg <- downscaleIAMemissions_CO2( wide_df_zero_or_neg, con_year_mapping )
 
 # 5.3 combine downscaled non-CO2 emissions and CO2 emissions 
-ds_df <- rbind( ds_df_nonCO2, ds_df_CO2 )
+ds_df <- rbind( ds_df_nonCO2, ds_df_zero_or_neg )
 
 # -----------------------------------------------------------------------------
 # 5 Write out
