@@ -86,6 +86,7 @@ source( '../code/module-B/B.2.IAM_reference_emission_preparation.R' )
 source( '../code/module-B/B.3.regional_pop_gdp_preparation.R' )
 source( '../code/module-B/B.4.1.IAM_emissions_downscaling_linear.R' )
 source( '../code/module-B/B.4.2.IAM_emissions_downscaling_ipat.R' )
+source( '../code/module-B/B.4.3.IAM_emissions_downscaling_consistency_check.R' )
 source( '../code/module-B/B.5.IAM_emissions_downscaled_cleanup.R' )
 
 # -----------------------------------------------------------------------------
