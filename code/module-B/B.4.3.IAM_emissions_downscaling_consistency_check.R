@@ -33,7 +33,7 @@ PARAM_DIR <- "../code/parameters/"
 # Call standard script header function to read in universal header files - 
 # provides logging, file support, and system functions - and start the script log.
 headers <- c( 'common_data.R', 'data_functions.R', 'module-A_functions.R', 'all_module_functions.R' ) 
-log_msg <- "Downscale energy related emissions using IPAT approach" 
+log_msg <- "Run checksum test on downscaling output" 
 
 script_name <- "B.4.3.IAM_emissions_downscaling_consistency_check.R"
 
@@ -90,8 +90,14 @@ ds_lin_out.agg <- ds_lin_out %>%
   mutate(value = round(value, 5)) # in order to compare two df's, must round to same precision
 
 # fiddle with aggregated ds output values
+# 3/26 regions
+regs <- unique(ds_lin_out.agg$region)[sample(1:26, 3)]
+# 2/9 em
+ems <- unique(ds_lin_out.agg$em)[sample(1:9, 2)]
+# 4/86 x_year
+xyrs <- unique(ds_lin_out.agg$x_year)[sample(1:86, 4)]
 ds_lin_out.agg <- ds_lin_out.agg %>% 
-  mutate(value = ifelse(region == "USA" & em == "BC" & x_year %in% c("X2015", "X2100"),
+  mutate(value = ifelse(region %in% regs & em %in% ems & x_year %in% xyrs,
                         2*value,
                         value))
 
@@ -154,23 +160,36 @@ ds_ipat.mismatch <- list(anti_join(ds_ipat_in.agg, ds_ipat_out.agg),
 # check rows in mismatch. both entries will contain same # of rows
 if (nrow(ds_lin.mismatch[[1]]) != 0) {
   
+  printLog("Linear downscaling: output rows that don't match input")
   # drop columns that don't need to be reported in error log
-  df <- ds_lin.mismatch[[1]] %>% select(-value, -Unit)
+  df <- ds_lin.mismatch[[1]] %>% 
+    select(-value, -unit) %>% 
+    group_by(model, scenario, region, em, harm_status) %>% 
+    summarise(x_years = paste0(x_year, collapse=", ")) %>% 
+    ungroup()
   
   # for each mismatched row, print the following keys:
   # model, scenario, region, em, harm_status, x_year 
   for (i in 1:nrow(df)) {
-    paste0(df[1,], collapse=", ") %>% 
+    paste0(df[i,], collapse=", ") %>% 
       printLog()
   }
   
+} else {
+  printLog("IPAT downscaling: all output rows match input")
 }
 
 # check rows in mismatch. both entries will contain same # of rows
 if (nrow(ds_ipat.mismatch[[1]]) != 0) {
   
+  printLog("IPAT downscaling: output rows that don't match input")
+  
   # drop columns that don't need to be reported in error log
-  df <- ds_ipat.mismatch[[1]] %>% select(-value, -Unit)
+  df <- ds_ipat.mismatch[[1]] %>% 
+    select(-value, -unit) %>% 
+    group_by(model, scenario, region, em, harm_status) %>% 
+    summarise(x_years = paste0(x_year, collapse=", ")) %>% 
+    ungroup()  
   
   # for each mismatched row, print the following keys:
   # model, scenario, region, em, harm_status, x_year 
@@ -179,6 +198,8 @@ if (nrow(ds_ipat.mismatch[[1]]) != 0) {
       printLog()
   }
   
+} else {
+  printLog("IPAT downscaling: all output rows match input")
 }
 # END
 logStop()
