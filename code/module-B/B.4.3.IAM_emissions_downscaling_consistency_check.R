@@ -81,6 +81,7 @@ ds_lin_in.agg <- ds_lin_in %>%
   ungroup() %>% 
   mutate(value = round(value, 5)) # in order to compare two df's, must round to same precision
 
+
 ds_lin_out.agg <- ds_lin_out %>% 
   gather(x_year, value, -model, -scenario, -region, -em, -sector, -harm_status,-unit, -iso) %>% 
   group_by(model, scenario, region, em, harm_status, unit, x_year) %>% 
@@ -88,6 +89,11 @@ ds_lin_out.agg <- ds_lin_out %>%
   ungroup() %>% 
   mutate(value = round(value, 5)) # in order to compare two df's, must round to same precision
 
+# fiddle with aggregated ds output values
+ds_lin_out.agg <- ds_lin_out.agg %>% 
+  mutate(value = ifelse(region == "USA" & em == "BC" & x_year %in% c("X2015", "X2100"),
+                        2*value,
+                        value))
 
 # don't provide 'by' argument so that join(x,y) compares on all columns 
 ds_lin.mismatch <- list(anti_join(ds_lin_in.agg, ds_lin_out.agg), 
@@ -142,6 +148,8 @@ ds_ipat.mismatch <- list(anti_join(ds_ipat_in.agg, ds_ipat_out.agg),
 #  ------------------------------------------------------------------------
 # 4. Error logging
 # If there are any mismatched rows, print to log the identifying keys for those rows
+
+
 
 # check rows in mismatch. both entries will contain same # of rows
 if (nrow(ds_lin.mismatch[[1]]) != 0) {
