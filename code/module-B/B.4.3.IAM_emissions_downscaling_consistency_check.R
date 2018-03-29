@@ -89,17 +89,17 @@ ds_lin_out.agg <- ds_lin_out %>%
   ungroup() %>% 
   mutate(value = round(value, 5)) # in order to compare two df's, must round to same precision
 
-# fiddle with aggregated ds output values
-# 3/26 regions
-regs <- unique(ds_lin_out.agg$region)[sample(1:26, 3)]
-# 2/9 em
-ems <- unique(ds_lin_out.agg$em)[sample(1:9, 2)]
-# 4/86 x_year
-xyrs <- unique(ds_lin_out.agg$x_year)[sample(1:86, 4)]
-ds_lin_out.agg <- ds_lin_out.agg %>% 
-  mutate(value = ifelse(region %in% regs & em %in% ems & x_year %in% xyrs,
-                        2*value,
-                        value))
+# # fiddle with aggregated ds output values
+# # 3/26 regions
+# regs <- unique(ds_lin_out.agg$region)[sample(1:26, 3)]
+# # 2/9 em
+# ems <- unique(ds_lin_out.agg$em)[sample(1:9, 2)]
+# # 4/86 x_year
+# xyrs <- unique(ds_lin_out.agg$x_year)[sample(1:86, 4)]
+# ds_lin_out.agg <- ds_lin_out.agg %>% 
+#   mutate(value = ifelse(region %in% regs & em %in% ems & x_year %in% xyrs,
+#                         2*value,
+#                         value))
 
 # don't provide 'by' argument so that join(x,y) compares on all columns 
 ds_lin.mismatch <- list(anti_join(ds_lin_in.agg, ds_lin_out.agg), 
