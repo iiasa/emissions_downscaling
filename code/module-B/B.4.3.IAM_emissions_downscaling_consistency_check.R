@@ -7,7 +7,6 @@
 #              intermediate-output/[SUFFIX]/B.[IAM]_emissions_linear_[SUFFIX].csv      
 #              intermediate-output/[SUFFIX]/B.[IAM]_emissions_downscaled_linear_[SUFFIX].csv
 #              intermediate-output/[SUFFIX]/B.[IAM]_emissions_ipat_[SUFFIX].csv 
-#              intermediate-output/[SUFFIX]/B.[IAM]_emissions_ipat_[SUFFIX].csv 
 #              intermediate-output/[SUFFIX]/B.[IAM]_emissions_downscaled_ipat_[SUFFIX].csv
 # 
 # Output Files: 
@@ -91,8 +90,12 @@ ds_lin_out.agg <- ds_lin_out %>%
 
 
 # don't provide 'by' argument so that join(x,y) compares on all columns 
-df <- anti_join(ds_lin_in.agg, ds_lin_out.agg) # rows from input that don't match output
-df2 <- anti_join(ds_lin_out.agg, ds_lin_in.agg) # rows from output that don't match input
+ds_lin.mismatch <- list(anti_join(ds_lin_in.agg, ds_lin_out.agg), 
+                        anti_join(ds_lin_out.agg, ds_lin_in.agg)) 
+# 1st entry in ds_lin.mismatch contains the rows from input that don't match output. 
+# 2nd entry in ds_lin.mismatch contains the rows from the output that don't match input. 
+# input is the original data, so the values in the 2nd entry are supposed to match the 
+# values in the 1st entry. 
 
 # -----------------------------------------------------------------------------
 # 3. Confirm region-consistency for ipat downscaling
@@ -128,8 +131,12 @@ ds_ipat_out.agg <- ds_ipat_out %>%
   mutate(value = round(value, 5)) # in order to compare two df's, must round to same precision
 
 # don't provide 'by' argument so that join(x,y) compares on all columns 
-df <- anti_join(ds_ipat_in.agg, ds_ipat_out.agg) # rows from input that don't match output
-df2 <- anti_join(ds_ipat_out.agg, ds_ipat_in.agg) # rows from output that don't match input
+ds_ipat.mismatch <- list(anti_join(ds_ipat_in.agg, ds_ipat_out.agg), 
+                         anti_join(ds_ipat_out.agg, ds_ipat_in.agg)) 
+# 1st entry in ds_lin.mismatch contains the rows from input that don't match output. 
+# 2nd entry in ds_lin.mismatch contains the rows from the output that don't match input. 
+# input is the original data, so the values in the 2nd entry are supposed to match the 
+# values in the 1st entry. 
 
 # END
 logStop()
