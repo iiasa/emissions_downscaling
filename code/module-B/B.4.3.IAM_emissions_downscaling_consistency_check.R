@@ -58,7 +58,7 @@ ds_ipat_in <- readData( domain = 'MED_OUT', file_name = paste0( 'B.', iam, '_emi
 ds_ipat_out <- readData( domain = 'MED_OUT', file_name = paste0( 'B.', iam, '_emissions_downscaled_ipat', '_', RUNSUFFIX ) )
 
 # -----------------------------------------------------------------------------
-# 2. Confirm region-consistency for linear downscaling
+# 3. Run region-consistency check for linear downscaling
 # 
 # in order to perform the consistency check, we are collapsing the 'iso' and 
 # 'sector' columns. 
@@ -98,7 +98,7 @@ ds_lin.mismatch <- list(anti_join(ds_lin_in.agg, ds_lin_out.agg),
 # values in the 1st entry. 
 
 # -----------------------------------------------------------------------------
-# 3. Confirm region-consistency for ipat downscaling
+# 3. Run region-consistency check for ipat downscaling
 # 
 # in order to perform the consistency check, we are collapsing the 'iso' and 
 # 'sector' columns. 
@@ -138,5 +138,39 @@ ds_ipat.mismatch <- list(anti_join(ds_ipat_in.agg, ds_ipat_out.agg),
 # input is the original data, so the values in the 2nd entry are supposed to match the 
 # values in the 1st entry. 
 
+
+#  ------------------------------------------------------------------------
+# 4. Error logging
+# If there are any mismatched rows, print to log the identifying keys for those rows
+
+# check rows in mismatch. both entries will contain same # of rows
+if (nrow(ds_lin.mismatch[[1]]) != 0) {
+  
+  # drop columns that don't need to be reported in error log
+  df <- ds_lin.mismatch[[1]] %>% select(-value, -Unit)
+  
+  # for each mismatched row, print the following keys:
+  # model, scenario, region, em, harm_status, x_year 
+  for (i in 1:nrow(df)) {
+    paste0(df[1,], collapse=", ") %>% 
+      printLog()
+  }
+  
+}
+
+# check rows in mismatch. both entries will contain same # of rows
+if (nrow(ds_ipat.mismatch[[1]]) != 0) {
+  
+  # drop columns that don't need to be reported in error log
+  df <- ds_ipat.mismatch[[1]] %>% select(-value, -Unit)
+  
+  # for each mismatched row, print the following keys:
+  # model, scenario, region, em, harm_status, x_year 
+  for (i in 1:nrow(df)) {
+    paste0(df[1,], collapse=", ") %>% 
+      printLog()
+  }
+  
+}
 # END
 logStop()
