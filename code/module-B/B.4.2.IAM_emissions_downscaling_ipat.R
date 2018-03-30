@@ -89,13 +89,15 @@ wide_df <- merge( wide_df, gdp_data[ , c( 'scenario', 'region', 'iso', gdp_data_
 #wide_df_CO2 <- wide_df[ wide_df$em == 'CO2', ]
 
 # separate emissions that has 0 or less values in convergence year 
-wide_df_nonCO2 <- wide_df[ wide_df$reg_iam_em_Xcon_year > 0, ]
-wide_df_zero_or_neg <- wide_df[ wide_df$reg_iam_em_Xcon_year <= 0, ]
+wide_df_pos_nonCO2 <- wide_df %>% 
+  filter(reg_iam_em_Xcon_year > 0 & em != "CO2") # only positive emissions. no CO2
+wide_df_CO2_or_neg_nonCO2 <- wide_df %>% 
+  filter(reg_iam_em_Xcon_year <= 0 | em == "CO2") # either zero/negative or CO2
 
 # -----------------------------------------------------------------------------
 # 5. Downscaling
 # 5.1 downscaling for non-CO2 emissions 
-downscaleIAMemissions_nonCO2 <- function( wide_df, con_year_mapping ) { 
+downscaleIAMemissions_pos_nonCO2 <- function( wide_df, con_year_mapping ) { 
     
     # set up two working df: parameter data frame and results data frame
     par_df <- wide_df[ , c( "region", "iso", "ssp_label", "em", "sector", "model", "scenario", "unit" ) ] 
@@ -162,10 +164,10 @@ downscaleIAMemissions_nonCO2 <- function( wide_df, con_year_mapping ) {
   return( out_df )
 }
 
-ds_df_nonCO2 <- downscaleIAMemissions_nonCO2( wide_df_nonCO2, con_year_mapping )
+ds_df_pos_nonCO2 <- downscaleIAMemissions_pos_nonCO2( wide_df_pos_nonCO2, con_year_mapping )
 
 # 5.2 downscaling for CO2 emissions 
-downscaleIAMemissions_CO2 <- function( wide_df, con_year_mapping ) { 
+downscaleIAMemissions_CO2_or_neg_nonCO2 <- function( wide_df, con_year_mapping ) { 
   
   # set up two working df: parameter data frame and results data frame
   par_df <- wide_df[ , c( "region", "iso", "ssp_label", "em", "sector", "model", "scenario", "unit" ) ] 
@@ -234,10 +236,10 @@ downscaleIAMemissions_CO2 <- function( wide_df, con_year_mapping ) {
   return( out_df )
 }
 
-ds_df_zero_or_neg <- downscaleIAMemissions_CO2( wide_df_zero_or_neg, con_year_mapping )
+ds_df_CO2_or_neg_nonCO2 <- downscaleIAMemissions_CO2_or_neg_nonCO2( wide_df_CO2_or_neg_nonCO2, con_year_mapping )
 
 # 5.3 combine downscaled non-CO2 emissions and CO2 emissions 
-ds_df <- rbind( ds_df_nonCO2, ds_df_zero_or_neg )
+ds_df <- rbind( ds_df_pos_nonCO2, ds_df_CO2_or_neg_nonCO2 )
 
 # -----------------------------------------------------------------------------
 # 5 Write out
