@@ -38,15 +38,15 @@ initialize( script_name, log_msg, headers )
 # 1. Set up desired IAM to be processing
 
 # debug
-#args_from_makefile <- c( 'MESSAGE-GLOBIOM', 
-#                         'Harmonized-DB',
-#                         'C:/Users/feng999/Documents/emissions_downscaling/input/IAM_emissions/MESSAGE-GLOBIOM_SSP2-Ref-SPA0-V25_unharmonized_harmonized.xlsx',
-#                         'C:/Users/feng999/Documents/emissions_downscaling/final-output/module-B', 
-#                         'C:/Users/feng999/Documents/emissions_downscaling/final-output/module-C',
-#                         'gridding' )
+args_from_makefile <- c( 'IMAGE',
+                        'Harmonized-DB',
+                        'C:/Users/guti220/Desktop/emissions_downscaling/input/IAM_emissions/IMAGE_SSP1-26/output_harmonized.xlsx',
+                        'C:/Users/guti220/Desktop/emissions_downscaling/final-output/module-B',
+                        'C:/Users/guti220/Desktop/emissions_downscaling/final-output/module-C',
+                        'NOTgridding' )
 
 # the flag for intermediate file cleaning
-MED_OUT_CLEAN <- T
+MED_OUT_CLEAN <- F
 
 # getting target IAM from command line arguement
 if ( !exists( 'args_from_makefile' ) ) args_from_makefile <- commandArgs( TRUE )
@@ -86,6 +86,7 @@ source( '../code/module-B/B.2.IAM_reference_emission_preparation.R' )
 source( '../code/module-B/B.3.regional_pop_gdp_preparation.R' )
 source( '../code/module-B/B.4.1.IAM_emissions_downscaling_linear.R' )
 source( '../code/module-B/B.4.2.IAM_emissions_downscaling_ipat.R' )
+source( '../code/module-B/B.4.3.IAM_emissions_downscaling_consistency_check.R' )
 source( '../code/module-B/B.5.IAM_emissions_downscaled_cleanup.R' )
 
 # -----------------------------------------------------------------------------
