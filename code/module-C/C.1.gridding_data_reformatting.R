@@ -65,6 +65,9 @@ iam_em <- merge( iam_data, sector_mapping,
 iam_em$sector <- NULL
 colnames( iam_em )[ which( colnames( iam_em ) == 'sector_short' ) ] <- 'sector'
 
+# remove the version number in scenario name
+iam_em$scenario<- substr(iam_em$scenario, 1, nchar(iam_em$scenario)-4)
+
 # -----------------------------------------------------------------------------
 # 4. Write out
 # write the interpolated iam_data into intermediate output folder 
