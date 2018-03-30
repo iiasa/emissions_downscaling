@@ -167,9 +167,12 @@ if (nrow(ds_lin.mismatch[[1]]) != 0) {
   for (m in unique(df$model)) {
     for (s in unique(df$scenario)) {
       # open error log, name according to (m, s)
-      fn <- paste0("../code/error/Linear ", m, ", ", s, ".err")
+      fn <- paste0("../code/error/Linear ", m, ", ", s, ".txt")
       zz <- file(fn, open="wt")
       sink(zz) # divert session output to error log
+      
+      print("Linear downscaling error")
+      print("Downscaled emissions aggregated to native IAM regions don't match IAM emissions")
       
       df2 <- df %>% 
         select(-value, -unit) %>% # drop columns that don't need to be reported
@@ -180,6 +183,7 @@ if (nrow(ds_lin.mismatch[[1]]) != 0) {
       
       # for each mismatched row, print the following keys:
       # model, scenario, region, em, harm_status, x_year 
+      print("Rows with mismatched values:")
       for (i in 1:nrow(df2)) {
         paste0(df2[i,], collapse=", ") %>% 
           print()
@@ -206,9 +210,11 @@ if (nrow(ds_ipat.mismatch[[1]]) != 0) {
   for (m in unique(df$model)) {
     for (s in unique(df$scenario)) {
       # open error log, name according to (m, s)
-      fn <- paste0("../code/error/IPAT ", m, ", ", s, ".err")
+      fn <- paste0("../code/error/IPAT ", m, ", ", s, ".txt")
       zz <- file(fn, open="wt")
       sink(zz) # divert session output to error log
+      print("IPAT downscaling error")
+      print("Downscaled emissions aggregated to native IAM regions don't match IAM emissions")
       
       df2 <- df %>% 
         select(-value, -unit) %>% # drop columns that don't need to be reported
@@ -219,6 +225,7 @@ if (nrow(ds_ipat.mismatch[[1]]) != 0) {
       
       # for each mismatched row, print the following keys:
       # model, scenario, region, em, harm_status, x_year 
+      print("Rows with mismatched values:")
       for (i in 1:nrow(df)) {
         paste0(df2[i,], collapse=", ") %>% 
           print()
