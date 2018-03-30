@@ -156,7 +156,7 @@ if (nrow(ds_lin.mismatch[[1]]) != 0) {
   for (m in unique(df$model)) {
     for (s in unique(df$scenario)) {
       # open error log, name according to (m, s)
-      fn <- paste0("../code/error/Linear ", m, ", ", s, ".txt")
+      fn <- paste0("../code/error/ERROR-Linear ", m, ", ", s, ".txt")
       zz <- file(fn, open="wt")
       sink(zz) # divert session output to error log
       
@@ -199,7 +199,7 @@ if (nrow(ds_ipat.mismatch[[1]]) != 0) {
   for (m in unique(df$model)) {
     for (s in unique(df$scenario)) {
       # open error log, name according to (m, s)
-      fn <- paste0("../code/error/IPAT ", m, ", ", s, ".txt")
+      fn <- paste0("../code/error/ERROR-IPAT ", m, ", ", s, ".txt")
       zz <- file(fn, open="wt")
       sink(zz) # divert session output to error log
       print("IPAT downscaling error")
