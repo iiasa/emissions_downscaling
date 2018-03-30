@@ -156,6 +156,7 @@ ds_ipat.mismatch <- list(anti_join(ds_ipat_in.agg, ds_ipat_out.agg),
 # If there are any mismatched rows, print to log the identifying keys for those rows
 
 
+# Linear Downscaling
 
 # check rows in mismatch. both entries will contain same # of rows
 if (nrow(ds_lin.mismatch[[1]]) != 0) {
@@ -194,11 +195,11 @@ if (nrow(ds_lin.mismatch[[1]]) != 0) {
       close(zz)
     }
   }
-
-  
 } else {
   printLog("Linear downscaling: all output rows match input")
 }
+
+#IPAT Downscaling
 
 # check rows in mismatch. both entries will contain same # of rows
 if (nrow(ds_ipat.mismatch[[1]]) != 0) {
@@ -236,8 +237,6 @@ if (nrow(ds_ipat.mismatch[[1]]) != 0) {
       close(zz)
     }
   }
-  
-  
 } else {
   printLog("IPAT downscaling: all output rows match input")
 }
