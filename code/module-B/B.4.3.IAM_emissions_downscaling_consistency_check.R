@@ -79,7 +79,7 @@ ds_lin_in.agg <- ds_lin_in %>%
   group_by(model, scenario, region, em, harm_status, unit, x_year) %>% 
   summarise(value=sum(value)) %>% # aggregate over sectors
   ungroup() %>% 
-  mutate(value = round(value, 5)) # in order to compare two df's, must round to same precision
+  mutate(value = round(value, digits = 5)) # in order to compare two df's, must round to same precision
 
 
 ds_lin_out.agg <- ds_lin_out %>% 
@@ -87,19 +87,7 @@ ds_lin_out.agg <- ds_lin_out %>%
   group_by(model, scenario, region, em, harm_status, unit, x_year) %>% 
   summarise(value=sum(value)) %>% # aggregate over sectors
   ungroup() %>% 
-  mutate(value = round(value, 5)) # in order to compare two df's, must round to same precision
-
-# # fiddle with aggregated ds output values
-# # 3/26 regions
-# regs <- unique(ds_lin_out.agg$region)[sample(1:26, 3)]
-# # 2/9 em
-# ems <- unique(ds_lin_out.agg$em)[sample(1:9, 2)]
-# # 4/86 x_year
-# xyrs <- unique(ds_lin_out.agg$x_year)[sample(1:86, 4)]
-# ds_lin_out.agg <- ds_lin_out.agg %>% 
-#   mutate(value = ifelse(region %in% regs & em %in% ems & x_year %in% xyrs,
-#                         2*value,
-#                         value))
+  mutate(value = round(value, digits = 5)) # in order to compare two df's, must round to same precision
 
 # don't provide 'by' argument so that join(x,y) compares on all columns 
 ds_lin.mismatch <- list(anti_join(ds_lin_in.agg, ds_lin_out.agg), 
@@ -133,14 +121,14 @@ ds_ipat_in.agg <- ds_ipat_in %>%
   group_by(model, scenario, region, em, unit, x_year) %>% 
   summarise(value=sum(value)) %>% # aggregate over sectors, 
   ungroup() %>% 
-  mutate(value = round(value, 5)) # in order to compare two df's, must round to same precision
+  mutate(value = round(value, digits = 5)) # in order to compare two df's, must round to same precision
 
 ds_ipat_out.agg <- ds_ipat_out %>% 
   gather(x_year, value, -model, -scenario, -region, -em, -sector,-unit, -iso) %>% 
   group_by(model, scenario, region, em, unit, x_year) %>% 
   summarise(value=sum(value)) %>% # aggregate over sectors, 
   ungroup() %>% 
-  mutate(value = round(value, 5)) # in order to compare two df's, must round to same precision
+  mutate(value = round(value, digits = 5)) # in order to compare two df's, must round to same precision
 
 # don't provide 'by' argument so that join(x,y) compares on all columns 
 ds_ipat.mismatch <- list(anti_join(ds_ipat_in.agg, ds_ipat_out.agg), 
@@ -156,50 +144,98 @@ ds_ipat.mismatch <- list(anti_join(ds_ipat_in.agg, ds_ipat_out.agg),
 # If there are any mismatched rows, print to log the identifying keys for those rows
 
 
+# Linear Downscaling
 
 # check rows in mismatch. both entries will contain same # of rows
 if (nrow(ds_lin.mismatch[[1]]) != 0) {
+  df <- ds_lin.mismatch[[1]] # grab one set of mismatched rows. values aren't reported in error log, so it doesn't matter which set. 
   
-  printLog("Linear downscaling: output rows that don't match input")
-  # drop columns that don't need to be reported in error log
-  df <- ds_lin.mismatch[[1]] %>% 
-    select(-value, -unit) %>% 
-    group_by(model, scenario, region, em, harm_status) %>% 
-    summarise(x_years = paste0(x_year, collapse=", ")) %>% 
-    ungroup()
+  printLog("Linear downscaling: There are output rows that don't match input. Check error log")
   
-  # for each mismatched row, print the following keys:
-  # model, scenario, region, em, harm_status, x_year 
-  for (i in 1:nrow(df)) {
-    paste0(df[i,], collapse=", ") %>% 
-      printLog()
+  # distinct error log for each (m, s) with mismatched values
+  for (m in unique(df$model)) {
+    for (s in unique(df$scenario)) {
+      
+      # m can't contain any /
+      m <- gsub("/", "-", m)
+      
+      # open error log, name according to (m, s)
+      fn <- paste0("../code/error/ERROR-Linear ", m, ", ", s, ".txt")
+      zz <- file(fn, open="wt")
+      sink(zz) # divert session output to error log
+      
+      print("Linear downscaling error")
+      print("Downscaled emissions aggregated to native IAM regions don't match IAM emissions")
+      
+      df2 <- df %>% 
+        select(-value, -unit) %>% # drop columns that don't need to be reported
+        filter(model == m & scenario == s) %>% # filter to distinct model & scenario
+        group_by(model, scenario, region, em, harm_status) %>% # for each region and em in (m,s), 
+        summarise(x_years = paste0(x_year, collapse=", ")) %>% # print years that have mismatched values
+        ungroup()
+      
+      # for each mismatched row, print the following keys:
+      # model, scenario, region, em, harm_status, x_year 
+      print("Rows with mismatched values:")
+      for (i in 1:nrow(df2)) {
+        paste0(df2[i,], collapse=", ") %>% 
+          print()
+      }
+      
+      # close sink diversion then file connection
+      sink()
+      close(zz)
+    }
   }
+} else {
+  printLog("Linear downscaling: all output rows match input")
+}
+
+#IPAT Downscaling
+
+# check rows in mismatch. both entries will contain same # of rows
+if (nrow(ds_ipat.mismatch[[1]]) != 0) {
+  df <- ds_ipat.mismatch[[1]] # grab one set of mismatched rows. values aren't reported in error log, so it doesn't matter which set. 
   
+  printLog("IPAT downscaling: There are output rows that don't match input. Check error log")
+  
+  # distinct error log for each (m, s) with mismatched values
+  for (m in unique(df$model)) {
+    for (s in unique(df$scenario)) {
+      
+      # m can't contain any /
+      m <- gsub("/", "-", m)
+      
+      # open error log, name according to (m, s)
+      fn <- paste0("../code/error/ERROR-IPAT ", m, ", ", s, ".txt")
+      zz <- file(fn, open="wt")
+      sink(zz) # divert session output to error log
+      print("IPAT downscaling error")
+      print("Downscaled emissions aggregated to native IAM regions don't match IAM emissions")
+      
+      df2 <- df %>% 
+        select(-value, -unit) %>% # drop columns that don't need to be reported
+        filter(model == m & scenario == s) %>% # filter to distinct model & scenario
+        group_by(model, scenario, region, em) %>% # for each region and em in (m,s), 
+        summarise(x_years = paste0(x_year, collapse=", ")) %>% # print years that have mismatched values
+        ungroup()
+      
+      # for each mismatched row, print the following keys:
+      # model, scenario, region, em, harm_status, x_year 
+      print("Rows with mismatched values:")
+      for (i in 1:nrow(df2)) {
+        paste0(df2[i,], collapse=", ") %>% 
+          print()
+      }
+      
+      # close sink diversion then file connection
+      sink()
+      close(zz)
+    }
+  }
 } else {
   printLog("IPAT downscaling: all output rows match input")
 }
 
-# check rows in mismatch. both entries will contain same # of rows
-if (nrow(ds_ipat.mismatch[[1]]) != 0) {
-  
-  printLog("IPAT downscaling: output rows that don't match input")
-  
-  # drop columns that don't need to be reported in error log
-  df <- ds_ipat.mismatch[[1]] %>% 
-    select(-value, -unit) %>% 
-    group_by(model, scenario, region, em, harm_status) %>% 
-    summarise(x_years = paste0(x_year, collapse=", ")) %>% 
-    ungroup()  
-  
-  # for each mismatched row, print the following keys:
-  # model, scenario, region, em, harm_status, x_year 
-  for (i in 1:nrow(df)) {
-    paste0(df[1,], collapse=", ") %>% 
-      printLog()
-  }
-  
-} else {
-  printLog("IPAT downscaling: all output rows match input")
-}
 # END
 logStop()

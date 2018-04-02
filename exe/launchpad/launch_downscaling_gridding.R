@@ -37,19 +37,25 @@ initialize( script_name, log_msg, headers )
 # -----------------------------------------------------------------------------
 # 1. Set up desired IAM to be processing
 
-# debug
-args_from_makefile <- c( 'IMAGE',
-                        'Harmonized-DB',
-                        'C:/Users/guti220/Desktop/emissions_downscaling/input/IAM_emissions/IMAGE_SSP1-26/output_harmonized.xlsx',
-                        'C:/Users/guti220/Desktop/emissions_downscaling/final-output/module-B',
-                        'C:/Users/guti220/Desktop/emissions_downscaling/final-output/module-C',
-                        'NOTgridding' )
+# debug flag
+debug <- FALSE
+
+if (debug) {
+  args_from_makefile <- c( 'AIM',
+                           'Harmonized-DB',
+                           'C:/Users/guti220/Desktop/emissions_downscaling/input/IAM_emissions/failed_input/AIM_SSP3-Ref/output_harmonized.xlsx',
+                           'C:/Users/guti220/Desktop/emissions_downscaling/final-output/module-B',
+                           'C:/Users/guti220/Desktop/emissions_downscaling/final-output/module-C',
+                           'NOTgridding' )
+} else {
+  # get args from command line
+  args_from_makefile <- commandArgs( TRUE )
+}
 
 # the flag for intermediate file cleaning
 MED_OUT_CLEAN <- F
 
-# getting target IAM from command line arguement
-if ( !exists( 'args_from_makefile' ) ) args_from_makefile <- commandArgs( TRUE )
+# extract arguments from args_from_makefile
 iam <- args_from_makefile[ 1 ]
 harm_status <- args_from_makefile[ 2 ]
 input_file <- args_from_makefile[ 3 ]   
