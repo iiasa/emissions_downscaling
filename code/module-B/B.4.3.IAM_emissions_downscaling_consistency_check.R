@@ -79,7 +79,7 @@ ds_lin_in.agg <- ds_lin_in %>%
   group_by(model, scenario, region, em, harm_status, unit, x_year) %>% 
   summarise(value=sum(value)) %>% # aggregate over sectors
   ungroup() %>% 
-  mutate(value = round(value, 5)) # in order to compare two df's, must round to same precision
+  mutate(value = round(value, digits = 5)) # in order to compare two df's, must round to same precision
 
 
 ds_lin_out.agg <- ds_lin_out %>% 
@@ -87,7 +87,7 @@ ds_lin_out.agg <- ds_lin_out %>%
   group_by(model, scenario, region, em, harm_status, unit, x_year) %>% 
   summarise(value=sum(value)) %>% # aggregate over sectors
   ungroup() %>% 
-  mutate(value = round(value, 5)) # in order to compare two df's, must round to same precision
+  mutate(value = round(value, digits = 5)) # in order to compare two df's, must round to same precision
 
 # don't provide 'by' argument so that join(x,y) compares on all columns 
 ds_lin.mismatch <- list(anti_join(ds_lin_in.agg, ds_lin_out.agg), 
@@ -121,14 +121,14 @@ ds_ipat_in.agg <- ds_ipat_in %>%
   group_by(model, scenario, region, em, unit, x_year) %>% 
   summarise(value=sum(value)) %>% # aggregate over sectors, 
   ungroup() %>% 
-  mutate(value = round(value, 5)) # in order to compare two df's, must round to same precision
+  mutate(value = round(value, digits = 5)) # in order to compare two df's, must round to same precision
 
 ds_ipat_out.agg <- ds_ipat_out %>% 
   gather(x_year, value, -model, -scenario, -region, -em, -sector,-unit, -iso) %>% 
   group_by(model, scenario, region, em, unit, x_year) %>% 
   summarise(value=sum(value)) %>% # aggregate over sectors, 
   ungroup() %>% 
-  mutate(value = round(value, 5)) # in order to compare two df's, must round to same precision
+  mutate(value = round(value, digits = 5)) # in order to compare two df's, must round to same precision
 
 # don't provide 'by' argument so that join(x,y) compares on all columns 
 ds_ipat.mismatch <- list(anti_join(ds_ipat_in.agg, ds_ipat_out.agg), 
@@ -155,6 +155,10 @@ if (nrow(ds_lin.mismatch[[1]]) != 0) {
   # distinct error log for each (m, s) with mismatched values
   for (m in unique(df$model)) {
     for (s in unique(df$scenario)) {
+      
+      # m can't contain any /
+      m <- gsub("/", "-", m)
+      
       # open error log, name according to (m, s)
       fn <- paste0("../code/error/ERROR-Linear ", m, ", ", s, ".txt")
       zz <- file(fn, open="wt")
@@ -198,6 +202,10 @@ if (nrow(ds_ipat.mismatch[[1]]) != 0) {
   # distinct error log for each (m, s) with mismatched values
   for (m in unique(df$model)) {
     for (s in unique(df$scenario)) {
+      
+      # m can't contain any /
+      m <- gsub("/", "-", m)
+      
       # open error log, name according to (m, s)
       fn <- paste0("../code/error/ERROR-IPAT ", m, ", ", s, ".txt")
       zz <- file(fn, open="wt")
@@ -208,14 +216,14 @@ if (nrow(ds_ipat.mismatch[[1]]) != 0) {
       df2 <- df %>% 
         select(-value, -unit) %>% # drop columns that don't need to be reported
         filter(model == m & scenario == s) %>% # filter to distinct model & scenario
-        group_by(model, scenario, region, em, harm_status) %>% # for each region and em in (m,s), 
+        group_by(model, scenario, region, em) %>% # for each region and em in (m,s), 
         summarise(x_years = paste0(x_year, collapse=", ")) %>% # print years that have mismatched values
         ungroup()
       
       # for each mismatched row, print the following keys:
       # model, scenario, region, em, harm_status, x_year 
       print("Rows with mismatched values:")
-      for (i in 1:nrow(df)) {
+      for (i in 1:nrow(df2)) {
         paste0(df2[i,], collapse=", ") %>% 
           print()
       }
