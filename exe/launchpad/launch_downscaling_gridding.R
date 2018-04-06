@@ -38,7 +38,7 @@ initialize( script_name, log_msg, headers )
 # 1. Set up desired IAM to be processing
 
 # debug flag
-debug <- FALSE
+debug <- TRUE
 
 if (debug) {
   args_from_makefile <- c( 'REMIND-MAGPIE',
