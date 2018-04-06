@@ -1,12 +1,12 @@
 # ------------------------------------------------------------------------------
 # Program Name: luanch_downscaling_gridding.R
 # Author(s): Leyang Feng
-# Date Last Updated: Nov 28, 2017 
+# Date Last Updated: Nov 28, 2017
 # Program Purpose: The script runs downscaling and gridding
-# Input Files: 
+# Input Files:
 # Output Files:
-# Notes: 
-# TODO: 
+# Notes:
+# TODO:
 # ------------------------------------------------------------------------------
 
 # ------------------------------------------------------------------------------
@@ -25,10 +25,10 @@ for ( i in 1:length( dirs ) ) {
 }
 PARAM_DIR <- "../code/parameters/"
 
-# Call standard script header function to read in universal header files - 
+# Call standard script header function to read in universal header files -
 # provides logging, file support, and system functions - and start the script log.
-headers <- c( 'common_data.R', 'data_functions.R', 'module-A_functions.R', 'all_module_functions.R' ) 
-log_msg <- "Initiate downscaling routines." 
+headers <- c( 'common_data.R', 'data_functions.R', 'module-A_functions.R', 'all_module_functions.R' )
+log_msg <- "Initiate downscaling routines."
 script_name <- "launch_downscaling.R"
 
 source( paste0( PARAM_DIR, "header.R" ) )
@@ -41,12 +41,12 @@ initialize( script_name, log_msg, headers )
 debug <- FALSE
 
 if (debug) {
-  args_from_makefile <- c( 'AIM',
+  args_from_makefile <- c( 'REMIND-MAGPIE',
                            'Harmonized-DB',
-                           'C:/Users/guti220/Desktop/emissions_downscaling/input/IAM_emissions/failed_input/AIM_SSP3-Ref/output_harmonized.xlsx',
+                           'C:/Users/guti220/Desktop/emissions_downscaling/input/IAM_emissions/output_harmonized.xlsx',
                            'C:/Users/guti220/Desktop/emissions_downscaling/final-output/module-B',
                            'C:/Users/guti220/Desktop/emissions_downscaling/final-output/module-C',
-                           'NOTgridding' )
+                           'gridding' )
 } else {
   # get args from command line
   args_from_makefile <- commandArgs( TRUE )
@@ -58,25 +58,25 @@ MED_OUT_CLEAN <- F
 # extract arguments from args_from_makefile
 iam <- args_from_makefile[ 1 ]
 harm_status <- args_from_makefile[ 2 ]
-input_file <- args_from_makefile[ 3 ]   
-modb_out <- args_from_makefile[ 4 ]    
+input_file <- args_from_makefile[ 3 ]
+modb_out <- args_from_makefile[ 4 ]
 modc_out <- args_from_makefile[ 5 ]
 gridding_flag <- args_from_makefile[ 6 ]
-RUNSUFFIX <- substr( sha1( runif(1) ), 1, 6 ) 
+RUNSUFFIX <- substr( sha1( runif(1) ), 1, 6 )
 
-# update domainmapping for current run 
+# update domainmapping for current run
 domainmapping <- read.csv( DOMAINPATHMAP, stringsAsFactors = F )
 
-# create modb_out 
+# create modb_out
 dir.create( modb_out )
-# create modc_out if only the gridding flag is given  
-if ( gridding_flag == 'gridding' ) { 
+# create modc_out if only the gridding flag is given
+if ( gridding_flag == 'gridding' ) {
 dir.create( modc_out )
-} else { 
-  modc_out <- NA 
+} else {
+  modc_out <- NA
   }
 
-# create unique directory for intermediate files 
+# create unique directory for intermediate files
 med_out <- paste0( '../intermediate-output', '/', RUNSUFFIX )
 dir.create( med_out )
 
@@ -97,15 +97,15 @@ source( '../code/module-B/B.5.IAM_emissions_downscaled_cleanup.R' )
 
 # -----------------------------------------------------------------------------
 # 3. Source module-C script in order
-if ( gridding_flag == 'gridding' ) { 
+if ( gridding_flag == 'gridding' ) {
   source( '../code/module-C/C.1.gridding_data_reformatting.R' )
   source( '../code/module-C/C.2.1.gridding_nonair.R' )
-  source( '../code/module-C/C.2.2.gridding_air.R' ) 
+  source( '../code/module-C/C.2.2.gridding_air.R' )
 }
 
 # -----------------------------------------------------------------------------
 # 4. clean the intermediate files
-if ( MED_OUT_CLEAN ) { 
+if ( MED_OUT_CLEAN ) {
   invisible( unlink( med_out, recursive = T ) )
   invisible( file.remove( paste0( '../documentation/IO_documentation_', RUNSUFFIX, '.csv' ) ) )
 }
