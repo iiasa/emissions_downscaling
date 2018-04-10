@@ -96,10 +96,10 @@ wide_df_CO2_or_neg_nonCO2 <- wide_df %>%
 source("../code/module-B/downscaling_ipat_functions.R")
 
 # 5.1 downscaling for non-CO2 emissions 
-ds_df_pos_nonCO2 <- downscaleIAMemissions_pos_nonCO2( wide_df_pos_nonCO2, con_year_mapping )
+ds_df_pos_nonCO2 <- downscaleIAMemissions( wide_df_pos_nonCO2, con_year_mapping, pos_nonCO2 = TRUE )
 
 # 5.2 downscaling for CO2 emissions 
-ds_df_CO2_or_neg_nonCO2 <- downscaleIAMemissions_CO2_or_neg_nonCO2( wide_df_CO2_or_neg_nonCO2, con_year_mapping )
+ds_df_CO2_or_neg_nonCO2 <- downscaleIAMemissions( wide_df_CO2_or_neg_nonCO2, con_year_mapping, pos_nonCO2 = FALSE )
 
 # 5.3 combine downscaled non-CO2 emissions and CO2 emissions 
 ds_df <- rbind( ds_df_pos_nonCO2, ds_df_CO2_or_neg_nonCO2 )
