@@ -109,11 +109,7 @@
         } )
         sec_res <- do.call( 'rbind', sec_res_list )
         
-        if ( iam == 'GCAM4' ) model_world <- 'World'
-        if ( iam == 'REMIND-MAGPIE' ) model_world <- 'World'
-        if ( iam == 'MESSAGE-GLOBIOM' ) model_world <- 'World'
-        if ( iam == 'AIM' ) model_world <- 'World'
-        if ( iam == 'IMAGE' ) model_world <- 'World'
+        model_world <- 'World'
         
         air_res <- data.frame( scenario = sce, 
                                em = em, 
