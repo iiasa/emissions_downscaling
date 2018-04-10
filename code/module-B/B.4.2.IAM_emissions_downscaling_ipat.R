@@ -96,19 +96,28 @@ wide_df_CO2_or_neg_nonCO2 <- wide_df %>%
 source("../code/module-B/downscaling_ipat_functions.R")
 
 # 5.1 downscaling for non-CO2 emissions 
-ds_df_pos_nonCO2 <- downscaleIAMemissions( wide_df_pos_nonCO2, con_year_mapping, pos_nonCO2 = TRUE )
+out <- downscaleIAMemissions( wide_df_pos_nonCO2, con_year_mapping, pos_nonCO2 = TRUE )
+ds_df_pos_nonCO2 <- out[[1]]
+zero_in_BY.pos_nonCO2 <- out[[2]]
 
 # 5.2 downscaling for CO2 emissions 
-ds_df_CO2_or_neg_nonCO2 <- downscaleIAMemissions( wide_df_CO2_or_neg_nonCO2, con_year_mapping, pos_nonCO2 = FALSE )
+out <- downscaleIAMemissions( wide_df_CO2_or_neg_nonCO2, con_year_mapping, pos_nonCO2 = FALSE )
+ds_df_CO2_or_neg_nonCO2 <-  out [[1]]
+zero_in_BY.CO2_or_neg_nonCO2 <- out[[2]]
 
 # 5.3 combine downscaled non-CO2 emissions and CO2 emissions 
 ds_df <- rbind( ds_df_pos_nonCO2, ds_df_CO2_or_neg_nonCO2 )
+zero_in_BY <- rbind(zero_in_BY.pos_nonCO2, zero_in_BY.CO2_or_neg_nonCO2)
 
 # -----------------------------------------------------------------------------
 # 5 Write out
-# write baseyear reference emissions for aircraft and shipping sectors 
+# write baseyear reference emissions for energy-related sectors 
 out_filename <- paste0( 'B.', iam, '_emissions_downscaled_ipat', '_', RUNSUFFIX )
 writeData( ds_df, 'MED_OUT', out_filename, meta = F )  
+
+# write diagnostic file that records rows where a replacement was made
+out_filname <- paste0( 'B.', ref_name, '_DIAGNOSTIC_emissions_replaced_zero_in_BY', '_', RUNSUFFIX )
+writeData( zero_in_BY, 'MED_OUT', out_filname, meta = F )
 
 # END
 logStop()
