@@ -38,15 +38,16 @@ initialize( script_name, log_msg, headers )
 # 1. Set up desired IAM to be processing
 
 # debug flag
-debug <- TRUE
+
+debug <- FALSE
 
 if (debug) {
-  args_from_makefile <- c( 'REMIND-MAGPIE',
+  args_from_makefile <- c( 'AIM',
                            'Harmonized-DB',
-                           'C:/Users/guti220/Desktop/emissions_downscaling/input/IAM_emissions/output_harmonized.xlsx',
+                           'C:/Users/guti220/Desktop/emissions_downscaling/input/IAM_emissions/failed_input/AIM_SSP3-Ref/output_harmonized.xlsx',
                            'C:/Users/guti220/Desktop/emissions_downscaling/final-output/module-B',
                            'C:/Users/guti220/Desktop/emissions_downscaling/final-output/module-C',
-                           'gridding' )
+                           'NOTgridding' )
 } else {
   # get args from command line
   args_from_makefile <- commandArgs( TRUE )

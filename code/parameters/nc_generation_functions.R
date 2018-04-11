@@ -156,12 +156,14 @@ generate_bulk_grids_nc <- function( allyear_grids_list,
 		  
   # ---
   # 3. generate nc file name and some variables
+  if (em == 'Sulfur') {FN_em <- 'SO2'} else {FN_em <- em}
+  
   FN_version_tag <- paste0( 'IAMC', '-', dataset_version_number )  
   MD_dataset_version_number_value <- dataset_version_number 
   MD_source_value <- 'IAMC Scenario Database hosted at IIASA'
   MD_source_id_value <- FN_version_tag
   FN_source_id_value <- MD_source_id_value
-  FN_variable_id_value <- paste0( iam, '-', scenario, '-', harm_status, '-', em, '-em-anthro' )
+  FN_variable_id_value <- paste0( iam, '-', scenario, '-', harm_status, '-', FN_em, '-em-anthro' )
   nc_file_name <- paste0( FN_variable_id_value, '_input4MIPs_emissions_CMIP_', FN_version_tag, '_gn_201501-210012.nc' )
   nc_file_name_w_path <- paste0( output_dir, '/', nc_file_name ) 
   
@@ -247,7 +249,7 @@ generate_bulk_grids_nc <- function( allyear_grids_list,
   ncatt_put( nc_new, 0, 'source_id', MD_source_id_value )
   ncatt_put( nc_new, 0, 'table_id', 'input4MIPs' )
   ncatt_put( nc_new, 0, 'target_mip', 'CMIP' )
-  ncatt_put( nc_new, 0, 'title', paste0( 'Future Anthropogenic Emissions of ', em, ' prepared for input4MIPs' ) )
+  ncatt_put( nc_new, 0, 'title', paste0( 'Future Anthropogenic Emissions of ', FN_em, ' prepared for input4MIPs' ) )
   ncatt_put( nc_new, 0, 'variable_id', MD_variable_id_value )
   
   # some other metadata
@@ -437,12 +439,14 @@ generate_openburning_grids_nc <- function( allyear_grids_list,
   
   # ---
   # 3. generate nc file name and some variables
+  if (em == 'Sulfur') {FN_em <- 'SO2'} else {FN_em <- em}
+  
   FN_version_tag <- paste0( 'IAMC', '-', dataset_version_number )  
   MD_dataset_version_number_value <- dataset_version_number 
   MD_source_value <- 'IAMC Scenario Database hosted at IIASA'
   MD_source_id_value <- FN_version_tag
   FN_source_id_value <- MD_source_id_value
-  FN_variable_id_value <- paste0( iam, '-', scenario, '-', harm_status, '-', em, '-em-openburning' )
+  FN_variable_id_value <- paste0( iam, '-', scenario, '-', harm_status, '-', FN_em, '-em-openburning' )
   nc_file_name <- paste0( FN_variable_id_value, '_input4MIPs_emissions_CMIP_', FN_version_tag, '_gn_201501-210012.nc' )
   nc_file_name_w_path <- paste0( output_dir, '/', nc_file_name ) 
   
@@ -528,7 +532,7 @@ generate_openburning_grids_nc <- function( allyear_grids_list,
   ncatt_put( nc_new, 0, 'source_id', MD_source_id_value )
   ncatt_put( nc_new, 0, 'table_id', 'input4MIPs' )
   ncatt_put( nc_new, 0, 'target_mip', 'CMIP' )
-  ncatt_put( nc_new, 0, 'title', paste0( 'Future Anthropogenic Emissions of ', em, ' prepared for input4MIPs' ) )
+  ncatt_put( nc_new, 0, 'title', paste0( 'Future Anthropogenic Emissions of ', FN_em, ' prepared for input4MIPs' ) )
   ncatt_put( nc_new, 0, 'variable_id', MD_variable_id_value )
   
   # some other metadata
@@ -686,12 +690,14 @@ generate_air_grids_nc <- function( allyear_grids_list,
   
   # ---
   # 3. generate nc file name and some variables
+  if (em == 'Sulfur') {FN_em <- 'SO2'} else {FN_em <- em}
+  
   FN_version_tag <- paste0( 'IAMC', '-', dataset_version_number )  
   MD_dataset_version_number_value <- dataset_version_number 
   MD_source_value <- 'IAMC Scenario Database hosted at IIASA'
   MD_source_id_value <- FN_version_tag
   FN_source_id_value <- MD_source_id_value
-  FN_variable_id_value <- paste0( iam, '-', scenario, '-', harm_status, '-', em, '-em-aircraft-anthro' )
+  FN_variable_id_value <- paste0( iam, '-', scenario, '-', harm_status, '-', FN_em, '-em-aircraft-anthro' )
   nc_file_name <- paste0( FN_variable_id_value, '_input4MIPs_emissions_CMIP_', FN_version_tag, '_gn_201501-210012.nc' )
   nc_file_name_w_path <- paste0( output_dir, '/', nc_file_name ) 
   
@@ -773,7 +779,7 @@ generate_air_grids_nc <- function( allyear_grids_list,
   ncatt_put( nc_new, 0, 'source_id', MD_source_id_value )
   ncatt_put( nc_new, 0, 'table_id', 'input4MIPs' )
   ncatt_put( nc_new, 0, 'target_mip', 'CMIP' )
-  ncatt_put( nc_new, 0, 'title', paste0( 'Future Anthropogenic Aircraft Emissions of ', em, ' prepared for input4MIPs' ) )
+  ncatt_put( nc_new, 0, 'title', paste0( 'Future Anthropogenic Aircraft Emissions of ', FN_em, ' prepared for input4MIPs' ) )
   ncatt_put( nc_new, 0, 'variable_id', MD_variable_id_value )
   
   # some other metadata

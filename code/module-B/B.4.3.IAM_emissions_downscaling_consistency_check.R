@@ -161,6 +161,7 @@ if (nrow(ds_lin.mismatch[[1]]) != 0) {
       
       # open error log, name according to (m, s)
       fn <- paste0("../code/error/ERROR-Linear ", m.file, ", ", s, ".txt")
+
       zz <- file(fn, open="wt")
       sink(zz) # divert session output to error log
       
@@ -208,6 +209,7 @@ if (nrow(ds_ipat.mismatch[[1]]) != 0) {
       
       # open error log, name according to (m, s)
       fn <- paste0("../code/error/ERROR-IPAT ", m.file, ", ", s, ".txt")
+
       zz <- file(fn, open="wt")
       sink(zz) # divert session output to error log
       print("IPAT downscaling error")
