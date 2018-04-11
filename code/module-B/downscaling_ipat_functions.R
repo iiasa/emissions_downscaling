@@ -27,7 +27,7 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping, pos_nonCO2) {
   
   # first, grab all sectors with non-zero baseyear emissions intensity growth
   nonzero_in_BY <- par_df %>%
-    filter(EICBY != 0 )
+    filter(EICBY != 0 | sector == "Industrial Sector" )
   # then, calculate min(that region's set of sectoral emissions intensity growth) / 3
   replacement_values <- nonzero_in_BY %>%
     group_by(region, em, unit) %>%
@@ -36,7 +36,7 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping, pos_nonCO2) {
   # then, replace zero-valued baseyears with the value calculated above
   # the zero-valued iso sectors are replaced with the above calculated values
   zero_in_BY <- par_df %>%
-    filter(EICBY == 0 ) %>%
+    filter(EICBY == 0 & sector != "Industrial Sector") %>% 
     select(-EICBY) %>%
     left_join(replacement_values) %>% 
     dplyr::rename(EICBY = replacement_value)
