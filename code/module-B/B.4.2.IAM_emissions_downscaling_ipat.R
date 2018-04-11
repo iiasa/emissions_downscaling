@@ -55,7 +55,6 @@ base_year <- as.numeric( base_year )
 x_baseyear <- paste0( 'X', base_year )
 
 con_year_mapping <- readData( domain = 'MAPPINGS', file_name = ds_convergence_year_mapping )
-con_year_mapping <- con_year_mapping[ con_year_mapping$model == iam, c( "scenario_label", "convergence_year" ) ]
 
 # -----------------------------------------------------------------------------
 # 2. Read IAM emissions, baseyear reference emissions, population data and GDP data 
