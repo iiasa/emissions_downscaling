@@ -66,6 +66,7 @@ x_baseyear <- paste0( 'X', base_year )
 sector_mapping <- readData( domain = 'MAPPINGS', file_name = ref_sector_mapping ) 
 region_mapping <- readData( domain = 'MAPPINGS', file_name = ref_region_mapping ) 
 con_year_mapping <- readData( domain = 'MAPPINGS', file_name = ds_convergence_year_mapping )
+con_year_mapping <- con_year_mapping[ con_year_mapping$model == iam, c( "scenario_label", "convergence_year" ) ]
 method_mapping <- readData( domain = 'MAPPINGS', file_name = ds_method_mapping ) 
 
 # -----------------------------------------------------------------------------
