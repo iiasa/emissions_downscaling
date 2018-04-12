@@ -40,19 +40,22 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping, pos_nonCO2) {
     ungroup()
   
   # then, replace zero-valued baseyears with the value calculated above
+  
   # the zero-valued iso sectors 
   zero_in_BY <- par_df %>%
     filter(EICBY == 0 & sector != "Industrial Sector")
+  
   # EICBY swapped with replacement values calculated above
   zero_in_BY.mod <- zero_in_BY %>% 
     select(-EICBY) %>%
     left_join(replacement_values) %>% 
     dplyr::rename(EICBY = replacement_value)
-  # report truncated set of columns for diagnostic output
+  
+  # diagnostic output report truncated set of columns 
   zero_in_BY.trunc <- zero_in_BY %>% 
     select(region, iso, ssp_label, em, sector, model, scenario, unit)
   
-  # bind zero and non-zero baseyear emissions intensity growth rows together
+  # bind unmodified (nonzero_in_BY, industrial) and modified (zero_in_BY.mod) rows together
   par_df <- rbind(nonzero_in_BY, zero_in_BY.mod, industrial)
   
   # loop over all ssp's in data
@@ -64,7 +67,7 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping, pos_nonCO2) {
     wide_df_ssp <- wide_df %>% filter(ssp_label == ssp)
     con_year <- con_year_mapping %>% filter(scenario_label == ssp) %>% select(convergence_year) %>% as.numeric()
     
-    # equation (2)
+    # equation (2) (emissions intensity growth rate, country-level)
     if(pos_nonCO2) { # only positive & non-co2 emissions
       par_df_ssp <- par_df_ssp %>% 
         mutate(EI_gr_C = ( EIRCY / EICBY ) ^ ( 1 / ( con_year - base_year ) ),
@@ -84,7 +87,7 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping, pos_nonCO2) {
       
       # strings used to call columns of data
       
-      # use to dynamically refer to last year's calculated downscaled emissions (res_df)
+      # used to dynamically refer to last year's calculated downscaled emissions (res_df)
       ctry_ref_em_X_year_less1 <- paste0( 'ctry_ref_em_X', ( year - 1 ) ) 
       
       # used to convert between emissions and emissions intensity (wide_df)
