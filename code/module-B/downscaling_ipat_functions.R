@@ -18,35 +18,43 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping, pos_nonCO2) {
     select(region, iso, ssp_label, em, sector, model, scenario, unit, ref_em_BY)
   
   # equation (1)
-  par_df <- wide_df %>% 
-    mutate(EIRCY = reg_iam_em_Xcon_year / reg_gdp_Xcon_year,
-           EICBY = !!ref_em_BY.quo / !!gdp_BY.quo)
+  par_df <- par_df %>% 
+    mutate(EIRCY = wide_df[["reg_iam_em_Xcon_year"]] / wide_df[["reg_gdp_Xcon_year"]],
+           EICBY = wide_df[[ref_em_BY]] / wide_df[[gdp_BY]])
   
   # need to replace countries' sectors that have zero emissions intensity growth 
   # in BY with a non-zero value
   
+  # this methodology doesn't affect industrial sector
+  industrial <- par_df %>% 
+    filter(sector == "Industrial Sector")
+  
   # first, grab all sectors with non-zero baseyear emissions intensity growth
   nonzero_in_BY <- par_df %>%
-    filter(EICBY != 0 | sector == "Industrial Sector" )
+    filter( EICBY != 0 & sector != "Industrial Sector")
+  
   # then, calculate min(that region's set of sectoral emissions intensity growth) / 3
   replacement_values <- nonzero_in_BY %>%
     group_by(region, em, unit) %>%
-    summarise(replacement_value = min(ctry_ref_em_X2015)/3) %>%
+    summarise(replacement_value = min(EICBY)/3) %>%
     ungroup()
+  
   # then, replace zero-valued baseyears with the value calculated above
-  # the zero-valued iso sectors are replaced with the above calculated values
+  # the zero-valued iso sectors 
   zero_in_BY <- par_df %>%
-    filter(EICBY == 0 & sector != "Industrial Sector") %>% 
+    filter(EICBY == 0 & sector != "Industrial Sector")
+  # EICBY swapped with replacement values calculated above
+  zero_in_BY.mod <- zero_in_BY %>% 
     select(-EICBY) %>%
     left_join(replacement_values) %>% 
     dplyr::rename(EICBY = replacement_value)
-  # bind zero and non-zero baseyear emissions intensity growth rows together
-  par_df <- rbind(nonzero_in_BY, zero_in_BY)
+  # report truncated set of columns for diagnostic output
+  zero_in_BY.trunc <- zero_in_BY %>% 
+    select(region, iso, ssp_label, em, sector, model, scenario, unit)
   
-  # return truncated zero_in_BY for diagnostic reporting
-  zero_in_BY <- zero_in_BY %>% 
-    select(region, iso, ssp_label, em, sector, model, scenario, harm_status, unit)
-
+  # bind zero and non-zero baseyear emissions intensity growth rows together
+  par_df <- rbind(nonzero_in_BY, zero_in_BY.mod, industrial)
+  
   # loop over all ssp's in data
   out_df_list <- lapply( unique( wide_df$ssp_label ), function( ssp ) { 
     
@@ -134,7 +142,7 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping, pos_nonCO2) {
   
   out_df <- do.call( 'rbind', out_df_list )
   
-  return( list(out_df, zero_in_BY ) )
+  return( list(out_df, zero_in_BY.trunc ) )
 }
 # downscaleIAMemissions_pos_nonCO2 ----------------------------------------
 downscaleIAMemissions_pos_nonCO2 <- function( wide_df, con_year_mapping ) { 
