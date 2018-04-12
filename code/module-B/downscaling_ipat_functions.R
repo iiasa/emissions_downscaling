@@ -80,44 +80,56 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping, pos_nonCO2) {
     }
     
     # apply rest of calculation to each timestep 
-    for ( year in ( base_year + 1 ) : ds_end_year ) { 
+    for ( year in ( base_year + 1 ) : ds_end_year ) {
       
-      # equation (3) (next year's EI-value)
+      # strings used to call columns of data
+      
+      # use to dynamically refer to last year's calculated downscaled emissions (res_df)
+      ctry_ref_em_X_year_less1 <- paste0( 'ctry_ref_em_X', ( year - 1 ) ) 
+      
+      # used to convert between emissions and emissions intensity (wide_df)
+      ctry_gdp_em_X_year_less1 <- paste0( 'ctry_gdp_X', ( year - 1 ) )
+      ctry_gdp_em_X_year <- paste0( 'ctry_gdp_X', year )
+      
+      # equation (3) (this year's EI-value)
+      # pos_nonCO2:: this year's EI = last year's EI * growth rate ( where growth rate > 1)
+      # ! pos_nonCO2:: this year's EI = last year's EI + last year's EI * growth rate (where growth rate < 1)
+      
       if(pos_nonCO2) { # only positive & non-co2 emissions
       
-        if (year == base_year + 1 ) { # modified EI values necessary for EI* calculation in timestep just after base year
+        if (year == base_year + 1 ) { # EI* = EIBY (modified base_year values)
           
           par_df_ssp <- par_df_ssp %>% 
             mutate(EI_star = EICBY * EI_gr_C) 
           
-        } else { # all other timesteps calculate EI* dynamically
+        } else { # all other timesteps calculate EI* dynamically from last year's E-value (downscaled emissions) & GDP-value
           
-          par_df_ssp$EI_star <- ( res_df_ssp[ , paste0( 'ctry_ref_em_X', (year - 1) )] / 
-                                    wide_df_ssp[ , paste0( 'ctry_gdp_X', (year - 1) )] ) * 
-            par_df_ssp$EI_gr_C
+          par_df_ssp <- par_df_ssp %>% 
+            mutate(EI_star = ( res_df_ssp[[ctry_ref_em_X_year_less1]] / wide_df_ssp[[ctry_gdp_em_X_year_less1]] ) * 
+                     EI_gr_C )
         }
 
         
       } else { # either CO2 or zero/negative 
         
-        if (year == base_year + 1) { # modified EI values necessary for EI* calculation in timestep just after base year
+        if (year == base_year + 1) { # EI* = EIBY (modified base_year values)
           
           par_df_ssp <- par_df_ssp %>% 
             mutate(EI_star = EICBY + EICBY* EI_gr_C)
           
-        } else {# all other timesteps calculate EI* dynamically
+        } else { # all other timesteps calculate EI* dynamically from last year's E-value (downscaled emissions) & GDP-value
         
-          par_df_ssp$EI_star <- ( res_df_ssp[ , paste0( 'ctry_ref_em_X', ( year - 1 ) ) ] / 
-                                  wide_df_ssp[ , paste0( 'ctry_gdp_X', ( year - 1 ) ) ] ) + 
-          ( res_df_ssp[ , paste0( 'ctry_ref_em_X', ( year - 1 ) ) ] / 
-              wide_df_ssp[ , paste0( 'ctry_gdp_X', ( year - 1 ) ) ] ) * 
-          par_df_ssp$EI_gr_C
+          par_df_ssp <- par_df_ssp %>% 
+            mutate( EI_star = ( res_df_ssp[[ctry_ref_em_X_year_less1]] / wide_df_ssp[[ctry_gdp_em_X_year_less1]] ) + 
+            ( res_df_ssp[[ctry_ref_em_X_year_less1]] / wide_df_ssp[[ctry_gdp_em_X_year_less1]] ) * EI_gr_C )
         }
         
       }
       
       # equation (4)
-      par_df_ssp$E_star <- par_df_ssp$EI_star * wide_df_ssp[ , paste0( 'ctry_gdp_X', year ) ]
+      # this year's emissions = this year's emissions intensity * this year's GDP
+      par_df_ssp <- par_df_ssp %>% 
+        mutate(E_star = EI_star * wide_df_ssp[[ctry_gdp_em_X_year]] )
       
       # calculate 2nd term of equation (5)
       temp_df_agg <- aggregate( par_df_ssp$E_star, 
