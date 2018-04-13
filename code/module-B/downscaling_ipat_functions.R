@@ -12,7 +12,7 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping, pos_nonCO2) {
   par_df <- wide_df %>% 
     select(region, iso, ssp_label, em, sector, model, scenario, unit)
   res_df <- wide_df %>% 
-    select(region, iso, ssp_label, em, sector, model, scenario, unit, ref_em_BY)
+    select(region, iso, ssp_label, em, sector, model, scenario, unit, ctry_ref_em_Xbase_year)
   
   # equation (1)
   par_df <- par_df %>% 
@@ -64,39 +64,26 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping, pos_nonCO2) {
       ctry_gdp_em_X_year <- paste0( 'ctry_gdp_X', year )
       
       # equation (3) (this year's EI-value)
-      # pos_nonCO2:: this year's EI = last year's EI * growth rate ( where growth rate > 1)
-      # ! pos_nonCO2:: this year's EI = last year's EI + last year's EI * growth rate (where growth rate < 1)
       
+      # either use adjusted EICBY values when calculating first time step
+      if (year == base_year + 1) {
+        par_df_ssp <- par_df_ssp %>% 
+          mutate(EI_prev = EICBY)
+      } else { # or dynamically calculate last years EI-value from last year's downscaled E_final value
+        par_df_ssp <- par_df_ssp %>% 
+          mutate( EI_prev = res_df_ssp[[ctry_ref_em_X_year_less1]] / wide_df_ssp[[ctry_gdp_em_X_year_less1]] )
+      }
+      
+      # two downscaling methodologies depending on emissions species & reg_IAM_em-value in convergence year
       if(pos_nonCO2) { # only positive & non-co2 emissions
       
-        if (year == base_year + 1 ) { # EI* = EIBY (modified base_year values)
-          
-          par_df_ssp <- par_df_ssp %>% 
-            mutate(EI_star = EICBY * EI_gr_C) 
-          
-        } else { # all other timesteps calculate EI* dynamically from last year's E-value (downscaled emissions) & GDP-value
-          
-          par_df_ssp <- par_df_ssp %>% 
-            mutate(!!ctry_ref_em_X_year_less1 := res_df_ssp[[ctry_ref_em_X_year_less1]],
-                   !!ctry_gdp_em_X_year_less1 := wide_df_ssp[[ctry_gdp_em_X_year_less1]],
-              EI_star = (  sym(ctry_ref_em_X_year_less1) / sym(ctry_gdp_em_X_year_less1) ) *  EI_gr_C )
-        }
-
+        par_df_ssp <- par_df_ssp %>% 
+          mutate(EI_star = EI_prev * EI_gr_C)
         
       } else { # either CO2 or zero/negative 
         
-        if (year == base_year + 1) { # EI* = EIBY (modified base_year values)
-          
-          par_df_ssp <- par_df_ssp %>% 
-            mutate(EI_star = EICBY + EICBY* EI_gr_C)
-          
-        } else { # all other timesteps calculate EI* dynamically from last year's E-value (downscaled emissions) & GDP-value
-        
-          par_df_ssp <- par_df_ssp %>% 
-            mutate( !!ctry_ref_em_X_year_less1 := res_df_ssp[[ctry_ref_em_X_year_less1]],
-                    !!ctry_gdp_em_X_year_less1 := wide_df_ssp[[ctry_gdp_em_X_year_less1]],
-              EI_star = ( sym(ctry_ref_em_X_year_less1) /  sym(ctry_gdp_em_X_year_less1) ) + ( sym(ctry_ref_em_X_year_less1) / sym(ctry_gdp_em_X_year_less1) ) * EI_gr_C )
-        }
+        par_df_ssp <- par_df_ssp %>% 
+          mutate(EI_star = EI_prev + EI_prev * EI_gr_C)
         
       }
       
