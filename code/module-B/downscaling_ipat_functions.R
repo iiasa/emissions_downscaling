@@ -16,12 +16,13 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping, pos_nonCO2) {
   
   # equation (1)
   par_df <- par_df %>% 
-    mutate(EIRCY = wide_df[["reg_iam_em_Xcon_year"]]  / wide_df[["reg_gdp_Xcon_year"]] ,
-           EICBY = wide_df[[ctry_ref_em_Xbase_year]] / wide_df[[ctry_gdp_Xbase_year]] )
+    mutate(EIRCY = wide_df[,"reg_iam_em_Xcon_year"]  / wide_df[,"reg_gdp_Xcon_year"] ,
+           EICBY = wide_df[, ctry_ref_em_Xbase_year] / wide_df[,ctry_gdp_Xbase_year] )
 
   # need to replace countries' sectors that have zero emissions intensity growth in BY with a non-zero value
-  par_df <- adjustEICBY(par_df, ctry_ref_em_Xbase_year)
-  
+  out <- adjustEICBY(par_df, ctry_ref_em_Xbase_year)
+  par_df <- out[[1]]
+  zero_in_BY.trunc <- out[[2]]
   
   # loop over all ssp's in data
   out_df_list <- lapply( unique( wide_df$ssp_label ), function( ssp ) { 
@@ -67,7 +68,7 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping, pos_nonCO2) {
           mutate(EI_prev = EICBY)
       } else { # or dynamically calculate last years EI-value from last year's downscaled E_final value
         par_df_ssp <- par_df_ssp %>% 
-          mutate( EI_prev = res_df_ssp[[ctry_gdp_X_year_less1]] / wide_df_ssp[[ctry_gdp_X_year_less1]] )
+          mutate( EI_prev = res_df_ssp[, ctry_ref_em_X_year_less1] / wide_df_ssp[, ctry_gdp_X_year_less1] )
       }
       
       # two downscaling methodologies depending on emissions species & reg_IAM_em-value in convergence year
@@ -184,7 +185,7 @@ adjustEICBY <- function(par_df, ctry_ref_em_Xbase_year) {
   # bind unmodified (industrial, zero_IAMreg_ref_em_BY, nonzero_in_BY) and modified (zero_in_BY.mod) rows together
   par_df.mod <- rbind(industrial, zero_IAMreg_ref_em_BY, nonzero_in_BY, zero_in_BY.mod)
   
-  return(par_df.mod)
+  return(list(par_df.mod, zero_in_BY.trunc))
   
 }
 # downscaleIAMemissions_pos_nonCO2 ----------------------------------------
