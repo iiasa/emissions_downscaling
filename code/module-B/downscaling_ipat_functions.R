@@ -21,7 +21,7 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping, pos_nonCO2) {
            EIRCY = reg_iam_em_Xcon_year / reg_gdp_Xcon_year,
            !!ctry_ref_em_Xbase_year := wide_df[[ctry_ref_em_Xbase_year]],
            !!ctry_gdp_Xbase_year := wide_df[[ctry_gdp_Xbase_year]],
-           EICBY =  ctry_ref_em_Xbase_year / ctry_gdp_Xbase_year )
+           EICBY =  sym(ctry_ref_em_Xbase_year) / sym(ctry_gdp_Xbase_year) )
   
   # need to replace countries' sectors that have zero emissions intensity growth in BY with a non-zero value
   par_df <- adjustEICBY(par_df)
@@ -77,8 +77,9 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping, pos_nonCO2) {
         } else { # all other timesteps calculate EI* dynamically from last year's E-value (downscaled emissions) & GDP-value
           
           par_df_ssp <- par_df_ssp %>% 
-            mutate(EI_star = ( res_df_ssp[[ctry_ref_em_X_year_less1]] / wide_df_ssp[[ctry_gdp_em_X_year_less1]] ) * 
-                     EI_gr_C )
+            mutate(!!ctry_ref_em_X_year_less1 := res_df_ssp[[ctry_ref_em_X_year_less1]],
+                   !!ctry_gdp_em_X_year_less1 := wide_df_ssp[[ctry_gdp_em_X_year_less1]],
+              EI_star = (  sym(ctry_ref_em_X_year_less1) / sym(ctry_gdp_em_X_year_less1) ) *  EI_gr_C )
         }
 
         
@@ -92,8 +93,9 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping, pos_nonCO2) {
         } else { # all other timesteps calculate EI* dynamically from last year's E-value (downscaled emissions) & GDP-value
         
           par_df_ssp <- par_df_ssp %>% 
-            mutate( EI_star = ( res_df_ssp[[ctry_ref_em_X_year_less1]] / wide_df_ssp[[ctry_gdp_em_X_year_less1]] ) + 
-            ( res_df_ssp[[ctry_ref_em_X_year_less1]] / wide_df_ssp[[ctry_gdp_em_X_year_less1]] ) * EI_gr_C )
+            mutate( !!ctry_ref_em_X_year_less1 := res_df_ssp[[ctry_ref_em_X_year_less1]],
+                    !!ctry_gdp_em_X_year_less1 := wide_df_ssp[[ctry_gdp_em_X_year_less1]],
+              EI_star = ( sym(ctry_ref_em_X_year_less1) /  sym(ctry_gdp_em_X_year_less1) ) + ( sym(ctry_ref_em_X_year_less1) / sym(ctry_gdp_em_X_year_less1) ) * EI_gr_C )
         }
         
       }
