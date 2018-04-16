@@ -3,24 +3,26 @@
 # downscaleIAMemissions ----------------------------------------
 downscaleIAMemissions <- function( wide_df, con_year_mapping, pos_nonCO2) { 
   
-  # construct column-names that are dependet on indicated base_year
-  # strings (use for select())
-  ctry_ref_em_Xbase_year <-  paste0('ctry_ref_em_X', base_year)
-  ctry_gdp_Xbase_year <- paste0("ctry_gdp_X", base_year)
-  
   # set up two working df: parameter data frame and results data frame
   par_df <- wide_df %>% 
-    select(region, iso, ssp_label, em, sector, model, scenario, unit, ctry_ref_em_Xbase_year)
+    select(region, iso, ssp_label, em, sector, model, scenario, unit)
   res_df <- wide_df %>% 
-    select(region, iso, ssp_label, em, sector, model, scenario, unit, ctry_ref_em_Xbase_year)
+    select(region, iso, ssp_label, em, sector, model, scenario, unit, paste0('ctry_ref_em_X', base_year))
   
   # equation (1)
+  EI_params <- wide_df %>% 
+    select(region, iso, ssp_label, em, sector, model, scenario, unit, 
+           reg_iam_em_Xcon_year, reg_gdp_Xcon_year, 
+           paste0('ctry_ref_em_X', base_year), paste0("ctry_gdp_X", base_year))
+  names(EI_params) <- c(names(EI_params)[1:10], "ctry_ref_em_Xbase_year", "ctry_gdp_Xbase_year")
+  
   par_df <- par_df %>% 
-    mutate(EIRCY = wide_df[,"reg_iam_em_Xcon_year"]  / wide_df[,"reg_gdp_Xcon_year"] ,
-           EICBY = wide_df[, ctry_ref_em_Xbase_year] / wide_df[,ctry_gdp_Xbase_year] )
+    left_join(EI_params) %>% 
+    mutate(EIRCY = reg_iam_em_Xcon_year / reg_gdp_Xcon_year ,
+           EICBY = ctry_ref_em_Xbase_year / ctry_gdp_Xbase_year )
 
   # need to replace countries' sectors that have zero emissions intensity growth in BY with a non-zero value
-  out <- adjustEICBY(par_df, ctry_ref_em_Xbase_year)
+  out <- adjustEICBY(par_df)
   par_df <- out[[1]]
   zero_in_BY.trunc <- out[[2]]
   
@@ -51,7 +53,7 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping, pos_nonCO2) {
     # apply rest of calculation to each timestep 
     for ( year in ( base_year + 1 ) : ds_end_year ) {
       
-      # strings used to call columns of data
+      # strings used to call columns of data:
       
       # used to dynamically refer to last year's calculated downscaled emissions (res_df)
       ctry_ref_em_X_year_less1 <- paste0( 'ctry_ref_em_X', ( year - 1 ) ) 
@@ -67,8 +69,20 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping, pos_nonCO2) {
         par_df_ssp <- par_df_ssp %>% 
           mutate(EI_prev = EICBY)
       } else { # or dynamically calculate last years EI-value from last year's downscaled E_final value
-        par_df_ssp <- par_df_ssp %>% 
-          mutate( EI_prev = res_df_ssp[, ctry_ref_em_X_year_less1] / wide_df_ssp[, ctry_gdp_X_year_less1] )
+        ctry_ref_em_prev <- res_df_ssp %>% 
+          select(region, iso, ssp_label, em, sector, model, scenario, unit,
+                 ctry_ref_em_X_year_less1) 
+        names(ctry_ref_em_prev) <- c(names(ctry_ref_em_prev)[1:8], "ctry_ref_em_prev")
+
+        ctry_gdp_prev <- wide_df_ssp %>% 
+          select(region, iso, ssp_label, em, sector, model, scenario, unit,
+                 ctry_gdp_X_year_less1)
+        names(ctry_gdp_prev) <- c(names(ctry_gdp_prev)[1:8], "ctry_gdp_prev")
+        
+        par_df_ssp <- par_df_ssp %>%
+          left_join(ctry_ref_em_prev) %>% 
+          left_join(ctry_gdp_prev) %>% 
+          mutate( EI_prev = ctry_ref_em_prev / ctry_gdp_prev )
       }
       
       # two downscaling methodologies depending on emissions species & reg_IAM_em-value in convergence year
@@ -86,44 +100,65 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping, pos_nonCO2) {
       }
       
       # equation (4)
-      # this year's emissions = this year's emissions intensity * this year's GDP
+      # this year's preliminary emissions = this year's emissions intensity * this year's GDP
       gdp <- wide_df_ssp %>% 
-        select(region, iso, ssp_label, em, sector, model, scenario, unit, ctry_ref_em_X2015, ctry_gdp_X_year) 
-      names(gdp) <- c(names(gdp)[1:ncol(gdp)-1], "GDP")
-      
+        select(region, iso, ssp_label, em, sector, model, scenario, unit, 
+               ctry_gdp_X_year) 
+      names(gdp) <- c(names(gdp)[1:8], "ctry_gdp_X_year")
+
       par_df_ssp <- par_df_ssp %>% 
         left_join(gdp) %>% 
-        mutate(E_star = EI_star * GDP)
+        mutate(E_star = EI_star * ctry_gdp_X_year)
 
-      # calculate 2nd term of equation (5)
-      temp_df_agg <- aggregate( par_df_ssp$E_star, 
-                                by = list( wide_df_ssp$region, wide_df_ssp$ssp_label,
-                                           wide_df_ssp$em, wide_df_ssp$sector, wide_df_ssp$scenario ), 
-                                FUN=sum, na.rm = T )
-      colnames( temp_df_agg ) <- c( 'region', 'ssp_label', 'em', 'sector', 'scenario', 'sum_E_star' )
+      # 2nd term of equation (5)
+      # calculate regional emissions from this time step's preliminary country emissions
+      temp_df_agg <- par_df_ssp %>%
+        group_by(region, ssp_label, em, sector, scenario) %>%
+        summarise(sum_E_star = sum(E_star, na.rm=T)) %>%
+        ungroup()
+      # drop new calculated regional emissions into par_df_ssp
+      if ("sum_E_star" %in% names(par_df_ssp) ) {
+        par_df_ssp <- par_df_ssp %>% 
+          select(-sum_E_star)
+      }      
+      par_df_ssp <- par_df_ssp %>%
+        left_join(temp_df_agg, by=c("region", "ssp_label", "em", "sector", "scenario"))
       
-      par_df_ssp$sum_E_star <- temp_df_agg[ match( paste( par_df_ssp$region, par_df_ssp$ssp_label, par_df_ssp$em, par_df_ssp$sector, par_df_ssp$scenario ), 
-                                                   paste( temp_df_agg$region, temp_df_agg$ssp_label, temp_df_agg$em, temp_df_agg$sector, temp_df_agg$scenario ) ), 
-                                            'sum_E_star' ]
       
-      # equation (5)
-      par_df_ssp$DiffR <- wide_df_ssp[ , paste0( 'reg_iam_em_X', year ) ]  - par_df_ssp$sum_E_star
+      # equation (5) - difference between IAM regional emissions and calculated regional emissions
+      reg_IAM_em <- wide_df_ssp %>% 
+        select( region, iso, ssp_label, em, sector, model, scenario, paste0('reg_iam_em_X', year) )
+      names(reg_IAM_em) <- c(names(reg_IAM_em)[1:7], "regional_IAM_Emissions")
       
-      # equation (6)
+      # drop new regional IAM emissions into par_df_ssp
+      if ("regional_IAM_Emissions" %in% names(par_df_ssp) ) {
+        par_df_ssp <- par_df_ssp %>% 
+          select(-regional_IAM_Emissions)
+      }
+      par_df_ssp <- par_df_ssp %>% 
+        left_join(reg_IAM_em, by=names(reg_IAM_em)[1:7] ) %>% 
+        mutate(DiffR = regional_IAM_Emissions  - sum_E_star)
+      
+      # equation (6) - each country's share of calculated regional emissions
       par_df_ssp <- par_df_ssp %>% 
         mutate(E_share = E_star / sum_E_star,
                E_share = ifelse( is.na( E_share ), 0, E_share ),
                E_share = ifelse( is.infinite( E_share ), 0, E_share ) )
       
-      # equation (7)    
+      # equation (7) - preliminary country emissions + share of difference in regional emissions 
       par_df_ssp <- par_df_ssp %>% 
-        mutate(E_final = E_star + DiffR * E_share, 
+        mutate(E_adj = DiffR * E_share,
+               E_final = E_star + E_adj, 
                E_final = ifelse( is.na( E_final ), 0, E_final ),
                E_final = ifelse( is.infinite( E_final ), 0, E_final ) )
       
       # drop final emissions result into results df
-      res_df_ssp[ , paste0( "ctry_ref_em_X", year ) ] <- par_df_ssp$E_final
-      
+      df <- par_df_ssp %>% 
+        select(region, iso, ssp_label, em, sector, model, scenario, unit, E_final)
+      res_df_ssp <- res_df_ssp %>% 
+        left_join(df, by=c("region", "iso", "ssp_label", "em", "sector", "model", "scenario", "unit"))
+      names(res_df_ssp) <- c(names(res_df_ssp)[1:ncol(res_df_ssp)-1], 
+                             paste0( "ctry_ref_em_X", year ))
     }
     
     out_df_ssp <- res_df_ssp[ , c( 'region', 'iso', 'em', 'sector', 'model', 'scenario', 'unit', 
@@ -138,7 +173,7 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping, pos_nonCO2) {
   return( list(out_df, zero_in_BY.trunc ) )
 }
 
-adjustEICBY <- function(par_df, ctry_ref_em_Xbase_year) {
+adjustEICBY <- function(par_df) {
   
   # this methodology doesn't affect industrial sector
   industrial <- par_df %>% 
@@ -148,7 +183,7 @@ adjustEICBY <- function(par_df, ctry_ref_em_Xbase_year) {
   zero_IAMreg_ref_em_BY <- par_df %>% 
     anti_join(., industrial) %>% 
     group_by(region, ssp_label, em, sector, model, scenario, unit) %>% 
-    summarise(reg_ref_em_Xbase_year = sum(ctry_ref_em_X2015)) %>% 
+    summarise(reg_ref_em_Xbase_year = sum(ctry_ref_em_Xbase_year)) %>% 
     ungroup() %>% 
     filter(reg_ref_em_Xbase_year == 0 ) %>% 
     select(-reg_ref_em_Xbase_year) %>% 
@@ -196,8 +231,13 @@ downscaleIAMemissions_pos_nonCO2 <- function( wide_df, con_year_mapping ) {
   res_df <- wide_df[ , c( "region", "iso", "ssp_label", "em", "sector", "model", "scenario", "unit", paste0( 'ctry_ref_em_X', base_year ) ) ] 
   
   # equation (1)
-  par_df$EIRCY <- wide_df[ , 'reg_iam_em_Xcon_year' ] / wide_df[ , 'reg_gdp_Xcon_year' ]
-  par_df$EICBY <- wide_df[ , paste0( 'ctry_ref_em_X', base_year ) ] / wide_df[ , paste0( 'ctry_gdp_X', base_year ) ]
+  par_df$reg_iam_em_Xcon_year <- wide_df[ , 'reg_iam_em_Xcon_year' ]
+  par_df$reg_gdp_Xcon_year <- wide_df[ , 'reg_gdp_Xcon_year' ]
+  par_df$EIRCY <- par_df$reg_iam_em_Xcon_year / par_df$reg_gdp_Xcon_year
+  
+  par_df$ctry_ref_em_Xbase_year <- wide_df[ , paste0( 'ctry_ref_em_X', base_year ) ]
+  par_df$ctry_gdp_Xbase_year <- wide_df[ , paste0( 'ctry_gdp_X', base_year ) ]
+  par_df$EICBY <- par_df$ctry_ref_em_Xbase_year / par_df$ctry_gdp_Xbase_year
   
   out_df_list <- lapply( unique( wide_df$ssp_label ), function( ssp ) { 
     par_df_ssp <- par_df[ par_df$ssp_label == ssp, ]
@@ -218,8 +258,8 @@ downscaleIAMemissions_pos_nonCO2 <- function( wide_df, con_year_mapping ) {
       par_df_ssp$EI_star <-  par_df_ssp$EI_prev * par_df_ssp$EI_gr_C
       
       # equation (4)
-      par_df_ssp$GDP <- wide_df_ssp[ , paste0( 'ctry_gdp_X', year ) ]
-      par_df_ssp$E_star <- par_df_ssp$EI_star * par_df_ssp$GDP
+      par_df_ssp$ctry_gdp_X_year <- wide_df_ssp[ , paste0( 'ctry_gdp_X', year ) ]
+      par_df_ssp$E_star <- par_df_ssp$EI_star * par_df_ssp$ctry_gdp_X_year
       
       # equation(3)
       temp_df_agg <- aggregate( par_df_ssp$E_star, 
@@ -231,7 +271,8 @@ downscaleIAMemissions_pos_nonCO2 <- function( wide_df, con_year_mapping ) {
       par_df_ssp$sum_E_star <- temp_df_agg[ match( paste( par_df_ssp$region, par_df_ssp$ssp_label, par_df_ssp$em, par_df_ssp$sector, par_df_ssp$scenario ), 
                                                    paste( temp_df_agg$region, temp_df_agg$ssp_label, temp_df_agg$em, temp_df_agg$sector, temp_df_agg$scenario ) ), 
                                             'sum_E_star' ]
-      par_df_ssp$DiffR <- wide_df_ssp[ , paste0( 'reg_iam_em_X', year ) ]  - par_df_ssp$sum_E_star
+      par_df_ssp$regional_IAM_Emissions <- wide_df_ssp[ , paste0( 'reg_iam_em_X', year ) ]
+      par_df_ssp$DiffR <- par_df_ssp$regional_IAM_Emissions - par_df_ssp$sum_E_star
       
       # equation (5)
       par_df_ssp$E_share <- par_df_ssp$E_star / par_df_ssp$sum_E_star 
@@ -239,7 +280,8 @@ downscaleIAMemissions_pos_nonCO2 <- function( wide_df, con_year_mapping ) {
       par_df_ssp$E_share <- ifelse( is.infinite( par_df_ssp$E_share ), 0, par_df_ssp$E_share  )
       
       # equation (6)    
-      par_df_ssp$E_final <- par_df_ssp$E_star + par_df_ssp$DiffR * par_df_ssp$E_share 
+      par_df_ssp$E_adj <- par_df_ssp$DiffR * par_df_ssp$E_share 
+      par_df_ssp$E_final <- par_df_ssp$E_star + par_df_ssp$E_adj
       #par_df_ssp$E_final <- par_df_ssp$E_star + par_df_ssp$E_star * par_df_ssp$DiffR * par_df_ssp$E_share 
       par_df_ssp$E_final <- ifelse( is.na( par_df_ssp$E_final ), 0, par_df_ssp$E_final )
       par_df_ssp$E_final <- ifelse( is.infinite( par_df_ssp$E_final ), 0, par_df_ssp$E_final )
@@ -267,8 +309,13 @@ downscaleIAMemissions_CO2_or_neg_nonCO2 <- function( wide_df, con_year_mapping )
   res_df <- wide_df[ , c( "region", "iso", "ssp_label", "em", "sector", "model", "scenario", "unit", paste0( 'ctry_ref_em_X', base_year ) ) ] 
   
   # equation (1)
-  par_df$EIRCY <- wide_df[ , 'reg_iam_em_Xcon_year' ] / wide_df[ , 'reg_gdp_Xcon_year' ]
-  par_df$EICBY <- wide_df[ , paste0( 'ctry_ref_em_X', base_year ) ] / wide_df[ , paste0( 'ctry_gdp_X', base_year ) ]
+  par_df$reg_iam_em_Xcon_year <- wide_df[ , 'reg_iam_em_Xcon_year' ]
+  par_df$reg_gdp_Xcon_year <- wide_df[ , 'reg_gdp_Xcon_year' ]
+  par_df$EIRCY <- par_df$reg_iam_em_Xcon_year / par_df$reg_gdp_Xcon_year
+  
+  par_df$ctry_ref_em_Xbase_year <- wide_df[ , paste0( 'ctry_ref_em_X', base_year ) ]
+  par_df$ctry_gdp_Xbase_year <- wide_df[ , paste0( 'ctry_gdp_X', base_year ) ]
+  par_df$EICBY <- par_df$ctry_ref_em_Xbase_year / par_df$ctry_gdp_Xbase_year
   
   out_df_list <- lapply( unique( wide_df$ssp_label ), function( ssp ) { 
     par_df_ssp <- par_df[ par_df$ssp_label == ssp, ]
@@ -284,13 +331,12 @@ downscaleIAMemissions_CO2_or_neg_nonCO2 <- function( wide_df, con_year_mapping )
     for ( year in ( base_year + 1 ) : ds_end_year ) { 
       
       # equation (2)
-      par_df_ssp$EI_star <- ( res_df_ssp[ , paste0( 'ctry_ref_em_X', ( year - 1 ) ) ] / 
-                                wide_df_ssp[ , paste0( 'ctry_gdp_X', ( year - 1 ) ) ] ) +  
-        ( res_df_ssp[ , paste0( 'ctry_ref_em_X', ( year - 1 ) ) ] / 
-            wide_df_ssp[ , paste0( 'ctry_gdp_X', ( year - 1 ) ) ] ) * 
-        par_df_ssp$EI_gr_C
-      par_df_ssp$E_star <- par_df_ssp$EI_star * wide_df_ssp[ , paste0( 'ctry_gdp_X', year ) ]
+      par_df_ssp$EI_prev <- res_df_ssp[ , paste0( 'ctry_ref_em_X', ( year - 1 ) ) ] / wide_df_ssp[ , paste0( 'ctry_gdp_X', ( year - 1 ) ) ]
+      par_df_ssp$EI_star <- par_df_ssp$EI_prev + par_df_ssp$EI_prev * par_df_ssp$EI_gr_C
       
+      par_df_ssp$ctry_gdp_X_year <- wide_df_ssp[ , paste0( 'ctry_gdp_X', year ) ]
+      par_df_ssp$E_star <- par_df_ssp$EI_star * par_df_ssp$ctry_gdp_X_year
+
       # equation(3)
       temp_df_agg <- aggregate( par_df_ssp$E_star, 
                                 by = list( wide_df_ssp$region, wide_df_ssp$ssp_label,
@@ -301,7 +347,8 @@ downscaleIAMemissions_CO2_or_neg_nonCO2 <- function( wide_df, con_year_mapping )
       par_df_ssp$sum_E_star <- temp_df_agg[ match( paste( par_df_ssp$region, par_df_ssp$ssp_label, par_df_ssp$em, par_df_ssp$sector, par_df_ssp$scenario ), 
                                                    paste( temp_df_agg$region, temp_df_agg$ssp_label, temp_df_agg$em, temp_df_agg$sector, temp_df_agg$scenario ) ), 
                                             'sum_E_star' ]
-      par_df_ssp$DiffR <- wide_df_ssp[ , paste0( 'reg_iam_em_X', year ) ]  - par_df_ssp$sum_E_star
+      par_df_ssp$regional_IAM_Emissions <- wide_df_ssp[ , paste0( 'reg_iam_em_X', year ) ]
+      par_df_ssp$DiffR <- par_df_ssp$regional_IAM_Emissions - par_df_ssp$sum_E_star
       
       # equation (5)
       par_df_ssp$E_share <- par_df_ssp$E_star / par_df_ssp$sum_E_star 
@@ -309,7 +356,8 @@ downscaleIAMemissions_CO2_or_neg_nonCO2 <- function( wide_df, con_year_mapping )
       par_df_ssp$E_share <- ifelse( is.infinite( par_df_ssp$E_share ), 0, par_df_ssp$E_share  )
       
       # equation (6)    
-      par_df_ssp$E_final <- par_df_ssp$E_star + par_df_ssp$DiffR * par_df_ssp$E_share 
+      par_df_ssp$E_adj <- par_df_ssp$DiffR * par_df_ssp$E_share 
+      par_df_ssp$E_final <- par_df_ssp$E_star + par_df_ssp$E_adj
       #par_df_ssp$E_final <- par_df_ssp$E_star + par_df_ssp$E_star * par_df_ssp$DiffR * par_df_ssp$E_share 
       par_df_ssp$E_final <- ifelse( is.na( par_df_ssp$E_final ), 0, par_df_ssp$E_final )
       par_df_ssp$E_final <- ifelse( is.infinite( par_df_ssp$E_final ), 0, par_df_ssp$E_final )
