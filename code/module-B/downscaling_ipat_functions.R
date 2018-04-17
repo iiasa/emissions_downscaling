@@ -4,12 +4,23 @@
 downscaleIAMemissions <- function( wide_df, con_year_mapping, pos_nonCO2) { 
   
   # set up two working df: parameter data frame and results data frame
+  
+  # when a parameter is needed for a step in the calculation, a separate df is 
+  # subset from wide_df to isolate a specific year's GDP, or from res_df for 
+  # the previous year's downscaled emissions. 
+  # this new df is then left_joined to par_df so as to match the new parameter 
+  # column to the existing data in par_df using the original par_df columns (region, iso, ssp_label, em, ...)
+  # in this way, each time-step has every step of the calculation stored in par_df, but reports only
+  # E_final in res_df.
+  
   par_df <- wide_df %>% 
     select(region, iso, ssp_label, em, sector, model, scenario, unit)
   res_df <- wide_df %>% 
     select(region, iso, ssp_label, em, sector, model, scenario, unit, paste0('ctry_ref_em_X', base_year))
   
-  # equation (1)
+  # equation (1) :
+  # regional EI in convergence year (using IAM emissions)
+  # country EI in base year (using REF emissions)
   EI_params <- wide_df %>% 
     select(region, iso, ssp_label, em, sector, model, scenario, unit, 
            reg_iam_em_Xcon_year, reg_gdp_Xcon_year, 
@@ -35,7 +46,10 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping, pos_nonCO2) {
     wide_df_ssp <- wide_df %>% filter(ssp_label == ssp) 
     con_year <- con_year_mapping %>% filter(scenario_label == ssp) %>% select(convergence_year) %>% as.numeric()
     
-    # equation (2) (emissions intensity growth rate, country-level)
+    # equation (2) : 
+    # country-level emissions intensity growth rate 
+    # calculation depends if there are negative emissions in CY 
+    
     if(pos_nonCO2) { # only positive & non-co2 emissions
       par_df_ssp <- par_df_ssp %>% 
         mutate(EI_gr_C = ( EIRCY / EICBY ) ^ ( 1 / ( con_year - base_year ) ),
@@ -50,7 +64,7 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping, pos_nonCO2) {
                EI_gr_C = ifelse( is.infinite( EI_gr_C ), 0, EI_gr_C ) )
     }
     
-    # apply rest of calculation to each timestep 
+    # calculation of each year's downscaled country emissions
     for ( year in ( base_year + 1 ) : ds_end_year ) {
       
       # strings used to call columns of data:
@@ -62,31 +76,38 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping, pos_nonCO2) {
       ctry_gdp_X_year_less1 <- paste0( 'ctry_gdp_X', ( year - 1 ) )
       ctry_gdp_X_year <- paste0( 'ctry_gdp_X', year )
       
-      # equation (3) (this year's EI-value)
+      # equation (3):
+      # this year's EI ~ {last year's EI, EI growth rate}
       
-      # either use adjusted EICBY values when calculating first time step
+      # identify/calculate last year's EI and drop into par_df_ssp
       if (year == base_year + 1) {
+        # either use adjusted EICBY values when calculating first time step...
         par_df_ssp <- par_df_ssp %>% 
           mutate(EI_prev = EICBY)
-      } else { # or dynamically calculate last years EI-value from last year's downscaled E_final value
+      } else { 
+        # or dynamically calculate last years EI-value from last year's GDP & downscaled emissions
+        
+        # last year's downscaled emissions
         ctry_ref_em_prev <- res_df_ssp %>% 
           select(region, iso, ssp_label, em, sector, model, scenario, unit,
                  ctry_ref_em_X_year_less1) 
         names(ctry_ref_em_prev) <- c(names(ctry_ref_em_prev)[1:8], "ctry_ref_em_prev")
 
+        # last year's gdp
         ctry_gdp_prev <- wide_df_ssp %>% 
           select(region, iso, ssp_label, em, sector, model, scenario, unit,
                  ctry_gdp_X_year_less1)
         names(ctry_gdp_prev) <- c(names(ctry_gdp_prev)[1:8], "ctry_gdp_prev")
         
+        # EI = E / GDP
         par_df_ssp <- par_df_ssp %>%
           left_join(ctry_ref_em_prev) %>% 
           left_join(ctry_gdp_prev) %>% 
           mutate( EI_prev = ctry_ref_em_prev / ctry_gdp_prev )
       }
       
-      # two downscaling methodologies depending on emissions species & reg_IAM_em-value in convergence year
-      
+      # just like EI growth rate, calculating this year's EI depends on 
+      # regional (IAM) emissions in covnergence year
       if(pos_nonCO2) { # only positive & non-co2 emissions
       
         par_df_ssp <- par_df_ssp %>% 
@@ -99,24 +120,28 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping, pos_nonCO2) {
         
       }
       
-      # equation (4)
+      # equation (4) : 
       # this year's preliminary emissions = this year's emissions intensity * this year's GDP
+      
+      # drop this year's GDP into par_df_ssp
       gdp <- wide_df_ssp %>% 
         select(region, iso, ssp_label, em, sector, model, scenario, unit, 
                ctry_gdp_X_year) 
       names(gdp) <- c(names(gdp)[1:8], "ctry_gdp_X_year")
 
+      # E = EI * GDP
       par_df_ssp <- par_df_ssp %>% 
         left_join(gdp) %>% 
         mutate(E_star = EI_star * ctry_gdp_X_year)
 
-      # 2nd term of equation (5)
+      # 2nd term of equation (5):
       # calculate regional emissions from this time step's preliminary country emissions
       temp_df_agg <- par_df_ssp %>%
         group_by(region, ssp_label, em, sector, scenario) %>%
         summarise(sum_E_star = sum(E_star, na.rm=T)) %>%
         ungroup()
-      # drop new calculated regional emissions into par_df_ssp
+      
+      # drop *this year's* calculated regional emissions into par_df_ssp
       if ("sum_E_star" %in% names(par_df_ssp) ) {
         par_df_ssp <- par_df_ssp %>% 
           select(-sum_E_star)
@@ -125,27 +150,34 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping, pos_nonCO2) {
         left_join(temp_df_agg, by=c("region", "ssp_label", "em", "sector", "scenario"))
       
       
-      # equation (5) - difference between IAM regional emissions and calculated regional emissions
+      # equation (5):
+      # difference between IAM regional emissions and calculated regional emissions
+      
+      # drop *this year's* regional IAM emissions into par_df_ssp
       reg_IAM_em <- wide_df_ssp %>% 
         select( region, iso, ssp_label, em, sector, model, scenario, paste0('reg_iam_em_X', year) )
       names(reg_IAM_em) <- c(names(reg_IAM_em)[1:7], "regional_IAM_Emissions")
-      
-      # drop new regional IAM emissions into par_df_ssp
       if ("regional_IAM_Emissions" %in% names(par_df_ssp) ) {
         par_df_ssp <- par_df_ssp %>% 
           select(-regional_IAM_Emissions)
       }
+      
+      # DiffR = IAM_Regional_Emissions - REF_Regional_Emissions
       par_df_ssp <- par_df_ssp %>% 
         left_join(reg_IAM_em, by=names(reg_IAM_em)[1:7] ) %>% 
         mutate(DiffR = regional_IAM_Emissions  - sum_E_star)
       
-      # equation (6) - each country's share of calculated regional emissions
+      # equation (6):
+      # each country's share of calculated regional emissions
+      # (used to portion out DiffR)
       par_df_ssp <- par_df_ssp %>% 
         mutate(E_share = E_star / sum_E_star,
                E_share = ifelse( is.na( E_share ), 0, E_share ),
                E_share = ifelse( is.infinite( E_share ), 0, E_share ) )
       
-      # equation (7) - preliminary country emissions + share of difference in regional emissions 
+      # equation (7):
+      # final adjustment to preliminary country emissions 
+      # using portion of DiffR = IAM_Regional_Emissinos  REF_Regional_Emissions
       par_df_ssp <- par_df_ssp %>% 
         mutate(E_adj = DiffR * E_share,
                E_final = E_star + E_adj, 
@@ -157,6 +189,8 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping, pos_nonCO2) {
         select(region, iso, ssp_label, em, sector, model, scenario, unit, E_final)
       res_df_ssp <- res_df_ssp %>% 
         left_join(df, by=c("region", "iso", "ssp_label", "em", "sector", "model", "scenario", "unit"))
+      
+      # format name of new final emissions data column
       names(res_df_ssp) <- c(names(res_df_ssp)[1:ncol(res_df_ssp)-1], 
                              paste0( "ctry_ref_em_X", year ))
     }
