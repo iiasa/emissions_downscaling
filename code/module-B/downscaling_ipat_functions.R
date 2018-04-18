@@ -86,7 +86,7 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping, pos_nonCO2) {
           mutate(EI_prev = EICBY)
       } else { 
         # or dynamically calculate last years EI-value from last year's GDP & downscaled emissions
-        
+
         # last year's downscaled emissions
         ctry_ref_em_prev <- res_df_ssp %>% 
           select(region, iso, ssp_label, em, sector, model, scenario, unit,
@@ -98,8 +98,13 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping, pos_nonCO2) {
           select(region, iso, ssp_label, em, sector, model, scenario, unit,
                  ctry_gdp_X_year_less1)
         names(ctry_gdp_prev) <- c(names(ctry_gdp_prev)[1:8], "ctry_gdp_prev")
-        
+
         # EI = E / GDP
+        # drop *new* previous year's emissions & GDP into par_df_ssp
+        if ( any( c("ctry_ref_em_prev", "ctry_gdp_prev") %in% names(par_df_ssp) ) ) {
+          par_df_ssp <- par_df_ssp %>% 
+            select(-matches("prev"))
+        }      
         par_df_ssp <- par_df_ssp %>%
           left_join(ctry_ref_em_prev) %>% 
           left_join(ctry_gdp_prev) %>% 
@@ -130,6 +135,11 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping, pos_nonCO2) {
       names(gdp) <- c(names(gdp)[1:8], "ctry_gdp_X_year")
 
       # E = EI * GDP
+      # drop *this* year's GDP into par_df_ssp
+      if ("ctry_gdp_X_year" %in% names(par_df_ssp) ) {
+        par_df_ssp <- par_df_ssp %>% 
+          select(-ctry_gdp_X_year)
+      }   
       par_df_ssp <- par_df_ssp %>% 
         left_join(gdp) %>% 
         mutate(E_star = EI_star * ctry_gdp_X_year)
@@ -152,11 +162,11 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping, pos_nonCO2) {
       
       # equation (5):
       # difference between IAM regional emissions and calculated regional emissions
-      
-      # drop *this year's* regional IAM emissions into par_df_ssp
       reg_IAM_em <- wide_df_ssp %>% 
         select( region, iso, ssp_label, em, sector, model, scenario, paste0('reg_iam_em_X', year) )
       names(reg_IAM_em) <- c(names(reg_IAM_em)[1:7], "regional_IAM_Emissions")
+      
+      # drop *this year's* regional IAM emissions into par_df_ssp
       if ("regional_IAM_Emissions" %in% names(par_df_ssp) ) {
         par_df_ssp <- par_df_ssp %>% 
           select(-regional_IAM_Emissions)
@@ -184,6 +194,11 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping, pos_nonCO2) {
                E_final = ifelse( is.na( E_final ), 0, E_final ),
                E_final = ifelse( is.infinite( E_final ), 0, E_final ) )
       
+      # save calculation dataframe
+      if (year %in% c(2016:2020)) {
+        saveCalculation(par_df_ssp, year, pos_nonCO2)
+      }
+      
       # drop final emissions result into results df
       df <- par_df_ssp %>% 
         select(region, iso, ssp_label, em, sector, model, scenario, unit, E_final)
@@ -207,8 +222,33 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping, pos_nonCO2) {
   return( list(out_df, zero_in_BY.trunc ) )
 }
 
-adjustEICBY <- function(par_df) {
+saveCalculation <- function(par_df_ssp, year, pos_nonCO2) {
+  fn <- paste0("C:/users/guti220/desktop/random files/ds_calculation/branch2") %>% 
+    paste(year, "csv", sep=".")
   
+  # append to saved calculation file on 2nd ipat downscaling routine
+  if (pos_nonCO2) {
+    app <- F
+  } else {
+    app <- T
+  }
+  col <- ! app
+  
+  
+  par_df_ssp %>% 
+    select(region, iso, em, sector, model, scenario, 
+           matches("em_Xcon"), matches("gdp_Xcon"), matches("EIRCY"), 
+           matches("em_Xbase"), matches("gdp_Xbase"), matches("EICBY"), matches("EI_gr_C"),
+           matches("ref_em_prev"), matches("gdp_prev"), matches("EI_prev"), matches("EI_star"), 
+           matches("gdp_X_year"), matches("^E_star"),
+           matches("sum_E_star"), matches("regional_IAM_Emissions"), matches("DiffR"), 
+           matches("E_share"), matches("E_adj"), matches("E_final")) %>% 
+    #filter(region == "AFR" & em == "CO2" & sector == "Energy Sector") %>% 
+    arrange(ctry_ref_em_Xbase_year) %>% 
+    write.table(fn, append=app, col.names=col, row.names=F, sep=",")
+}
+
+adjustEICBY <- function(par_df) {
   # this methodology doesn't affect industrial sector
   industrial <- par_df %>% 
     filter(sector == "Industrial Sector")
@@ -257,6 +297,7 @@ adjustEICBY <- function(par_df) {
   return(list(par_df.mod, zero_in_BY.trunc))
   
 }
+
 # downscaleIAMemissions_pos_nonCO2 ----------------------------------------
 downscaleIAMemissions_pos_nonCO2 <- function( wide_df, con_year_mapping ) { 
   
