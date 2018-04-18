@@ -107,7 +107,9 @@ zero_in_BY.CO2_or_neg_nonCO2 <- out[[2]]
 
 # 5.3 combine downscaled non-CO2 emissions and CO2 emissions 
 ds_df <- rbind( ds_df_pos_nonCO2, ds_df_CO2_or_neg_nonCO2 )
-zero_in_BY <- rbind(zero_in_BY.pos_nonCO2, zero_in_BY.CO2_or_neg_nonCO2)
+zero_in_BY <- rbind(zero_in_BY.pos_nonCO2, zero_in_BY.CO2_or_neg_nonCO2) %>% 
+  inner_join(ds_df) %>% 
+  select(region, iso, em, sector, model, scenario, unit, X2050)
 
 # -----------------------------------------------------------------------------
 # 5 Write out
