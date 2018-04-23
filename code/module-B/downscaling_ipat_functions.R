@@ -183,8 +183,9 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping, pos_nonCO2) {
       # equation (6):
       # each country's share of calculated regional emissions
       # (used to portion out DiffR)
+      # E_share always positive so that E_adj is same sign as DiffR
       par_df_ssp <- par_df_ssp %>% 
-        mutate(E_share = E_star / sum_E_star,
+        mutate(E_share = abs(E_star) / abs(sum_E_star),
                E_share = ifelse( is.na( E_share ), 0, E_share ),
                E_share = ifelse( is.infinite( E_share ), 0, E_share ) )
       
