@@ -84,30 +84,18 @@ wide_df <- merge( wide_df, gdp_data[ , c( 'scenario', 'region', 'iso', gdp_data_
                   by.x = c( 'region', 'iso', 'ssp_label' ), 
                   by.y = c( 'region', 'iso', 'scenario' ), all.x = T  ) 
 
-# separate emissions that has 0 or less values in convergence year 
-wide_df_pos_nonCO2 <- wide_df %>% 
-  filter(reg_iam_em_Xcon_year > 0 & em != "CO2") # only positive emissions. no CO2
-wide_df_CO2_or_neg_nonCO2 <- wide_df %>% 
-  filter(reg_iam_em_Xcon_year <= 0 | em == "CO2") # either zero/negative or CO2
-
 # -----------------------------------------------------------------------------
 # 5. Downscaling
 # 5.0 ipat downscaling functions
 source("../code/module-B/downscaling_ipat_functions.R")
 
-# 5.1 downscaling for non-CO2 emissions 
-out <- downscaleIAMemissions( wide_df_pos_nonCO2, con_year_mapping, pos_nonCO2 = TRUE )
-ds_df_pos_nonCO2 <- out[[1]]
-zero_in_BY.pos_nonCO2 <- out[[2]]
+out <- downscaleIAMemissions( wide_df, con_year_mapping)
 
-# 5.2 downscaling for CO2 emissions 
-out <- downscaleIAMemissions( wide_df_CO2_or_neg_nonCO2, con_year_mapping, pos_nonCO2 = FALSE )
-ds_df_CO2_or_neg_nonCO2 <-  out [[1]]
-zero_in_BY.CO2_or_neg_nonCO2 <- out[[2]]
+# annual downscaled emissions
+ds_df <- out[[1]]
 
-# 5.3 combine downscaled non-CO2 emissions and CO2 emissions 
-ds_df <- rbind( ds_df_pos_nonCO2, ds_df_CO2_or_neg_nonCO2 )
-zero_in_BY <- rbind(zero_in_BY.pos_nonCO2, zero_in_BY.CO2_or_neg_nonCO2) %>% 
+# set of rows with adjusted EICBY. Grab 2050 emissions from ds_df
+zero_in_BY <- out[[2]] %>% 
   inner_join(ds_df) %>% 
   select(region, iso, em, sector, model, scenario, unit, X2050)
 
