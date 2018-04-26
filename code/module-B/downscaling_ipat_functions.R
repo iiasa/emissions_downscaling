@@ -28,19 +28,8 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping) {
   par_df <- identifyGrowthMethods(wide_df, par_df)
   
   # equation (1) :
-  # regional EI in convergence year (using IAM emissions)
-  # country EI in base year (using REF emissions)
-  EI_params <- wide_df %>% 
-    select(region, iso, ssp_label, em, sector, model, scenario, unit, 
-           reg_iam_em_Xcon_year, reg_gdp_Xcon_year, 
-           paste0('ctry_ref_em_X', base_year), paste0("ctry_gdp_X", base_year))
-  names(EI_params) <- c(names(EI_params)[1:10], "ctry_ref_em_Xbase_year", "ctry_gdp_Xbase_year")
+  par_df <- equation1(wide_df, par_df)
   
-  par_df <- par_df %>% 
-    left_join(EI_params,  by = c("region", "iso", "ssp_label", "em", "sector", "model", "scenario", "unit")) %>% 
-    mutate( EICBY = ctry_ref_em_Xbase_year / ctry_gdp_Xbase_year,
-            EIRCY = reg_iam_em_Xcon_year / reg_gdp_Xcon_year )
-
   # need to replace countries' sectors that have zero emissions intensity growth in BY with a non-zero value
   out <- adjustEICBY(par_df)
   par_df <- out[[1]]
@@ -304,6 +293,33 @@ identifyGrowthMethods <- function(wide_df, par_df) {
     mutate(peak_year = gsub("X", "", peak_year))
 }
 
+equation1 <- function(wide_df, par_df) {
+  
+  # case 1/2: 
+  # regional EI in convergence year (using IAM emissions)
+  # country EI in base year (using REF emissions)
+  EI_CYBY_params <- wide_df %>% 
+    select(region, iso, ssp_label, em, sector, model, scenario, unit, 
+           reg_iam_em_Xcon_year, reg_gdp_Xcon_year, 
+           paste0('ctry_ref_em_X', base_year), paste0("ctry_gdp_X", base_year))
+  names(EI_CYBY_params) <- c(names(EI_params)[1:10], "ctry_ref_em_Xbase_year", "ctry_gdp_Xbase_year")
+  
+  par_df <- par_df %>% 
+    left_join(EI_CYBY_params,  by = c("region", "iso", "ssp_label", "em", "sector", "model", "scenario", "unit")) %>% 
+    mutate( EICBY = ctry_ref_em_Xbase_year / ctry_gdp_Xbase_year,
+            EIRCY = reg_iam_em_Xcon_year / reg_gdp_Xcon_year,
+            # the following parametes aren't used for case 1 & 2 we store empty values 
+            reg_iam_em_Xpeak_year="",
+            reg_gdp_Xpeak_year="",
+            EIRPY="",
+            EICPY="")
+  
+  # case 3: 
+  # regional EI in peak year (using IAM emissions)
+  # country EI in base year (using REF emissions)
+  
+  
+}
 saveCalculation <- function(par_df_ssp, file, year, pos_nonCO2) {
   fn <- paste0("C:/users/guti220/desktop/random files/ds_calculation/", file)
   
