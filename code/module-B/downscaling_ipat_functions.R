@@ -1,7 +1,7 @@
 
 
 # downscaleIAMemissions ----------------------------------------
-downscaleIAMemissions <- function( wide_df, con_year_mapping, pos_nonCO2) { 
+downscaleIAMemissions <- function( wide_df, con_year_mapping) { 
   
   # set up two working df: parameter data frame and results data frame
   
@@ -14,9 +14,18 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping, pos_nonCO2) {
   # E_final in res_df.
   
   par_df <- wide_df %>% 
-    select(region, iso, ssp_label, em, sector, model, scenario, unit)
+    select(region, iso, ssp_label, em, sector, model, scenario, unit) %>% 
+    mutate(base_year = base_year) %>% 
+    left_join(con_year_mapping, by=c("ssp_label" = "scenario_label"))
   res_df <- wide_df %>% 
     select(region, iso, ssp_label, em, sector, model, scenario, unit, paste0('ctry_ref_em_X', base_year))
+  
+  # identify EI_Gr_C methodology to be applied 
+  # whether to apply 1 or 2 growth rates (or growthrate = 0 ) depends on if/when emissions peak
+  # this function attaches to par_df the following columns
+  # case: 1 for monotonic growth (peaks in BY or CY), 2 for flat growth (no peak), 3 for peak not in CY or BY
+  # peak_year: year of peak for cases 1 or 3, N/A for case 2
+  par_df <- identifyGrowthMethods(wide_df, par_df)
   
   # equation (1) :
   # regional EI in convergence year (using IAM emissions)
@@ -28,9 +37,9 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping, pos_nonCO2) {
   names(EI_params) <- c(names(EI_params)[1:10], "ctry_ref_em_Xbase_year", "ctry_gdp_Xbase_year")
   
   par_df <- par_df %>% 
-    left_join(EI_params) %>% 
-    mutate(EIRCY = reg_iam_em_Xcon_year / reg_gdp_Xcon_year ,
-           EICBY = ctry_ref_em_Xbase_year / ctry_gdp_Xbase_year )
+    left_join(EI_params,  by = c("region", "iso", "ssp_label", "em", "sector", "model", "scenario", "unit")) %>% 
+    mutate( EICBY = ctry_ref_em_Xbase_year / ctry_gdp_Xbase_year,
+            EIRCY = reg_iam_em_Xcon_year / reg_gdp_Xcon_year )
 
   # need to replace countries' sectors that have zero emissions intensity growth in BY with a non-zero value
   out <- adjustEICBY(par_df)
@@ -50,19 +59,26 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping, pos_nonCO2) {
     # country-level emissions intensity growth rate 
     # calculation depends if there are negative emissions in CY 
     
-    if(pos_nonCO2) { # only positive & non-co2 emissions
-      par_df_ssp <- par_df_ssp %>% 
-        mutate(EI_gr_C = ( EIRCY / EICBY ) ^ ( 1 / ( con_year - base_year ) ),
-               EI_gr_C = ifelse( is.na( EI_gr_C ), 0, EI_gr_C ),
-               EI_gr_C = ifelse( is.infinite( EI_gr_C ), 0, EI_gr_C ) )
-    
-     
-    } else { # either CO2 or zero/negative
-      par_df_ssp <- par_df_ssp %>% 
-        mutate(EI_gr_C = ( ( EIRCY - EICBY ) / EICBY ) / ( con_year - base_year ) ,
-               EI_gr_C = ifelse( is.na( EI_gr_C ), 0, EI_gr_C ),
-               EI_gr_C = ifelse( is.infinite( EI_gr_C ), 0, EI_gr_C ) )
-    }
+    par_df_ssp <- par_df_ssp %>% 
+      mutate(EI_gr_C = ifelse(reg_iam_em_Xcon_year >= 0,
+                              ( EIRCY / EICBY ) ^ ( 1 / ( con_year - base_year ) ), 
+                              ( ( EIRCY - EICBY ) / EICBY ) / ( con_year - base_year ) ),
+             EI_gr_C = ifelse( is.na( EI_gr_C ), 0, EI_gr_C ),
+             EI_gr_C = ifelse( is.infinite( EI_gr_C ), 0, EI_gr_C ) )
+             
+    # if(pos_nonCO2) { # only positive & non-co2 emissions
+    #   par_df_ssp <- par_df_ssp %>% 
+    #     mutate(EI_gr_C = ( EIRCY / EICBY ) ^ ( 1 / ( con_year - base_year ) ),
+    #            EI_gr_C = ifelse( is.na( EI_gr_C ), 0, EI_gr_C ),
+    #            EI_gr_C = ifelse( is.infinite( EI_gr_C ), 0, EI_gr_C ) )
+    # 
+    #  
+    # } else { # either CO2 or zero/negative
+    #   par_df_ssp <- par_df_ssp %>% 
+    #     mutate(EI_gr_C = ( ( EIRCY - EICBY ) / EICBY ) / ( con_year - base_year ) ,
+    #            EI_gr_C = ifelse( is.na( EI_gr_C ), 0, EI_gr_C ),
+    #            EI_gr_C = ifelse( is.infinite( EI_gr_C ), 0, EI_gr_C ) )
+    # }
     
     # calculation of each year's downscaled country emissions
     for ( year in ( base_year + 1 ) : ds_end_year ) {
@@ -83,7 +99,9 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping, pos_nonCO2) {
       if (year == base_year + 1) {
         # either use adjusted EICBY values when calculating first time step...
         par_df_ssp <- par_df_ssp %>% 
-          mutate(EI_prev = EICBY)
+          mutate(EI_prev = EICBY,
+                 ctry_ref_em_prev = "",
+                 ctry_gdp_prev = "")
       } else { 
         # or dynamically calculate last years EI-value from last year's GDP & downscaled emissions
 
@@ -106,24 +124,29 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping, pos_nonCO2) {
             select(-matches("prev"))
         }      
         par_df_ssp <- par_df_ssp %>%
-          left_join(ctry_ref_em_prev) %>% 
-          left_join(ctry_gdp_prev) %>% 
+          left_join(ctry_ref_em_prev, by = c("region", "iso", "ssp_label", "em", "sector", "model", "scenario", "unit")) %>% 
+          left_join(ctry_gdp_prev, by = c("region", "iso", "ssp_label", "em", "sector", "model", "scenario", "unit")) %>% 
           mutate( EI_prev = ctry_ref_em_prev / ctry_gdp_prev )
       }
       
       # just like EI growth rate, calculating this year's EI depends on 
       # regional (IAM) emissions in covnergence year
-      if(pos_nonCO2) { # only positive & non-co2 emissions
+      par_df_ssp <- par_df_ssp %>% 
+        mutate(EI_star = ifelse(reg_iam_em_Xcon_year >= 0,
+                                EI_prev * EI_gr_C, 
+                                EI_prev + abs(EI_prev) * EI_gr_C))
       
-        par_df_ssp <- par_df_ssp %>% 
-          mutate(EI_star = EI_prev * EI_gr_C)
-        
-      } else { # either CO2 or zero/negative 
-        
-        par_df_ssp <- par_df_ssp %>% 
-          mutate(EI_star = EI_prev + abs(EI_prev) * EI_gr_C)
-        
-      }
+      # if(pos_nonCO2) { # only positive & non-co2 emissions
+      # 
+      #   par_df_ssp <- par_df_ssp %>% 
+      #     mutate(EI_star = EI_prev * EI_gr_C)
+      #   
+      # } else { # either CO2 or zero/negative 
+      #   
+      #   par_df_ssp <- par_df_ssp %>% 
+      #     mutate(EI_star = EI_prev + abs(EI_prev) * EI_gr_C)
+      #   
+      # }
       
       # EI_star pathways for zero_in_BY rows is bounded by minimum EI_star in nonzero_in_BY rows
       par_df_ssp <- adjustEI_star(par_df_ssp, zero_in_BY.trunc)
@@ -144,7 +167,7 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping, pos_nonCO2) {
           select(-ctry_gdp_X_year)
       }   
       par_df_ssp <- par_df_ssp %>% 
-        left_join(gdp) %>% 
+        left_join(gdp, by = c("region", "iso", "ssp_label", "em", "sector", "model", "scenario", "unit")) %>% 
         mutate(E_star = EI_star * ctry_gdp_X_year)
 
       # 2nd term of equation (5):
@@ -177,7 +200,7 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping, pos_nonCO2) {
       
       # DiffR = IAM_Regional_Emissions - REF_Regional_Emissions
       par_df_ssp <- par_df_ssp %>% 
-        left_join(reg_IAM_em, by=names(reg_IAM_em)[1:7] ) %>% 
+        left_join(reg_IAM_em , by = c("region", "iso", "ssp_label", "em", "sector", "model", "scenario")) %>% 
         mutate(DiffR = regional_IAM_Emissions  - sum_E_star)
       
       # equation (6):
@@ -226,6 +249,61 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping, pos_nonCO2) {
   return( list(out_df, zero_in_BY.trunc ) )
 }
 
+identifyGrowthMethods <- function(wide_df, par_df) {
+  # grab regional emissions
+  reg_iam_em.wide <- wide_df %>% 
+    select(region, ssp_label, em, sector, model, scenario, unit, matches("reg_iam_em")) %>% 
+    distinct()
+  names(reg_iam_em.wide) <- gsub("reg_iam_em_", "", names(reg_iam_em.wide))
+  
+  # melt to long format
+  reg_iam_em <- reg_iam_em.wide %>% 
+    gather(key=x_year, value=value, -region, -ssp_label, -em, -sector, -model, -scenario, -unit) %>% 
+    dplyr::rename(E=value)
+  
+  # identify peaking behavior in each series
+  
+  # case 1: peaks in BY or CY
+  monotonic <- reg_iam_em %>% 
+    group_by(region, ssp_label, em, sector, model, scenario, unit) %>% 
+    filter(length(unique(E)) != 1) %>% # non-zero slope
+    filter(E==max(E)) %>%
+    ungroup() %>% 
+    filter(x_year %in% c(paste0("X", base_year), "X2100", "Xcon_year")) %>%  # no peaks ever in 2100 -- why??
+    mutate(case=1)
+  
+  # case 2: flat emissions (can be zero, or non-zero as a result of harmonization procedure)
+  flat <- reg_iam_em %>% 
+    group_by(region, ssp_label, em, sector, model, scenario, unit) %>% 
+    filter(length(unique(E)) == 1) %>% # zero slope
+    ungroup() %>% 
+    mutate(case=2)
+  
+  # case 3: peaks in a single year that isn't BY or CY
+  peaks <- reg_iam_em %>% 
+    group_by(region, ssp_label, em, sector, model, scenario, unit) %>% 
+    filter(E==max(E)) %>%
+    ungroup() %>% 
+    anti_join(monotonic, by = c("region", "ssp_label", "em", "sector", "model", "scenario", "unit")) %>% 
+    anti_join(flat, by = c("region", "ssp_label", "em", "sector", "model", "scenario", "unit")) %>% 
+    mutate(case=3) 
+  
+  # data.frame that holds "case" and "peak_year" parameters
+  # flat contains entire emissions time-series, so must collapse by storing 'peak_year' as N/A and grabbing distinct columns
+  # After doing this, the data.frame is uniquely identified by base set of columns (see initialization of par_df) 
+  df <- monotonic %>% 
+    full_join(flat, by = c("region", "ssp_label", "em", "sector", "model", "scenario", "unit", "x_year", "E", "case")) %>% 
+    full_join(peaks, by = c("region", "ssp_label", "em", "sector", "model", "scenario", "unit", "x_year", "E", "case")) %>% 
+    mutate(peak_year = ifelse(case %in% c(1,3), x_year, "N/A")) %>% 
+    select(-x_year) %>% 
+    distinct() %>% 
+    select(-E)
+  
+  par_df <- par_df %>% 
+    left_join(df, by = c("region", "ssp_label", "em", "sector", "model", "scenario", "unit")) %>% 
+    mutate(peak_year = gsub("X", "", peak_year))
+}
+
 saveCalculation <- function(par_df_ssp, file, year, pos_nonCO2) {
   fn <- paste0("C:/users/guti220/desktop/random files/ds_calculation/", file)
   
@@ -270,25 +348,39 @@ adjustEICBY <- function(par_df) {
   
   # replacement values can't be taken from countries in a region with zero emissions as well 
   zero_IAMreg_ref_em_BY <- par_df %>% 
-    anti_join(., industrial) %>% 
+    anti_join(., industrial, by = c("region", "iso", "ssp_label", "em", "sector", "model", "scenario", "unit", 
+                                    "reg_iam_em_Xcon_year", "reg_gdp_Xcon_year", 
+                                    "ctry_ref_em_Xbase_year", "ctry_gdp_Xbase_year", "EICBY", "EIRCY")) %>% 
     group_by(region, ssp_label, em, sector, model, scenario, unit) %>% 
     summarise(reg_ref_em_Xbase_year = sum(ctry_ref_em_Xbase_year)) %>% 
     ungroup() %>% 
     filter(reg_ref_em_Xbase_year == 0 ) %>% 
     select(-reg_ref_em_Xbase_year) %>% 
-    inner_join(., par_df)  
+    inner_join(., par_df, by = c("region", "ssp_label", "em", "sector", "model", "scenario", "unit"))  
   
   # the rows we're modifying are...
   zero_in_BY <- par_df %>%
     filter(EICBY == 0) %>% # zero-valued EICBY 
-    anti_join(., industrial) %>% # not industrial sector
-    anti_join(., zero_IAMreg_ref_em_BY) # not zero-sum @ IAM-region-level
-  
+    # not industrial sector
+    anti_join(., industrial, by = c("region", "iso", "ssp_label", "em", "sector", "model", "scenario", "unit", 
+                                    "reg_iam_em_Xcon_year", "reg_gdp_Xcon_year", 
+                                    "ctry_ref_em_Xbase_year", "ctry_gdp_Xbase_year", "EICBY", "EIRCY")) %>% 
+    # not zero-sum @ IAM-region-level
+    anti_join(., zero_IAMreg_ref_em_BY, by = c("region", "iso", "ssp_label", "em", "sector", "model", "scenario", "unit", 
+                                    "reg_iam_em_Xcon_year", "reg_gdp_Xcon_year", 
+                                    "ctry_ref_em_Xbase_year", "ctry_gdp_Xbase_year", "EICBY", "EIRCY"))
+
   # replacement values are calculated from all remaining rows...
   nonzero_in_BY <- par_df %>% 
-    anti_join(., industrial) %>% 
-    anti_join(., zero_IAMreg_ref_em_BY) %>% 
-    anti_join(., zero_in_BY)
+    anti_join(., industrial, by = c("region", "iso", "ssp_label", "em", "sector", "model", "scenario", "unit", 
+                                    "reg_iam_em_Xcon_year", "reg_gdp_Xcon_year", 
+                                    "ctry_ref_em_Xbase_year", "ctry_gdp_Xbase_year", "EICBY", "EIRCY")) %>% 
+    anti_join(., zero_IAMreg_ref_em_BY, by = c("region", "iso", "ssp_label", "em", "sector", "model", "scenario", "unit", 
+                                               "reg_iam_em_Xcon_year", "reg_gdp_Xcon_year", 
+                                               "ctry_ref_em_Xbase_year", "ctry_gdp_Xbase_year", "EICBY", "EIRCY")) %>% 
+    anti_join(., zero_in_BY, by = c("region", "iso", "ssp_label", "em", "sector", "model", "scenario", "unit", 
+                                    "reg_iam_em_Xcon_year", "reg_gdp_Xcon_year", 
+                                    "ctry_ref_em_Xbase_year", "ctry_gdp_Xbase_year", "EICBY", "EIRCY"))
   
   # by choosing min(that region's set of emissions intensity growth values for the same sector) / 3
   replacement_values <- nonzero_in_BY %>%
@@ -299,7 +391,7 @@ adjustEICBY <- function(par_df) {
   # replace zero-valued baseyears with the value calculated above
   zero_in_BY.mod <- zero_in_BY %>% 
     select(-EICBY) %>%
-    left_join(replacement_values) %>% 
+    left_join(replacement_values, by = c("region", "ssp_label", "em", "sector", "model", "scenario", "unit")) %>% 
     dplyr::rename(EICBY = replacement_value)
   
   # diagnostic output report truncated set of columns 
@@ -315,7 +407,7 @@ adjustEICBY <- function(par_df) {
 
 adjustEI_star <- function(par_df, zero_in_BY.trunc) {
   nonzero_in_BY <- par_df %>% 
-    anti_join(zero_in_BY.trunc)
+    anti_join(zero_in_BY.trunc, by = c("region", "iso", "ssp_label", "em", "sector", "model", "scenario", "unit"))
   
   replacement_values <- nonzero_in_BY %>% 
     group_by(region, ssp_label, em, sector, model, scenario, unit) %>%
@@ -323,8 +415,8 @@ adjustEI_star <- function(par_df, zero_in_BY.trunc) {
     ungroup()
   
   zero_in_BY.mod <- par_df %>% 
-    inner_join(zero_in_BY.trunc) %>% 
-    left_join(replacement_values) %>% 
+    inner_join(zero_in_BY.trunc, by = c("region", "iso", "ssp_label", "em", "sector", "model", "scenario", "unit")) %>% 
+    left_join(replacement_values, by = c("region", "ssp_label", "em", "sector", "model", "scenario", "unit")) %>% 
     mutate(EI_star = ifelse(abs(EI_star) > abs(replacement_value), replacement_value, EI_star)) %>% 
     select(-replacement_value)
   
