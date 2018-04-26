@@ -172,8 +172,11 @@ calculateConYear <- function( iam_em_ipat ) {
     con_year <- con_year_mapping[ con_year_mapping$scenario_label == ssp, 'convergence_year' ]
     
     # calculate regional emissions in convergence year
+    # Con_year emissions have same sign as 2100 emissions
     ssp_df <- ssp_df %>% 
-      mutate(reg_iam_em_Xcon_year = reg_iam_em_X2100 * (reg_iam_em_X2100 / reg_iam_em_X2090) ^ ( (con_year - 2100) / 10),
+      mutate(reg_iam_em_Xcon_year = ifelse(reg_iam_em_X2100 >= 0,
+                                           reg_iam_em_X2100 * ( abs(reg_iam_em_X2100 / reg_iam_em_X2090) ) ^ ( (con_year - 2100) / 10),
+                                           reg_iam_em_X2100 + (reg_iam_em_X2100 - reg_iam_em_X2090) * ( (con_year - 2100) / 10) ),
              reg_iam_em_Xcon_year = ifelse(is.nan(reg_iam_em_Xcon_year), 0, reg_iam_em_Xcon_year),
              reg_iam_em_Xcon_year = ifelse(is.infinite(reg_iam_em_Xcon_year ), 0, reg_iam_em_Xcon_year) )
 
