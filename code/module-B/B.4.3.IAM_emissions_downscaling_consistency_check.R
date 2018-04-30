@@ -143,14 +143,14 @@ errorLogging <- function(in.agg, out.agg, method) {
     printLog(paste0(method, " downscaling: there are output rows that don't match input. Check error log"))
     
     # distinct error log for each (m, s) with mismatched values
-    for (m in unique(in.mis$model)) {
-      for (s in unique(in.mis$scenario)) {
+    for (model.name in unique(in.mis$model)) {
+      for (scen in unique(in.mis$scenario)) {
         
         # m can't contain any /
-        m.file <- gsub("/", "-", m)
+        model.name.mod <- gsub("/", "-", model.name)
         
         # open error log, name according to (m, s)
-        fn <- paste0("../code/error/ERROR-", method, " ", m.file, ", ", s, ".txt")
+        fn <- paste0("../code/error/ERROR-", method, " ", model.name.mod, ", ", s, ".txt")
         zz <- file(fn, open="wt")
         sink(zz) # divert session output to error log
         print(paste0(method, " downscaling error"))
@@ -158,7 +158,7 @@ errorLogging <- function(in.agg, out.agg, method) {
         
         df2 <- in.mis %>% 
           select(-value, -unit) %>% # drop columns that don't need to be reported
-          filter(model == m & scenario == s) %>% # filter to distinct model & scenario
+          filter(model == model.name & scenario == scen) %>% # filter to distinct model & scenario
           group_by(model, scenario, region, em) %>% # for each region and em in (m,s), 
           summarise(x_years = paste0(x_year, collapse=", ")) %>% # print years that have mismatched values
           ungroup()
