@@ -124,7 +124,6 @@ ds_ipat_out.agg <- ds_ipat_out %>%
   ungroup() %>% 
   mutate(value = round(value, digits = 5)) # in order to compare two df's, must round to same precision
 
-
 #  ------------------------------------------------------------------------
 # 4. Error logging
 # Check for mismatched rows between the two aggregated emissions dataframes
@@ -209,6 +208,7 @@ errorLogging <- function(in.agg, out.agg, method) {
     printLog(paste0(method, " downscaling: all output rows match input"))
   }
 }
+
 # Linear Downscaling
 errorLogging(ds_lin_in.agg, ds_lin_out.agg, "Linear")
 
