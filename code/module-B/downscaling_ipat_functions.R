@@ -571,7 +571,7 @@ save_EI_prelim <- function(par_df_ssp, year) {
     app <- TRUE
   }
   col <- !app
-  fn <- paste0("C:/users/xavie/desktop/work/ds_calculation/EI_prelim.csv")
+  fn <- paste0("C:/users/guti220/desktop/random files/ds_calculation/EI_prelim.csv")
   write.table(EI_prelim, fn, append=app, sep=",", col.names=col, row.names=F)
 }
 
