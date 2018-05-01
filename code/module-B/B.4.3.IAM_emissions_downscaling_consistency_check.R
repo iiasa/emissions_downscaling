@@ -188,7 +188,8 @@ errorLogging <- function(in.agg, out.agg, method) {
     
     # place input/output data columns next to each other for each year of mismatched values
     mis <- full_join(in.mis, out.mis,
-                     by=c("model", "scenario", "region", "em", "sector", "unit", "x_year")) 
+                     by=c("model", "scenario", "region", "em", "sector", "unit", "x_year")) %>% 
+      mutate(difference = output - input)
     
     # construct diagnostic file name
     iam <- unique(mis$model)
