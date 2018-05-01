@@ -130,7 +130,7 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping) {
                E_final = ifelse( is.infinite( E_final ), 0, E_final ) )
       
       # save calculation dataframe
-      if (year %in% c(2016:2020)) {
+      if (year %in% c(2070:2073)) {
         saveCalculation(par_df_ssp, "branch", year)
       }
       
@@ -515,7 +515,8 @@ equation3 <- function(wide_df_ssp, res_df_ssp, par_df_ssp, year) {
 }
 
 saveCalculation <- function(par_df_ssp, file, year) {
-  fn <- paste0("C:/users/guti220/desktop/random files/ds_calculation/", file)
+  fn <- paste0("C:/users/guti220/desktop/random files/ds_calculation/", file) %>% 
+    paste(., year, "csv", sep=".")
   print(paste0("saving ", fn))
   
   par_df_ssp %>% 
@@ -531,7 +532,7 @@ saveCalculation <- function(par_df_ssp, file, year) {
            matches("E_share"), matches("E_adj"), matches("E_final")) %>% 
     arrange(ctry_ref_em_Xbase_year) %>% 
     #filter(region == "AFR" & em == "CO2" & sector == "Energy Sector") %>% 
-    write.csv(paste(fn, year, "csv", sep="."), row.names=F)
+    write.csv(fn, row.names=F)
 }
 
 adjustEI_star <- function(par_df, zero_in_BY.trunc) {
