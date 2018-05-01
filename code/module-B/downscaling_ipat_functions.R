@@ -134,6 +134,8 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping) {
         saveCalculation(par_df_ssp, "branch", year)
       }
       
+      save_EI_prelim(par_df_ssp, year)
+      
       # drop final emissions result into results df
       df <- par_df_ssp %>% 
         select(region, iso, ssp_label, em, sector, model, scenario, unit, E_final)
@@ -514,27 +516,7 @@ equation3 <- function(wide_df_ssp, res_df_ssp, par_df_ssp, year) {
                             EI_prev + abs(EI_prev) * EI_gr_C))
 }
 
-saveCalculation <- function(par_df_ssp, file, year) {
-  fn <- paste0("C:/users/guti220/desktop/random files/ds_calculation/", file) %>% 
-    paste(., year, "csv", sep=".")
-  print(paste0("saving ", fn))
-  
-  par_df_ssp %>% 
-    select(region, iso, em, sector, model, scenario, 
-           base_year, con_year, dist, case, peak_year,
-           matches("em_Xbase"), matches("gdp_Xbase"), matches("EICBY"),
-           matches("em_Xpeak"), matches("gdp_Xpeak"), matches("EIRPY"),
-           matches("em_Xcon"), matches("gdp_Xcon"), matches("EIRCY"), 
-           matches("EI_gr_C"),
-           matches("ref_em_prev"), matches("gdp_prev"), matches("EI_prev"), matches("EI_star"), 
-           matches("gdp_X_year"), matches("^E_star"),
-           matches("sum_E_star"), matches("regional_IAM_Emissions"), matches("DiffR"), 
-           matches("E_share"), matches("E_adj"), matches("E_final")) %>% 
-    arrange(ctry_ref_em_Xbase_year) %>% 
-    #filter(region == "AFR" & em == "CO2" & sector == "Energy Sector") %>% 
-    write.csv(fn, row.names=F)
-}
-
+# zero in BY rows Emissions Intensity bounded by min(abs(EI_star)) in region
 adjustEI_star <- function(par_df, zero_in_BY.trunc) {
   nonzero_in_BY <- par_df %>% 
     anti_join(zero_in_BY.trunc, by = c("region", "iso", "ssp_label", "em", "sector", "model", "scenario", "unit"))
@@ -553,6 +535,46 @@ adjustEI_star <- function(par_df, zero_in_BY.trunc) {
   return(rbind(nonzero_in_BY, zero_in_BY.mod))
   
 }
+
+# output calculation parameters data.frame
+saveCalculation <- function(par_df_ssp, file, year) {
+  fn <- paste0("C:/users/guti220/desktop/random files/ds_calculation/", file) %>% 
+    paste(., year, "csv", sep=".")
+  print(paste0("saving ", fn))
+  
+  par_df_ssp %>% 
+    select(region, iso, em, sector, model, scenario, 
+           base_year, con_year, dist, case, peak_year,
+           matches("em_Xbase"), matches("gdp_Xbase"), matches("EICBY"),
+           matches("em_Xpeak"), matches("gdp_Xpeak"), matches("EIRPY"), matches("EICPY"),
+           matches("em_Xcon"), matches("gdp_Xcon"), matches("EIRCY"), 
+           matches("EI_gr_C"),
+           matches("ref_em_prev"), matches("gdp_prev"), matches("EI_prev"), matches("EI_star"), 
+           matches("gdp_X_year"), matches("^E_star"),
+           matches("sum_E_star"), matches("regional_IAM_Emissions"), matches("DiffR"), 
+           matches("E_share"), matches("E_adj"), matches("E_final")) %>% 
+    arrange(ctry_ref_em_Xbase_year) %>% 
+    #filter(region == "AFR" & em == "CO2" & sector == "Energy Sector") %>% 
+    write.csv(fn, row.names=F)
+}
+
+# append timeseries of Emissions Intensities before scaling
+save_EI_prelim <- function(par_df_ssp, year) {
+  EI_prelim <- par_df_ssp %>% 
+    select(region, iso, em, sector, model, scenario, EI_star) %>% 
+    mutate(year = year)
+  
+  
+  if (year == 2016) {
+    app <- FALSE
+  } else {
+    app <- TRUE
+  }
+  col <- !app
+  fn <- paste0("C:/users/xavie/desktop/work/ds_calculation/EI_prelim.csv")
+  write.table(EI_prelim, fn, append=app, sep=",", col.names=col, row.names=F)
+}
+
 
 # downscaleIAMemissions_pos_nonCO2 ----------------------------------------
 downscaleIAMemissions_pos_nonCO2 <- function( wide_df, con_year_mapping ) { 
@@ -619,8 +641,8 @@ downscaleIAMemissions_pos_nonCO2 <- function( wide_df, con_year_mapping ) {
       res_df_ssp[ , paste0( "ctry_ref_em_X", year ) ] <- par_df_ssp$E_final
       
       # save calculation dataframe
-      if (year %in% c(2016:2020)) {
-        saveCalculation(par_df_ssp, "master", 2, year, pos_nonCO2=TRUE)
+      if (year %in% c(2097:2100)) {
+        saveCalculation(par_df_ssp, "master", 2, year)
       }
       
     }
@@ -701,7 +723,7 @@ downscaleIAMemissions_CO2_or_neg_nonCO2 <- function( wide_df, con_year_mapping )
       
       # save calculation dataframe
       if (year %in% c(2016:2020)) {
-        saveCalculation(par_df_ssp, "master", 2, year, pos_nonCO2=FALSE)
+        saveCalculation(par_df_ssp, "master", 2, year)
       }
       
     }
