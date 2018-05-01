@@ -95,7 +95,7 @@ ds_df <- out[[1]]
 
 # set of rows with adjusted EICBY. Grab 2050 emissions from ds_df
 zero_in_BY <- out[[2]] %>% 
-  inner_join(ds_df) %>% 
+  inner_join(ds_df, by = c("region", "iso", "em", "sector", "model", "scenario", "unit")) %>% 
   select(region, iso, em, sector, model, scenario, unit, X2050)
 
 # -----------------------------------------------------------------------------
