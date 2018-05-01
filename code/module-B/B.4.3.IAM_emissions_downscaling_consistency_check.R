@@ -149,7 +149,7 @@ errorLogging <- function(in.agg, out.agg, method) {
         model.name.mod <- gsub("/", "-", model.name)
         
         # open error log, name according to (m, s)
-        fn <- paste0("../code/error/ERROR-", method, " ", model.name.mod, ", ", s, ".txt")
+        fn <- paste0("../code/error/ERROR-", method, " ", model.name.mod, ", ", scen, ".txt")
         zz <- file(fn, open="wt")
         sink(zz) # divert session output to error log
         print(paste0(method, " downscaling error"))
