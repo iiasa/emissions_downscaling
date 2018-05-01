@@ -134,8 +134,8 @@ ds_ipat_out.agg <- ds_ipat_out %>%
 errorLogging <- function(in.agg, out.agg, method) {
   
   # same number of rows/cols, different values
-  in.mis <- anti_join(in.agg, out.agg)
-  out.mis <- anti_join(out.agg, in.agg)
+  in.mis <- anti_join(in.agg, out.agg, by = c("model", "scenario", "region", "em", "unit", "x_year", "value"))
+  out.mis <- anti_join(out.agg, in.agg, by = c("model", "scenario", "region", "em", "unit", "x_year", "value"))
   
   # check if any rows in mismatched values df
   if(nrow(in.mis) != 0) {
@@ -180,28 +180,21 @@ errorLogging <- function(in.agg, out.agg, method) {
     
     # contains the rows from input that don't match output
     in.mis <- in.mis %>% 
-      spread(key=x_year, value=value)
+      dplyr::rename(input=value)
     
     # contains the rows from output that don't match input
     out.mis <- out.mis %>% 
-      spread(key=x_year, value)
+      dplyr::rename(output=value)
     
     # place input/output data columns next to each other for each year of mismatched values
     mis <- full_join(in.mis, out.mis,
-                     by=c("model", "scenario", "region", "em", "unit"),
-                     suffix=c(".in", ".out")) 
+                     by=c("model", "scenario", "region", "em", "unit", "x_year")) 
     
-    # trunk columns
-    trunk <- c("model", "scenario", "region", "em", "unit")
-    
-    # {x_year.in, x_year.out}
-    remaining.vars <- names(mis)[!names(mis) %in% trunk] %>% sort()
-    
-    # diagnostic 
-    mis <- mis[,c(trunk, remaining.vars)]
-    
+    # construct diagnostic file name
     iam <- unique(mis$model)
     out_filename <- paste0( iam, '_emissions_downscaled_', method, '_inconsistent' )
+    
+    # save diagnostic file
     writeData( mis, 'ERR', out_filename, meta = F ) 
     
   } else {
