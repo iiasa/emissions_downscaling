@@ -47,6 +47,9 @@ if (debug) {
                            'C:/Users/guti220/Desktop/emissions_downscaling/final-output/module-B',
                            'C:/Users/guti220/Desktop/emissions_downscaling/final-output/module-C',
                            'NOTgridding' )
+  
+  calculationDir <- "C:/users/guti220/desktop/random files/ds_calculation/"
+  calculationYears <- 2070:2075
 } else {
   # get args from command line
   args_from_makefile <- commandArgs( TRUE )
