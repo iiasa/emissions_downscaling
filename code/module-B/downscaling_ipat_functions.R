@@ -15,7 +15,7 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping) {
   
   par_df <- wide_df %>% 
     select(region, iso, ssp_label, em, sector, model, scenario, unit) %>% 
-    mutate(base_year = base_year) %>% 
+    mutate(base_year = base_year %>% as.numeric() ) %>% 
     left_join(con_year_mapping, by=c("ssp_label" = "scenario_label")) %>% 
     dplyr::rename(con_year = convergence_year) %>% 
     mutate(dist = con_year - 2100) # used for calculating pre-peak growth rate
@@ -49,8 +49,10 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping) {
     # calculate EI growth rate depending on (a) case (peak or not) and (b) CY emissions (pos or neg)
     par_df_ssp <- equation2(par_df_ssp)
     
+    base_year <- as.numeric(base_year)
+    ds_end_year <- as.numeric(ds_end_year)
     # calculation of each year's downscaled country emissions
-    for ( year in ( base_year + 1 ) : ds_end_year ) {
+    for ( year in seq(base_year+1, ds_end_year) ) {
       
       # calculate next year's prelminary emissions intensity 
       par_df_ssp <- equation3(wide_df_ssp, res_df_ssp, par_df_ssp, year) 
@@ -79,7 +81,6 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping) {
         
         # append timeseries of Emissions Intensities before scaling
         save_EI_prelim(par_df_ssp, year, calculationDir)
-        
       }
       
       # drop final emissions result into results df
@@ -362,8 +363,9 @@ equation2 <- function(par_df_ssp) {
         case == 3,
         
         # TRUE
-        # this function calculates initial growth rates, so let's signal that regional emissions haven't peaked yet in calculation
-        "year <= peak_year",
+        # this function calculates only EI_gr_C & EI_gr_C_am b/c we don't have 
+        # EICPY to calculate EI_gr_C_pm until year == peak_year + 1
+        NA,
         
         # FALSE
         # case 1 or 2, therefore only EI_gr_C is necessary
@@ -385,11 +387,10 @@ equation2 <- function(par_df_ssp) {
 
 # calculate next year's preliminary emissions intensity using one of {EI_gr_C, EI_gr_C_am, EI_gr_C_pm}
 equation3 <- function(wide_df_ssp, res_df_ssp, par_df_ssp, year) {
-  
-  
+
   # identify/calculate last year's EI and drop into par_df_ssp
   
-  if (year == base_year + 1) {
+  if (year == as.numeric(base_year) + 1) {
     # either use adjusted EICBY values when calculating first time step...
     par_df_ssp <- par_df_ssp %>% 
       mutate(EI_prev = EICBY,
@@ -635,19 +636,19 @@ equation7 <- function(par_df_ssp) {
 
 # output calculation parameters data.frame
 saveCalculation <- function(par_df_ssp, year, calculationYears, calculationDir) {
-  fn <- paste0(calculationDir, year) %>% 
-    paste(., "csv", sep=".")
-  print(paste0("saving ", fn))
+  fn <- paste0(calculationDir, "par_df", ".csv") 
   
   if (year == calculationYears[1]) {
+    print(paste0("Initializing ", fn, " with ", year, " data"))
     app <- FALSE
   } else {
+    print(paste0("Appending ", year, " data to ", fn))
     app <- TRUE
   }
   col <- !app
   
-  par_df_ssp %>% 
-    mutate(year = year)
+  df <- par_df_ssp %>% 
+    mutate(year = year) %>% 
     select(year, region, iso, em, sector, model, scenario, 
            base_year, con_year, dist, case, peak_year,
            matches("em_Xbase"), matches("gdp_Xbase"), matches("EICBY"),
@@ -662,8 +663,11 @@ saveCalculation <- function(par_df_ssp, year, calculationYears, calculationDir) 
            matches("sum_E_star"), matches("regional_IAM_Emissions"), matches("DiffR"), 
            matches("E_share"), matches("E_adj"), matches("E_final")) %>% 
     arrange(ctry_ref_em_Xbase_year) %>% 
-    filter(region == "AFR" & em == "CO2" & sector == "Energy Sector") %>% 
-    write.table(., fn, append=app, sep=",", col.names=col, row.names=F)
+    filter(em == "CO2" & sector == "Energy Sector")
+  
+  df.melt <- df %>% 
+    gather(key=parameter, value=value, -year, -region, -iso, -em, -sector, -model, -scenario)
+  write.table(df.melt, fn, append=app, sep=",", col.names=col, row.names=F)
     
 }
 
