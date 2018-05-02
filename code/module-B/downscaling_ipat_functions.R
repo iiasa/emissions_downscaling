@@ -322,7 +322,7 @@ equation2 <- function(par_df_ssp) {
         
         # TRUE
         # use EICBY & EIRCY to calculate EI_gr_C
-        ifelse(reg_iam_em_Xcon_year >= 0,
+        ifelse(reg_iam_em_Xcon_year > 0,
                
                # eq 2 for positive CY emissions
                ( EIRCY / EICBY ) ^ ( 1 / ( con_year - base_year ) ),
@@ -343,7 +343,7 @@ equation2 <- function(par_df_ssp) {
         
         # TRUE
         # use EICBY & EIRPY to calculate EI_gr_C_am
-        ifelse(reg_iam_em_Xcon_year >= 0,
+        ifelse(reg_iam_em_Xcon_year > 0,
                
                # eq 2 for positive CY emissions
                ( EIRPY / EICBY ) ^ ( 1 / ( peak_year + dist - base_year ) ),
@@ -476,7 +476,7 @@ equation3 <- function(wide_df_ssp, res_df_ssp, par_df_ssp, year) {
           year == peak_year + 1,
           
           #TRUE: it is 1 year after peak_year, so we calculate EI_gr_C_pm using EICPY (above)
-          ifelse(reg_iam_em_Xcon_year >= 0,
+          ifelse(reg_iam_em_Xcon_year > 0,
                  
                  # eq 2 for positive CY emissions
                  ( EIRCY / EICPY ) ^ ( 1 / ( con_year - peak_year ) ),
@@ -506,7 +506,7 @@ equation3 <- function(wide_df_ssp, res_df_ssp, par_df_ssp, year) {
       
       # TRUE
       # emissions don't peak, so we use EI_gr_C
-      ifelse(reg_iam_em_Xcon_year >= 0,
+      ifelse(reg_iam_em_Xcon_year > 0,
                             EI_prev * EI_gr_C, 
                             EI_prev + abs(EI_prev) * EI_gr_C),
       
@@ -519,13 +519,13 @@ equation3 <- function(wide_df_ssp, res_df_ssp, par_df_ssp, year) {
         
         # TRUE
         # emissions haven't peaked yet, so we use EI_gr_C_am
-        ifelse(reg_iam_em_Xcon_year >= 0,
+        ifelse(reg_iam_em_Xcon_year > 0,
                EI_prev * EI_gr_C_am, 
                EI_prev + abs(EI_prev) * EI_gr_C_am),
         
         # FALSE
         # emissions have peaked, so we use EI_gr_C_pm
-        ifelse(reg_iam_em_Xcon_year >= 0,
+        ifelse(reg_iam_em_Xcon_year > 0,
                EI_prev * EI_gr_C_pm, 
                EI_prev + abs(EI_prev) * EI_gr_C_pm)
         )
@@ -618,7 +618,7 @@ equation6 <- function(par_df_ssp) {
   # (used to portion out DiffR)
   # E_share always positive so that E_adj is same sign as DiffR
   par_df_ssp <- par_df_ssp %>% 
-    mutate(E_share = abs(E_star) / abs(sum_E_star),
+    mutate(E_share = E_star / sum_E_star,
            E_share = ifelse( is.na( E_share ), 0, E_share ),
            E_share = ifelse( is.infinite( E_share ), 0, E_share ) )
 }
@@ -663,10 +663,10 @@ saveCalculation <- function(par_df_ssp, year, calculationYears, calculationDir) 
            matches("sum_E_star"), matches("regional_IAM_Emissions"), matches("DiffR"), 
            matches("E_share"), matches("E_adj"), matches("E_final")) %>% 
     arrange(ctry_ref_em_Xbase_year) %>% 
-    filter(em == "CO2" & sector == "Energy Sector")
+    filter(em == "CH4" & sector == "Residential Commercial Other")
   
   df.melt <- df %>% 
-    gather(key=parameter, value=value, -year, -region, -iso, -em, -sector, -model, -scenario)
+    gather(key=parameter, value=value, -year, -region, -iso, -em, -sector, -model, -scenario) 
   write.table(df.melt, fn, append=app, sep=",", col.names=col, row.names=F)
     
 }
