@@ -64,7 +64,7 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping) {
       par_df_ssp <- equation4(wide_df_ssp, par_df_ssp, year) 
       
       # scale preliminary emissions to match this year's regional IAM emissions
-      par_df_ssp <- equation5(wide_df_ssp, par_df_ssp, year)
+      par_df_ssp <- equation5(wide_df_ssp, par_df_ssp, year, res_df_ssp)
       
       # calculate each country's share of preliminary, calculated regional emissions
       par_df_ssp <- equation6(par_df_ssp)
@@ -576,7 +576,7 @@ equation4 <- function(wide_df_ssp, par_df_ssp, year) {
 }
 
 # scale preliminary emissions to match this year's regional IAM emissions
-equation5 <- function(wide_df_ssp, par_df_ssp, year) {
+equation5 <- function(wide_df_ssp, par_df_ssp, year, res_df_ssp) {
   # 2nd term of equation (5):
   # calculate regional emissions from this time step's preliminary country emissions
   temp_df_agg <- par_df_ssp %>%
@@ -606,10 +606,64 @@ equation5 <- function(wide_df_ssp, par_df_ssp, year) {
   }
   
   # drop *this* year's IAM regional emissions into par_df_ssp
-  # leftover regional emissions (distributed across downscaled countries) = IAM_emissions - sum_E_star
   par_df_ssp <- par_df_ssp %>% 
-    left_join(reg_IAM_em , by = c("region", "iso", "ssp_label", "em", "sector", "model", "scenario")) %>% 
+    left_join(reg_IAM_em , by = c("region", "iso", "ssp_label", "em", "sector", "model", "scenario"))
+  
+  # check if calculated regional emissions are zero but IAM regional emissions are non-zero
+  # need to modify E_star & sum_E_star if sum_E_star == 0 & regional_IAM_Emissions != 0
+  replace <- par_df_ssp %>%
+    filter(sum_E_star==0 & regional_IAM_Emissions != 0)
+  if (nrow(replace) > 0 ) {
+    # we have to make modifications to E_star & sum_E_star in order to distribute the difference between
+    # sum_E_star & regional_IAM_Emissions (DiffR, calculated below)
+    # see Eqn's 6 & 7 for details as to why we have to make this modification
+
+    # for these cases, we replace E_star & sum_E_star with country and regional emissions from
+    # the last year there were non-zero regional emissions
+
+    # get downscaled country emissions
+    ctry_ref_em <- res_df_ssp %>%
+      select(region, iso, ssp_label, em, sector, model, scenario, unit, matches("ctry_ref_em"))
+    names(ctry_ref_em) <- gsub("ctry_ref_em_X", "", names(ctry_ref_em))
+    ctry_ref_em.melt <- ctry_ref_em %>%
+      gather(key=year, value=E.country, -region, -iso, -ssp_label, -em, -sector, -model, -scenario, -unit) %>%
+      mutate(year = as.numeric(year))
+
+    # aggregate regional emissions, but subset to the last non-zero year
+    reg_ref_em.melt <- ctry_ref_em.melt %>%
+      group_by(region, ssp_label, em, sector, model, scenario, unit, year) %>%
+      # get regional totals
+      summarise(E.region=sum(E.country)) %>%
+      ungroup() %>%
+      group_by(region, ssp_label, em, sector, model, scenario, unit) %>%
+      # grab the last year there was a non-zero regional total
+      filter(E.region != 0) %>%
+      filter(year == max(year)) %>%
+      ungroup()
+
+    # combine country and regional emissions
+    ctry_and_reg_em.melt <- ctry_ref_em.melt %>%
+      inner_join(reg_ref_em.melt, by = c("region", "ssp_label", "em", "sector", "model", "scenario", "unit", "year")) %>%
+      select(-year)
+
+    # replace E_star & sum_E_star w/ E.country & E.region, respectively
+    replace <- replace %>%
+      left_join(ctry_and_reg_em.melt, by = c("region", "iso", "ssp_label", "em", "sector", "model", "scenario", "unit")) %>%
+      select(-E_star, -sum_E_star) %>%
+      dplyr::rename(E_star = E.country,
+                    sum_E_star = E.region)
+
+    # drop modified countries into par_df_ssp while leaving all other countries unaffected
+    par_df_ssp <- par_df_ssp %>%
+      anti_join(replace, by = c("region", "iso", "ssp_label", "em", "sector", "model", "scenario", "unit")) %>%
+      rbind(replace)
+  }
+
+  # leftover regional emissions (distributed across downscaled countries) = IAM_emissions - sum_E_star
+ par_df_ssp <- par_df_ssp %>% 
     mutate(DiffR = regional_IAM_Emissions  - sum_E_star)
+  
+  
 }
 
 # calculate each country's share of preliminary, calculated regional emissions
@@ -665,9 +719,9 @@ saveCalculation <- function(par_df_ssp, year, calculationYears, calculationDir) 
     arrange(ctry_ref_em_Xbase_year) %>% 
     filter(em == "CH4" & sector == "Residential Commercial Other")
   
-  df.melt <- df %>% 
-    gather(key=parameter, value=value, -year, -region, -iso, -em, -sector, -model, -scenario) 
-  write.table(df.melt, fn, append=app, sep=",", col.names=col, row.names=F)
+  # df.melt <- df %>% 
+  #   gather(key=parameter, value=value, -year, -region, -iso, -em, -sector, -model, -scenario) 
+  write.table(df, fn, append=app, sep=",", col.names=col, row.names=F)
     
 }
 
