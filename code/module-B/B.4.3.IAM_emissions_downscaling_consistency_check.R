@@ -57,6 +57,8 @@ ds_lin_out <- readData( domain = 'MED_OUT', file_name = paste0( 'B.', iam, '_emi
 ds_ipat_in <- readData( domain = 'MED_OUT', file_name = paste0( 'B.', iam, '_emissions_ipat', '_', RUNSUFFIX ))
 ds_ipat_out <- readData( domain = 'MED_OUT', file_name = paste0( 'B.', iam, '_emissions_downscaled_ipat', '_', RUNSUFFIX ) )
 
+# digits of precision in sum comparison
+d <- 5
 # -----------------------------------------------------------------------------
 # 3. Aggregate IAM Emissions and Linear-Downscaling Emissions
 # 
@@ -80,7 +82,7 @@ ds_lin_in.agg <- ds_lin_in %>%
   group_by(model, scenario, region, em, sector, unit, x_year) %>% 
   summarise(value=sum(value)) %>%
   ungroup() %>% 
-  mutate(value = round(value, digits = 5)) # in order to compare two df's, must round to same precision
+  mutate(value = round(value, digits = d)) # in order to compare two df's, must round to same precision
 
 
 ds_lin_out.agg <- ds_lin_out %>% 
@@ -89,7 +91,7 @@ ds_lin_out.agg <- ds_lin_out %>%
   group_by(model, scenario, region, em, sector, unit, x_year) %>% 
   summarise(value=sum(value)) %>%
   ungroup() %>% 
-  mutate(value = round(value, digits = 5)) # in order to compare two df's, must round to same precision
+  mutate(value = round(value, digits = d)) # in order to compare two df's, must round to same precision
 
 # -----------------------------------------------------------------------------
 # 3. Aggregate IAM Emissions and IPAT-Downscaling Emissions
@@ -115,14 +117,14 @@ ds_ipat_in.agg <- ds_ipat_in %>%
   group_by(model, scenario, region, em, sector, unit, x_year) %>% 
   summarise(value=sum(value)) %>% 
   ungroup() %>% 
-  mutate(value = round(value, digits = 5)) # in order to compare two df's, must round to same precision
+  mutate(value = round(value, digits = d)) # in order to compare two df's, must round to same precision
 
 ds_ipat_out.agg <- ds_ipat_out %>% 
   gather(x_year, value, -model, -scenario, -region, -em, -sector,-unit, -iso) %>% 
   group_by(model, scenario, region, em, sector, unit, x_year) %>% 
   summarise(value=sum(value)) %>% # aggregate over sectors, 
   ungroup() %>% 
-  mutate(value = round(value, digits = 5)) # in order to compare two df's, must round to same precision
+  mutate(value = round(value, digits = d)) # in order to compare two df's, must round to same precision
 
 #  ------------------------------------------------------------------------
 # 4. Error logging
