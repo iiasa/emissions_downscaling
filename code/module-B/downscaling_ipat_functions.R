@@ -81,6 +81,12 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping) {
         
         # append timeseries of Emissions Intensities before scaling
         save_EI_prelim(par_df_ssp, year, calculationDir)
+        
+        # append timeseries of Emissions before scaling
+        # save_sum_E_star(par_df_ssp, year, calculationDir)
+        
+        # append timeseries of Emissions-Shares before scaling
+        # save_E_share(par_df_ssp, year, calculationDir)
       }
       
       # drop final emissions result into results df
@@ -690,7 +696,7 @@ equation7 <- function(par_df_ssp) {
 
 # output calculation parameters data.frame
 saveCalculation <- function(par_df_ssp, year, calculationYears, calculationDir) {
-  fn <- paste0(calculationDir, "par_df", ".csv") 
+  fn <- paste0(calculationDir, "/par_df", ".csv") 
   
   if (year == calculationYears[1]) {
     print(paste0("Initializing ", fn, " with ", year, " data"))
@@ -717,7 +723,7 @@ saveCalculation <- function(par_df_ssp, year, calculationYears, calculationDir) 
            matches("sum_E_star"), matches("regional_IAM_Emissions"), matches("DiffR"), 
            matches("E_share"), matches("E_adj"), matches("E_final")) %>% 
     arrange(ctry_ref_em_Xbase_year) %>% 
-    filter(em == "CH4" & sector == "Residential Commercial Other")
+    filter(em == "CO2" & sector == "Energy Sector")
   
   # df.melt <- df %>% 
   #   gather(key=parameter, value=value, -year, -region, -iso, -em, -sector, -model, -scenario) 
@@ -742,6 +748,40 @@ save_EI_prelim <- function(par_df_ssp, year, calculationDir) {
   write.table(EI_prelim, fn, append=app, sep=",", col.names=col, row.names=F)
 }
 
+# append timeseries of Emissions before scaling
+save_sum_E_star <- function(par_df_ssp, year, calculationDir) {
+  E.region_prelim <- par_df_ssp %>% 
+    select(region, em, sector, model, scenario, sum_E_star) %>% 
+    distinct() %>% 
+    mutate(year = year)
+  
+  
+  if (year == 2016) {
+    app <- FALSE
+  } else {
+    app <- TRUE
+  }
+  col <- !app
+  fn <- paste0(calculationDir, "/E.region_prelim.csv")
+  write.table(E.region_prelim, fn, append=app, sep=",", col.names=col, row.names=F)
+}
+
+# append timeseries of Emissions-Shares before scaling
+save_E_share <- function(par_df_ssp, year, calculationDir) {
+  E_share_prelim <- par_df_ssp %>% 
+    select(region, iso, em, sector, model, scenario, E_share) %>% 
+    mutate(year = year)
+  
+  
+  if (year == 2016) {
+    app <- FALSE
+  } else {
+    app <- TRUE
+  }
+  col <- !app
+  fn <- paste0(calculationDir, "/E_share_prelim.csv")
+  write.table(E_share_prelim, fn, append=app, sep=",", col.names=col, row.names=F)
+}
 
 # downscaleIAMemissions_pos_nonCO2 ----------------------------------------
 downscaleIAMemissions_pos_nonCO2 <- function( wide_df, con_year_mapping ) { 
