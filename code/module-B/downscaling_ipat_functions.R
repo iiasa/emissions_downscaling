@@ -72,9 +72,6 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping) {
       # rescale preliminary downscaled emissions so that they sum to IAM regional emissions
       par_df_ssp <- equation7(par_df_ssp)
       
-      # calculate EICPY & fill in post-peak EI_gr_C if year == peak_year (new growth rate used in next time step)
-      par_df_ssp <- update_EI_gr_C(par_df_ssp, year)
-      
       if (debug) {
         
         # output calculation parameters data.frame
@@ -91,6 +88,9 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping) {
         # append timeseries of Emissions-Shares before scaling
         # save_E_share(par_df_ssp, year, calculationDir)
       }
+      
+      # calculate EICPY & fill in post-peak EI_gr_C if year == peak_year (new growth rate used in next time step)
+      par_df_ssp <- update_EI_gr_C(par_df_ssp, year)
       
       # drop final emissions result into results df
       df <- par_df_ssp %>% 
