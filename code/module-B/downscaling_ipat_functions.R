@@ -72,6 +72,9 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping) {
       # rescale preliminary downscaled emissions so that they sum to IAM regional emissions
       par_df_ssp <- equation7(par_df_ssp)
       
+      # calculate EICPY & fill in post-peak EI_gr_C if year == peak_year (new growth rate used in next time step)
+      par_df_ssp <- update_EI_gr_C(par_df_ssp, year)
+      
       if (debug) {
         
         # output calculation parameters data.frame
@@ -88,9 +91,6 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping) {
         # append timeseries of Emissions-Shares before scaling
         # save_E_share(par_df_ssp, year, calculationDir)
       }
-      
-      # calculate EICPY & fill in post-peak EI_gr_C if year == peak_year (new growth rate used in next time step)
-      par_df_ssp <- update_EI_gr_C(par_df_ssp, year, base_year)
       
       # drop final emissions result into results df
       df <- par_df_ssp %>% 
@@ -240,12 +240,13 @@ equation1 <- function(wide_df, con_year_mapping, par_df) {
       # EIRPY: regional (IAM) EI in peak year (used only in case 3)
       EIRPY = ifelse(case==3, 
                      reg_iam_em_Xpeak_year / reg_gdp_Xpeak_year, 
-                     NA))
-  # excluded is EICPY: country (downscaled) EI in peak_year (used only in case 3)
-  # this is calculated using the downscaled emissions intensity when year == peak_year + 1
-  # update_EI_gr_C checks if this is true and calculates EICPY and the post-peak growth rate
-  # when it is. 
-  
+                     NA),
+      
+      # EICPY: country (downscaled) EI in peak_year (used only in case 3)
+      # this is calculated using the downscaled emissions intensity when year == peak_year
+      # update_EI_gr_C checks if this is true and calculates EICPY and the post-peak growth rate
+      # when it is. 
+      EICPY = NA)
 }
 
 # replace zero-valued emissions intensity in BY with 1/3 regional minimum
@@ -360,12 +361,7 @@ equation2 <- function(par_df_ssp) {
 }
 
 # calculate EICPY & fill in post-peak EI_gr_C if year == peak_year (new growth rate used in next time step)
-update_EI_gr_C <- function(par_df_ssp, year, base_year) {
-  
-  # initialize EICPY in BY+1 (first calculation step)
-  if (year == base_year + 1) {
-    par_df_ssp$EICPY <- NA
-  }
+update_EI_gr_C <- function(par_df_ssp, year) {
   
   # countries that peak in emission use two growth rates
   # EI_gr_C_am (pre-peak), calculated from EICBY (CEDS) & EIRPY (IAM) in equation2()
@@ -395,21 +391,12 @@ update_EI_gr_C <- function(par_df_ssp, year, base_year) {
           # TRUE: we can use final downscaled E to calculate post-peak growth rate (used next time step)
           E_final / ctry_gdp_X_year,
           
-          # FALSE
-          ifelse(
-            
-            # logical test
-            year > peak_year,
-            
-            # TRUE: EICPY was ID'd in prev timestep, so leave as is
-            EICPY,
-            
-            # FALSE: EICPY will be ID'd in later timestep, so fill in NA for now
-            NA
-          )),
+          # FALSE: not right time step, so leave as is (initialized as NA)
+          EICPY
+        ),
         
-        # FALSE: emissions do not peak therefore we fill EICPY as NA
-        NA
+        # FALSE: emissions do not peak, so leave as is (initialized as NA)
+        EICPY
       ),
       
       # EI_gr_C = f(EICPY, EIRCY) if case 3 & year == peak_year
