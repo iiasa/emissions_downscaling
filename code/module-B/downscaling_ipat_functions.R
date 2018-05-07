@@ -492,35 +492,14 @@ equation3 <- function(wide_df_ssp, res_df_ssp, par_df_ssp, year) {
     mutate(EI_star = ifelse(
       
       # logical test
-      case %in% c(1,2),
+      reg_iam_em_Xcon_year > 0,
+                            
+      # TRUE : positive CY emissions
+      EI_prev * EI_gr_C, 
       
-      # TRUE
-      # emissions don't peak, so we use EI_gr_C
-      ifelse(reg_iam_em_Xcon_year > 0,
-                            EI_prev * EI_gr_C, 
-                            EI_prev + abs(EI_prev) * EI_gr_C),
-      
-      # FALSE
-      # emissions peak, so we use either EI_gr_C_am or EI_gr_C_pm
-      ifelse( 
-        
-        # logical test
-        year <= peak_year,
-        
-        # TRUE
-        # emissions haven't peaked yet, so we use EI_gr_C_am
-        ifelse(reg_iam_em_Xcon_year > 0,
-               EI_prev * EI_gr_C_am, 
-               EI_prev + abs(EI_prev) * EI_gr_C_am),
-        
-        # FALSE
-        # emissions have peaked, so we use EI_gr_C_pm
-        ifelse(reg_iam_em_Xcon_year > 0,
-               EI_prev * EI_gr_C_pm, 
-               EI_prev + abs(EI_prev) * EI_gr_C_pm)
-        )
+      # FALSE : zero or negative CY emissions
+      EI_prev + abs(EI_prev) * EI_gr_C) 
       )
-    )
 }
 
 # zero in BY rows Emissions Intensity bounded by min(abs(EI_star)) in region
