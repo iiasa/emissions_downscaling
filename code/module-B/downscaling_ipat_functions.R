@@ -385,16 +385,16 @@ update_EI_gr_C <- function(par_df_ssp, year) {
         ifelse(
           
           # logical test
-          year == peak_year + 1,
+          year == peak_year,
           
-          # TRUE: it's currently 1 year after peak_year, so EICPY = EI_prev
-          EI_prev,
+          # TRUE: we can use final downscaled E to calculate post-peak growth rate (used next time step)
+          E_final / ctry_gdp_X_year,
           
-          # FALSE: EI_prev != EICPY
+          # FALSE
           ifelse(
             
             # logical test
-            year > peak_year + 1,
+            year > peak_year,
             
             # TRUE: EICPY was ID'd in prev timestep, so leave as is
             EICPY,
@@ -407,10 +407,10 @@ update_EI_gr_C <- function(par_df_ssp, year) {
         NA
       ),
       
-      # EI_gr_C = f(EICPY, EIRCY) if case 3 & year == peak_year + 1
+      # EI_gr_C = f(EICPY, EIRCY) if case 3 & year == peak_year
       
-      # calculate EI_gr_C_pm if case 3 & year == peak_year + 1
-      EI_gr_C_pm = ifelse(
+      # calculate EI_gr_C if case 3 & year == peak_year 
+      EI_gr_C = ifelse(
         
         # logical test
         case==3,
@@ -419,9 +419,9 @@ update_EI_gr_C <- function(par_df_ssp, year) {
         ifelse(
           
           # logical test
-          year == peak_year + 1,
+          year == peak_year,
           
-          #TRUE: it is 1 year after peak_year, so we calculate EI_gr_C_pm using EICPY (above)
+          #TRUE: calculate EI_gr_C_pm using EICPY (above)
           ifelse(reg_iam_em_Xcon_year > 0,
                  
                  # eq 2 for positive CY emissions
@@ -431,8 +431,8 @@ update_EI_gr_C <- function(par_df_ssp, year) {
           ),
           
           # FALSE: leave EI_gr_C alone b/c either
-          # (a) emissions haven't peaked yet (year <= peak_year)
-          # (b) post-peak growth rate has already been calculated (year > peak_year + 1)
+          # (a) emissions haven't peaked yet (year < peak_year)
+          # (b) post-peak growth rate has already been calculated (year > peak_year)
           EI_gr_C
         ),
         
