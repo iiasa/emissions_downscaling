@@ -340,56 +340,21 @@ equation2 <- function(par_df_ssp) {
         ),
         
         # FALSE
-        # must calculate EI_gr_C_am & EI_gr_C_pm
-        NA
-        
-      ), # end EI_gr_C ifelse()
-      
-      EI_gr_C_am = ifelse(
-        
-        # logical test
-        case == 3,
-        
-        # TRUE
-        # use EICBY & EIRPY to calculate EI_gr_C_am
+        # use EICBY & EIRPY to calculate EI_gr_C (pre-peak growth rate)
         ifelse(reg_iam_em_Xcon_year > 0,
                
                # eq 2 for positive CY emissions
                ( EIRPY / EICBY ) ^ ( 1 / ( peak_year + dist - base_year ) ),
                # eq 2a for negative CY emissions
                ( ( EIRPY - EICBY ) / EICBY ) / ( peak_year + dist - base_year ) 
-        ),
+        )
         
-        # FALSE
-        # case 1 or 2, therefore only EI_gr_C is necessary
-        NA
-        
-      ), # end EI_gr_C_am ifelse()
-      
-      EI_gr_C_pm = ifelse(
-        
-        # logical test
-        case == 3,
-        
-        # TRUE
-        # this function calculates only EI_gr_C & EI_gr_C_am b/c we don't have 
-        # EICPY to calculate EI_gr_C_pm until year == peak_year + 1
-        NA,
-        
-        # FALSE
-        # case 1 or 2, therefore only EI_gr_C is necessary
-        NA
-        
-      ), # end EI_gr_C_pm ifelse()
+      ), # end EI_gr_C ifelse()
       
 
      # clean NA or Inf values
      EI_gr_C = ifelse( is.na( EI_gr_C ), 0, EI_gr_C ),
-     EI_gr_C = ifelse( is.infinite( EI_gr_C ), 0, EI_gr_C ),
-     EI_gr_C_am = ifelse( is.na( EI_gr_C_am ), 0, EI_gr_C_am ),
-     EI_gr_C_am = ifelse( is.infinite( EI_gr_C_am ), 0, EI_gr_C_am ),
-     EI_gr_C_pm = ifelse( is.na( EI_gr_C_pm ), 0, EI_gr_C_pm ),
-     EI_gr_C_pm = ifelse( is.infinite( EI_gr_C_pm ), 0, EI_gr_C_pm )
+     EI_gr_C = ifelse( is.infinite( EI_gr_C ), 0, EI_gr_C )
      
      ) # end mutate
 }
