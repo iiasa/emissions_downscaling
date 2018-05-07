@@ -54,6 +54,9 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping) {
     # calculation of each year's downscaled country emissions
     for ( year in seq(base_year+1, ds_end_year) ) {
       
+      # update growth rates if year == peak_year + 1
+      par_df_ssp <- update_EI_gr_C(par_df_ssp, year)
+      
       # calculate next year's prelminary emissions intensity 
       par_df_ssp <- equation3(wide_df_ssp, res_df_ssp, par_df_ssp, year) 
       
@@ -391,56 +394,14 @@ equation2 <- function(par_df_ssp) {
      ) # end mutate
 }
 
-# calculate next year's preliminary emissions intensity using one of {EI_gr_C, EI_gr_C_am, EI_gr_C_pm}
-equation3 <- function(wide_df_ssp, res_df_ssp, par_df_ssp, year) {
-
-  # identify/calculate last year's EI and drop into par_df_ssp
-  
-  if (year == as.numeric(base_year) + 1) {
-    # either use adjusted EICBY values when calculating first time step...
-    par_df_ssp <- par_df_ssp %>% 
-      mutate(EI_prev = EICBY,
-             ctry_ref_em_prev = "",
-             ctry_gdp_prev = "")
-    
-  } else { 
-    # or dynamically calculate last years EI-value from last year's GDP & downscaled emissions
-    
-    # last year's downscaled emissions (res_df)
-    ctry_ref_em_X_year_less1 <- paste0( 'ctry_ref_em_X', ( year - 1 ) ) 
-    ctry_ref_em_prev <- res_df_ssp %>% 
-      select(region, iso, ssp_label, em, sector, model, scenario, unit,
-             ctry_ref_em_X_year_less1) 
-    names(ctry_ref_em_prev) <- c(names(ctry_ref_em_prev)[1:8], "ctry_ref_em_prev")
-    
-    # last year's gdp (wide_df)
-    ctry_gdp_X_year_less1 <- paste0( 'ctry_gdp_X', ( year - 1 ) )
-    ctry_gdp_prev <- wide_df_ssp %>% 
-      select(region, iso, ssp_label, em, sector, model, scenario, unit,
-             ctry_gdp_X_year_less1)
-    names(ctry_gdp_prev) <- c(names(ctry_gdp_prev)[1:8], "ctry_gdp_prev")
-    
-    # in order to drop *new* previous year's E & GDP into par_df, we have to drop
-    # the *old* previous year's E  & GDP already inside par_df
-    if ( any( c("ctry_ref_em_prev", "ctry_gdp_prev") %in% names(par_df_ssp) ) ) {
-      par_df_ssp <- par_df_ssp %>% 
-        select(-matches("prev"))
-    }      
-    
-    # EI_prev = E_prev / GDP_prev
-    par_df_ssp <- par_df_ssp %>%
-      left_join(ctry_ref_em_prev, by = c("region", "iso", "ssp_label", "em", "sector", "model", "scenario", "unit")) %>% 
-      left_join(ctry_gdp_prev, by = c("region", "iso", "ssp_label", "em", "sector", "model", "scenario", "unit")) %>% 
-      mutate( EI_prev = ctry_ref_em_prev / ctry_gdp_prev )
-  }
-  
-  # countries that peak in emission use two growth rates
-  # EI_gr_C_am (pre-peak), calculated from EICBY (CEDS) & EIRPY (IAM) in equation2()
-  # EI_gr_C_pm (post-peak), calculated from EICPY (downscaling) & EIRCY (IAM)
-  # because EICPY is the output of the present downscaling, we don't know EICPY until year == peak_year + 1
-  # when year == peak_year + 1, we must do two things
-  # (1) identify EICPY = EI_prev
-  # (2) calculate EI_gr_C_pm
+# countries that peak in emission use two growth rates
+# EI_gr_C_am (pre-peak), calculated from EICBY (CEDS) & EIRPY (IAM) in equation2()
+# EI_gr_C_pm (post-peak), calculated from EICPY (downscaling) & EIRCY (IAM)
+# because EICPY is the output of the present downscaling, we don't know EICPY until year == peak_year + 1
+# when year == peak_year + 1, we must do two things
+# (1) identify EICPY = EI_prev
+# (2) calculate EI_gr_C_pm
+update_EI_gr_C <- function(par_df_ssp, year) {
 
   par_df_ssp <- par_df_ssp %>% 
     mutate(
@@ -500,6 +461,50 @@ equation3 <- function(wide_df_ssp, res_df_ssp, par_df_ssp, year) {
         EI_gr_C_pm
       )
     )
+}
+
+# calculate next year's preliminary emissions intensity using one of {EI_gr_C, EI_gr_C_am, EI_gr_C_pm}
+equation3 <- function(wide_df_ssp, res_df_ssp, par_df_ssp, year) {
+
+  # identify/calculate last year's EI and drop into par_df_ssp
+  
+  if (year == as.numeric(base_year) + 1) {
+    # either use adjusted EICBY values when calculating first time step...
+    par_df_ssp <- par_df_ssp %>% 
+      mutate(EI_prev = EICBY,
+             ctry_ref_em_prev = "",
+             ctry_gdp_prev = "")
+    
+  } else { 
+    # or dynamically calculate last years EI-value from last year's GDP & downscaled emissions
+    
+    # last year's downscaled emissions (res_df)
+    ctry_ref_em_X_year_less1 <- paste0( 'ctry_ref_em_X', ( year - 1 ) ) 
+    ctry_ref_em_prev <- res_df_ssp %>% 
+      select(region, iso, ssp_label, em, sector, model, scenario, unit,
+             ctry_ref_em_X_year_less1) 
+    names(ctry_ref_em_prev) <- c(names(ctry_ref_em_prev)[1:8], "ctry_ref_em_prev")
+    
+    # last year's gdp (wide_df)
+    ctry_gdp_X_year_less1 <- paste0( 'ctry_gdp_X', ( year - 1 ) )
+    ctry_gdp_prev <- wide_df_ssp %>% 
+      select(region, iso, ssp_label, em, sector, model, scenario, unit,
+             ctry_gdp_X_year_less1)
+    names(ctry_gdp_prev) <- c(names(ctry_gdp_prev)[1:8], "ctry_gdp_prev")
+    
+    # in order to drop *new* previous year's E & GDP into par_df, we have to drop
+    # the *old* previous year's E  & GDP already inside par_df
+    if ( any( c("ctry_ref_em_prev", "ctry_gdp_prev") %in% names(par_df_ssp) ) ) {
+      par_df_ssp <- par_df_ssp %>% 
+        select(-matches("prev"))
+    }      
+    
+    # EI_prev = E_prev / GDP_prev
+    par_df_ssp <- par_df_ssp %>%
+      left_join(ctry_ref_em_prev, by = c("region", "iso", "ssp_label", "em", "sector", "model", "scenario", "unit")) %>% 
+      left_join(ctry_gdp_prev, by = c("region", "iso", "ssp_label", "em", "sector", "model", "scenario", "unit")) %>% 
+      mutate( EI_prev = ctry_ref_em_prev / ctry_gdp_prev )
+  }
   
   # calculate next year's preliminary emissions intensity
   # formula depends on regional IAM emissions in CY 
