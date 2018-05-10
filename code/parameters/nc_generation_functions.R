@@ -165,7 +165,7 @@ generate_bulk_grids_nc <- function( allyear_grids_list,
   MD_source_id_value <- paste0( iam, '-', scenario) 
   FN_source_id_value <- MD_source_id_value
   FN_variable_id_value <- paste0( FN_em, '-em-anthro' )
-  nc_file_name <- paste0( FN_variable_id_value, '_input4MIPs_emissions_CMIP_', FN_version_tag, '_gn_201501-210012.nc' )
+  nc_file_name <- paste0( FN_variable_id_value, '_input4MIPs_emissions_CMIP_', MD_source_id_value, '_gn_201501-210012.nc' )
   nc_file_name_w_path <- paste0( output_dir, '/', nc_file_name ) 
   
   # generate flat_var variable name 
@@ -450,7 +450,7 @@ generate_openburning_grids_nc <- function( allyear_grids_list,
   MD_source_id_value <- paste0( iam, '-', scenario) 
   FN_source_id_value <- MD_source_id_value
   FN_variable_id_value <- paste0( FN_em, '-em-openburning' )
-  nc_file_name <- paste0( FN_variable_id_value, '_input4MIPs_emissions_CMIP_', FN_version_tag, '_gn_201501-210012.nc' )
+  nc_file_name <- paste0( FN_variable_id_value, '_input4MIPs_emissions_CMIP_', MD_source_id_value, '_gn_201501-210012.nc' )
   nc_file_name_w_path <- paste0( output_dir, '/', nc_file_name ) 
   
   # generate flat_var variable name 
@@ -704,7 +704,7 @@ generate_air_grids_nc <- function( allyear_grids_list,
   MD_source_id_value <- paste0( iam, '-', scenario) 
   FN_source_id_value <- MD_source_id_value
   FN_variable_id_value <- paste0( FN_em, '-em-aircraft-anthro' )
-  nc_file_name <- paste0( FN_variable_id_value, '_input4MIPs_emissions_CMIP_', FN_version_tag, '_gn_201501-210012.nc' )
+  nc_file_name <- paste0( FN_variable_id_value, '_input4MIPs_emissions_CMIP_', MD_source_id_value, '_gn_201501-210012.nc' )
   nc_file_name_w_path <- paste0( output_dir, '/', nc_file_name ) 
   
   # generate flat_var variable name 
