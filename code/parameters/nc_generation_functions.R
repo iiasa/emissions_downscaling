@@ -282,13 +282,13 @@ generate_bulk_grids_nc <- function( allyear_grids_list,
   for ( em in unique( diagnostic_cells$em ) ) { 
     for ( loc in unique( diagnostic_cells$loc ) ) { 
       plot_df <- diagnostic_cells[ diagnostic_cells$loc == loc & diagnostic_cells$em == em, ]
-      plot_df$time_line <- 1 : nrow( plot_df )
-      plot_df$time_label <- paste0( plot_df$year, sprintf( '%02d', plot_df$month ) )
+      plot_df$date <-paste0(plot_df$year, "-", sprintf( '%02d', plot_df$month ))
+      plot_df$date <-  lubridate::ymd(plot_df$date, truncated=2)
       plot <- ggplot( plot_df ) + 
-        geom_line( aes( x = time_line, y = value ) ) + 
+        geom_line( aes( x = date, y = value ) ) + 
         ylab( paste0( em, ' Mt' ) ) + 
         xlab( '' ) + 
-        scale_x_continuous( breaks = seq( 1, nrow( plot_df ), 10 ), labels = plot_df$time_label[ seq( 1, nrow( plot_df ), 10 ) ] ) +
+        scale_x_date(date_breaks = "10 years", labels=scales::date_format("%Y-%m"), date_minor_breaks = "6 months") +
         ggtitle( paste0( gsub( '_cells', '', out_name ), '\n', loc ) )
       ggsave( filePath( "DIAG_OUT", paste0( out_name, '_', em, '_', loc ), extension = ".jpeg" ), units = 'in', width = 13, height = 5 )
       } 

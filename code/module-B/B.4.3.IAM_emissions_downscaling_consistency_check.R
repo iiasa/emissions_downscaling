@@ -157,10 +157,11 @@ if (nrow(ds_lin.mismatch[[1]]) != 0) {
     for (s in unique(df$scenario)) {
       
       # m can't contain any /
-      m <- gsub("/", "-", m)
+      m.file <- gsub("/", "-", m)
       
       # open error log, name according to (m, s)
-      fn <- paste0("../code/error/ERROR-Linear ", m, ", ", s, ".txt")
+      fn <- paste0("../code/error/ERROR-Linear ", m.file, ", ", s, ".txt")
+
       zz <- file(fn, open="wt")
       sink(zz) # divert session output to error log
       
@@ -204,10 +205,11 @@ if (nrow(ds_ipat.mismatch[[1]]) != 0) {
     for (s in unique(df$scenario)) {
       
       # m can't contain any /
-      m <- gsub("/", "-", m)
+      m.file <- gsub("/", "-", m)
       
       # open error log, name according to (m, s)
-      fn <- paste0("../code/error/ERROR-IPAT ", m, ", ", s, ".txt")
+      fn <- paste0("../code/error/ERROR-IPAT ", m.file, ", ", s, ".txt")
+
       zz <- file(fn, open="wt")
       sink(zz) # divert session output to error log
       print("IPAT downscaling error")
