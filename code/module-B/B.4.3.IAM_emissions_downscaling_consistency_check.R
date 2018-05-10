@@ -57,6 +57,12 @@ ds_lin_out <- readData( domain = 'MED_OUT', file_name = paste0( 'B.', iam, '_emi
 ds_ipat_in <- readData( domain = 'MED_OUT', file_name = paste0( 'B.', iam, '_emissions_ipat', '_', RUNSUFFIX ))
 ds_ipat_out <- readData( domain = 'MED_OUT', file_name = paste0( 'B.', iam, '_emissions_downscaled_ipat', '_', RUNSUFFIX ) )
 
+# digits of precision in sum comparison
+d <- 5
+
+# tolerance for error
+t <- 0.05/100 # 0.05%
+
 # -----------------------------------------------------------------------------
 # 3. Aggregate IAM Emissions and Linear-Downscaling Emissions
 # 
@@ -72,24 +78,25 @@ ds_ipat_out <- readData( domain = 'MED_OUT', file_name = paste0( 'B.', iam, '_em
 # and value. 
 
 ds_lin_in.agg <- ds_lin_in %>% 
-  rename_all(funs(gsub("reg_iam_em_", "", .))) %>% 
+  rename_all(funs(gsub("reg_iam_em_X", "", .))) %>% 
   select(-harm_status) %>% 
-  gather(x_year, value, -model, -scenario, -region, -em, -sector, -unit, -iso) %>% 
-  select(model, scenario, region, em, sector, unit, x_year, value) %>% 
+  gather(year, value, -model, -scenario, -region, -em, -sector, -unit, -iso) %>% 
+  select(model, scenario, region, em, sector, unit, year, value) %>% 
   distinct() %>% 
-  group_by(model, scenario, region, em, sector, unit, x_year) %>% 
+  group_by(model, scenario, region, em, sector, unit, year) %>% 
   summarise(value=sum(value)) %>%
   ungroup() %>% 
-  mutate(value = round(value, digits = 5)) # in order to compare two df's, must round to same precision
+  mutate(value = round(value, digits = d)) # in order to compare two df's, must round to same precision
 
 
-ds_lin_out.agg <- ds_lin_out %>% 
+ds_lin_out.agg <- ds_lin_out %>%   
+  rename_all(funs(gsub("X", "", .))) %>% 
   select(-harm_status) %>% 
-  gather(x_year, value, -model, -scenario, -region, -em, -sector,-unit, -iso) %>% 
-  group_by(model, scenario, region, em, sector, unit, x_year) %>% 
+  gather(year, value, -model, -scenario, -region, -em, -sector,-unit, -iso) %>% 
+  group_by(model, scenario, region, em, sector, unit, year) %>% 
   summarise(value=sum(value)) %>%
   ungroup() %>% 
-  mutate(value = round(value, digits = 5)) # in order to compare two df's, must round to same precision
+  mutate(value = round(value, digits = d)) # in order to compare two df's, must round to same precision
 
 # -----------------------------------------------------------------------------
 # 3. Aggregate IAM Emissions and IPAT-Downscaling Emissions
@@ -106,23 +113,24 @@ ds_lin_out.agg <- ds_lin_out %>%
 # and value. 
 
 ds_ipat_in.agg <- ds_ipat_in %>% 
-  rename_all(funs(gsub("reg_iam_em_", "", .))) %>% 
+  rename_all(funs(gsub("reg_iam_em_X", "", .))) %>% 
   select(-harm_status) %>% # not used in ds_ipat_out so dropping from input
-  select(-Xcon_year) %>% # not a year included in output 
-  gather(x_year, value, -model, -scenario, -region, -em, -sector, -unit, -iso) %>% 
-  select(model, scenario, region, em, sector, unit, x_year, value) %>% 
+  select(-con_year) %>% # not a year included in output 
+  gather(year, value, -model, -scenario, -region, -em, -sector, -unit, -iso) %>% 
+  select(model, scenario, region, em, sector, unit, year, value) %>% 
   distinct() %>% 
-  group_by(model, scenario, region, em, sector, unit, x_year) %>% 
+  group_by(model, scenario, region, em, sector, unit, year) %>% 
   summarise(value=sum(value)) %>% 
   ungroup() %>% 
-  mutate(value = round(value, digits = 5)) # in order to compare two df's, must round to same precision
+  mutate(value = round(value, digits = d)) # in order to compare two df's, must round to same precision
 
 ds_ipat_out.agg <- ds_ipat_out %>% 
-  gather(x_year, value, -model, -scenario, -region, -em, -sector,-unit, -iso) %>% 
-  group_by(model, scenario, region, em, sector, unit, x_year) %>% 
+  rename_all(funs(gsub("X", "", .))) %>% 
+  gather(year, value, -model, -scenario, -region, -em, -sector,-unit, -iso) %>% 
+  group_by(model, scenario, region, em, sector, unit, year) %>% 
   summarise(value=sum(value)) %>% # aggregate over sectors, 
   ungroup() %>% 
-  mutate(value = round(value, digits = 5)) # in order to compare two df's, must round to same precision
+  mutate(value = round(value, digits = d)) # in order to compare two df's, must round to same precision
 
 #  ------------------------------------------------------------------------
 # 4. Error logging
@@ -131,11 +139,12 @@ ds_ipat_out.agg <- ds_ipat_out %>%
 # normal log contains reference to error log
 # Write in error/ directory a diagnostic file that contains the two sets of mismatched rows side-by-side
 
-errorLogging <- function(in.agg, out.agg, method) {
+
+errorLogging <- function(in.agg, out.agg, method, t) {
   
   # same number of rows/cols, different values
-  in.mis <- anti_join(in.agg, out.agg, by = c("model", "scenario", "region", "em", "sector", "unit", "x_year", "value"))
-  out.mis <- anti_join(out.agg, in.agg, by = c("model", "scenario", "region", "em", "sector", "unit", "x_year", "value"))
+  in.mis <- anti_join(in.agg, out.agg, by = c("model", "scenario", "region", "em", "sector", "unit", "year", "value"))
+  out.mis <- anti_join(out.agg, in.agg, by = c("model", "scenario", "region", "em", "sector", "unit", "year", "value"))
   
   # check if any rows in mismatched values df
   if(nrow(in.mis) != 0) {
@@ -159,11 +168,11 @@ errorLogging <- function(in.agg, out.agg, method) {
           select(-value, -unit) %>% # drop columns that don't need to be reported
           filter(model == model.name & scenario == scen) %>% # filter to distinct model & scenario
           group_by(model, scenario, region, em, sector, ) %>% # for each region-em-sector in (m,s), 
-          summarise(x_years = paste0(x_year, collapse=", ")) %>% # print years that have mismatched values
+          summarise(years = paste0(year, collapse=", ")) %>% # print years that have mismatched values
           ungroup()
         
         # for each mismatched row, print the following keys:
-        # model, scenario, region, em, harm_status, x_year 
+        # model, scenario, region, em, harm_status, year 
         print("Rows with mismatched values:")
         for (i in 1:nrow(df2)) {
           paste0(df2[i,], collapse=", ") %>% 
@@ -188,15 +197,29 @@ errorLogging <- function(in.agg, out.agg, method) {
     
     # place input/output data columns next to each other for each year of mismatched values
     mis <- full_join(in.mis, out.mis,
-                     by=c("model", "scenario", "region", "em", "sector", "unit", "x_year")) %>% 
-      mutate(difference = output - input)
+                     by=c("model", "scenario", "region", "em", "sector", "unit", "year")) %>% 
+      mutate(difference = output - input,
+             percentDifference = difference / input) %>% 
+      filter(percentDifference > t) %>% 
+      filter( year %in% seq(2015, 2100, by=5))  # only keep model years (every 5)
+    # mismatch due to downscaling
+    mis.ds <- mis %>% 
+      filter(year != 2015) # drop base year values
+    
+    # mismatch due to harmonization (only base year values)
+    mis.harm <- mis %>% 
+      filter(year == 2015)
+    
     
     # construct diagnostic file name
     iam <- unique(mis$model)
-    out_filename <- paste0( iam, '_emissions_downscaled_', method, '_inconsistent' )
+    out_filename.ds <- paste0( iam, '_emissions_downscaled_', method, '_inconsistent' )
+    out_filename.harm <- paste0( iam, '_emissions_downscaled_', method, '_inconsistent_harmonization' )
     
     # save diagnostic file
-    writeData( mis, 'ERR', out_filename, meta = F ) 
+    writeData( mis.ds, 'ERR', out_filename.ds, meta = F ) 
+    writeData( mis.harm, 'ERR', out_filename.harm, meta = F ) 
+    
     
   } else {
     printLog(paste0(method, " downscaling: all output rows match input"))
@@ -204,10 +227,10 @@ errorLogging <- function(in.agg, out.agg, method) {
 }
 
 # Linear Downscaling
-errorLogging(ds_lin_in.agg, ds_lin_out.agg, "Linear")
+errorLogging(ds_lin_in.agg, ds_lin_out.agg, "Linear", t)
 
 #IPAT Downscaling
-errorLogging(ds_ipat_in.agg, ds_ipat_out.agg, "IPAT")
+errorLogging(ds_ipat_in.agg, ds_ipat_out.agg, "IPAT", t)
 
 # END
 logStop()
