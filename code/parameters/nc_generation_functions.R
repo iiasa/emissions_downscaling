@@ -23,6 +23,7 @@ loadPackage( 'geosphere' )
 # return: null 
 # input files: null
 # output: 
+
 generate_bulk_grids_nc <- function( allyear_grids_list, 
                                     output_dir, 
                                     grid_resolution, 
@@ -75,13 +76,13 @@ generate_bulk_grids_nc <- function( allyear_grids_list,
                                 unit = 'Mt',
                                 value = conv_mat[ diagnostic_cells$row[ i ], diagnostic_cells$col[ i ] ],
                                 stringsAsFactors = F )
-          } )
+        } )
         cell_value_df <- do.call( 'rbind', cell_value_list )
         cell_value_df <- cbind( diagnostic_cells, cell_value_df )
         
         return( list( conv_mat_sum, cell_value_df ) ) 
       } )
-
+      
       temp_array_checksum <- unlist( lapply( checksum_diag_list, '[[', 1 ) )
       temp_checksum_storage <- c( temp_checksum_storage, temp_array_checksum )
       
@@ -98,7 +99,7 @@ generate_bulk_grids_nc <- function( allyear_grids_list,
                                     stringsAsFactors = F )
     
     return( list( current_year_sector_array, temp_checksum_df, temp_cell_value_storage ) )
-    } )
+  } )
   checksum_df_list <- lapply( year_data_list, '[[', 2 )
   diagnostic_cells_list <- lapply( year_data_list, '[[', 3 )
   year_data_list <- lapply( year_data_list, '[[', 1 )
@@ -122,11 +123,11 @@ generate_bulk_grids_nc <- function( allyear_grids_list,
   for ( year  in year_list ) { 
     base_days <- ( year - 2015 ) * 365 
     time_data <- c( time_data, month_middle_days + base_days )
-    }
+  }
   
   # (5) time dimension bounds data 
   month_bnds_days <- cbind( c( 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334 ),
-                           c( 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365 ) )
+                            c( 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365 ) )
   time_bnds_data <- matrix( ncol = 2 )
   for ( year  in year_list ) { 
     base_days <- ( year - 2015 ) * 365 
@@ -138,7 +139,7 @@ generate_bulk_grids_nc <- function( allyear_grids_list,
   sectors <- 0 : ( length( bulk_sectors ) - 1 )
   sector_bnds_data <- cbind( seq( -0.5, 6.5, 1 ),
                              seq( 0.5, 7.5, 1 ) )
-
+  
   # (7) upper lower bnds data 
   bnds <- 1 : 2
   
@@ -153,7 +154,7 @@ generate_bulk_grids_nc <- function( allyear_grids_list,
   dim_list <- list( londim, latdim, sectordim, timedim )
   
   bndsdim <- ncdim_def( 'bound', '', as.integer( bnds ), longname = 'bound', create_dimvar = F )
-		  
+  
   # ---
   # 3. generate nc file name and some variables
   if (em == 'Sulfur') {FN_em <- 'SO2'} else {FN_em <- em}
@@ -161,9 +162,9 @@ generate_bulk_grids_nc <- function( allyear_grids_list,
   FN_version_tag <- paste0( 'IAMC', '-', dataset_version_number )  
   MD_dataset_version_number_value <- dataset_version_number 
   MD_source_value <- 'IAMC Scenario Database hosted at IIASA'
-  MD_source_id_value <- FN_version_tag
+  MD_source_id_value <- paste0( iam, '-', scenario) 
   FN_source_id_value <- MD_source_id_value
-  FN_variable_id_value <- paste0( iam, '-', scenario, '-', harm_status, '-', FN_em, '-em-anthro' )
+  FN_variable_id_value <- paste0( FN_em, '-em-anthro' )
   nc_file_name <- paste0( FN_variable_id_value, '_input4MIPs_emissions_CMIP_', FN_version_tag, '_gn_201501-210012.nc' )
   nc_file_name_w_path <- paste0( output_dir, '/', nc_file_name ) 
   
@@ -226,7 +227,7 @@ generate_bulk_grids_nc <- function( allyear_grids_list,
   # nc global attributes
   ncatt_put( nc_new, 0, 'Conventions', 'CF-1.6' )
   ncatt_put( nc_new, 0, 'activity_id', 'input4MIPs' )  
-  ncatt_put( nc_new, 0, 'comment', 'Test and evaluation data release for SSP harmonized, gridded emissions. Data harmonized to historical emissions CEDS-v2017-05-18 (anthropogenic) and v1.2 (land-use change)' )
+  ncatt_put( nc_new, 0, 'comment', 'SSP harmonized, gridded emissions. Data harmonized to historical emissions CEDS-v2017-05-18 (anthropogenic) and v1.2 (land-use change)' )
   ncatt_put( nc_new, 0, 'contact', 'Steven J. Smith (ssmith@pnnl.gov)' )
   ncatt_put( nc_new, 0, 'creation_date', as.character( format( as.POSIXlt( Sys.time(), "UTC"), format = '%Y-%m-%dT%H:%M:%SZ' ) ) )
   ncatt_put( nc_new, 0, 'data_structure', 'grid' )
@@ -240,7 +241,7 @@ generate_bulk_grids_nc <- function( allyear_grids_list,
   ncatt_put( nc_new, 0, 'nominal_resolution', '50 km' )
   ncatt_put( nc_new, 0, 'history', paste0( as.character( format( as.POSIXlt( Sys.time(), "UTC"), format = '%d-%m-%Y %H:%M:%S %p %Z' ) ), '; College Park, MD, USA') )
   ncatt_put( nc_new, 0, 'institution', 'Gridded data generated at IIASA using codes developed at JGCRI' )
-  ncatt_put( nc_new, 0, 'institution_id', 'IIASA' )
+  ncatt_put( nc_new, 0, 'institution_id', 'IAMC' )
   ncatt_put( nc_new, 0, 'mip_era', 'CMIP6' )
   ncatt_put( nc_new, 0, 'product', 'primary-emissions-data' )  
   ncatt_put( nc_new, 0, 'realm', 'atmos' )
@@ -291,10 +292,11 @@ generate_bulk_grids_nc <- function( allyear_grids_list,
         scale_x_date(date_breaks = "10 years", labels=scales::date_format("%Y-%m"), date_minor_breaks = "6 months") +
         ggtitle( paste0( gsub( '_cells', '', out_name ), '\n', loc ) )
       ggsave( filePath( "DIAG_OUT", paste0( out_name, '_', em, '_', loc ), extension = ".jpeg" ), units = 'in', width = 13, height = 5 )
-      } 
-    }
+    } 
+  }
   invisible( gc( ) )
 } 
+
 
 # -------------------------------------------------
 # generate_openburning_grids_nc
@@ -305,6 +307,7 @@ generate_bulk_grids_nc <- function( allyear_grids_list,
 # return: null 
 # input files: null
 # output: 
+
 generate_openburning_grids_nc <- function( allyear_grids_list, 
                                            output_dir, 
                                            grid_resolution, 
@@ -444,9 +447,9 @@ generate_openburning_grids_nc <- function( allyear_grids_list,
   FN_version_tag <- paste0( 'IAMC', '-', dataset_version_number )  
   MD_dataset_version_number_value <- dataset_version_number 
   MD_source_value <- 'IAMC Scenario Database hosted at IIASA'
-  MD_source_id_value <- FN_version_tag
+  MD_source_id_value <- paste0( iam, '-', scenario) 
   FN_source_id_value <- MD_source_id_value
-  FN_variable_id_value <- paste0( iam, '-', scenario, '-', harm_status, '-', FN_em, '-em-openburning' )
+  FN_variable_id_value <- paste0( FN_em, '-em-openburning' )
   nc_file_name <- paste0( FN_variable_id_value, '_input4MIPs_emissions_CMIP_', FN_version_tag, '_gn_201501-210012.nc' )
   nc_file_name_w_path <- paste0( output_dir, '/', nc_file_name ) 
   
@@ -509,7 +512,7 @@ generate_openburning_grids_nc <- function( allyear_grids_list,
   # nc global attributes
   ncatt_put( nc_new, 0, 'Conventions', 'CF-1.6' )
   ncatt_put( nc_new, 0, 'activity_id', 'input4MIPs' )  
-  ncatt_put( nc_new, 0, 'comment', 'Test and evaluation data release for SSP harmonized, gridded emissions. Data harmonized to historical emissions CEDS-v2017-05-18 (anthropogenic) and v1.2 (land-use change)' )
+  ncatt_put( nc_new, 0, 'comment', 'SSP harmonized, gridded emissions. Data harmonized to historical emissions CEDS-v2017-05-18 (anthropogenic) and v1.2 (land-use change)' )
   ncatt_put( nc_new, 0, 'contact', 'Steven J. Smith (ssmith@pnnl.gov)' )
   ncatt_put( nc_new, 0, 'creation_date', as.character( format( as.POSIXlt( Sys.time(), "UTC"), format = '%Y-%m-%dT%H:%M:%SZ' ) ) )
   ncatt_put( nc_new, 0, 'data_structure', 'grid' )
@@ -523,7 +526,7 @@ generate_openburning_grids_nc <- function( allyear_grids_list,
   ncatt_put( nc_new, 0, 'nominal_resolution', '50 km' )
   ncatt_put( nc_new, 0, 'history', paste0( as.character( format( as.POSIXlt( Sys.time(), "UTC"), format = '%d-%m-%Y %H:%M:%S %p %Z' ) ), '; College Park, MD, USA') )
   ncatt_put( nc_new, 0, 'institution', 'Gridded data generated at IIASA using codes developed at JGCRI' )
-  ncatt_put( nc_new, 0, 'institution_id', 'IIASA' )
+  ncatt_put( nc_new, 0, 'institution_id', 'IAMC' )
   ncatt_put( nc_new, 0, 'mip_era', 'CMIP6' )
   ncatt_put( nc_new, 0, 'product', 'primary-emissions-data' )  
   ncatt_put( nc_new, 0, 'realm', 'atmos' )
@@ -580,6 +583,7 @@ generate_openburning_grids_nc <- function( allyear_grids_list,
   invisible( gc( ) )
 } 
 
+
 # -------------------------------------------------
 # generate_air_grids_nc
 # Brief: 
@@ -589,16 +593,18 @@ generate_openburning_grids_nc <- function( allyear_grids_list,
 # return: null 
 # input files: null
 # output: 
+
 generate_air_grids_nc <- function( allyear_grids_list,
                                    output_dir, 
                                    grid_resolution, 
                                    year, 
                                    em ) {
   
+  
   # ---
   # 0. Define some needed variables
   global_grid_area <- grid_area( grid_resolution, all_lon = T )
-
+  
   # ---
   # 1. Prepare data from writing
   # (1) emission array 
@@ -613,8 +619,8 @@ generate_air_grids_nc <- function( allyear_grids_list,
     for ( i in 1 : 25 ) {  # go through each height layer
       for ( j in 1 : 12 ) {  # go through each month 
         current_year_array[ , , i, j ] <- t( flip_a_matrix( current_year_grids[ , , i, j ] ) ) 
-        }
       }
+    }
     
     # checksum calculation 
     current_year_grids_no_height <- apply( current_year_grids, c( 1, 2, 4 ), sum ) 
@@ -635,7 +641,7 @@ generate_air_grids_nc <- function( allyear_grids_list,
     
     return( list( current_year_array, temp_checksum_df ) )
   } )
- 
+  
   checksum_df_list <- lapply( year_data_list, '[[', 2 )
   year_data_list <- lapply( year_data_list, '[[', 1 )
   em_array <- array( unlist( year_data_list ),  dim = c( 360 / grid_resolution, # lat lon flipped to accommodate nc write-in
@@ -672,10 +678,10 @@ generate_air_grids_nc <- function( allyear_grids_list,
     time_bnds_data <- rbind( time_bnds_data, month_bnds_days + base_days )
   }
   time_bnds_data <- time_bnds_data[ 2 : nrow( time_bnds_data ), ]
-
+  
   # (7) upper lower bnds data 
   bnds <- 1 : 2   
- 
+  
   # ---
   # 2. define nc dimensions 
   londim <- ncdim_def( "lon", "degrees_east", as.double( lons ), longname = 'longitude' )
@@ -695,9 +701,9 @@ generate_air_grids_nc <- function( allyear_grids_list,
   FN_version_tag <- paste0( 'IAMC', '-', dataset_version_number )  
   MD_dataset_version_number_value <- dataset_version_number 
   MD_source_value <- 'IAMC Scenario Database hosted at IIASA'
-  MD_source_id_value <- FN_version_tag
+  MD_source_id_value <- paste0( iam, '-', scenario) 
   FN_source_id_value <- MD_source_id_value
-  FN_variable_id_value <- paste0( iam, '-', scenario, '-', harm_status, '-', FN_em, '-em-aircraft-anthro' )
+  FN_variable_id_value <- paste0( FN_em, '-em-aircraft-anthro' )
   nc_file_name <- paste0( FN_variable_id_value, '_input4MIPs_emissions_CMIP_', FN_version_tag, '_gn_201501-210012.nc' )
   nc_file_name_w_path <- paste0( output_dir, '/', nc_file_name ) 
   
@@ -716,7 +722,7 @@ generate_air_grids_nc <- function( allyear_grids_list,
   lon_bnds <- ncvar_def( 'lon_bnds', '', list( bndsdim, londim ), prec = 'double' )
   lat_bnds <- ncvar_def( 'lat_bnds', '', list( bndsdim, latdim ), prec = 'double' )
   time_bnds <- ncvar_def( 'time_bnds', '', list( bndsdim, timedim ), prec = 'double' )
-
+  
   # ---
   # 5. generate the var_list
   variable_list <- list( flat_var, lat_bnds, lon_bnds, time_bnds ) 
@@ -731,7 +737,7 @@ generate_air_grids_nc <- function( allyear_grids_list,
   ncvar_put( nc_new, lon_bnds, t( lon_bnds_data ) )
   ncvar_put( nc_new, lat_bnds, t( lat_bnds_data ) )
   ncvar_put( nc_new, time_bnds, t( time_bnds_data ) )
-
+  
   # ---
   # 8. nc variable attributes
   # attributes for dimensions
@@ -756,7 +762,7 @@ generate_air_grids_nc <- function( allyear_grids_list,
   # nc global attributes
   ncatt_put( nc_new, 0, 'Conventions', 'CF-1.6' )
   ncatt_put( nc_new, 0, 'activity_id', 'input4MIPs' )  
-  ncatt_put( nc_new, 0, 'comment', 'Test and evaluation data release for SSP harmonized, gridded emissions. Data harmonized to historical emissions CEDS-v2017-05-18 (anthropogenic) and v1.2 (land-use change)' )
+  ncatt_put( nc_new, 0, 'comment', 'SSP harmonized, gridded emissions. Data harmonized to historical emissions CEDS-v2017-05-18 (anthropogenic) and v1.2 (land-use change)' )
   ncatt_put( nc_new, 0, 'contact', 'Steven J. Smith (ssmith@pnnl.gov)' )
   ncatt_put( nc_new, 0, 'creation_date', as.character( format( as.POSIXlt( Sys.time(), "UTC"), format = '%Y-%m-%dT%H:%M:%SZ' ) ) )
   ncatt_put( nc_new, 0, 'data_structure', 'grid' )
@@ -770,7 +776,7 @@ generate_air_grids_nc <- function( allyear_grids_list,
   ncatt_put( nc_new, 0, 'nominal_resolution', '50 km' )
   ncatt_put( nc_new, 0, 'history', paste0( as.character( format( as.POSIXlt( Sys.time(), "UTC"), format = '%d-%m-%Y %H:%M:%S %p %Z' ) ), '; College Park, MD, USA') )
   ncatt_put( nc_new, 0, 'institution', 'Gridded data generated at IIASA using codes developed at JGCRI' )
-  ncatt_put( nc_new, 0, 'institution_id', 'IIASA' )
+  ncatt_put( nc_new, 0, 'institution_id', 'IAMC' )
   ncatt_put( nc_new, 0, 'mip_era', 'CMIP6' )
   ncatt_put( nc_new, 0, 'product', 'primary-emissions-data' )  
   ncatt_put( nc_new, 0, 'realm', 'atmos' )
@@ -800,4 +806,3 @@ generate_air_grids_nc <- function( allyear_grids_list,
   
   invisible( gc( ) )
 }
-
