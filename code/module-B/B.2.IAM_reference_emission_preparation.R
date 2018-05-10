@@ -155,16 +155,30 @@ iam_em_ipat <- iam_em_iso_added[ iam_em_iso_added$sector %in% sector_ipat, ]
 # 4.5 Convergence year value calculation for energy relatd  
 calculateConYear <- function( iam_em_ipat ) { 
   
+  # subset IAM regional emissions df to 2090 & 2100 
   calc_baseyears <- c( 2090, 2100 )  
   iam_em_ipat_header_cols <- grep( 'X', colnames( iam_em_ipat ), value = T, invert = T  )
   temp_df <- iam_em_ipat[ , c( iam_em_ipat_header_cols, paste0( 'reg_iam_em_X', calc_baseyears ) ) ]
+  
+  # create ssp_label and loop over each individual ssp
   temp_df$ssp_label <- unlist( lapply( strsplit( temp_df$scenario, '-' ), '[[', 1 ) ) 
   temp_df_list <- lapply( unique( temp_df$ssp_label ), function( ssp ) {
+    
+    # subset to specific ssp data
     ssp_df <- temp_df[ temp_df$ssp_label == ssp,  ]
+    
+    # grab ssp's convergence year
     con_year <- con_year_mapping[ con_year_mapping$scenario_label == ssp, 'convergence_year' ]
-    ssp_df$reg_iam_em_Xcon_year <- ssp_df[ , paste0( 'reg_iam_em_X', calc_baseyears[ 2 ] ) ] * ( ssp_df[ , paste0( 'reg_iam_em_X', calc_baseyears[ 2 ] ) ] / ssp_df[ , paste0( 'reg_iam_em_X', calc_baseyears[ 1 ] ) ] )^( ( con_year - calc_baseyears[ 2 ] ) / 10 )
-    ssp_df$reg_iam_em_Xcon_year <- ifelse( is.nan( ssp_df$reg_iam_em_Xcon_year ), 0, ssp_df$reg_iam_em_Xcon_year )
-    ssp_df$reg_iam_em_Xcon_year <- ifelse( is.infinite( ssp_df$reg_iam_em_Xcon_year ), 0, ssp_df$reg_iam_em_Xcon_year )
+    
+    # calculate regional emissions in convergence year
+    # Con_year emissions have same sign as 2100 emissions
+    ssp_df <- ssp_df %>% 
+      mutate(reg_iam_em_Xcon_year = ifelse(reg_iam_em_X2100 >= 0,
+                                           reg_iam_em_X2100 * ( abs(reg_iam_em_X2100 / reg_iam_em_X2090) ) ^ ( (con_year - 2100) / 10),
+                                           reg_iam_em_X2100 + (reg_iam_em_X2100 - reg_iam_em_X2090) * ( (con_year - 2100) / 10) ),
+             reg_iam_em_Xcon_year = ifelse(is.nan(reg_iam_em_Xcon_year), 0, reg_iam_em_Xcon_year),
+             reg_iam_em_Xcon_year = ifelse(is.infinite(reg_iam_em_Xcon_year ), 0, reg_iam_em_Xcon_year) )
+
     ssp_df <- ssp_df[ , c( iam_em_ipat_header_cols, 'reg_iam_em_Xcon_year' ) ]
     } )
   temp_df <- do.call( 'rbind', temp_df_list )

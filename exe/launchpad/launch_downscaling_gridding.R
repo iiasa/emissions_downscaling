@@ -38,16 +38,18 @@ initialize( script_name, log_msg, headers )
 # 1. Set up desired IAM to be processing
 
 # debug flag
-
 debug <- FALSE
 
 if (debug) {
-  args_from_makefile <- c( 'AIM',
+  args_from_makefile <- c( 'MESSAGE-GLOBIOM',
                            'Harmonized-DB',
-                           'C:/Users/guti220/Desktop/emissions_downscaling/input/IAM_emissions/failed_input/AIM_SSP3-Ref/output_harmonized.xlsx',
+                           'C:/Users/guti220/Desktop/emissions_downscaling/input/IAM_emissions/MESSAGE-GLOBIOM_SSP2-45/output_harmonized.xlsx',
                            'C:/Users/guti220/Desktop/emissions_downscaling/final-output/module-B',
                            'C:/Users/guti220/Desktop/emissions_downscaling/final-output/module-C',
                            'NOTgridding' )
+  
+  calculationDir <- "C:/Users/guti220/Desktop/emissions_downscaling/code/error/parameters"
+  calculationYears <- 2016:2020
 } else {
   # get args from command line
   args_from_makefile <- commandArgs( TRUE )

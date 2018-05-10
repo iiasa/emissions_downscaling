@@ -102,18 +102,29 @@ gdp_iso_region <- merge( gdp_data_region_added, gdp_region,
                          all.x = T )
 # ------------------------------------------------------------------------------
 # 4.2 Add convergence year gdp data 
-calculateCeonYear <- function( gdp_iso_region ) { 
+calculateConYear <- function( gdp_iso_region ) { 
   
+  # subset regional GDP data to 2090 & 2100
   calc_baseyears <- c( 2090, 2100 )  
   gdp_header_cols <- grep( 'X', colnames( gdp_iso_region ), value = T, invert = T  )
   temp_df <- gdp_iso_region[ , c( gdp_header_cols, paste0( 'reg_gdp_X', calc_baseyears ) ) ]
+  
+  # loop over each scenarion in data
   temp_df_list <- lapply( unique( temp_df$scenario ), function( ssp ) {
+    
+    # subset to specific scenario
     ssp_df <- temp_df[ temp_df$scenario == ssp,  ]
+    
+    # grab ssp's convergence year
     con_year <- con_year_mapping[ con_year_mapping$scenario_label == ssp, 'convergence_year' ]
-    ssp_df$reg_gdp_Xcon_year <- ssp_df[ , paste0( 'reg_gdp_X', calc_baseyears[ 2 ] ) ] * ( ssp_df[ , paste0( 'reg_gdp_X', calc_baseyears[ 2 ] ) ] / ssp_df[ , paste0( 'reg_gdp_X', calc_baseyears[ 1 ] ) ] )^( ( con_year - calc_baseyears[ 2 ] ) / 10 )
-    ssp_df$reg_gdp_Xcon_year <- ifelse( is.nan( ssp_df$reg_gdp_Xcon_year ), 0, ssp_df$reg_gdp_Xcon_year )
-    ssp_df$reg_gdp_Xcon_year <- ifelse( is.infinite( ssp_df$reg_gdp_Xcon_year ), 0, ssp_df$reg_gdp_Xcon_year )
+    
+    # calculate GDP in convergence year
+    ssp_df <- ssp_df %>% 
+      mutate(reg_gdp_Xcon_year = reg_gdp_X2100 * (reg_gdp_X2100 / reg_gdp_X2090) ^ ( (con_year - 2100) / 10 ),
+             reg_gdp_Xcon_year = ifelse( is.nan( reg_gdp_Xcon_year ), 0, reg_gdp_Xcon_year ),
+             reg_gdp_Xcon_year = ifelse( is.infinite( reg_gdp_Xcon_year ), 0, reg_gdp_Xcon_year ) )
     ssp_df <- ssp_df[ , c( gdp_header_cols, 'reg_gdp_Xcon_year' ) ]
+    
     } )
   temp_df <- do.call( 'rbind', temp_df_list )
   gdp_iso_region <- merge( gdp_iso_region, 
@@ -122,7 +133,7 @@ calculateCeonYear <- function( gdp_iso_region ) {
   return( gdp_iso_region )
 }
 
-gdp_iso_region<- calculateCeonYear( gdp_iso_region )
+gdp_iso_region<- calculateConYear( gdp_iso_region )
 
 # -----------------------------------------------------------------------------
 # 5. Write out
