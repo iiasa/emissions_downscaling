@@ -84,34 +84,17 @@ wide_df <- merge( wide_df, gdp_data[ , c( 'scenario', 'region', 'iso', gdp_data_
                   by.y = c( 'region', 'iso', 'scenario' ), all.x = T  )
 
 wide_df_nonCO2_posCY <- wide_df %>% 
-  filter(em != "CO2" & reg_iam_em_Xcon_year >= 0)
+  filter(em != "CO2" & reg_iam_em_Xcon_year > 0)
 
 wide_df_CO2_or_negCY <- wide_df %>% 
-  filter(em == "CO2" | reg_iam_em_Xcon_year < 0)
+  filter(em == "CO2" | reg_iam_em_Xcon_year <= 0)
+
+
 
 # -----------------------------------------------------------------------------
 # 5. Downscaling
 # 5.0 ipat downscaling functions
 source("../code/module-B/downscaling_ipat_functions.R")
-
-# adds 'equation2' & 'equation3' columns which identify which version of equation to use
-identifyEquations2and3 <- function(par_df) {
-  par_df <- par_df %>% 
-    mutate(equation2 = ifelse(reg_iam_em_Xcon_year > 0 & em != "CO2", 
-                              "2",
-                              ifelse(reg_iam_em_Xcon_year <= 0 | em == "CO2", 
-                                     "2a",
-                                     NA)
-    ),
-    
-    equation3 = ifelse(reg_iam_em_Xcon_year > 0 & em != "CO2", 
-                       "3",
-                       ifelse(reg_iam_em_Xcon_year <= 0 | em == "CO2", 
-                              "3a",
-                              NA)
-    ) 
-    )
-}
 
 out_nonCO2_posCY <- downscaleIAMemissions( wide_df_nonCO2_posCY, con_year_mapping, CO2_or_negCY = FALSE)
 
