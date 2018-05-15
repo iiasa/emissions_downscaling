@@ -81,20 +81,47 @@ wide_df <- merge( wide_df, pop_data[ , c( 'scenario', 'region', 'iso', pop_data_
                   by.y = c( 'region', 'iso', 'scenario' ), all.x = T  ) 
 wide_df <- merge( wide_df, gdp_data[ , c( 'scenario', 'region', 'iso', gdp_data_cols ) ], 
                   by.x = c( 'region', 'iso', 'ssp_label' ), 
-                  by.y = c( 'region', 'iso', 'scenario' ), all.x = T  ) 
+                  by.y = c( 'region', 'iso', 'scenario' ), all.x = T  )
+
+wide_df_nonCO2_posCY <- wide_df %>% 
+  filter(em != "CO2" & reg_iam_em_Xcon_year >= 0)
+
+wide_df_CO2_or_negCY <- wide_df %>% 
+  filter(em == "CO2" | reg_iam_em_Xcon_year < 0)
 
 # -----------------------------------------------------------------------------
 # 5. Downscaling
 # 5.0 ipat downscaling functions
 source("../code/module-B/downscaling_ipat_functions.R")
 
-out <- downscaleIAMemissions( wide_df, con_year_mapping)
+# adds 'equation2' & 'equation3' columns which identify which version of equation to use
+identifyEquations2and3 <- function(par_df) {
+  par_df <- par_df %>% 
+    mutate(equation2 = ifelse(reg_iam_em_Xcon_year > 0 & em != "CO2", 
+                              "2",
+                              ifelse(reg_iam_em_Xcon_year <= 0 | em == "CO2", 
+                                     "2a",
+                                     NA)
+    ),
+    
+    equation3 = ifelse(reg_iam_em_Xcon_year > 0 & em != "CO2", 
+                       "3",
+                       ifelse(reg_iam_em_Xcon_year <= 0 | em == "CO2", 
+                              "3a",
+                              NA)
+    ) 
+    )
+}
+
+out_nonCO2_posCY <- downscaleIAMemissions( wide_df_nonCO2_posCY, con_year_mapping, CO2_or_negCY = FALSE)
+
+out_CO2_or_negCY <- downscaleIAMemissions( wide_df_CO2_or_negCY, con_year_mapping, CO2_or_negCY = TRUE)
 
 # annual downscaled emissions
-ds_df <- out[[1]]
+ds_df <- rbind(out_nonCO2_posCY[[1]], out_CO2_or_negCY[[1]])
 
 # set of rows with adjusted EICBY. Grab 2050 emissions from ds_df
-zero_in_BY <- out[[2]] %>% 
+zero_in_BY <- rbind(out_nonCO2_posCY[[2]], out_CO2_or_negCY[[2]]) %>% 
   inner_join(ds_df, by = c("region", "iso", "em", "sector", "model", "scenario", "unit")) %>% 
   select(region, iso, em, sector, model, scenario, unit, X2050)
 
