@@ -39,7 +39,7 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping, CO2_or_negCY) {
   }
   
   # replace zero-valued emissions intensity in BY with 1/3 regional minimum
-  out <- adjustEICBY( par_df )
+  out <- adjustEICBY( par_df, CO2_or_negCY )
   par_df <- out[[1]]
   zero_in_BY.trunc <- out[[2]] # record which rows required adjustment
   
@@ -53,7 +53,7 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping, CO2_or_negCY) {
 
     if (CO2_or_negCY) {
       # calculate EI_gr_C_am
-      par_df_ssp <- equation2_EI_gr_C_am( par_df_ssp )
+      par_df_ssp <- equation2a_EI_gr_C_am( par_df_ssp )
     } else {
       # calculate EI_gr_C
       par_df_ssp <- equation2( par_df_ssp )
@@ -104,8 +104,11 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping, CO2_or_negCY) {
         
       }
       
-      # calculate EI_gr_C_pm (updates column if numGrowthRates = 2 & year == peak_year)
-      par_df_ssp <- equation2_EI_gr_C_pm( par_df_ssp, year )
+      if (CO2_or_negCY) {
+        # calculate EI_gr_C_pm (updates column if numGrowthRates = 2 & year == peak_year)
+        par_df_ssp <- equation2a_EI_gr_C_pm( par_df_ssp, year )
+      }
+
       
       # drop final emissions result into results df
       df <- par_df_ssp %>% 
@@ -190,25 +193,13 @@ identifyNumGrowthRates <- function(wide_df, con_year_mapping, par_df) {
     select(-year) %>% 
     distinct() %>% 
     select(-E)
-  
-  # attach CY regional emissions to PY
-  E_CY <- wide_df %>% 
-    select(region, ssp_label, em, sector, model, scenario, unit, reg_iam_em_Xcon_year) 
-  PY <- PY %>% 
-    left_join(E_CY, by = c("region", "ssp_label", "em", "sector", "model", "scenario", "unit")) %>% 
-    mutate(numGrowthRates = ifelse(numGrowthRates == 2, 
-                                   ifelse(em != "CO2" & reg_iam_em_Xcon_year >= 0,
-                                          1, 
-                                          numGrowthRates), 
-                                   numGrowthRates)
-    )
     
   df <- par_df %>% 
     left_join(PY, by = c("region", "ssp_label", "em", "sector", "model", "scenario", "unit"))
 }
 
-# Calculate EICBY, EIRCY & EIRPY (if numGrowthRates = 2)
-equation1 <- function(wide_df, con_year_mapping, par_df) {
+# Calculate EICBY & EIRCY (all cases), & EIRPY if numGrowthRates = 2
+equation1a <- function(wide_df, con_year_mapping, par_df) {
   
   # grab E & GDP for both BY & CY
   EI_CYBY_params <- wide_df %>% 
@@ -280,19 +271,54 @@ equation1 <- function(wide_df, con_year_mapping, par_df) {
       EICPY = NA)
 }
 
+# Calculate EICBY & EIRCY
+equation1 <- function(wide_df, con_year_mapping, par_df) {
+  # grab E & GDP for both BY & CY
+  EI_CYBY_params <- wide_df %>% 
+    select(region, iso, ssp_label, em, sector, model, scenario, unit, 
+           reg_iam_em_Xcon_year, reg_gdp_Xcon_year, 
+           paste0('ctry_ref_em_X', base_year), paste0("ctry_gdp_X", base_year))
+  names(EI_CYBY_params) <- c(names(EI_CYBY_params)[1:10], "ctry_ref_em_Xbase_year", "ctry_gdp_Xbase_year")
+  
+  # attach E & GDP to par_df for both BY & CY
+  par_df <- par_df %>% 
+    left_join(EI_CYBY_params,  by = c("region", "iso", "ssp_label", "em", "sector", "model", "scenario", "unit"))
+  
+  # EI = E / GDP
+  par_df <- par_df %>% 
+    mutate( 
+      # EICBY: country (CEDS) EI in base year (used for all numGrowthRates)
+      EICBY = ctry_ref_em_Xbase_year / ctry_gdp_Xbase_year, 
+      
+      # EIRCY: regional (IAM) EI in convergence year (used for all numGrowthRates)
+      # not used until after peak if numGrowthRates = 2
+      EIRCY = reg_iam_em_Xcon_year / reg_gdp_Xcon_year
+      
+      )
+}
+
 # replace zero-valued emissions intensity in BY with 1/3 regional minimum
-adjustEICBY <- function(par_df) {
+adjustEICBY <- function(par_df, CO2_or_negCY) {
+  
+  if (CO2_or_negCY) {
+    joinCols <- c("region", "iso", "ssp_label", "em", "sector", "model", "scenario", "unit", 
+      "base_year", "con_year", "numGrowthRates", "peak_year", 
+      "reg_iam_em_Xcon_year", "reg_gdp_Xcon_year", "ctry_ref_em_Xbase_year", "ctry_gdp_Xbase_year", "reg_iam_em_Xpeak_year", "reg_gdp_Xpeak_year", 
+      "EICBY", "EIRCY", "EIRPY", "EICPY")
+  } else {
+    joinCols <- c("region", "iso", "ssp_label", "em", "sector", "model", "scenario", "unit", 
+                  "base_year", "con_year", 
+                  "reg_iam_em_Xcon_year", "reg_gdp_Xcon_year", "ctry_ref_em_Xbase_year", "ctry_gdp_Xbase_year", 
+                  "EICBY", "EIRCY")
+  }
+  
   # this methodology doesn't affect industrial sector
   industrial <- par_df %>% 
     filter(sector == "Industrial Sector")
   
   # replacement values can't be taken from countries in a region with zero emissions as well 
   zero_IAMreg_ref_em_BY <- par_df %>% 
-    anti_join(., industrial, by = c("region", "iso", "ssp_label", "em", "sector", "model", "scenario", "unit", 
-                                      "base_year", "con_year", "dist", "numGrowthRates", "peak_year", 
-                                      "reg_iam_em_Xcon_year", "reg_gdp_Xcon_year", "ctry_ref_em_Xbase_year", "ctry_gdp_Xbase_year", "reg_iam_em_Xpeak_year", "reg_gdp_Xpeak_year", 
-                                      "EICBY", "EIRCY", "EIRPY", "EICPY", 
-                                      "equation2", "equation3")) %>% 
+    anti_join(., industrial, by=joinCols) %>% 
     group_by(region, ssp_label, em, sector, model, scenario, unit) %>% 
     summarise(reg_ref_em_Xbase_year = sum(ctry_ref_em_Xbase_year)) %>% 
     ungroup() %>% 
@@ -304,35 +330,15 @@ adjustEICBY <- function(par_df) {
   zero_in_BY <- par_df %>%
     filter(EICBY == 0) %>% # zero-valued EICBY 
     # not industrial sector
-    anti_join(., industrial, by = c("region", "iso", "ssp_label", "em", "sector", "model", "scenario", "unit", 
-                                    "base_year", "con_year", "dist", "numGrowthRates", "peak_year", 
-                                    "reg_iam_em_Xcon_year", "reg_gdp_Xcon_year", "ctry_ref_em_Xbase_year", "ctry_gdp_Xbase_year", "reg_iam_em_Xpeak_year", "reg_gdp_Xpeak_year", 
-                                    "EICBY", "EIRCY", "EIRPY", "EICPY", 
-                                    "equation2", "equation3")) %>%  
+    anti_join(., industrial, by = joinCols) %>%  
     # not zero-sum @ IAM-region-level
-    anti_join(., zero_IAMreg_ref_em_BY, by = c("region", "iso", "ssp_label", "em", "sector", "model", "scenario", "unit", 
-                                               "base_year", "con_year", "dist", "numGrowthRates", "peak_year", 
-                                               "reg_iam_em_Xcon_year", "reg_gdp_Xcon_year", "ctry_ref_em_Xbase_year", "ctry_gdp_Xbase_year", "reg_iam_em_Xpeak_year", "reg_gdp_Xpeak_year", 
-                                               "EICBY", "EIRCY", "EIRPY", "EICPY", 
-                                               "equation2", "equation3"))
+    anti_join(., zero_IAMreg_ref_em_BY, by=joinCols)
   
   # replacement values are calculated from all remaining rows...
   nonzero_in_BY <- par_df %>% 
-    anti_join(., industrial, by = c("region", "iso", "ssp_label", "em", "sector", "model", "scenario", "unit", 
-                                    "base_year", "con_year", "dist", "numGrowthRates", "peak_year", 
-                                    "reg_iam_em_Xcon_year", "reg_gdp_Xcon_year", "ctry_ref_em_Xbase_year", "ctry_gdp_Xbase_year", "reg_iam_em_Xpeak_year", "reg_gdp_Xpeak_year", 
-                                    "EICBY", "EIRCY", "EIRPY", "EICPY", 
-                                    "equation2", "equation3")) %>% 
-    anti_join(., zero_IAMreg_ref_em_BY, by = c("region", "iso", "ssp_label", "em", "sector", "model", "scenario", "unit", 
-                                               "base_year", "con_year", "dist", "numGrowthRates", "peak_year", 
-                                               "reg_iam_em_Xcon_year", "reg_gdp_Xcon_year", "ctry_ref_em_Xbase_year", "ctry_gdp_Xbase_year", "reg_iam_em_Xpeak_year", "reg_gdp_Xpeak_year", 
-                                               "EICBY", "EIRCY", "EIRPY", "EICPY", 
-                                               "equation2", "equation3")) %>% 
-    anti_join(., zero_in_BY, by = c("region", "iso", "ssp_label", "em", "sector", "model", "scenario", "unit", 
-                                    "base_year", "con_year", "dist", "numGrowthRates", "peak_year", 
-                                    "reg_iam_em_Xcon_year", "reg_gdp_Xcon_year", "ctry_ref_em_Xbase_year", "ctry_gdp_Xbase_year", "reg_iam_em_Xpeak_year", "reg_gdp_Xpeak_year", 
-                                    "EICBY", "EIRCY", "EIRPY", "EICPY", 
-                                    "equation2", "equation3"))
+    anti_join(., industrial, by = joinCols) %>% 
+    anti_join(., zero_IAMreg_ref_em_BY, by = joinCols) %>% 
+    anti_join(., zero_in_BY, by = joinCols)
   
   # by choosing min(that region's set of emissions intensity growth values for the same sector) / 3
   replacement_values <- nonzero_in_BY %>%
@@ -357,8 +363,22 @@ adjustEICBY <- function(par_df) {
   
 }
 
-# calculate EI_gr_C_am
-equation2_EI_gr_C_am <- function(par_df_ssp) {
+# calculate EI_gr_C (nonCO2 & posCY)
+equation2 <- function(par_df_ssp) {
+  par_df_ssp <- par_df_ssp %>% 
+    mutate(
+      # equation 2: nonCO2 & posCY 
+      EI_gr_C = ( EIRCY / EICBY ) ^ ( 1/ (con_year - base_year) ),
+      
+      # clean NA or Inf values
+      EI_gr_C = ifelse( is.na( EI_gr_C ), 0, EI_gr_C ),
+      EI_gr_C = ifelse( is.infinite( EI_gr_C ), 0, EI_gr_C )
+    )
+  
+}
+
+# calculate EI_gr_C_am (CO2_or_negCY)
+equation2a_EI_gr_C_am <- function(par_df_ssp) {
   
   par_df_ssp <- par_df_ssp %>%  
     mutate( dist = con_year - 2100 ) 
@@ -391,30 +411,12 @@ equation2_EI_gr_C_am <- function(par_df_ssp) {
         numGrowthRates==1,
         
         # TRUE
-        ifelse(
-          
-          # positive CY emissions & em != CO2 ?
-          equation2=="2",
-               
-               # TRUE : use equation 2
-               ( EIRCY / EICBY ) ^ ( 1 / ( con_year - base_year ) ),
-               
-               # FALSE 
-               ifelse(
+        # equation 2a: CO2 or zero/negative CY emissions
+        ( EIRCY - EICBY ) / ( con_year - base_year ),
                  
-                 # zero or negative CY emissions ?
-                 equation2=="2a",
-                 
-                 # TRUE : use equation 2a
-                 ( EIRCY - EICBY ) / ( con_year - base_year ),
-                 
-                 # FALSE : leave as is
-                 EI_gr_C_am )
-        ),
-        
-        # FALSE: leave as is
+        # FALSE : leave as is
         # either 0 growth rates (above) or 2 growth rates (below) 
-        EI_gr_C_am
+        EI_gr_C_am 
         
       ), # end EI_gr_C_am, numGrowthRates = 1
       
@@ -426,26 +428,8 @@ equation2_EI_gr_C_am <- function(par_df_ssp) {
         numGrowthRates==2,
         
         # TRUE
-        ifelse(
-          
-          # positive CY emissions & em != CO2 ?
-          equation2=="2",
-          
-          # TRUE : use equation 2
-          ( EIRPY / EICBY ) ^ ( 1 / ( peak_year + dist - base_year ) ),
-          
-          # FALSE 
-          ifelse(
-            
-            # zero or negative CY emissions ?
-            equation2=="2a",
-            
-            # TRUE : use equation 2a
-            ( EIRPY - EICBY )  / ( peak_year + dist - base_year ),
-            
-            # FALSE : leave as is
-            EI_gr_C_am )
-        ),
+        # equation 2a: CO2 or zero/negative CY emissions
+        ( EIRPY - EICBY )  / ( peak_year + dist - base_year ),
         
         # FALSE: numGrowthRates != 2, leave as is
         EI_gr_C_am
@@ -462,8 +446,8 @@ equation2_EI_gr_C_am <- function(par_df_ssp) {
      ) # end mutate
 }
 
-# calculate EI_gr_C_pm
-equation2_EI_gr_C_pm <- function(par_df_ssp, year) {
+# calculate EI_gr_C_pm (CO2_or_negCY)
+equation2a_EI_gr_C_pm <- function(par_df_ssp, year) {
   
   # if numGrowthRates = 0, EI_gr_C_pm = 0
   # if numGrowthRates = 1, EI_gr_C_pm = EI_gr_C_am
@@ -472,33 +456,19 @@ equation2_EI_gr_C_pm <- function(par_df_ssp, year) {
       
       ## post-peak EI growth rate initialized w/ NA by equation2_EI_gr_C_am()
       
-      ## numGrowthRates = 0 -> set to zero
+      ## if numGrowthRates %in% c(0,1) -> set to EI_gr_C_am
       EI_gr_C_pm = ifelse(
         
         # logical test
-        numGrowthRates==0,
+        numGrowthRates %in% c(0,1),
           
         # TRUE : flat emissions
-        0,
+        EI_gr_C_am,
           
-        # FALSE : 1 or 2 growth rates. Must calculate (below)
+        # FALSE : leave as is. Must calculate post-peak growth rate (below)
         EI_gr_C_pm
         
-        ), ## end EI_gr_C_pm, numGrowthRates = 0
-      
-      ## numGrowthRates = 1 -> calculate EI_gr_C_pm using EICBY  & EIRCY
-      EI_gr_C_pm = ifelse(
-        
-        # logical test
-        numGrowthRates==1,
-          
-        # TRUE
-        EI_gr_C_am,
-        
-        # FALSE : leave as is
-        EI_gr_C_pm 
-        
-      ) ## end EI_gr_C_pm, numGrowthRates = 1
+        ) ## end EI_gr_C_pm, numGrowthRates %in% c(0,1)
           
     ) ### end mutate, numGrowthRates %in% c(0,1)
   
@@ -529,33 +499,15 @@ equation2_EI_gr_C_pm <- function(par_df_ssp, year) {
         numGrowthRates==2 & year == peak_year,
         
         # TRUE
-        ifelse(
-          
-          # positive CY emissions & em != CO2 ?
-          equation2=="2",
-          
-          # TRUE : use equation 2
-          ( EIRCY / EICPY ) ^ ( 1 / ( peak_year + dist - base_year ) ),
-          
-          # FALSE 
-          ifelse(
+        # equation 2a: CO2 or zero/negative CY emissions
+        ( EIRCY - EICPY ) / ( peak_year + dist - base_year ),
             
-            # zero or negative CY emissions ?
-            equation2=="2a",
-            
-            # TRUE : use equation 2a
-            ( EIRCY - EICPY ) / ( peak_year + dist - base_year ),
-            
-            # FALSE : leave as is
-            EI_gr_C_pm )
-        ),
-        
-        # FALSE: numGrowthRates != 2, leave as is
+        # FALSE : leave as is
         EI_gr_C_pm
         
-      ) ## end EI_gr_C_pm, numGrowthRates=2
+        ) ## end EI_gr_C_pm, numGrowthRates=2
       
-    ) ### end mutate, numGrowthRates=2
+      ) ### end mutate, numGrowthRates=2
         
   
   ### clean all EI_gr_C_pm NA or Inf values
@@ -567,7 +519,7 @@ equation2_EI_gr_C_pm <- function(par_df_ssp, year) {
       
 }
 
-# identify EI_gr_C at beginning of each time-step (no calculation in this function!)
+# identify EI_gr_C at beginning of each time-step (no calculation in this function!) (CO2_or_negCY)
 identify_EI_gr_C <- function(par_df_ssp, year) {
   
   # if numGrowthRates = 0, EI_gr_C = 0
@@ -608,7 +560,7 @@ identify_EI_gr_C <- function(par_df_ssp, year) {
 
   
   # if numGrowthRates = 2 & year <= peak_year, EI_gr_C = EI_gr_C_am
-  # if numGrowthRates = 2 & year <= peak_year, EI_gr_C = EI_gr_C_pm
+  # if numGrowthRates = 2 & year > peak_year, EI_gr_C = EI_gr_C_pm
   par_df_ssp <- par_df_ssp %>% 
     mutate(
       
@@ -639,8 +591,7 @@ identify_EI_gr_C <- function(par_df_ssp, year) {
       ) ### end mutate
 }
 
-# calculate this year's preliminary emissions intensity from last year's emissions & GDP
-# equation depends on entries in column 'equation3'
+# calculate this year's preliminary emissions intensity from last year's emissions & GDP (nonCO2 & posCY)
 equation3 <- function(wide_df_ssp, res_df_ssp, par_df_ssp, year) {
 
   # identify/calculate last year's EI and drop into par_df_ssp
@@ -690,20 +641,65 @@ equation3 <- function(wide_df_ssp, res_df_ssp, par_df_ssp, year) {
   par_df_ssp <- par_df_ssp %>% 
     mutate(
       
-      EI_star = ifelse(
+      # equation 3: nonCO2 & posCY 
+      EI_star = EI_prev * EI_gr_C
       
-      # logical test
-      equation3=="3",
-                            
-      # TRUE : positive CY emissions & em != CO2
-      EI_prev * EI_gr_C, 
+    )
+}
+
+# calculate this year's preliminary emissions intensity from last year's emissions & GDP (CO2_or_negCY)
+equation3a <- function(wide_df_ssp, res_df_ssp, par_df_ssp, year) {
+  
+  # identify/calculate last year's EI and drop into par_df_ssp
+  
+  if (year == as.numeric(base_year) + 1) {
+    # either use adjusted EICBY values when calculating first time step...
+    par_df_ssp <- par_df_ssp %>% 
+      mutate(EI_prev = EICBY,
+             ctry_ref_em_prev = "",
+             ctry_gdp_prev = "")
+    
+  } else { 
+    # or dynamically calculate last years EI-value from last year's GDP & downscaled emissions
+    
+    # last year's downscaled emissions (res_df)
+    ctry_ref_em_X_year_less1 <- paste0( 'ctry_ref_em_X', ( year - 1 ) ) 
+    ctry_ref_em_prev <- res_df_ssp %>% 
+      select(region, iso, ssp_label, em, sector, model, scenario, unit,
+             ctry_ref_em_X_year_less1) 
+    names(ctry_ref_em_prev) <- c(names(ctry_ref_em_prev)[1:8], "ctry_ref_em_prev")
+    
+    # last year's gdp (wide_df)
+    ctry_gdp_X_year_less1 <- paste0( 'ctry_gdp_X', ( year - 1 ) )
+    ctry_gdp_prev <- wide_df_ssp %>% 
+      select(region, iso, ssp_label, em, sector, model, scenario, unit,
+             ctry_gdp_X_year_less1)
+    names(ctry_gdp_prev) <- c(names(ctry_gdp_prev)[1:8], "ctry_gdp_prev")
+    
+    # in order to drop *new* previous year's E & GDP into par_df, we have to drop
+    # the *old* previous year's E  & GDP already inside par_df
+    if ( any( c("ctry_ref_em_prev", "ctry_gdp_prev") %in% names(par_df_ssp) ) ) {
+      par_df_ssp <- par_df_ssp %>% 
+        select(-matches("prev"))
+    }      
+    
+    # EI_prev = E_prev / GDP_prev
+    par_df_ssp <- par_df_ssp %>%
+      left_join(ctry_ref_em_prev, by = c("region", "iso", "ssp_label", "em", "sector", "model", "scenario", "unit")) %>% 
+      left_join(ctry_gdp_prev, by = c("region", "iso", "ssp_label", "em", "sector", "model", "scenario", "unit")) %>% 
+      mutate( EI_prev = ctry_ref_em_prev / ctry_gdp_prev )
+  }
+  
+  
+  # calculate next year's preliminary emissions intensity
+  # equation depends on entry in 'equation3' 
+  # see identifyEquations2and3()
+  par_df_ssp <- par_df_ssp %>% 
+    mutate(
       
-      # FALSE : zero or negative CY emissions
-      ifelse(equation3=="3a",
-             EI_prev + abs(EI_prev) * EI_gr_C,
-             NA)
-    )
-    )
+      # equation 3a: CO2 or zero/negative CY emissions
+      EI_star = EI_prev + abs(EI_prev) * EI_gr_C
+      )
 }
 
 # zero in BY rows Emissions Intensity bounded by min(abs(EI_star)) in region
