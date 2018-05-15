@@ -26,9 +26,9 @@
 # ----------------------------------------------------------------------------------------------------------------
 
 # Special Packages
-loadPackage( 'ncdf4' ) 
-loadPackage( 'sp' )
-loadPackage( 'geosphere' )
+library( 'ncdf4' ) 
+library( 'sp' )
+library( 'geosphere' )
 
 # ==============================================================================
 # core gridding functions
