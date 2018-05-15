@@ -212,7 +212,7 @@ errorLogging <- function(in.agg, out.agg, method, t) {
     
     
     # construct diagnostic file name
-    iam <- unique(mis$model)
+    iam <- unique(mis$model) %>% gsub("/", "-", .)
     out_filename.ds <- paste0( iam, '_emissions_downscaled_', method, '_inconsistent' )
     out_filename.harm <- paste0( iam, '_emissions_downscaled_', method, '_inconsistent_harmonization' )
     
