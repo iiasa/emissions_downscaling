@@ -50,14 +50,14 @@ MODULE_PROC_ROOT		<- PARAM_DIR
 
 
 # -----------------------------------------------------------------------------
-# Logical Check - Options
+# Set-up protected environement for shared variables
 
+em_gridding_env = new.env()
 
-#na_error : Check for NA's. 
-# 1: If NA's exists in in EF database or dataframes, then error and stop script. 
-# There should be no NA's in these files. NA's  are the result of faulty code
-#
-na_error <- 1
+# Function to retrive values from protected environement
+get_global_constants <- function (const_name) {
+  return( get( const_name, envir = em_gridding_env ) )
+}
 
-# If true write value meta data in scaling module (FALSE to save time while test running)
-Write_value_metadata <- FALSE
+global_environment$"dataset_version_number" = '1.0'
+global_environment$"target_mip" = 'ScenarioMIP'

@@ -68,8 +68,6 @@ gridding_initialize( grid_resolution = grid_resolution,
                      load_masks = T, 
                      load_seasonality_profile = T )
 
-dataset_version_number <- 'V1'
-
 # -----------------------------------------------------------------------------
 # 3. Read in emissions file and mappings 
 iam_data <- readData( domain = 'MED_OUT', 
