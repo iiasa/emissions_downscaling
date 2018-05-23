@@ -165,7 +165,7 @@ generate_bulk_grids_nc <- function( allyear_grids_list,
   FN_version_tag <- paste0( 'IAMC', '-', dataset_version_number )  
   MD_dataset_version_number_value <- dataset_version_number 
   MD_source_value <- 'IAMC Scenario Database hosted at IIASA'
-  scenario <- gsub("-SPA[0123456789]","",org_scneario) # Remove SPA designation
+  scenario <- gsub("-SPA[0123456789]","",scenario) # Remove SPA designation
   scenario <- gsub("-","",scenario) # Remove dash
   scenario <- gsub("SSP","ssp",scenario) # Change case
   MD_source_id_value <- paste0( iam, '-', scenario, '-', gsub(".","-",dataset_version_number) ) 
@@ -460,7 +460,7 @@ generate_openburning_grids_nc <- function( allyear_grids_list,
   FN_version_tag <- paste0( 'IAMC', '-', dataset_version_number )  
   MD_dataset_version_number_value <- dataset_version_number 
   MD_source_value <- 'IAMC Scenario Database hosted at IIASA'
-  scenario <- gsub("-SPA[0123456789]","",org_scneario) # Remove SPA designation
+  scenario <- gsub("-SPA[0123456789]","",scenario) # Remove SPA designation
   scenario <- gsub("-","",scenario) # Remove dash
   scenario <- gsub("SSP","ssp",scenario) # Change case
   MD_source_id_value <- paste0( iam, '-', scenario, '-', gsub(".","-",dataset_version_number) ) 
@@ -722,7 +722,7 @@ generate_air_grids_nc <- function( allyear_grids_list,
   FN_version_tag <- paste0( 'IAMC', '-', dataset_version_number )  
   MD_dataset_version_number_value <- dataset_version_number 
   MD_source_value <- 'IAMC Scenario Database hosted at IIASA'
-  scenario <- gsub("-SPA[0123456789]","",org_scneario) # Remove SPA designation
+  scenario <- gsub("-SPA[0123456789]","",scenario) # Remove SPA designation
   scenario <- gsub("-","",scenario) # Remove dash
   scenario <- gsub("SSP","ssp",scenario) # Change case
   MD_source_id_value <- paste0( iam, '-', scenario, '-', gsub(".","-",dataset_version_number) )
