@@ -165,10 +165,9 @@ generate_bulk_grids_nc <- function( allyear_grids_list,
   FN_version_tag <- paste0( 'IAMC', '-', dataset_version_number )  
   MD_dataset_version_number_value <- dataset_version_number 
   MD_source_value <- 'IAMC Scenario Database hosted at IIASA'
-  scenario <- gsub("-SPA[0123456789]","",scenario) # Remove SPA designation
-  scenario <- gsub("-","",scenario) # Remove dash
-  scenario <- gsub("SSP","ssp",scenario) # Change case
-  MD_source_id_value <- paste0( iam, '-', scenario, '-', gsub(".","-",dataset_version_number) ) 
+  scenario <- sub("-SPA[0123456789]", "", scenario) # Remove SPA designation
+  scenario <- sub("SSP", "ssp", scenario) # Change case
+  MD_source_id_value <- paste0( iam, '-', scenario, '-', gsub("\\.", "-", dataset_version_number) ) 
   FN_source_id_value <- MD_source_id_value
   FN_variable_id_value <- paste0( FN_em, '-em-anthro' )
   nc_file_name <- paste0( FN_variable_id_value, '_input4MIPs_emissions_',target_mip,'_', MD_source_id_value, '_gn_201501-210012.nc' )
@@ -227,7 +226,7 @@ generate_bulk_grids_nc <- function( allyear_grids_list,
   ncatt_put( nc_new, "time", "realtopology", "linear" )
   ncatt_put( nc_new, "time", "standard_name", "time" )
   ncatt_put( nc_new, "sector", "bounds", "sector_bnds" )
-  ncatt_put( nc_new, "sector", "ids", "0: AGR; 1: ENE; 2: IND; 3: RCO; 4: SHP; 5:SLV; 6: TRA; 7: WST" )
+  ncatt_put( nc_new, "sector", "ids", "0: AGR; 1: ENE; 2: IND; 3: TRA; 4: RCO; 5: SLV; 6: WST; 7: SHP" )
   # attributes for variables
   ncatt_put( nc_new, flat_var_name, 'cell_methods', 'time: mean' )
   ncatt_put( nc_new, flat_var_name, 'long_name', flat_var_longname )
@@ -256,7 +255,7 @@ generate_bulk_grids_nc <- function( allyear_grids_list,
   ncatt_put( nc_new, 0, 'references', 'See: https://secure.iiasa.ac.at/web-apps/ene/SspDb/ for references' )
   ncatt_put( nc_new, 0, 'source', 'IAMC Scenario Database hosted at IIASA' )
   ncatt_put( nc_new, 0, 'source_id', MD_source_id_value )
-  ncatt_put( nc_new, 0, 'source_version ', dataset_version_number )
+  ncatt_put( nc_new, 0, 'source_version', dataset_version_number )
   ncatt_put( nc_new, 0, 'table_id', 'input4MIPs' )
   ncatt_put( nc_new, 0, 'target_mip', target_mip )
   ncatt_put( nc_new, 0, 'title', paste0( 'Future Anthropogenic Emissions of ', FN_em, ' prepared for input4MIPs' ) )
@@ -549,7 +548,7 @@ generate_openburning_grids_nc <- function( allyear_grids_list,
   ncatt_put( nc_new, 0, 'references', 'See: https://secure.iiasa.ac.at/web-apps/ene/SspDb/ for references' )
   ncatt_put( nc_new, 0, 'source', 'IAMC Scenario Database hosted at IIASA' )
   ncatt_put( nc_new, 0, 'source_id', MD_source_id_value )
-  ncatt_put( nc_new, 0, 'source_version ', dataset_version_number )
+  ncatt_put( nc_new, 0, 'source_version', dataset_version_number )
   ncatt_put( nc_new, 0, 'table_id', 'input4MIPs' )
   ncatt_put( nc_new, 0, 'target_mip', target_mip )
   ncatt_put( nc_new, 0, 'title', paste0( 'Future Anthropogenic Emissions of ', FN_em, ' prepared for input4MIPs' ) )
@@ -807,7 +806,7 @@ generate_air_grids_nc <- function( allyear_grids_list,
   ncatt_put( nc_new, 0, 'references', 'See: https://secure.iiasa.ac.at/web-apps/ene/SspDb/ for references' )
   ncatt_put( nc_new, 0, 'source', 'IAMC Scenario Database hosted at IIASA' )
   ncatt_put( nc_new, 0, 'source_id', MD_source_id_value )
-  ncatt_put( nc_new, 0, 'source_version ', dataset_version_number )
+  ncatt_put( nc_new, 0, 'source_version', dataset_version_number )
   ncatt_put( nc_new, 0, 'table_id', 'input4MIPs' )
   ncatt_put( nc_new, 0, 'target_mip', target_mip )
   ncatt_put( nc_new, 0, 'title', paste0( 'Future Anthropogenic Aircraft Emissions of ', FN_em, ' prepared for input4MIPs' ) )

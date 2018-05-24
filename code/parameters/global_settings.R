@@ -59,5 +59,5 @@ get_global_constants <- function (const_name) {
   return( get( const_name, envir = em_gridding_env ) )
 }
 
-global_environment$"dataset_version_number" = '1.0'
-global_environment$"target_mip" = 'ScenarioMIP'
+em_gridding_env$"dataset_version_number" = '1.0'
+em_gridding_env$"target_mip" = 'ScenarioMIP'
