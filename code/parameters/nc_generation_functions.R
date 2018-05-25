@@ -159,17 +159,28 @@ generate_bulk_grids_nc <- function( allyear_grids_list,
   # 3. generate nc file name and some variables
   if (em == 'Sulfur') {FN_em <- 'SO2'} else {FN_em <- em}
   
+  dataset_version_number <- get_global_constants( "dataset_version_number" )
+  target_mip <- get_global_constants( "target_mip" )
+
+  # Generate comment here to preserve SPA information from original scenario
+  MD_comment <- paste0( 'SSP harmonized, gridded emissions for ', iam, '_',
+                     scenario, '. Data harmonized to historical emissions ',
+                     'CEDS-v2017-05-18 (anthropogenic) and v1.2 (land-use change)' )
   FN_version_tag <- paste0( 'IAMC', '-', dataset_version_number )  
   MD_dataset_version_number_value <- dataset_version_number 
   MD_source_value <- 'IAMC Scenario Database hosted at IIASA'
-  MD_source_id_value <- paste0( iam, '-', scenario, '-', dataset_version_number) 
+  scenario <- gsub("-SPA[0123456789]", "", scenario) # Remove SPA designation
+  scenario <- gsub("SSP", "ssp", scenario) # Change case
+  MD_source_id_value <- paste0( iam, '-', scenario, '-', gsub("[.]", "-", dataset_version_number) ) 
   FN_source_id_value <- MD_source_id_value
   FN_variable_id_value <- paste0( FN_em, '-em-anthro' )
-  nc_file_name <- paste0( FN_variable_id_value, '_input4MIPs_emissions_CMIP_', MD_source_id_value, '_gn_201501-210012.nc' )
+  nc_file_name <- paste0( FN_variable_id_value, '_input4MIPs_emissions_',target_mip,'_', MD_source_id_value, '_gn_201501-210012.nc' )
   nc_file_name_w_path <- paste0( output_dir, '/', nc_file_name ) 
   
+  # Now that file name has been generated, re-format variable_id to have underscores
+  
   # generate flat_var variable name 
-  MD_variable_id_value <- FN_variable_id_value
+  MD_variable_id_value <- gsub( "-", "_", FN_variable_id_value ) # Change to underscore for metadata
   flat_var_name <- MD_variable_id_value 
   flat_var_longname <- flat_var_name
   
@@ -219,7 +230,7 @@ generate_bulk_grids_nc <- function( allyear_grids_list,
   ncatt_put( nc_new, "time", "realtopology", "linear" )
   ncatt_put( nc_new, "time", "standard_name", "time" )
   ncatt_put( nc_new, "sector", "bounds", "sector_bnds" )
-  ncatt_put( nc_new, "sector", "ids", "0: AGR; 1: ENE; 2: IND; 3: RCO; 4: SHP; 5:SLV; 6: TRA; 7: WST" )
+  ncatt_put( nc_new, "sector", "ids", "0: Agriculture; 1: Energy; 2: Industrial; 3: Transportation; 4: Residential, Commercial, Other; 5: Solvents production and application; 6: Waste; 7: International Shipping" )
   # attributes for variables
   ncatt_put( nc_new, flat_var_name, 'cell_methods', 'time: mean' )
   ncatt_put( nc_new, flat_var_name, 'long_name', flat_var_longname )
@@ -227,7 +238,7 @@ generate_bulk_grids_nc <- function( allyear_grids_list,
   # nc global attributes
   ncatt_put( nc_new, 0, 'Conventions', 'CF-1.6' )
   ncatt_put( nc_new, 0, 'activity_id', 'input4MIPs' )  
-  ncatt_put( nc_new, 0, 'comment', 'SSP harmonized, gridded emissions. Data harmonized to historical emissions CEDS-v2017-05-18 (anthropogenic) and v1.2 (land-use change)' )
+  ncatt_put( nc_new, 0, 'comment', MD_comment )
   ncatt_put( nc_new, 0, 'contact', 'Steven J. Smith (ssmith@pnnl.gov)' )
   ncatt_put( nc_new, 0, 'creation_date', as.character( format( as.POSIXlt( Sys.time(), "UTC"), format = '%Y-%m-%dT%H:%M:%SZ' ) ) )
   ncatt_put( nc_new, 0, 'data_structure', 'grid' )
@@ -240,7 +251,7 @@ generate_bulk_grids_nc <- function( allyear_grids_list,
   ncatt_put( nc_new, 0, 'grid_label', 'gn' )
   ncatt_put( nc_new, 0, 'nominal_resolution', '50 km' )
   ncatt_put( nc_new, 0, 'history', paste0( as.character( format( as.POSIXlt( Sys.time(), "UTC"), format = '%d-%m-%Y %H:%M:%S %p %Z' ) ), '; College Park, MD, USA') )
-  ncatt_put( nc_new, 0, 'institution', 'Gridded data generated at IIASA using codes developed at JGCRI' )
+  ncatt_put( nc_new, 0, 'institution', 'Integrated Assessment Modeling Consortium' )
   ncatt_put( nc_new, 0, 'institution_id', 'IAMC' )
   ncatt_put( nc_new, 0, 'mip_era', 'CMIP6' )
   ncatt_put( nc_new, 0, 'product', 'primary-emissions-data' )  
@@ -248,10 +259,12 @@ generate_bulk_grids_nc <- function( allyear_grids_list,
   ncatt_put( nc_new, 0, 'references', 'See: https://secure.iiasa.ac.at/web-apps/ene/SspDb/ for references' )
   ncatt_put( nc_new, 0, 'source', 'IAMC Scenario Database hosted at IIASA' )
   ncatt_put( nc_new, 0, 'source_id', MD_source_id_value )
+  ncatt_put( nc_new, 0, 'source_version', dataset_version_number )
   ncatt_put( nc_new, 0, 'table_id', 'input4MIPs' )
-  ncatt_put( nc_new, 0, 'target_mip', 'CMIP' )
+  ncatt_put( nc_new, 0, 'target_mip', target_mip )
   ncatt_put( nc_new, 0, 'title', paste0( 'Future Anthropogenic Emissions of ', FN_em, ' prepared for input4MIPs' ) )
   ncatt_put( nc_new, 0, 'variable_id', MD_variable_id_value )
+  ncatt_put( nc_new, 0, 'license', "Consult https://pcmdi.llnl.gov/CMIP6/TermsOfUse for terms of use governing input4MIPs output, including citation requirements and proper acknowledgment. Further information about this data, including some limitations, can be found via the further_info_url (recorded as a global attribute in this file). The data producers and data providers make no warranty, either express or implied, including, but not limited to, warranties of merchantability and fitness for a particular purpose. All liabilities arising from the supply of the information (including any liability arising in negligence) are excluded to the fullest extent permitted by law" )
   
   # some other metadata
   ncatt_put( nc_new, 0, 'data_usage_tips', 'Note that these are monthly average fluxes. Note that emissions are provided in uneven year intervals (2015, 2020, then at 10 year intervals) as these are the years for which projection data is available.' )
@@ -444,17 +457,26 @@ generate_openburning_grids_nc <- function( allyear_grids_list,
   # 3. generate nc file name and some variables
   if (em == 'Sulfur') {FN_em <- 'SO2'} else {FN_em <- em}
   
+  dataset_version_number <- get_global_constants( "dataset_version_number" )
+  target_mip <- get_global_constants( "target_mip" )
+
+  # Generate comment here to preserve SPA information from original scenario
+  MD_comment <- paste0( 'SSP harmonized, gridded emissions for ', iam, '_',
+                     scenario, '. Data harmonized to historical emissions ',
+                     'CEDS-v2017-05-18 (anthropogenic) and v1.2 (land-use change)' )
   FN_version_tag <- paste0( 'IAMC', '-', dataset_version_number )  
   MD_dataset_version_number_value <- dataset_version_number 
   MD_source_value <- 'IAMC Scenario Database hosted at IIASA'
-  MD_source_id_value <- paste0( iam, '-', scenario, '-', dataset_version_number ) 
+  scenario <- gsub("-SPA[0123456789]", "", scenario) # Remove SPA designation
+  scenario <- gsub("SSP", "ssp", scenario) # Change case
+  MD_source_id_value <- paste0( iam, '-', scenario, '-', gsub("[.]", "-", dataset_version_number) ) 
   FN_source_id_value <- MD_source_id_value
   FN_variable_id_value <- paste0( FN_em, '-em-openburning' )
-  nc_file_name <- paste0( FN_variable_id_value, '_input4MIPs_emissions_CMIP_', MD_source_id_value, '_gn_201501-210012.nc' )
+  nc_file_name <- paste0( FN_variable_id_value, '_input4MIPs_emissions_',target_mip,'_', MD_source_id_value, '_gn_201501-210012.nc' )
   nc_file_name_w_path <- paste0( output_dir, '/', nc_file_name ) 
   
   # generate flat_var variable name 
-  MD_variable_id_value <- FN_variable_id_value
+  MD_variable_id_value <- gsub( "-", "_", FN_variable_id_value ) # Change to underscore for metadata
   flat_var_name <- MD_variable_id_value 
   flat_var_longname <- flat_var_name
   
@@ -504,7 +526,7 @@ generate_openburning_grids_nc <- function( allyear_grids_list,
   ncatt_put( nc_new, "time", "realtopology", "linear" )
   ncatt_put( nc_new, "time", "standard_name", "time" )
   ncatt_put( nc_new, "sector", "bounds", "sector_bnds" )
-  ncatt_put( nc_new, "sector", "ids", "0: AWB; 1: FRTB; 2: GRSB; 3: PEAT" )
+  ncatt_put( nc_new, "sector", "ids", "0: Agricultural Waste Burning On Fields; 1: Forest Burning; 2: Grassland Burning; 3: Peat Burning" )
   # attributes for variables
   ncatt_put( nc_new, flat_var_name, 'cell_methods', 'time: mean' )
   ncatt_put( nc_new, flat_var_name, 'long_name', flat_var_longname )
@@ -512,7 +534,7 @@ generate_openburning_grids_nc <- function( allyear_grids_list,
   # nc global attributes
   ncatt_put( nc_new, 0, 'Conventions', 'CF-1.6' )
   ncatt_put( nc_new, 0, 'activity_id', 'input4MIPs' )  
-  ncatt_put( nc_new, 0, 'comment', 'SSP harmonized, gridded emissions. Data harmonized to historical emissions CEDS-v2017-05-18 (anthropogenic) and v1.2 (land-use change)' )
+  ncatt_put( nc_new, 0, 'comment', MD_comment )
   ncatt_put( nc_new, 0, 'contact', 'Steven J. Smith (ssmith@pnnl.gov)' )
   ncatt_put( nc_new, 0, 'creation_date', as.character( format( as.POSIXlt( Sys.time(), "UTC"), format = '%Y-%m-%dT%H:%M:%SZ' ) ) )
   ncatt_put( nc_new, 0, 'data_structure', 'grid' )
@@ -525,7 +547,7 @@ generate_openburning_grids_nc <- function( allyear_grids_list,
   ncatt_put( nc_new, 0, 'grid_label', 'gn' )
   ncatt_put( nc_new, 0, 'nominal_resolution', '50 km' )
   ncatt_put( nc_new, 0, 'history', paste0( as.character( format( as.POSIXlt( Sys.time(), "UTC"), format = '%d-%m-%Y %H:%M:%S %p %Z' ) ), '; College Park, MD, USA') )
-  ncatt_put( nc_new, 0, 'institution', 'Gridded data generated at IIASA using codes developed at JGCRI' )
+  ncatt_put( nc_new, 0, 'institution', 'Integrated Assessment Modeling Consortium' )
   ncatt_put( nc_new, 0, 'institution_id', 'IAMC' )
   ncatt_put( nc_new, 0, 'mip_era', 'CMIP6' )
   ncatt_put( nc_new, 0, 'product', 'primary-emissions-data' )  
@@ -533,10 +555,12 @@ generate_openburning_grids_nc <- function( allyear_grids_list,
   ncatt_put( nc_new, 0, 'references', 'See: https://secure.iiasa.ac.at/web-apps/ene/SspDb/ for references' )
   ncatt_put( nc_new, 0, 'source', 'IAMC Scenario Database hosted at IIASA' )
   ncatt_put( nc_new, 0, 'source_id', MD_source_id_value )
+  ncatt_put( nc_new, 0, 'source_version', dataset_version_number )
   ncatt_put( nc_new, 0, 'table_id', 'input4MIPs' )
-  ncatt_put( nc_new, 0, 'target_mip', 'CMIP' )
+  ncatt_put( nc_new, 0, 'target_mip', target_mip )
   ncatt_put( nc_new, 0, 'title', paste0( 'Future Anthropogenic Emissions of ', FN_em, ' prepared for input4MIPs' ) )
   ncatt_put( nc_new, 0, 'variable_id', MD_variable_id_value )
+  ncatt_put( nc_new, 0, 'license', "Consult https://pcmdi.llnl.gov/CMIP6/TermsOfUse for terms of use governing input4MIPs output, including citation requirements and proper acknowledgment. Further information about this data, including some limitations, can be found via the further_info_url (recorded as a global attribute in this file). The data producers and data providers make no warranty, either express or implied, including, but not limited to, warranties of merchantability and fitness for a particular purpose. All liabilities arising from the supply of the information (including any liability arising in negligence) are excluded to the fullest extent permitted by law" )
   
   # some other metadata
   ncatt_put( nc_new, 0, 'data_usage_tips', 'Note that these are monthly average fluxes. Note that emissions are provided in uneven year intervals (2015, 2020, then at 10 year intervals) as these are the years for which projection data is available.' )
@@ -698,17 +722,26 @@ generate_air_grids_nc <- function( allyear_grids_list,
   # 3. generate nc file name and some variables
   if (em == 'Sulfur') {FN_em <- 'SO2'} else {FN_em <- em}
   
+  dataset_version_number <- get_global_constants( "dataset_version_number" )
+  target_mip <- get_global_constants( "target_mip" )
+
+  # Generate comment here to preserve SPA information from original scenario
+  MD_comment <- paste0( 'SSP harmonized, gridded emissions for ', iam, '_',
+                     scenario, '. Data harmonized to historical emissions ',
+                     'CEDS-v2017-05-18 (anthropogenic) and v1.2 (land-use change)' )
   FN_version_tag <- paste0( 'IAMC', '-', dataset_version_number )  
   MD_dataset_version_number_value <- dataset_version_number 
   MD_source_value <- 'IAMC Scenario Database hosted at IIASA'
-  MD_source_id_value <- paste0( iam, '-', scenario, '-', dataset_version_number )
+  scenario <- gsub("-SPA[0123456789]", "", scenario) # Remove SPA designation
+  scenario <- gsub("SSP", "ssp", scenario) # Change case
+  MD_source_id_value <- paste0( iam, '-', scenario, '-', gsub("[.]", "-", dataset_version_number) ) 
   FN_source_id_value <- MD_source_id_value
   FN_variable_id_value <- paste0( FN_em, '-em-aircraft-anthro' )
-  nc_file_name <- paste0( FN_variable_id_value, '_input4MIPs_emissions_CMIP_', MD_source_id_value, '_gn_201501-210012.nc' )
+  nc_file_name <- paste0( FN_variable_id_value, '_input4MIPs_emissions_',target_mip,'_', MD_source_id_value, '_gn_201501-210012.nc' )
   nc_file_name_w_path <- paste0( output_dir, '/', nc_file_name ) 
   
   # generate flat_var variable name 
-  MD_variable_id_value <- FN_variable_id_value
+  MD_variable_id_value <- gsub( "-", "_", FN_variable_id_value ) # Change to underscore for metadata
   flat_var_name <- MD_variable_id_value 
   flat_var_longname <- flat_var_name
   
@@ -762,7 +795,7 @@ generate_air_grids_nc <- function( allyear_grids_list,
   # nc global attributes
   ncatt_put( nc_new, 0, 'Conventions', 'CF-1.6' )
   ncatt_put( nc_new, 0, 'activity_id', 'input4MIPs' )  
-  ncatt_put( nc_new, 0, 'comment', 'SSP harmonized, gridded emissions. Data harmonized to historical emissions CEDS-v2017-05-18 (anthropogenic) and v1.2 (land-use change)' )
+  ncatt_put( nc_new, 0, 'comment', MD_comment )
   ncatt_put( nc_new, 0, 'contact', 'Steven J. Smith (ssmith@pnnl.gov)' )
   ncatt_put( nc_new, 0, 'creation_date', as.character( format( as.POSIXlt( Sys.time(), "UTC"), format = '%Y-%m-%dT%H:%M:%SZ' ) ) )
   ncatt_put( nc_new, 0, 'data_structure', 'grid' )
@@ -775,7 +808,7 @@ generate_air_grids_nc <- function( allyear_grids_list,
   ncatt_put( nc_new, 0, 'grid_label', 'gn' )
   ncatt_put( nc_new, 0, 'nominal_resolution', '50 km' )
   ncatt_put( nc_new, 0, 'history', paste0( as.character( format( as.POSIXlt( Sys.time(), "UTC"), format = '%d-%m-%Y %H:%M:%S %p %Z' ) ), '; College Park, MD, USA') )
-  ncatt_put( nc_new, 0, 'institution', 'Gridded data generated at IIASA using codes developed at JGCRI' )
+  ncatt_put( nc_new, 0, 'institution', 'Integrated Assessment Modeling Consortium' )
   ncatt_put( nc_new, 0, 'institution_id', 'IAMC' )
   ncatt_put( nc_new, 0, 'mip_era', 'CMIP6' )
   ncatt_put( nc_new, 0, 'product', 'primary-emissions-data' )  
@@ -783,10 +816,12 @@ generate_air_grids_nc <- function( allyear_grids_list,
   ncatt_put( nc_new, 0, 'references', 'See: https://secure.iiasa.ac.at/web-apps/ene/SspDb/ for references' )
   ncatt_put( nc_new, 0, 'source', 'IAMC Scenario Database hosted at IIASA' )
   ncatt_put( nc_new, 0, 'source_id', MD_source_id_value )
+  ncatt_put( nc_new, 0, 'source_version', dataset_version_number )
   ncatt_put( nc_new, 0, 'table_id', 'input4MIPs' )
-  ncatt_put( nc_new, 0, 'target_mip', 'CMIP' )
+  ncatt_put( nc_new, 0, 'target_mip', target_mip )
   ncatt_put( nc_new, 0, 'title', paste0( 'Future Anthropogenic Aircraft Emissions of ', FN_em, ' prepared for input4MIPs' ) )
   ncatt_put( nc_new, 0, 'variable_id', MD_variable_id_value )
+  ncatt_put( nc_new, 0, 'license', "Consult https://pcmdi.llnl.gov/CMIP6/TermsOfUse for terms of use governing input4MIPs output, including citation requirements and proper acknowledgment. Further information about this data, including some limitations, can be found via the further_info_url (recorded as a global attribute in this file). The data producers and data providers make no warranty, either express or implied, including, but not limited to, warranties of merchantability and fitness for a particular purpose. All liabilities arising from the supply of the information (including any liability arising in negligence) are excluded to the fullest extent permitted by law" )
   
   # some other metadata
   ncatt_put( nc_new, 0, 'data_usage_tips', 'Note that these are monthly average fluxes. Note that emissions are provided in uneven year intervals (2015, 2020, then at 10 year intervals) as these are the years for which projection data is available.' )
