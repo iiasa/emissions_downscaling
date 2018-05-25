@@ -162,15 +162,15 @@ generate_bulk_grids_nc <- function( allyear_grids_list,
   dataset_version_number <- get_global_constants( "dataset_version_number" )
   target_mip <- get_global_constants( "target_mip" )
 
-  comment <- paste0( 'SSP harmonized, gridded emissions for ', iam, '_',
+  MD_comment <- paste0( 'SSP harmonized, gridded emissions for ', iam, '_',
                      scenario, '. Data harmonized to historical emissions ',
                      'CEDS-v2017-05-18 (anthropogenic) and v1.2 (land-use change)' )
   FN_version_tag <- paste0( 'IAMC', '-', dataset_version_number )  
   MD_dataset_version_number_value <- dataset_version_number 
   MD_source_value <- 'IAMC Scenario Database hosted at IIASA'
-  scenario <- sub("-SPA[0123456789]", "", scenario) # Remove SPA designation
-  scenario <- sub("SSP", "ssp", scenario) # Change case
-  MD_source_id_value <- paste0( iam, '-', scenario, '-', gsub("\\.", "-", dataset_version_number) ) 
+  scenario <- gsub("-SPA[0123456789]", "", scenario) # Remove SPA designation
+  scenario <- gsub("SSP", "ssp", scenario) # Change case
+  MD_source_id_value <- paste0( iam, '-', scenario, '-', gsub("[.]", "-", dataset_version_number) ) 
   FN_source_id_value <- MD_source_id_value
   FN_variable_id_value <- paste0( FN_em, '-em-anthro' )
   nc_file_name <- paste0( FN_variable_id_value, '_input4MIPs_emissions_',target_mip,'_', MD_source_id_value, '_gn_201501-210012.nc' )
@@ -237,7 +237,7 @@ generate_bulk_grids_nc <- function( allyear_grids_list,
   # nc global attributes
   ncatt_put( nc_new, 0, 'Conventions', 'CF-1.6' )
   ncatt_put( nc_new, 0, 'activity_id', 'input4MIPs' )  
-  ncatt_put( nc_new, 0, 'comment', comment )
+  ncatt_put( nc_new, 0, 'comment', MD_comment )
   ncatt_put( nc_new, 0, 'contact', 'Steven J. Smith (ssmith@pnnl.gov)' )
   ncatt_put( nc_new, 0, 'creation_date', as.character( format( as.POSIXlt( Sys.time(), "UTC"), format = '%Y-%m-%dT%H:%M:%SZ' ) ) )
   ncatt_put( nc_new, 0, 'data_structure', 'grid' )
@@ -459,16 +459,15 @@ generate_openburning_grids_nc <- function( allyear_grids_list,
   dataset_version_number <- get_global_constants( "dataset_version_number" )
   target_mip <- get_global_constants( "target_mip" )
 
-  comment <- paste0( 'SSP harmonized, gridded emissions for ', iam, '_',
+  MD_comment <- paste0( 'SSP harmonized, gridded emissions for ', iam, '_',
                      scenario, '. Data harmonized to historical emissions ',
                      'CEDS-v2017-05-18 (anthropogenic) and v1.2 (land-use change)' )
   FN_version_tag <- paste0( 'IAMC', '-', dataset_version_number )  
   MD_dataset_version_number_value <- dataset_version_number 
   MD_source_value <- 'IAMC Scenario Database hosted at IIASA'
-  scenario <- gsub("-SPA[0123456789]","",scenario) # Remove SPA designation
-  scenario <- gsub("-","",scenario) # Remove dash
-  scenario <- gsub("SSP","ssp",scenario) # Change case
-  MD_source_id_value <- paste0( iam, '-', scenario, '-', gsub(".","-",dataset_version_number) ) 
+  scenario <- gsub("-SPA[0123456789]", "", scenario) # Remove SPA designation
+  scenario <- gsub("SSP", "ssp", scenario) # Change case
+  MD_source_id_value <- paste0( iam, '-', scenario, '-', gsub("[.]", "-", dataset_version_number) ) 
   FN_source_id_value <- MD_source_id_value
   FN_variable_id_value <- paste0( FN_em, '-em-openburning' )
   nc_file_name <- paste0( FN_variable_id_value, '_input4MIPs_emissions_',target_mip,'_', MD_source_id_value, '_gn_201501-210012.nc' )
@@ -533,7 +532,7 @@ generate_openburning_grids_nc <- function( allyear_grids_list,
   # nc global attributes
   ncatt_put( nc_new, 0, 'Conventions', 'CF-1.6' )
   ncatt_put( nc_new, 0, 'activity_id', 'input4MIPs' )  
-  ncatt_put( nc_new, 0, 'comment', comment )
+  ncatt_put( nc_new, 0, 'comment', MD_comment )
   ncatt_put( nc_new, 0, 'contact', 'Steven J. Smith (ssmith@pnnl.gov)' )
   ncatt_put( nc_new, 0, 'creation_date', as.character( format( as.POSIXlt( Sys.time(), "UTC"), format = '%Y-%m-%dT%H:%M:%SZ' ) ) )
   ncatt_put( nc_new, 0, 'data_structure', 'grid' )
@@ -724,16 +723,15 @@ generate_air_grids_nc <- function( allyear_grids_list,
   dataset_version_number <- get_global_constants( "dataset_version_number" )
   target_mip <- get_global_constants( "target_mip" )
 
-  comment <- paste0( 'SSP harmonized, gridded emissions for ', iam, '_',
+  MD_comment <- paste0( 'SSP harmonized, gridded emissions for ', iam, '_',
                      scenario, '. Data harmonized to historical emissions ',
                      'CEDS-v2017-05-18 (anthropogenic) and v1.2 (land-use change)' )
   FN_version_tag <- paste0( 'IAMC', '-', dataset_version_number )  
   MD_dataset_version_number_value <- dataset_version_number 
   MD_source_value <- 'IAMC Scenario Database hosted at IIASA'
-  scenario <- gsub("-SPA[0123456789]","",scenario) # Remove SPA designation
-  scenario <- gsub("-","",scenario) # Remove dash
-  scenario <- gsub("SSP","ssp",scenario) # Change case
-  MD_source_id_value <- paste0( iam, '-', scenario, '-', gsub(".","-",dataset_version_number) )
+  scenario <- gsub("-SPA[0123456789]", "", scenario) # Remove SPA designation
+  scenario <- gsub("SSP", "ssp", scenario) # Change case
+  MD_source_id_value <- paste0( iam, '-', scenario, '-', gsub("[.]", "-", dataset_version_number) ) 
   FN_source_id_value <- MD_source_id_value
   FN_variable_id_value <- paste0( FN_em, '-em-aircraft-anthro' )
   nc_file_name <- paste0( FN_variable_id_value, '_input4MIPs_emissions_',target_mip,'_', MD_source_id_value, '_gn_201501-210012.nc' )
@@ -794,7 +792,7 @@ generate_air_grids_nc <- function( allyear_grids_list,
   # nc global attributes
   ncatt_put( nc_new, 0, 'Conventions', 'CF-1.6' )
   ncatt_put( nc_new, 0, 'activity_id', 'input4MIPs' )  
-  ncatt_put( nc_new, 0, 'comment', comment )
+  ncatt_put( nc_new, 0, 'comment', MD_comment )
   ncatt_put( nc_new, 0, 'contact', 'Steven J. Smith (ssmith@pnnl.gov)' )
   ncatt_put( nc_new, 0, 'creation_date', as.character( format( as.POSIXlt( Sys.time(), "UTC"), format = '%Y-%m-%dT%H:%M:%SZ' ) ) )
   ncatt_put( nc_new, 0, 'data_structure', 'grid' )
