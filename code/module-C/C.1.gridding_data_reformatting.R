@@ -1,11 +1,11 @@
 # ------------------------------------------------------------------------------
 # Program Name: C.1.gridding_data_reformatting.R
 # Author(s): Leyang Feng
-# Date Last Updated: Apr 3, 2017 
+# Date Last Updated: Apr 3, 2017
 # Program Purpose: Reformat the downscaled IAM emissions for gridding
-# Input Files:  
-# Output Files: 
-# Notes: 
+# Input Files:
+# Output Files:
+# Notes:
 # TODO: update reference emissions so there would be no NA in X2015
 # ------------------------------------------------------------------------------
 
@@ -25,10 +25,10 @@ for ( i in 1:length( dirs ) ) {
 }
 PARAM_DIR <- "../code/parameters/"
 
-# Call standard script header function to read in universal header files - 
+# Call standard script header function to read in universal header files -
 # provides logging, file support, and system functions - and start the script log.
-headers <- c( 'common_data.R', 'data_functions.R', 'module-A_functions.R', 'all_module_functions.R' ) 
-log_msg <- "Reformat the downscaled IAM emissions for gridding" 
+headers <- c( 'common_data.R', 'data_functions.R', 'module-A_functions.R', 'all_module_functions.R' )
+log_msg <- "Reformat the downscaled IAM emissions for gridding"
 script_name <- "C.1.gridding_data_reformatting.R"
 
 source( paste0( PARAM_DIR, "header.R" ) )
@@ -45,22 +45,22 @@ MODULE_C <- "../code/module-C/"
 
 # ------------------------------------------------------------------------------
 # 1. Read mapping files and axtract iam info
-# read in master config file 
+# read in master config file
 master_config <- readData( 'MAPPINGS', 'master_config', column_names = F )
-# select iam configuration line from the mapping and read the iam information as a list 
+# select iam configuration line from the mapping and read the iam information as a list
 iam_info_list <- iamInfoExtract( master_config, iam )
 
-print( paste0( 'The IAM to be processed is: ', iam_name  ) )  
+print( paste0( 'The IAM to be processed is: ', iam_name  ) )
 
 # -----------------------------------------------------------------------------
-# 2. Read in the downscaled emissions and gridding mapping file 
-iam_data <- readData( domain = 'MED_OUT', 
+# 2. Read in the downscaled emissions and gridding mapping file
+iam_data <- readData( domain = 'MED_OUT',
                       file_name = paste0( 'B.', iam, '_', harm_status, '_emissions_downscaled_for_gridding', '_', RUNSUFFIX ) )
 sector_mapping <- readData( domain = 'GRIDDING', domain_extension = 'gridding-mappings/', file_name = gridding_sector_mapping )
 
 # -----------------------------------------------------------------------------
 # 3. Make necessary change
-iam_em <- merge( iam_data, sector_mapping, 
+iam_em <- merge( iam_data, sector_mapping,
                  by.x = 'sector', by.y = 'sector_name' )
 iam_em$sector <- NULL
 colnames( iam_em )[ which( colnames( iam_em ) == 'sector_short' ) ] <- 'sector'
@@ -70,9 +70,9 @@ iam_em$scenario<- substr(iam_em$scenario, 1, nchar(iam_em$scenario)-4)
 
 # -----------------------------------------------------------------------------
 # 4. Write out
-# write the interpolated iam_data into intermediate output folder 
+# write the interpolated iam_data into intermediate output folder
 out_filname <- paste0( 'C.', iam, '_', harm_status, '_emissions_reformatted', '_', RUNSUFFIX )
-writeData( iam_em , 'MED_OUT', out_filname, meta = F )  
+writeData( iam_em , 'MED_OUT', out_filname, meta = F )
 
 # END
 logStop()

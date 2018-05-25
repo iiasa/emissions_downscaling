@@ -92,17 +92,17 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping, CO2_or_negCY) {
       # rescale preliminary downscaled emissions so that they sum to IAM regional emissions
       par_df_ssp <- equation7( par_df_ssp )
       
-      if ( debug ) {
-        
-        # output calculation parameters data.frame
-        if ( year %in% calculationYears ) {
-          saveCalculation( par_df_ssp, year, calculationYears, calculationDir )
-        }
-        
-        # save_parameter( par_df_ssp, year, DiffR, calculationDir )
-        save_parameter( par_df_ssp, year, EI_star, calculationDir )
-        
-      }
+      # if ( debug ) {
+      #   
+      #   # output calculation parameters data.frame
+      #   if ( year %in% calculationYears ) {
+      #     saveCalculation( par_df_ssp, year, calculationYears, calculationDir )
+      #   }
+      #   
+      #   # save_parameter( par_df_ssp, year, DiffR, calculationDir )
+      #   save_parameter( par_df_ssp, year, EI_star, calculationDir )
+      #   
+      # }
       
       if (CO2_or_negCY) {
         # calculate EI_gr_C_pm (updates column if numGrowthRates = 2 & year == peak_year)
