@@ -1,352 +1,352 @@
-"model","em","variable","sector","harm_status"
-"AIM/CGE","BC","CEDS+|9+ Sectors|Emissions|BC|Agriculture|Harmonized","Agriculture","Harmonized"
-"AIM/CGE","BC","CEDS+|9+ Sectors|Emissions|BC|Agricultural Waste Burning|Harmonized","Agricultural Waste Burning","Harmonized"
-"AIM/CGE","BC","CEDS+|9+ Sectors|Emissions|BC|Forest Burning|Harmonized","Forest Burning","Harmonized"
-"AIM/CGE","BC","CEDS+|9+ Sectors|Emissions|BC|Grassland Burning|Harmonized","Grassland Burning","Harmonized"
-"AIM/CGE","BC","CEDS+|9+ Sectors|Emissions|BC|Peat Burning|Harmonized","Peat Burning","Harmonized"
-"AIM/CGE","BC","CEDS+|9+ Sectors|Emissions|BC|Industrial Sector|Harmonized","Industrial Sector","Harmonized"
-"AIM/CGE","BC","CEDS+|9+ Sectors|Emissions|BC|Residential Commercial Other|Harmonized","Residential Commercial Other","Harmonized"
-"AIM/CGE","BC","CEDS+|9+ Sectors|Emissions|BC|Aircraft|Harmonized","Aircraft","Harmonized"
-"AIM/CGE","BC","CEDS+|9+ Sectors|Emissions|BC|Transportation Sector|Harmonized","Transportation Sector","Harmonized"
-"AIM/CGE","BC","CEDS+|9+ Sectors|Emissions|BC|International Shipping|Harmonized","International Shipping","Harmonized"
-"AIM/CGE","BC","CEDS+|9+ Sectors|Emissions|BC|Energy Sector|Harmonized","Energy Sector","Harmonized"
-"AIM/CGE","BC","CEDS+|9+ Sectors|Emissions|BC|Solvents Production and Application|Harmonized","Solvents Production and Application","Harmonized"
-"AIM/CGE","BC","CEDS+|9+ Sectors|Emissions|BC|Waste|Harmonized","Waste","Harmonized"
-"AIM/CGE","BC","CEDS+|9+ Sectors|Emissions|BC|Agriculture|Harmonized-DB","Agriculture","Harmonized-DB"
-"AIM/CGE","BC","CEDS+|9+ Sectors|Emissions|BC|Agricultural Waste Burning|Harmonized-DB","Agricultural Waste Burning","Harmonized-DB"
-"AIM/CGE","BC","CEDS+|9+ Sectors|Emissions|BC|Forest Burning|Harmonized-DB","Forest Burning","Harmonized-DB"
-"AIM/CGE","BC","CEDS+|9+ Sectors|Emissions|BC|Grassland Burning|Harmonized-DB","Grassland Burning","Harmonized-DB"
-"AIM/CGE","BC","CEDS+|9+ Sectors|Emissions|BC|Peat Burning|Harmonized-DB","Peat Burning","Harmonized-DB"
-"AIM/CGE","BC","CEDS+|9+ Sectors|Emissions|BC|Industrial Sector|Harmonized-DB","Industrial Sector","Harmonized-DB"
-"AIM/CGE","BC","CEDS+|9+ Sectors|Emissions|BC|Residential Commercial Other|Harmonized-DB","Residential Commercial Other","Harmonized-DB"
-"AIM/CGE","BC","CEDS+|9+ Sectors|Emissions|BC|Aircraft|Harmonized-DB","Aircraft","Harmonized-DB"
-"AIM/CGE","BC","CEDS+|9+ Sectors|Emissions|BC|Transportation Sector|Harmonized-DB","Transportation Sector","Harmonized-DB"
-"AIM/CGE","BC","CEDS+|9+ Sectors|Emissions|BC|International Shipping|Harmonized-DB","International Shipping","Harmonized-DB"
-"AIM/CGE","BC","CEDS+|9+ Sectors|Emissions|BC|Energy Sector|Harmonized-DB","Energy Sector","Harmonized-DB"
-"AIM/CGE","BC","CEDS+|9+ Sectors|Emissions|BC|Solvents Production and Application|Harmonized-DB","Solvents Production and Application","Harmonized-DB"
-"AIM/CGE","BC","CEDS+|9+ Sectors|Emissions|BC|Waste|Harmonized-DB","Waste","Harmonized-DB"
-"AIM/CGE","BC","CEDS+|9+ Sectors|Emissions|BC|Agriculture|Unharmonized","Agriculture","Unharmonized"
-"AIM/CGE","BC","CEDS+|9+ Sectors|Emissions|BC|Agricultural Waste Burning|Unharmonized","Agricultural Waste Burning","Unharmonized"
-"AIM/CGE","BC","CEDS+|9+ Sectors|Emissions|BC|Forest Burning|Unharmonized","Forest Burning","Unharmonized"
-"AIM/CGE","BC","CEDS+|9+ Sectors|Emissions|BC|Grassland Burning|Unharmonized","Grassland Burning","Unharmonized"
-"AIM/CGE","BC","CEDS+|9+ Sectors|Emissions|BC|Peat Burning|Unharmonized","Peat Burning","Unharmonized"
-"AIM/CGE","BC","CEDS+|9+ Sectors|Emissions|BC|Industrial Sector|Unharmonized","Industrial Sector","Unharmonized"
-"AIM/CGE","BC","CEDS+|9+ Sectors|Emissions|BC|Residential Commercial Other|Unharmonized","Residential Commercial Other","Unharmonized"
-"AIM/CGE","BC","CEDS+|9+ Sectors|Emissions|BC|Aircraft|Unharmonized","Aircraft","Unharmonized"
-"AIM/CGE","BC","CEDS+|9+ Sectors|Emissions|BC|Transportation Sector|Unharmonized","Transportation Sector","Unharmonized"
-"AIM/CGE","BC","CEDS+|9+ Sectors|Emissions|BC|International Shipping|Unharmonized","International Shipping","Unharmonized"
-"AIM/CGE","BC","CEDS+|9+ Sectors|Emissions|BC|Energy Sector|Unharmonized","Energy Sector","Unharmonized"
-"AIM/CGE","BC","CEDS+|9+ Sectors|Emissions|BC|Solvents Production and Application|Unharmonized","Solvents Production and Application","Unharmonized"
-"AIM/CGE","BC","CEDS+|9+ Sectors|Emissions|BC|Waste|Unharmonized","Waste","Unharmonized"
-"AIM/CGE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Agriculture|Harmonized","Agriculture","Harmonized"
-"AIM/CGE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Agricultural Waste Burning|Harmonized","Agricultural Waste Burning","Harmonized"
-"AIM/CGE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Forest Burning|Harmonized","Forest Burning","Harmonized"
-"AIM/CGE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Grassland Burning|Harmonized","Grassland Burning","Harmonized"
-"AIM/CGE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Peat Burning|Harmonized","Peat Burning","Harmonized"
-"AIM/CGE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Industrial Sector|Harmonized","Industrial Sector","Harmonized"
-"AIM/CGE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Residential Commercial Other|Harmonized","Residential Commercial Other","Harmonized"
-"AIM/CGE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Aircraft|Harmonized","Aircraft","Harmonized"
-"AIM/CGE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Transportation Sector|Harmonized","Transportation Sector","Harmonized"
-"AIM/CGE","CH4","CEDS+|9+ Sectors|Emissions|CH4|International Shipping|Harmonized","International Shipping","Harmonized"
-"AIM/CGE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Energy Sector|Harmonized","Energy Sector","Harmonized"
-"AIM/CGE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Solvents Production and Application|Harmonized","Solvents Production and Application","Harmonized"
-"AIM/CGE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Waste|Harmonized","Waste","Harmonized"
-"AIM/CGE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Agriculture|Harmonized-DB","Agriculture","Harmonized-DB"
-"AIM/CGE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Agricultural Waste Burning|Harmonized-DB","Agricultural Waste Burning","Harmonized-DB"
-"AIM/CGE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Forest Burning|Harmonized-DB","Forest Burning","Harmonized-DB"
-"AIM/CGE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Grassland Burning|Harmonized-DB","Grassland Burning","Harmonized-DB"
-"AIM/CGE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Peat Burning|Harmonized-DB","Peat Burning","Harmonized-DB"
-"AIM/CGE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Industrial Sector|Harmonized-DB","Industrial Sector","Harmonized-DB"
-"AIM/CGE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Residential Commercial Other|Harmonized-DB","Residential Commercial Other","Harmonized-DB"
-"AIM/CGE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Aircraft|Harmonized-DB","Aircraft","Harmonized-DB"
-"AIM/CGE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Transportation Sector|Harmonized-DB","Transportation Sector","Harmonized-DB"
-"AIM/CGE","CH4","CEDS+|9+ Sectors|Emissions|CH4|International Shipping|Harmonized-DB","International Shipping","Harmonized-DB"
-"AIM/CGE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Energy Sector|Harmonized-DB","Energy Sector","Harmonized-DB"
-"AIM/CGE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Solvents Production and Application|Harmonized-DB","Solvents Production and Application","Harmonized-DB"
-"AIM/CGE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Waste|Harmonized-DB","Waste","Harmonized-DB"
-"AIM/CGE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Agriculture|Unharmonized","Agriculture","Unharmonized"
-"AIM/CGE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Agricultural Waste Burning|Unharmonized","Agricultural Waste Burning","Unharmonized"
-"AIM/CGE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Forest Burning|Unharmonized","Forest Burning","Unharmonized"
-"AIM/CGE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Grassland Burning|Unharmonized","Grassland Burning","Unharmonized"
-"AIM/CGE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Peat Burning|Unharmonized","Peat Burning","Unharmonized"
-"AIM/CGE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Industrial Sector|Unharmonized","Industrial Sector","Unharmonized"
-"AIM/CGE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Residential Commercial Other|Unharmonized","Residential Commercial Other","Unharmonized"
-"AIM/CGE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Aircraft|Unharmonized","Aircraft","Unharmonized"
-"AIM/CGE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Transportation Sector|Unharmonized","Transportation Sector","Unharmonized"
-"AIM/CGE","CH4","CEDS+|9+ Sectors|Emissions|CH4|International Shipping|Unharmonized","International Shipping","Unharmonized"
-"AIM/CGE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Energy Sector|Unharmonized","Energy Sector","Unharmonized"
-"AIM/CGE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Solvents Production and Application|Unharmonized","Solvents Production and Application","Unharmonized"
-"AIM/CGE","CH4","CEDS+|9+ Sectors|Emissions|CH4|Waste|Unharmonized","Waste","Unharmonized"
-"AIM/CGE","CO","CEDS+|9+ Sectors|Emissions|CO|Agriculture|Harmonized","Agriculture","Harmonized"
-"AIM/CGE","CO","CEDS+|9+ Sectors|Emissions|CO|Agricultural Waste Burning|Harmonized","Agricultural Waste Burning","Harmonized"
-"AIM/CGE","CO","CEDS+|9+ Sectors|Emissions|CO|Forest Burning|Harmonized","Forest Burning","Harmonized"
-"AIM/CGE","CO","CEDS+|9+ Sectors|Emissions|CO|Grassland Burning|Harmonized","Grassland Burning","Harmonized"
-"AIM/CGE","CO","CEDS+|9+ Sectors|Emissions|CO|Peat Burning|Harmonized","Peat Burning","Harmonized"
-"AIM/CGE","CO","CEDS+|9+ Sectors|Emissions|CO|Industrial Sector|Harmonized","Industrial Sector","Harmonized"
-"AIM/CGE","CO","CEDS+|9+ Sectors|Emissions|CO|Residential Commercial Other|Harmonized","Residential Commercial Other","Harmonized"
-"AIM/CGE","CO","CEDS+|9+ Sectors|Emissions|CO|Aircraft|Harmonized","Aircraft","Harmonized"
-"AIM/CGE","CO","CEDS+|9+ Sectors|Emissions|CO|Transportation Sector|Harmonized","Transportation Sector","Harmonized"
-"AIM/CGE","CO","CEDS+|9+ Sectors|Emissions|CO|International Shipping|Harmonized","International Shipping","Harmonized"
-"AIM/CGE","CO","CEDS+|9+ Sectors|Emissions|CO|Energy Sector|Harmonized","Energy Sector","Harmonized"
-"AIM/CGE","CO","CEDS+|9+ Sectors|Emissions|CO|Solvents Production and Application|Harmonized","Solvents Production and Application","Harmonized"
-"AIM/CGE","CO","CEDS+|9+ Sectors|Emissions|CO|Waste|Harmonized","Waste","Harmonized"
-"AIM/CGE","CO","CEDS+|9+ Sectors|Emissions|CO|Agriculture|Harmonized-DB","Agriculture","Harmonized-DB"
-"AIM/CGE","CO","CEDS+|9+ Sectors|Emissions|CO|Agricultural Waste Burning|Harmonized-DB","Agricultural Waste Burning","Harmonized-DB"
-"AIM/CGE","CO","CEDS+|9+ Sectors|Emissions|CO|Forest Burning|Harmonized-DB","Forest Burning","Harmonized-DB"
-"AIM/CGE","CO","CEDS+|9+ Sectors|Emissions|CO|Grassland Burning|Harmonized-DB","Grassland Burning","Harmonized-DB"
-"AIM/CGE","CO","CEDS+|9+ Sectors|Emissions|CO|Peat Burning|Harmonized-DB","Peat Burning","Harmonized-DB"
-"AIM/CGE","CO","CEDS+|9+ Sectors|Emissions|CO|Industrial Sector|Harmonized-DB","Industrial Sector","Harmonized-DB"
-"AIM/CGE","CO","CEDS+|9+ Sectors|Emissions|CO|Residential Commercial Other|Harmonized-DB","Residential Commercial Other","Harmonized-DB"
-"AIM/CGE","CO","CEDS+|9+ Sectors|Emissions|CO|Aircraft|Harmonized-DB","Aircraft","Harmonized-DB"
-"AIM/CGE","CO","CEDS+|9+ Sectors|Emissions|CO|Transportation Sector|Harmonized-DB","Transportation Sector","Harmonized-DB"
-"AIM/CGE","CO","CEDS+|9+ Sectors|Emissions|CO|International Shipping|Harmonized-DB","International Shipping","Harmonized-DB"
-"AIM/CGE","CO","CEDS+|9+ Sectors|Emissions|CO|Energy Sector|Harmonized-DB","Energy Sector","Harmonized-DB"
-"AIM/CGE","CO","CEDS+|9+ Sectors|Emissions|CO|Solvents Production and Application|Harmonized-DB","Solvents Production and Application","Harmonized-DB"
-"AIM/CGE","CO","CEDS+|9+ Sectors|Emissions|CO|Waste|Harmonized-DB","Waste","Harmonized-DB"
-"AIM/CGE","CO","CEDS+|9+ Sectors|Emissions|CO|Agriculture|Unharmonized","Agriculture","Unharmonized"
-"AIM/CGE","CO","CEDS+|9+ Sectors|Emissions|CO|Agricultural Waste Burning|Unharmonized","Agricultural Waste Burning","Unharmonized"
-"AIM/CGE","CO","CEDS+|9+ Sectors|Emissions|CO|Forest Burning|Unharmonized","Forest Burning","Unharmonized"
-"AIM/CGE","CO","CEDS+|9+ Sectors|Emissions|CO|Grassland Burning|Unharmonized","Grassland Burning","Unharmonized"
-"AIM/CGE","CO","CEDS+|9+ Sectors|Emissions|CO|Peat Burning|Unharmonized","Peat Burning","Unharmonized"
-"AIM/CGE","CO","CEDS+|9+ Sectors|Emissions|CO|Industrial Sector|Unharmonized","Industrial Sector","Unharmonized"
-"AIM/CGE","CO","CEDS+|9+ Sectors|Emissions|CO|Residential Commercial Other|Unharmonized","Residential Commercial Other","Unharmonized"
-"AIM/CGE","CO","CEDS+|9+ Sectors|Emissions|CO|Aircraft|Unharmonized","Aircraft","Unharmonized"
-"AIM/CGE","CO","CEDS+|9+ Sectors|Emissions|CO|Transportation Sector|Unharmonized","Transportation Sector","Unharmonized"
-"AIM/CGE","CO","CEDS+|9+ Sectors|Emissions|CO|International Shipping|Unharmonized","International Shipping","Unharmonized"
-"AIM/CGE","CO","CEDS+|9+ Sectors|Emissions|CO|Energy Sector|Unharmonized","Energy Sector","Unharmonized"
-"AIM/CGE","CO","CEDS+|9+ Sectors|Emissions|CO|Solvents Production and Application|Unharmonized","Solvents Production and Application","Unharmonized"
-"AIM/CGE","CO","CEDS+|9+ Sectors|Emissions|CO|Waste|Unharmonized","Waste","Unharmonized"
-"AIM/CGE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Agriculture|Harmonized","Agriculture","Harmonized"
-"AIM/CGE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Agricultural Waste Burning|Harmonized","Agricultural Waste Burning","Harmonized"
-"AIM/CGE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Forest Burning|Harmonized","Forest Burning","Harmonized"
-"AIM/CGE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Grassland Burning|Harmonized","Grassland Burning","Harmonized"
-"AIM/CGE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Peat Burning|Harmonized","Peat Burning","Harmonized"
-"AIM/CGE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Industrial Sector|Harmonized","Industrial Sector","Harmonized"
-"AIM/CGE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Residential Commercial Other|Harmonized","Residential Commercial Other","Harmonized"
-"AIM/CGE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Aircraft|Harmonized","Aircraft","Harmonized"
-"AIM/CGE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Transportation Sector|Harmonized","Transportation Sector","Harmonized"
-"AIM/CGE","CO2","CEDS+|9+ Sectors|Emissions|CO2|International Shipping|Harmonized","International Shipping","Harmonized"
-"AIM/CGE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Energy Sector|Harmonized","Energy Sector","Harmonized"
-"AIM/CGE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Solvents Production and Application|Harmonized","Solvents Production and Application","Harmonized"
-"AIM/CGE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Waste|Harmonized","Waste","Harmonized"
-"AIM/CGE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Agriculture|Harmonized-DB","Agriculture","Harmonized-DB"
-"AIM/CGE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Agricultural Waste Burning|Harmonized-DB","Agricultural Waste Burning","Harmonized-DB"
-"AIM/CGE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Forest Burning|Harmonized-DB","Forest Burning","Harmonized-DB"
-"AIM/CGE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Grassland Burning|Harmonized-DB","Grassland Burning","Harmonized-DB"
-"AIM/CGE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Peat Burning|Harmonized-DB","Peat Burning","Harmonized-DB"
-"AIM/CGE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Industrial Sector|Harmonized-DB","Industrial Sector","Harmonized-DB"
-"AIM/CGE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Residential Commercial Other|Harmonized-DB","Residential Commercial Other","Harmonized-DB"
-"AIM/CGE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Aircraft|Harmonized-DB","Aircraft","Harmonized-DB"
-"AIM/CGE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Transportation Sector|Harmonized-DB","Transportation Sector","Harmonized-DB"
-"AIM/CGE","CO2","CEDS+|9+ Sectors|Emissions|CO2|International Shipping|Harmonized-DB","International Shipping","Harmonized-DB"
-"AIM/CGE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Energy Sector|Harmonized-DB","Energy Sector","Harmonized-DB"
-"AIM/CGE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Solvents Production and Application|Harmonized-DB","Solvents Production and Application","Harmonized-DB"
-"AIM/CGE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Waste|Harmonized-DB","Waste","Harmonized-DB"
-"AIM/CGE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Agriculture|Unharmonized","Agriculture","Unharmonized"
-"AIM/CGE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Agricultural Waste Burning|Unharmonized","Agricultural Waste Burning","Unharmonized"
-"AIM/CGE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Forest Burning|Unharmonized","Forest Burning","Unharmonized"
-"AIM/CGE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Grassland Burning|Unharmonized","Grassland Burning","Unharmonized"
-"AIM/CGE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Peat Burning|Unharmonized","Peat Burning","Unharmonized"
-"AIM/CGE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Industrial Sector|Unharmonized","Industrial Sector","Unharmonized"
-"AIM/CGE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Residential Commercial Other|Unharmonized","Residential Commercial Other","Unharmonized"
-"AIM/CGE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Aircraft|Unharmonized","Aircraft","Unharmonized"
-"AIM/CGE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Transportation Sector|Unharmonized","Transportation Sector","Unharmonized"
-"AIM/CGE","CO2","CEDS+|9+ Sectors|Emissions|CO2|International Shipping|Unharmonized","International Shipping","Unharmonized"
-"AIM/CGE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Energy Sector|Unharmonized","Energy Sector","Unharmonized"
-"AIM/CGE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Solvents Production and Application|Unharmonized","Solvents Production and Application","Unharmonized"
-"AIM/CGE","CO2","CEDS+|9+ Sectors|Emissions|CO2|Waste|Unharmonized","Waste","Unharmonized"
-"AIM/CGE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Agriculture|Harmonized","Agriculture","Harmonized"
-"AIM/CGE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Agricultural Waste Burning|Harmonized","Agricultural Waste Burning","Harmonized"
-"AIM/CGE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Forest Burning|Harmonized","Forest Burning","Harmonized"
-"AIM/CGE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Grassland Burning|Harmonized","Grassland Burning","Harmonized"
-"AIM/CGE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Peat Burning|Harmonized","Peat Burning","Harmonized"
-"AIM/CGE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Industrial Sector|Harmonized","Industrial Sector","Harmonized"
-"AIM/CGE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Residential Commercial Other|Harmonized","Residential Commercial Other","Harmonized"
-"AIM/CGE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Aircraft|Harmonized","Aircraft","Harmonized"
-"AIM/CGE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Transportation Sector|Harmonized","Transportation Sector","Harmonized"
-"AIM/CGE","NH3","CEDS+|9+ Sectors|Emissions|NH3|International Shipping|Harmonized","International Shipping","Harmonized"
-"AIM/CGE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Energy Sector|Harmonized","Energy Sector","Harmonized"
-"AIM/CGE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Solvents Production and Application|Harmonized","Solvents Production and Application","Harmonized"
-"AIM/CGE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Waste|Harmonized","Waste","Harmonized"
-"AIM/CGE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Agriculture|Harmonized-DB","Agriculture","Harmonized-DB"
-"AIM/CGE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Agricultural Waste Burning|Harmonized-DB","Agricultural Waste Burning","Harmonized-DB"
-"AIM/CGE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Forest Burning|Harmonized-DB","Forest Burning","Harmonized-DB"
-"AIM/CGE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Grassland Burning|Harmonized-DB","Grassland Burning","Harmonized-DB"
-"AIM/CGE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Peat Burning|Harmonized-DB","Peat Burning","Harmonized-DB"
-"AIM/CGE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Industrial Sector|Harmonized-DB","Industrial Sector","Harmonized-DB"
-"AIM/CGE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Residential Commercial Other|Harmonized-DB","Residential Commercial Other","Harmonized-DB"
-"AIM/CGE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Aircraft|Harmonized-DB","Aircraft","Harmonized-DB"
-"AIM/CGE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Transportation Sector|Harmonized-DB","Transportation Sector","Harmonized-DB"
-"AIM/CGE","NH3","CEDS+|9+ Sectors|Emissions|NH3|International Shipping|Harmonized-DB","International Shipping","Harmonized-DB"
-"AIM/CGE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Energy Sector|Harmonized-DB","Energy Sector","Harmonized-DB"
-"AIM/CGE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Solvents Production and Application|Harmonized-DB","Solvents Production and Application","Harmonized-DB"
-"AIM/CGE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Waste|Harmonized-DB","Waste","Harmonized-DB"
-"AIM/CGE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Agriculture|Unharmonized","Agriculture","Unharmonized"
-"AIM/CGE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Agricultural Waste Burning|Unharmonized","Agricultural Waste Burning","Unharmonized"
-"AIM/CGE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Forest Burning|Unharmonized","Forest Burning","Unharmonized"
-"AIM/CGE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Grassland Burning|Unharmonized","Grassland Burning","Unharmonized"
-"AIM/CGE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Peat Burning|Unharmonized","Peat Burning","Unharmonized"
-"AIM/CGE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Industrial Sector|Unharmonized","Industrial Sector","Unharmonized"
-"AIM/CGE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Residential Commercial Other|Unharmonized","Residential Commercial Other","Unharmonized"
-"AIM/CGE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Aircraft|Unharmonized","Aircraft","Unharmonized"
-"AIM/CGE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Transportation Sector|Unharmonized","Transportation Sector","Unharmonized"
-"AIM/CGE","NH3","CEDS+|9+ Sectors|Emissions|NH3|International Shipping|Unharmonized","International Shipping","Unharmonized"
-"AIM/CGE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Energy Sector|Unharmonized","Energy Sector","Unharmonized"
-"AIM/CGE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Solvents Production and Application|Unharmonized","Solvents Production and Application","Unharmonized"
-"AIM/CGE","NH3","CEDS+|9+ Sectors|Emissions|NH3|Waste|Unharmonized","Waste","Unharmonized"
-"AIM/CGE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Agriculture|Harmonized","Agriculture","Harmonized"
-"AIM/CGE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Agricultural Waste Burning|Harmonized","Agricultural Waste Burning","Harmonized"
-"AIM/CGE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Forest Burning|Harmonized","Forest Burning","Harmonized"
-"AIM/CGE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Grassland Burning|Harmonized","Grassland Burning","Harmonized"
-"AIM/CGE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Peat Burning|Harmonized","Peat Burning","Harmonized"
-"AIM/CGE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Industrial Sector|Harmonized","Industrial Sector","Harmonized"
-"AIM/CGE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Residential Commercial Other|Harmonized","Residential Commercial Other","Harmonized"
-"AIM/CGE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Aircraft|Harmonized","Aircraft","Harmonized"
-"AIM/CGE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Transportation Sector|Harmonized","Transportation Sector","Harmonized"
-"AIM/CGE","NOx","CEDS+|9+ Sectors|Emissions|NOx|International Shipping|Harmonized","International Shipping","Harmonized"
-"AIM/CGE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Energy Sector|Harmonized","Energy Sector","Harmonized"
-"AIM/CGE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Solvents Production and Application|Harmonized","Solvents Production and Application","Harmonized"
-"AIM/CGE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Waste|Harmonized","Waste","Harmonized"
-"AIM/CGE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Agriculture|Harmonized-DB","Agriculture","Harmonized-DB"
-"AIM/CGE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Agricultural Waste Burning|Harmonized-DB","Agricultural Waste Burning","Harmonized-DB"
-"AIM/CGE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Forest Burning|Harmonized-DB","Forest Burning","Harmonized-DB"
-"AIM/CGE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Grassland Burning|Harmonized-DB","Grassland Burning","Harmonized-DB"
-"AIM/CGE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Peat Burning|Harmonized-DB","Peat Burning","Harmonized-DB"
-"AIM/CGE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Industrial Sector|Harmonized-DB","Industrial Sector","Harmonized-DB"
-"AIM/CGE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Residential Commercial Other|Harmonized-DB","Residential Commercial Other","Harmonized-DB"
-"AIM/CGE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Aircraft|Harmonized-DB","Aircraft","Harmonized-DB"
-"AIM/CGE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Transportation Sector|Harmonized-DB","Transportation Sector","Harmonized-DB"
-"AIM/CGE","NOx","CEDS+|9+ Sectors|Emissions|NOx|International Shipping|Harmonized-DB","International Shipping","Harmonized-DB"
-"AIM/CGE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Energy Sector|Harmonized-DB","Energy Sector","Harmonized-DB"
-"AIM/CGE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Solvents Production and Application|Harmonized-DB","Solvents Production and Application","Harmonized-DB"
-"AIM/CGE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Waste|Harmonized-DB","Waste","Harmonized-DB"
-"AIM/CGE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Agriculture|Unharmonized","Agriculture","Unharmonized"
-"AIM/CGE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Agricultural Waste Burning|Unharmonized","Agricultural Waste Burning","Unharmonized"
-"AIM/CGE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Forest Burning|Unharmonized","Forest Burning","Unharmonized"
-"AIM/CGE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Grassland Burning|Unharmonized","Grassland Burning","Unharmonized"
-"AIM/CGE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Peat Burning|Unharmonized","Peat Burning","Unharmonized"
-"AIM/CGE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Industrial Sector|Unharmonized","Industrial Sector","Unharmonized"
-"AIM/CGE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Residential Commercial Other|Unharmonized","Residential Commercial Other","Unharmonized"
-"AIM/CGE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Aircraft|Unharmonized","Aircraft","Unharmonized"
-"AIM/CGE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Transportation Sector|Unharmonized","Transportation Sector","Unharmonized"
-"AIM/CGE","NOx","CEDS+|9+ Sectors|Emissions|NOx|International Shipping|Unharmonized","International Shipping","Unharmonized"
-"AIM/CGE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Energy Sector|Unharmonized","Energy Sector","Unharmonized"
-"AIM/CGE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Solvents Production and Application|Unharmonized","Solvents Production and Application","Unharmonized"
-"AIM/CGE","NOx","CEDS+|9+ Sectors|Emissions|NOx|Waste|Unharmonized","Waste","Unharmonized"
-"AIM/CGE","OC","CEDS+|9+ Sectors|Emissions|OC|Agriculture|Harmonized","Agriculture","Harmonized"
-"AIM/CGE","OC","CEDS+|9+ Sectors|Emissions|OC|Agricultural Waste Burning|Harmonized","Agricultural Waste Burning","Harmonized"
-"AIM/CGE","OC","CEDS+|9+ Sectors|Emissions|OC|Forest Burning|Harmonized","Forest Burning","Harmonized"
-"AIM/CGE","OC","CEDS+|9+ Sectors|Emissions|OC|Grassland Burning|Harmonized","Grassland Burning","Harmonized"
-"AIM/CGE","OC","CEDS+|9+ Sectors|Emissions|OC|Peat Burning|Harmonized","Peat Burning","Harmonized"
-"AIM/CGE","OC","CEDS+|9+ Sectors|Emissions|OC|Industrial Sector|Harmonized","Industrial Sector","Harmonized"
-"AIM/CGE","OC","CEDS+|9+ Sectors|Emissions|OC|Residential Commercial Other|Harmonized","Residential Commercial Other","Harmonized"
-"AIM/CGE","OC","CEDS+|9+ Sectors|Emissions|OC|Aircraft|Harmonized","Aircraft","Harmonized"
-"AIM/CGE","OC","CEDS+|9+ Sectors|Emissions|OC|Transportation Sector|Harmonized","Transportation Sector","Harmonized"
-"AIM/CGE","OC","CEDS+|9+ Sectors|Emissions|OC|International Shipping|Harmonized","International Shipping","Harmonized"
-"AIM/CGE","OC","CEDS+|9+ Sectors|Emissions|OC|Energy Sector|Harmonized","Energy Sector","Harmonized"
-"AIM/CGE","OC","CEDS+|9+ Sectors|Emissions|OC|Solvents Production and Application|Harmonized","Solvents Production and Application","Harmonized"
-"AIM/CGE","OC","CEDS+|9+ Sectors|Emissions|OC|Waste|Harmonized","Waste","Harmonized"
-"AIM/CGE","OC","CEDS+|9+ Sectors|Emissions|OC|Agriculture|Harmonized-DB","Agriculture","Harmonized-DB"
-"AIM/CGE","OC","CEDS+|9+ Sectors|Emissions|OC|Agricultural Waste Burning|Harmonized-DB","Agricultural Waste Burning","Harmonized-DB"
-"AIM/CGE","OC","CEDS+|9+ Sectors|Emissions|OC|Forest Burning|Harmonized-DB","Forest Burning","Harmonized-DB"
-"AIM/CGE","OC","CEDS+|9+ Sectors|Emissions|OC|Grassland Burning|Harmonized-DB","Grassland Burning","Harmonized-DB"
-"AIM/CGE","OC","CEDS+|9+ Sectors|Emissions|OC|Peat Burning|Harmonized-DB","Peat Burning","Harmonized-DB"
-"AIM/CGE","OC","CEDS+|9+ Sectors|Emissions|OC|Industrial Sector|Harmonized-DB","Industrial Sector","Harmonized-DB"
-"AIM/CGE","OC","CEDS+|9+ Sectors|Emissions|OC|Residential Commercial Other|Harmonized-DB","Residential Commercial Other","Harmonized-DB"
-"AIM/CGE","OC","CEDS+|9+ Sectors|Emissions|OC|Aircraft|Harmonized-DB","Aircraft","Harmonized-DB"
-"AIM/CGE","OC","CEDS+|9+ Sectors|Emissions|OC|Transportation Sector|Harmonized-DB","Transportation Sector","Harmonized-DB"
-"AIM/CGE","OC","CEDS+|9+ Sectors|Emissions|OC|International Shipping|Harmonized-DB","International Shipping","Harmonized-DB"
-"AIM/CGE","OC","CEDS+|9+ Sectors|Emissions|OC|Energy Sector|Harmonized-DB","Energy Sector","Harmonized-DB"
-"AIM/CGE","OC","CEDS+|9+ Sectors|Emissions|OC|Solvents Production and Application|Harmonized-DB","Solvents Production and Application","Harmonized-DB"
-"AIM/CGE","OC","CEDS+|9+ Sectors|Emissions|OC|Waste|Harmonized-DB","Waste","Harmonized-DB"
-"AIM/CGE","OC","CEDS+|9+ Sectors|Emissions|OC|Agriculture|Unharmonized","Agriculture","Unharmonized"
-"AIM/CGE","OC","CEDS+|9+ Sectors|Emissions|OC|Agricultural Waste Burning|Unharmonized","Agricultural Waste Burning","Unharmonized"
-"AIM/CGE","OC","CEDS+|9+ Sectors|Emissions|OC|Forest Burning|Unharmonized","Forest Burning","Unharmonized"
-"AIM/CGE","OC","CEDS+|9+ Sectors|Emissions|OC|Grassland Burning|Unharmonized","Grassland Burning","Unharmonized"
-"AIM/CGE","OC","CEDS+|9+ Sectors|Emissions|OC|Peat Burning|Unharmonized","Peat Burning","Unharmonized"
-"AIM/CGE","OC","CEDS+|9+ Sectors|Emissions|OC|Industrial Sector|Unharmonized","Industrial Sector","Unharmonized"
-"AIM/CGE","OC","CEDS+|9+ Sectors|Emissions|OC|Residential Commercial Other|Unharmonized","Residential Commercial Other","Unharmonized"
-"AIM/CGE","OC","CEDS+|9+ Sectors|Emissions|OC|Aircraft|Unharmonized","Aircraft","Unharmonized"
-"AIM/CGE","OC","CEDS+|9+ Sectors|Emissions|OC|Transportation Sector|Unharmonized","Transportation Sector","Unharmonized"
-"AIM/CGE","OC","CEDS+|9+ Sectors|Emissions|OC|International Shipping|Unharmonized","International Shipping","Unharmonized"
-"AIM/CGE","OC","CEDS+|9+ Sectors|Emissions|OC|Energy Sector|Unharmonized","Energy Sector","Unharmonized"
-"AIM/CGE","OC","CEDS+|9+ Sectors|Emissions|OC|Solvents Production and Application|Unharmonized","Solvents Production and Application","Unharmonized"
-"AIM/CGE","OC","CEDS+|9+ Sectors|Emissions|OC|Waste|Unharmonized","Waste","Unharmonized"
-"AIM/CGE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Agriculture|Harmonized","Agriculture","Harmonized"
-"AIM/CGE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Agricultural Waste Burning|Harmonized","Agricultural Waste Burning","Harmonized"
-"AIM/CGE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Forest Burning|Harmonized","Forest Burning","Harmonized"
-"AIM/CGE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Grassland Burning|Harmonized","Grassland Burning","Harmonized"
-"AIM/CGE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Peat Burning|Harmonized","Peat Burning","Harmonized"
-"AIM/CGE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Industrial Sector|Harmonized","Industrial Sector","Harmonized"
-"AIM/CGE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Residential Commercial Other|Harmonized","Residential Commercial Other","Harmonized"
-"AIM/CGE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Aircraft|Harmonized","Aircraft","Harmonized"
-"AIM/CGE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Transportation Sector|Harmonized","Transportation Sector","Harmonized"
-"AIM/CGE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|International Shipping|Harmonized","International Shipping","Harmonized"
-"AIM/CGE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Energy Sector|Harmonized","Energy Sector","Harmonized"
-"AIM/CGE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Solvents Production and Application|Harmonized","Solvents Production and Application","Harmonized"
-"AIM/CGE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Waste|Harmonized","Waste","Harmonized"
-"AIM/CGE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Agriculture|Harmonized-DB","Agriculture","Harmonized-DB"
-"AIM/CGE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Agricultural Waste Burning|Harmonized-DB","Agricultural Waste Burning","Harmonized-DB"
-"AIM/CGE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Forest Burning|Harmonized-DB","Forest Burning","Harmonized-DB"
-"AIM/CGE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Grassland Burning|Harmonized-DB","Grassland Burning","Harmonized-DB"
-"AIM/CGE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Peat Burning|Harmonized-DB","Peat Burning","Harmonized-DB"
-"AIM/CGE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Industrial Sector|Harmonized-DB","Industrial Sector","Harmonized-DB"
-"AIM/CGE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Residential Commercial Other|Harmonized-DB","Residential Commercial Other","Harmonized-DB"
-"AIM/CGE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Aircraft|Harmonized-DB","Aircraft","Harmonized-DB"
-"AIM/CGE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Transportation Sector|Harmonized-DB","Transportation Sector","Harmonized-DB"
-"AIM/CGE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|International Shipping|Harmonized-DB","International Shipping","Harmonized-DB"
-"AIM/CGE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Energy Sector|Harmonized-DB","Energy Sector","Harmonized-DB"
-"AIM/CGE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Solvents Production and Application|Harmonized-DB","Solvents Production and Application","Harmonized-DB"
-"AIM/CGE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Waste|Harmonized-DB","Waste","Harmonized-DB"
-"AIM/CGE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Agriculture|Unharmonized","Agriculture","Unharmonized"
-"AIM/CGE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Agricultural Waste Burning|Unharmonized","Agricultural Waste Burning","Unharmonized"
-"AIM/CGE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Forest Burning|Unharmonized","Forest Burning","Unharmonized"
-"AIM/CGE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Grassland Burning|Unharmonized","Grassland Burning","Unharmonized"
-"AIM/CGE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Peat Burning|Unharmonized","Peat Burning","Unharmonized"
-"AIM/CGE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Industrial Sector|Unharmonized","Industrial Sector","Unharmonized"
-"AIM/CGE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Residential Commercial Other|Unharmonized","Residential Commercial Other","Unharmonized"
-"AIM/CGE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Aircraft|Unharmonized","Aircraft","Unharmonized"
-"AIM/CGE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Transportation Sector|Unharmonized","Transportation Sector","Unharmonized"
-"AIM/CGE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|International Shipping|Unharmonized","International Shipping","Unharmonized"
-"AIM/CGE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Energy Sector|Unharmonized","Energy Sector","Unharmonized"
-"AIM/CGE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Solvents Production and Application|Unharmonized","Solvents Production and Application","Unharmonized"
-"AIM/CGE","Sulfur","CEDS+|9+ Sectors|Emissions|Sulfur|Waste|Unharmonized","Waste","Unharmonized"
-"AIM/CGE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Agriculture|Harmonized","Agriculture","Harmonized"
-"AIM/CGE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Agricultural Waste Burning|Harmonized","Agricultural Waste Burning","Harmonized"
-"AIM/CGE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Forest Burning|Harmonized","Forest Burning","Harmonized"
-"AIM/CGE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Grassland Burning|Harmonized","Grassland Burning","Harmonized"
-"AIM/CGE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Peat Burning|Harmonized","Peat Burning","Harmonized"
-"AIM/CGE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Industrial Sector|Harmonized","Industrial Sector","Harmonized"
-"AIM/CGE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Residential Commercial Other|Harmonized","Residential Commercial Other","Harmonized"
-"AIM/CGE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Aircraft|Harmonized","Aircraft","Harmonized"
-"AIM/CGE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Transportation Sector|Harmonized","Transportation Sector","Harmonized"
-"AIM/CGE","VOC","CEDS+|9+ Sectors|Emissions|VOC|International Shipping|Harmonized","International Shipping","Harmonized"
-"AIM/CGE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Energy Sector|Harmonized","Energy Sector","Harmonized"
-"AIM/CGE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Solvents Production and Application|Harmonized","Solvents Production and Application","Harmonized"
-"AIM/CGE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Waste|Harmonized","Waste","Harmonized"
-"AIM/CGE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Agriculture|Harmonized-DB","Agriculture","Harmonized-DB"
-"AIM/CGE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Agricultural Waste Burning|Harmonized-DB","Agricultural Waste Burning","Harmonized-DB"
-"AIM/CGE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Forest Burning|Harmonized-DB","Forest Burning","Harmonized-DB"
-"AIM/CGE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Grassland Burning|Harmonized-DB","Grassland Burning","Harmonized-DB"
-"AIM/CGE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Peat Burning|Harmonized-DB","Peat Burning","Harmonized-DB"
-"AIM/CGE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Industrial Sector|Harmonized-DB","Industrial Sector","Harmonized-DB"
-"AIM/CGE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Residential Commercial Other|Harmonized-DB","Residential Commercial Other","Harmonized-DB"
-"AIM/CGE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Aircraft|Harmonized-DB","Aircraft","Harmonized-DB"
-"AIM/CGE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Transportation Sector|Harmonized-DB","Transportation Sector","Harmonized-DB"
-"AIM/CGE","VOC","CEDS+|9+ Sectors|Emissions|VOC|International Shipping|Harmonized-DB","International Shipping","Harmonized-DB"
-"AIM/CGE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Energy Sector|Harmonized-DB","Energy Sector","Harmonized-DB"
-"AIM/CGE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Solvents Production and Application|Harmonized-DB","Solvents Production and Application","Harmonized-DB"
-"AIM/CGE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Waste|Harmonized-DB","Waste","Harmonized-DB"
-"AIM/CGE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Agriculture|Unharmonized","Agriculture","Unharmonized"
-"AIM/CGE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Agricultural Waste Burning|Unharmonized","Agricultural Waste Burning","Unharmonized"
-"AIM/CGE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Forest Burning|Unharmonized","Forest Burning","Unharmonized"
-"AIM/CGE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Grassland Burning|Unharmonized","Grassland Burning","Unharmonized"
-"AIM/CGE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Peat Burning|Unharmonized","Peat Burning","Unharmonized"
-"AIM/CGE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Industrial Sector|Unharmonized","Industrial Sector","Unharmonized"
-"AIM/CGE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Residential Commercial Other|Unharmonized","Residential Commercial Other","Unharmonized"
-"AIM/CGE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Aircraft|Unharmonized","Aircraft","Unharmonized"
-"AIM/CGE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Transportation Sector|Unharmonized","Transportation Sector","Unharmonized"
-"AIM/CGE","VOC","CEDS+|9+ Sectors|Emissions|VOC|International Shipping|Unharmonized","International Shipping","Unharmonized"
-"AIM/CGE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Energy Sector|Unharmonized","Energy Sector","Unharmonized"
-"AIM/CGE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Solvents Production and Application|Unharmonized","Solvents Production and Application","Unharmonized"
-"AIM/CGE","VOC","CEDS+|9+ Sectors|Emissions|VOC|Waste|Unharmonized","Waste","Unharmonized"
+model,em,variable,sector,harm_status
+AIM,BC,CEDS+|9+ Sectors|Emissions|BC|Agriculture|Harmonized,Agriculture,Harmonized
+AIM,BC,CEDS+|9+ Sectors|Emissions|BC|Agricultural Waste Burning|Harmonized,Agricultural Waste Burning,Harmonized
+AIM,BC,CEDS+|9+ Sectors|Emissions|BC|Forest Burning|Harmonized,Forest Burning,Harmonized
+AIM,BC,CEDS+|9+ Sectors|Emissions|BC|Grassland Burning|Harmonized,Grassland Burning,Harmonized
+AIM,BC,CEDS+|9+ Sectors|Emissions|BC|Peat Burning|Harmonized,Peat Burning,Harmonized
+AIM,BC,CEDS+|9+ Sectors|Emissions|BC|Industrial Sector|Harmonized,Industrial Sector,Harmonized
+AIM,BC,CEDS+|9+ Sectors|Emissions|BC|Residential Commercial Other|Harmonized,Residential Commercial Other,Harmonized
+AIM,BC,CEDS+|9+ Sectors|Emissions|BC|Aircraft|Harmonized,Aircraft,Harmonized
+AIM,BC,CEDS+|9+ Sectors|Emissions|BC|Transportation Sector|Harmonized,Transportation Sector,Harmonized
+AIM,BC,CEDS+|9+ Sectors|Emissions|BC|International Shipping|Harmonized,International Shipping,Harmonized
+AIM,BC,CEDS+|9+ Sectors|Emissions|BC|Energy Sector|Harmonized,Energy Sector,Harmonized
+AIM,BC,CEDS+|9+ Sectors|Emissions|BC|Solvents Production and Application|Harmonized,Solvents Production and Application,Harmonized
+AIM,BC,CEDS+|9+ Sectors|Emissions|BC|Waste|Harmonized,Waste,Harmonized
+AIM,BC,CEDS+|9+ Sectors|Emissions|BC|Agriculture|Harmonized-DB,Agriculture,Harmonized-DB
+AIM,BC,CEDS+|9+ Sectors|Emissions|BC|Agricultural Waste Burning|Harmonized-DB,Agricultural Waste Burning,Harmonized-DB
+AIM,BC,CEDS+|9+ Sectors|Emissions|BC|Forest Burning|Harmonized-DB,Forest Burning,Harmonized-DB
+AIM,BC,CEDS+|9+ Sectors|Emissions|BC|Grassland Burning|Harmonized-DB,Grassland Burning,Harmonized-DB
+AIM,BC,CEDS+|9+ Sectors|Emissions|BC|Peat Burning|Harmonized-DB,Peat Burning,Harmonized-DB
+AIM,BC,CEDS+|9+ Sectors|Emissions|BC|Industrial Sector|Harmonized-DB,Industrial Sector,Harmonized-DB
+AIM,BC,CEDS+|9+ Sectors|Emissions|BC|Residential Commercial Other|Harmonized-DB,Residential Commercial Other,Harmonized-DB
+AIM,BC,CEDS+|9+ Sectors|Emissions|BC|Aircraft|Harmonized-DB,Aircraft,Harmonized-DB
+AIM,BC,CEDS+|9+ Sectors|Emissions|BC|Transportation Sector|Harmonized-DB,Transportation Sector,Harmonized-DB
+AIM,BC,CEDS+|9+ Sectors|Emissions|BC|International Shipping|Harmonized-DB,International Shipping,Harmonized-DB
+AIM,BC,CEDS+|9+ Sectors|Emissions|BC|Energy Sector|Harmonized-DB,Energy Sector,Harmonized-DB
+AIM,BC,CEDS+|9+ Sectors|Emissions|BC|Solvents Production and Application|Harmonized-DB,Solvents Production and Application,Harmonized-DB
+AIM,BC,CEDS+|9+ Sectors|Emissions|BC|Waste|Harmonized-DB,Waste,Harmonized-DB
+AIM,BC,CEDS+|9+ Sectors|Emissions|BC|Agriculture|Unharmonized,Agriculture,Unharmonized
+AIM,BC,CEDS+|9+ Sectors|Emissions|BC|Agricultural Waste Burning|Unharmonized,Agricultural Waste Burning,Unharmonized
+AIM,BC,CEDS+|9+ Sectors|Emissions|BC|Forest Burning|Unharmonized,Forest Burning,Unharmonized
+AIM,BC,CEDS+|9+ Sectors|Emissions|BC|Grassland Burning|Unharmonized,Grassland Burning,Unharmonized
+AIM,BC,CEDS+|9+ Sectors|Emissions|BC|Peat Burning|Unharmonized,Peat Burning,Unharmonized
+AIM,BC,CEDS+|9+ Sectors|Emissions|BC|Industrial Sector|Unharmonized,Industrial Sector,Unharmonized
+AIM,BC,CEDS+|9+ Sectors|Emissions|BC|Residential Commercial Other|Unharmonized,Residential Commercial Other,Unharmonized
+AIM,BC,CEDS+|9+ Sectors|Emissions|BC|Aircraft|Unharmonized,Aircraft,Unharmonized
+AIM,BC,CEDS+|9+ Sectors|Emissions|BC|Transportation Sector|Unharmonized,Transportation Sector,Unharmonized
+AIM,BC,CEDS+|9+ Sectors|Emissions|BC|International Shipping|Unharmonized,International Shipping,Unharmonized
+AIM,BC,CEDS+|9+ Sectors|Emissions|BC|Energy Sector|Unharmonized,Energy Sector,Unharmonized
+AIM,BC,CEDS+|9+ Sectors|Emissions|BC|Solvents Production and Application|Unharmonized,Solvents Production and Application,Unharmonized
+AIM,BC,CEDS+|9+ Sectors|Emissions|BC|Waste|Unharmonized,Waste,Unharmonized
+AIM,CH4,CEDS+|9+ Sectors|Emissions|CH4|Agriculture|Harmonized,Agriculture,Harmonized
+AIM,CH4,CEDS+|9+ Sectors|Emissions|CH4|Agricultural Waste Burning|Harmonized,Agricultural Waste Burning,Harmonized
+AIM,CH4,CEDS+|9+ Sectors|Emissions|CH4|Forest Burning|Harmonized,Forest Burning,Harmonized
+AIM,CH4,CEDS+|9+ Sectors|Emissions|CH4|Grassland Burning|Harmonized,Grassland Burning,Harmonized
+AIM,CH4,CEDS+|9+ Sectors|Emissions|CH4|Peat Burning|Harmonized,Peat Burning,Harmonized
+AIM,CH4,CEDS+|9+ Sectors|Emissions|CH4|Industrial Sector|Harmonized,Industrial Sector,Harmonized
+AIM,CH4,CEDS+|9+ Sectors|Emissions|CH4|Residential Commercial Other|Harmonized,Residential Commercial Other,Harmonized
+AIM,CH4,CEDS+|9+ Sectors|Emissions|CH4|Aircraft|Harmonized,Aircraft,Harmonized
+AIM,CH4,CEDS+|9+ Sectors|Emissions|CH4|Transportation Sector|Harmonized,Transportation Sector,Harmonized
+AIM,CH4,CEDS+|9+ Sectors|Emissions|CH4|International Shipping|Harmonized,International Shipping,Harmonized
+AIM,CH4,CEDS+|9+ Sectors|Emissions|CH4|Energy Sector|Harmonized,Energy Sector,Harmonized
+AIM,CH4,CEDS+|9+ Sectors|Emissions|CH4|Solvents Production and Application|Harmonized,Solvents Production and Application,Harmonized
+AIM,CH4,CEDS+|9+ Sectors|Emissions|CH4|Waste|Harmonized,Waste,Harmonized
+AIM,CH4,CEDS+|9+ Sectors|Emissions|CH4|Agriculture|Harmonized-DB,Agriculture,Harmonized-DB
+AIM,CH4,CEDS+|9+ Sectors|Emissions|CH4|Agricultural Waste Burning|Harmonized-DB,Agricultural Waste Burning,Harmonized-DB
+AIM,CH4,CEDS+|9+ Sectors|Emissions|CH4|Forest Burning|Harmonized-DB,Forest Burning,Harmonized-DB
+AIM,CH4,CEDS+|9+ Sectors|Emissions|CH4|Grassland Burning|Harmonized-DB,Grassland Burning,Harmonized-DB
+AIM,CH4,CEDS+|9+ Sectors|Emissions|CH4|Peat Burning|Harmonized-DB,Peat Burning,Harmonized-DB
+AIM,CH4,CEDS+|9+ Sectors|Emissions|CH4|Industrial Sector|Harmonized-DB,Industrial Sector,Harmonized-DB
+AIM,CH4,CEDS+|9+ Sectors|Emissions|CH4|Residential Commercial Other|Harmonized-DB,Residential Commercial Other,Harmonized-DB
+AIM,CH4,CEDS+|9+ Sectors|Emissions|CH4|Aircraft|Harmonized-DB,Aircraft,Harmonized-DB
+AIM,CH4,CEDS+|9+ Sectors|Emissions|CH4|Transportation Sector|Harmonized-DB,Transportation Sector,Harmonized-DB
+AIM,CH4,CEDS+|9+ Sectors|Emissions|CH4|International Shipping|Harmonized-DB,International Shipping,Harmonized-DB
+AIM,CH4,CEDS+|9+ Sectors|Emissions|CH4|Energy Sector|Harmonized-DB,Energy Sector,Harmonized-DB
+AIM,CH4,CEDS+|9+ Sectors|Emissions|CH4|Solvents Production and Application|Harmonized-DB,Solvents Production and Application,Harmonized-DB
+AIM,CH4,CEDS+|9+ Sectors|Emissions|CH4|Waste|Harmonized-DB,Waste,Harmonized-DB
+AIM,CH4,CEDS+|9+ Sectors|Emissions|CH4|Agriculture|Unharmonized,Agriculture,Unharmonized
+AIM,CH4,CEDS+|9+ Sectors|Emissions|CH4|Agricultural Waste Burning|Unharmonized,Agricultural Waste Burning,Unharmonized
+AIM,CH4,CEDS+|9+ Sectors|Emissions|CH4|Forest Burning|Unharmonized,Forest Burning,Unharmonized
+AIM,CH4,CEDS+|9+ Sectors|Emissions|CH4|Grassland Burning|Unharmonized,Grassland Burning,Unharmonized
+AIM,CH4,CEDS+|9+ Sectors|Emissions|CH4|Peat Burning|Unharmonized,Peat Burning,Unharmonized
+AIM,CH4,CEDS+|9+ Sectors|Emissions|CH4|Industrial Sector|Unharmonized,Industrial Sector,Unharmonized
+AIM,CH4,CEDS+|9+ Sectors|Emissions|CH4|Residential Commercial Other|Unharmonized,Residential Commercial Other,Unharmonized
+AIM,CH4,CEDS+|9+ Sectors|Emissions|CH4|Aircraft|Unharmonized,Aircraft,Unharmonized
+AIM,CH4,CEDS+|9+ Sectors|Emissions|CH4|Transportation Sector|Unharmonized,Transportation Sector,Unharmonized
+AIM,CH4,CEDS+|9+ Sectors|Emissions|CH4|International Shipping|Unharmonized,International Shipping,Unharmonized
+AIM,CH4,CEDS+|9+ Sectors|Emissions|CH4|Energy Sector|Unharmonized,Energy Sector,Unharmonized
+AIM,CH4,CEDS+|9+ Sectors|Emissions|CH4|Solvents Production and Application|Unharmonized,Solvents Production and Application,Unharmonized
+AIM,CH4,CEDS+|9+ Sectors|Emissions|CH4|Waste|Unharmonized,Waste,Unharmonized
+AIM,CO,CEDS+|9+ Sectors|Emissions|CO|Agriculture|Harmonized,Agriculture,Harmonized
+AIM,CO,CEDS+|9+ Sectors|Emissions|CO|Agricultural Waste Burning|Harmonized,Agricultural Waste Burning,Harmonized
+AIM,CO,CEDS+|9+ Sectors|Emissions|CO|Forest Burning|Harmonized,Forest Burning,Harmonized
+AIM,CO,CEDS+|9+ Sectors|Emissions|CO|Grassland Burning|Harmonized,Grassland Burning,Harmonized
+AIM,CO,CEDS+|9+ Sectors|Emissions|CO|Peat Burning|Harmonized,Peat Burning,Harmonized
+AIM,CO,CEDS+|9+ Sectors|Emissions|CO|Industrial Sector|Harmonized,Industrial Sector,Harmonized
+AIM,CO,CEDS+|9+ Sectors|Emissions|CO|Residential Commercial Other|Harmonized,Residential Commercial Other,Harmonized
+AIM,CO,CEDS+|9+ Sectors|Emissions|CO|Aircraft|Harmonized,Aircraft,Harmonized
+AIM,CO,CEDS+|9+ Sectors|Emissions|CO|Transportation Sector|Harmonized,Transportation Sector,Harmonized
+AIM,CO,CEDS+|9+ Sectors|Emissions|CO|International Shipping|Harmonized,International Shipping,Harmonized
+AIM,CO,CEDS+|9+ Sectors|Emissions|CO|Energy Sector|Harmonized,Energy Sector,Harmonized
+AIM,CO,CEDS+|9+ Sectors|Emissions|CO|Solvents Production and Application|Harmonized,Solvents Production and Application,Harmonized
+AIM,CO,CEDS+|9+ Sectors|Emissions|CO|Waste|Harmonized,Waste,Harmonized
+AIM,CO,CEDS+|9+ Sectors|Emissions|CO|Agriculture|Harmonized-DB,Agriculture,Harmonized-DB
+AIM,CO,CEDS+|9+ Sectors|Emissions|CO|Agricultural Waste Burning|Harmonized-DB,Agricultural Waste Burning,Harmonized-DB
+AIM,CO,CEDS+|9+ Sectors|Emissions|CO|Forest Burning|Harmonized-DB,Forest Burning,Harmonized-DB
+AIM,CO,CEDS+|9+ Sectors|Emissions|CO|Grassland Burning|Harmonized-DB,Grassland Burning,Harmonized-DB
+AIM,CO,CEDS+|9+ Sectors|Emissions|CO|Peat Burning|Harmonized-DB,Peat Burning,Harmonized-DB
+AIM,CO,CEDS+|9+ Sectors|Emissions|CO|Industrial Sector|Harmonized-DB,Industrial Sector,Harmonized-DB
+AIM,CO,CEDS+|9+ Sectors|Emissions|CO|Residential Commercial Other|Harmonized-DB,Residential Commercial Other,Harmonized-DB
+AIM,CO,CEDS+|9+ Sectors|Emissions|CO|Aircraft|Harmonized-DB,Aircraft,Harmonized-DB
+AIM,CO,CEDS+|9+ Sectors|Emissions|CO|Transportation Sector|Harmonized-DB,Transportation Sector,Harmonized-DB
+AIM,CO,CEDS+|9+ Sectors|Emissions|CO|International Shipping|Harmonized-DB,International Shipping,Harmonized-DB
+AIM,CO,CEDS+|9+ Sectors|Emissions|CO|Energy Sector|Harmonized-DB,Energy Sector,Harmonized-DB
+AIM,CO,CEDS+|9+ Sectors|Emissions|CO|Solvents Production and Application|Harmonized-DB,Solvents Production and Application,Harmonized-DB
+AIM,CO,CEDS+|9+ Sectors|Emissions|CO|Waste|Harmonized-DB,Waste,Harmonized-DB
+AIM,CO,CEDS+|9+ Sectors|Emissions|CO|Agriculture|Unharmonized,Agriculture,Unharmonized
+AIM,CO,CEDS+|9+ Sectors|Emissions|CO|Agricultural Waste Burning|Unharmonized,Agricultural Waste Burning,Unharmonized
+AIM,CO,CEDS+|9+ Sectors|Emissions|CO|Forest Burning|Unharmonized,Forest Burning,Unharmonized
+AIM,CO,CEDS+|9+ Sectors|Emissions|CO|Grassland Burning|Unharmonized,Grassland Burning,Unharmonized
+AIM,CO,CEDS+|9+ Sectors|Emissions|CO|Peat Burning|Unharmonized,Peat Burning,Unharmonized
+AIM,CO,CEDS+|9+ Sectors|Emissions|CO|Industrial Sector|Unharmonized,Industrial Sector,Unharmonized
+AIM,CO,CEDS+|9+ Sectors|Emissions|CO|Residential Commercial Other|Unharmonized,Residential Commercial Other,Unharmonized
+AIM,CO,CEDS+|9+ Sectors|Emissions|CO|Aircraft|Unharmonized,Aircraft,Unharmonized
+AIM,CO,CEDS+|9+ Sectors|Emissions|CO|Transportation Sector|Unharmonized,Transportation Sector,Unharmonized
+AIM,CO,CEDS+|9+ Sectors|Emissions|CO|International Shipping|Unharmonized,International Shipping,Unharmonized
+AIM,CO,CEDS+|9+ Sectors|Emissions|CO|Energy Sector|Unharmonized,Energy Sector,Unharmonized
+AIM,CO,CEDS+|9+ Sectors|Emissions|CO|Solvents Production and Application|Unharmonized,Solvents Production and Application,Unharmonized
+AIM,CO,CEDS+|9+ Sectors|Emissions|CO|Waste|Unharmonized,Waste,Unharmonized
+AIM,CO2,CEDS+|9+ Sectors|Emissions|CO2|Agriculture|Harmonized,Agriculture,Harmonized
+AIM,CO2,CEDS+|9+ Sectors|Emissions|CO2|Agricultural Waste Burning|Harmonized,Agricultural Waste Burning,Harmonized
+AIM,CO2,CEDS+|9+ Sectors|Emissions|CO2|Forest Burning|Harmonized,Forest Burning,Harmonized
+AIM,CO2,CEDS+|9+ Sectors|Emissions|CO2|Grassland Burning|Harmonized,Grassland Burning,Harmonized
+AIM,CO2,CEDS+|9+ Sectors|Emissions|CO2|Peat Burning|Harmonized,Peat Burning,Harmonized
+AIM,CO2,CEDS+|9+ Sectors|Emissions|CO2|Industrial Sector|Harmonized,Industrial Sector,Harmonized
+AIM,CO2,CEDS+|9+ Sectors|Emissions|CO2|Residential Commercial Other|Harmonized,Residential Commercial Other,Harmonized
+AIM,CO2,CEDS+|9+ Sectors|Emissions|CO2|Aircraft|Harmonized,Aircraft,Harmonized
+AIM,CO2,CEDS+|9+ Sectors|Emissions|CO2|Transportation Sector|Harmonized,Transportation Sector,Harmonized
+AIM,CO2,CEDS+|9+ Sectors|Emissions|CO2|International Shipping|Harmonized,International Shipping,Harmonized
+AIM,CO2,CEDS+|9+ Sectors|Emissions|CO2|Energy Sector|Harmonized,Energy Sector,Harmonized
+AIM,CO2,CEDS+|9+ Sectors|Emissions|CO2|Solvents Production and Application|Harmonized,Solvents Production and Application,Harmonized
+AIM,CO2,CEDS+|9+ Sectors|Emissions|CO2|Waste|Harmonized,Waste,Harmonized
+AIM,CO2,CEDS+|9+ Sectors|Emissions|CO2|Agriculture|Harmonized-DB,Agriculture,Harmonized-DB
+AIM,CO2,CEDS+|9+ Sectors|Emissions|CO2|Agricultural Waste Burning|Harmonized-DB,Agricultural Waste Burning,Harmonized-DB
+AIM,CO2,CEDS+|9+ Sectors|Emissions|CO2|Forest Burning|Harmonized-DB,Forest Burning,Harmonized-DB
+AIM,CO2,CEDS+|9+ Sectors|Emissions|CO2|Grassland Burning|Harmonized-DB,Grassland Burning,Harmonized-DB
+AIM,CO2,CEDS+|9+ Sectors|Emissions|CO2|Peat Burning|Harmonized-DB,Peat Burning,Harmonized-DB
+AIM,CO2,CEDS+|9+ Sectors|Emissions|CO2|Industrial Sector|Harmonized-DB,Industrial Sector,Harmonized-DB
+AIM,CO2,CEDS+|9+ Sectors|Emissions|CO2|Residential Commercial Other|Harmonized-DB,Residential Commercial Other,Harmonized-DB
+AIM,CO2,CEDS+|9+ Sectors|Emissions|CO2|Aircraft|Harmonized-DB,Aircraft,Harmonized-DB
+AIM,CO2,CEDS+|9+ Sectors|Emissions|CO2|Transportation Sector|Harmonized-DB,Transportation Sector,Harmonized-DB
+AIM,CO2,CEDS+|9+ Sectors|Emissions|CO2|International Shipping|Harmonized-DB,International Shipping,Harmonized-DB
+AIM,CO2,CEDS+|9+ Sectors|Emissions|CO2|Energy Sector|Harmonized-DB,Energy Sector,Harmonized-DB
+AIM,CO2,CEDS+|9+ Sectors|Emissions|CO2|Solvents Production and Application|Harmonized-DB,Solvents Production and Application,Harmonized-DB
+AIM,CO2,CEDS+|9+ Sectors|Emissions|CO2|Waste|Harmonized-DB,Waste,Harmonized-DB
+AIM,CO2,CEDS+|9+ Sectors|Emissions|CO2|Agriculture|Unharmonized,Agriculture,Unharmonized
+AIM,CO2,CEDS+|9+ Sectors|Emissions|CO2|Agricultural Waste Burning|Unharmonized,Agricultural Waste Burning,Unharmonized
+AIM,CO2,CEDS+|9+ Sectors|Emissions|CO2|Forest Burning|Unharmonized,Forest Burning,Unharmonized
+AIM,CO2,CEDS+|9+ Sectors|Emissions|CO2|Grassland Burning|Unharmonized,Grassland Burning,Unharmonized
+AIM,CO2,CEDS+|9+ Sectors|Emissions|CO2|Peat Burning|Unharmonized,Peat Burning,Unharmonized
+AIM,CO2,CEDS+|9+ Sectors|Emissions|CO2|Industrial Sector|Unharmonized,Industrial Sector,Unharmonized
+AIM,CO2,CEDS+|9+ Sectors|Emissions|CO2|Residential Commercial Other|Unharmonized,Residential Commercial Other,Unharmonized
+AIM,CO2,CEDS+|9+ Sectors|Emissions|CO2|Aircraft|Unharmonized,Aircraft,Unharmonized
+AIM,CO2,CEDS+|9+ Sectors|Emissions|CO2|Transportation Sector|Unharmonized,Transportation Sector,Unharmonized
+AIM,CO2,CEDS+|9+ Sectors|Emissions|CO2|International Shipping|Unharmonized,International Shipping,Unharmonized
+AIM,CO2,CEDS+|9+ Sectors|Emissions|CO2|Energy Sector|Unharmonized,Energy Sector,Unharmonized
+AIM,CO2,CEDS+|9+ Sectors|Emissions|CO2|Solvents Production and Application|Unharmonized,Solvents Production and Application,Unharmonized
+AIM,CO2,CEDS+|9+ Sectors|Emissions|CO2|Waste|Unharmonized,Waste,Unharmonized
+AIM,NH3,CEDS+|9+ Sectors|Emissions|NH3|Agriculture|Harmonized,Agriculture,Harmonized
+AIM,NH3,CEDS+|9+ Sectors|Emissions|NH3|Agricultural Waste Burning|Harmonized,Agricultural Waste Burning,Harmonized
+AIM,NH3,CEDS+|9+ Sectors|Emissions|NH3|Forest Burning|Harmonized,Forest Burning,Harmonized
+AIM,NH3,CEDS+|9+ Sectors|Emissions|NH3|Grassland Burning|Harmonized,Grassland Burning,Harmonized
+AIM,NH3,CEDS+|9+ Sectors|Emissions|NH3|Peat Burning|Harmonized,Peat Burning,Harmonized
+AIM,NH3,CEDS+|9+ Sectors|Emissions|NH3|Industrial Sector|Harmonized,Industrial Sector,Harmonized
+AIM,NH3,CEDS+|9+ Sectors|Emissions|NH3|Residential Commercial Other|Harmonized,Residential Commercial Other,Harmonized
+AIM,NH3,CEDS+|9+ Sectors|Emissions|NH3|Aircraft|Harmonized,Aircraft,Harmonized
+AIM,NH3,CEDS+|9+ Sectors|Emissions|NH3|Transportation Sector|Harmonized,Transportation Sector,Harmonized
+AIM,NH3,CEDS+|9+ Sectors|Emissions|NH3|International Shipping|Harmonized,International Shipping,Harmonized
+AIM,NH3,CEDS+|9+ Sectors|Emissions|NH3|Energy Sector|Harmonized,Energy Sector,Harmonized
+AIM,NH3,CEDS+|9+ Sectors|Emissions|NH3|Solvents Production and Application|Harmonized,Solvents Production and Application,Harmonized
+AIM,NH3,CEDS+|9+ Sectors|Emissions|NH3|Waste|Harmonized,Waste,Harmonized
+AIM,NH3,CEDS+|9+ Sectors|Emissions|NH3|Agriculture|Harmonized-DB,Agriculture,Harmonized-DB
+AIM,NH3,CEDS+|9+ Sectors|Emissions|NH3|Agricultural Waste Burning|Harmonized-DB,Agricultural Waste Burning,Harmonized-DB
+AIM,NH3,CEDS+|9+ Sectors|Emissions|NH3|Forest Burning|Harmonized-DB,Forest Burning,Harmonized-DB
+AIM,NH3,CEDS+|9+ Sectors|Emissions|NH3|Grassland Burning|Harmonized-DB,Grassland Burning,Harmonized-DB
+AIM,NH3,CEDS+|9+ Sectors|Emissions|NH3|Peat Burning|Harmonized-DB,Peat Burning,Harmonized-DB
+AIM,NH3,CEDS+|9+ Sectors|Emissions|NH3|Industrial Sector|Harmonized-DB,Industrial Sector,Harmonized-DB
+AIM,NH3,CEDS+|9+ Sectors|Emissions|NH3|Residential Commercial Other|Harmonized-DB,Residential Commercial Other,Harmonized-DB
+AIM,NH3,CEDS+|9+ Sectors|Emissions|NH3|Aircraft|Harmonized-DB,Aircraft,Harmonized-DB
+AIM,NH3,CEDS+|9+ Sectors|Emissions|NH3|Transportation Sector|Harmonized-DB,Transportation Sector,Harmonized-DB
+AIM,NH3,CEDS+|9+ Sectors|Emissions|NH3|International Shipping|Harmonized-DB,International Shipping,Harmonized-DB
+AIM,NH3,CEDS+|9+ Sectors|Emissions|NH3|Energy Sector|Harmonized-DB,Energy Sector,Harmonized-DB
+AIM,NH3,CEDS+|9+ Sectors|Emissions|NH3|Solvents Production and Application|Harmonized-DB,Solvents Production and Application,Harmonized-DB
+AIM,NH3,CEDS+|9+ Sectors|Emissions|NH3|Waste|Harmonized-DB,Waste,Harmonized-DB
+AIM,NH3,CEDS+|9+ Sectors|Emissions|NH3|Agriculture|Unharmonized,Agriculture,Unharmonized
+AIM,NH3,CEDS+|9+ Sectors|Emissions|NH3|Agricultural Waste Burning|Unharmonized,Agricultural Waste Burning,Unharmonized
+AIM,NH3,CEDS+|9+ Sectors|Emissions|NH3|Forest Burning|Unharmonized,Forest Burning,Unharmonized
+AIM,NH3,CEDS+|9+ Sectors|Emissions|NH3|Grassland Burning|Unharmonized,Grassland Burning,Unharmonized
+AIM,NH3,CEDS+|9+ Sectors|Emissions|NH3|Peat Burning|Unharmonized,Peat Burning,Unharmonized
+AIM,NH3,CEDS+|9+ Sectors|Emissions|NH3|Industrial Sector|Unharmonized,Industrial Sector,Unharmonized
+AIM,NH3,CEDS+|9+ Sectors|Emissions|NH3|Residential Commercial Other|Unharmonized,Residential Commercial Other,Unharmonized
+AIM,NH3,CEDS+|9+ Sectors|Emissions|NH3|Aircraft|Unharmonized,Aircraft,Unharmonized
+AIM,NH3,CEDS+|9+ Sectors|Emissions|NH3|Transportation Sector|Unharmonized,Transportation Sector,Unharmonized
+AIM,NH3,CEDS+|9+ Sectors|Emissions|NH3|International Shipping|Unharmonized,International Shipping,Unharmonized
+AIM,NH3,CEDS+|9+ Sectors|Emissions|NH3|Energy Sector|Unharmonized,Energy Sector,Unharmonized
+AIM,NH3,CEDS+|9+ Sectors|Emissions|NH3|Solvents Production and Application|Unharmonized,Solvents Production and Application,Unharmonized
+AIM,NH3,CEDS+|9+ Sectors|Emissions|NH3|Waste|Unharmonized,Waste,Unharmonized
+AIM,NOx,CEDS+|9+ Sectors|Emissions|NOx|Agriculture|Harmonized,Agriculture,Harmonized
+AIM,NOx,CEDS+|9+ Sectors|Emissions|NOx|Agricultural Waste Burning|Harmonized,Agricultural Waste Burning,Harmonized
+AIM,NOx,CEDS+|9+ Sectors|Emissions|NOx|Forest Burning|Harmonized,Forest Burning,Harmonized
+AIM,NOx,CEDS+|9+ Sectors|Emissions|NOx|Grassland Burning|Harmonized,Grassland Burning,Harmonized
+AIM,NOx,CEDS+|9+ Sectors|Emissions|NOx|Peat Burning|Harmonized,Peat Burning,Harmonized
+AIM,NOx,CEDS+|9+ Sectors|Emissions|NOx|Industrial Sector|Harmonized,Industrial Sector,Harmonized
+AIM,NOx,CEDS+|9+ Sectors|Emissions|NOx|Residential Commercial Other|Harmonized,Residential Commercial Other,Harmonized
+AIM,NOx,CEDS+|9+ Sectors|Emissions|NOx|Aircraft|Harmonized,Aircraft,Harmonized
+AIM,NOx,CEDS+|9+ Sectors|Emissions|NOx|Transportation Sector|Harmonized,Transportation Sector,Harmonized
+AIM,NOx,CEDS+|9+ Sectors|Emissions|NOx|International Shipping|Harmonized,International Shipping,Harmonized
+AIM,NOx,CEDS+|9+ Sectors|Emissions|NOx|Energy Sector|Harmonized,Energy Sector,Harmonized
+AIM,NOx,CEDS+|9+ Sectors|Emissions|NOx|Solvents Production and Application|Harmonized,Solvents Production and Application,Harmonized
+AIM,NOx,CEDS+|9+ Sectors|Emissions|NOx|Waste|Harmonized,Waste,Harmonized
+AIM,NOx,CEDS+|9+ Sectors|Emissions|NOx|Agriculture|Harmonized-DB,Agriculture,Harmonized-DB
+AIM,NOx,CEDS+|9+ Sectors|Emissions|NOx|Agricultural Waste Burning|Harmonized-DB,Agricultural Waste Burning,Harmonized-DB
+AIM,NOx,CEDS+|9+ Sectors|Emissions|NOx|Forest Burning|Harmonized-DB,Forest Burning,Harmonized-DB
+AIM,NOx,CEDS+|9+ Sectors|Emissions|NOx|Grassland Burning|Harmonized-DB,Grassland Burning,Harmonized-DB
+AIM,NOx,CEDS+|9+ Sectors|Emissions|NOx|Peat Burning|Harmonized-DB,Peat Burning,Harmonized-DB
+AIM,NOx,CEDS+|9+ Sectors|Emissions|NOx|Industrial Sector|Harmonized-DB,Industrial Sector,Harmonized-DB
+AIM,NOx,CEDS+|9+ Sectors|Emissions|NOx|Residential Commercial Other|Harmonized-DB,Residential Commercial Other,Harmonized-DB
+AIM,NOx,CEDS+|9+ Sectors|Emissions|NOx|Aircraft|Harmonized-DB,Aircraft,Harmonized-DB
+AIM,NOx,CEDS+|9+ Sectors|Emissions|NOx|Transportation Sector|Harmonized-DB,Transportation Sector,Harmonized-DB
+AIM,NOx,CEDS+|9+ Sectors|Emissions|NOx|International Shipping|Harmonized-DB,International Shipping,Harmonized-DB
+AIM,NOx,CEDS+|9+ Sectors|Emissions|NOx|Energy Sector|Harmonized-DB,Energy Sector,Harmonized-DB
+AIM,NOx,CEDS+|9+ Sectors|Emissions|NOx|Solvents Production and Application|Harmonized-DB,Solvents Production and Application,Harmonized-DB
+AIM,NOx,CEDS+|9+ Sectors|Emissions|NOx|Waste|Harmonized-DB,Waste,Harmonized-DB
+AIM,NOx,CEDS+|9+ Sectors|Emissions|NOx|Agriculture|Unharmonized,Agriculture,Unharmonized
+AIM,NOx,CEDS+|9+ Sectors|Emissions|NOx|Agricultural Waste Burning|Unharmonized,Agricultural Waste Burning,Unharmonized
+AIM,NOx,CEDS+|9+ Sectors|Emissions|NOx|Forest Burning|Unharmonized,Forest Burning,Unharmonized
+AIM,NOx,CEDS+|9+ Sectors|Emissions|NOx|Grassland Burning|Unharmonized,Grassland Burning,Unharmonized
+AIM,NOx,CEDS+|9+ Sectors|Emissions|NOx|Peat Burning|Unharmonized,Peat Burning,Unharmonized
+AIM,NOx,CEDS+|9+ Sectors|Emissions|NOx|Industrial Sector|Unharmonized,Industrial Sector,Unharmonized
+AIM,NOx,CEDS+|9+ Sectors|Emissions|NOx|Residential Commercial Other|Unharmonized,Residential Commercial Other,Unharmonized
+AIM,NOx,CEDS+|9+ Sectors|Emissions|NOx|Aircraft|Unharmonized,Aircraft,Unharmonized
+AIM,NOx,CEDS+|9+ Sectors|Emissions|NOx|Transportation Sector|Unharmonized,Transportation Sector,Unharmonized
+AIM,NOx,CEDS+|9+ Sectors|Emissions|NOx|International Shipping|Unharmonized,International Shipping,Unharmonized
+AIM,NOx,CEDS+|9+ Sectors|Emissions|NOx|Energy Sector|Unharmonized,Energy Sector,Unharmonized
+AIM,NOx,CEDS+|9+ Sectors|Emissions|NOx|Solvents Production and Application|Unharmonized,Solvents Production and Application,Unharmonized
+AIM,NOx,CEDS+|9+ Sectors|Emissions|NOx|Waste|Unharmonized,Waste,Unharmonized
+AIM,OC,CEDS+|9+ Sectors|Emissions|OC|Agriculture|Harmonized,Agriculture,Harmonized
+AIM,OC,CEDS+|9+ Sectors|Emissions|OC|Agricultural Waste Burning|Harmonized,Agricultural Waste Burning,Harmonized
+AIM,OC,CEDS+|9+ Sectors|Emissions|OC|Forest Burning|Harmonized,Forest Burning,Harmonized
+AIM,OC,CEDS+|9+ Sectors|Emissions|OC|Grassland Burning|Harmonized,Grassland Burning,Harmonized
+AIM,OC,CEDS+|9+ Sectors|Emissions|OC|Peat Burning|Harmonized,Peat Burning,Harmonized
+AIM,OC,CEDS+|9+ Sectors|Emissions|OC|Industrial Sector|Harmonized,Industrial Sector,Harmonized
+AIM,OC,CEDS+|9+ Sectors|Emissions|OC|Residential Commercial Other|Harmonized,Residential Commercial Other,Harmonized
+AIM,OC,CEDS+|9+ Sectors|Emissions|OC|Aircraft|Harmonized,Aircraft,Harmonized
+AIM,OC,CEDS+|9+ Sectors|Emissions|OC|Transportation Sector|Harmonized,Transportation Sector,Harmonized
+AIM,OC,CEDS+|9+ Sectors|Emissions|OC|International Shipping|Harmonized,International Shipping,Harmonized
+AIM,OC,CEDS+|9+ Sectors|Emissions|OC|Energy Sector|Harmonized,Energy Sector,Harmonized
+AIM,OC,CEDS+|9+ Sectors|Emissions|OC|Solvents Production and Application|Harmonized,Solvents Production and Application,Harmonized
+AIM,OC,CEDS+|9+ Sectors|Emissions|OC|Waste|Harmonized,Waste,Harmonized
+AIM,OC,CEDS+|9+ Sectors|Emissions|OC|Agriculture|Harmonized-DB,Agriculture,Harmonized-DB
+AIM,OC,CEDS+|9+ Sectors|Emissions|OC|Agricultural Waste Burning|Harmonized-DB,Agricultural Waste Burning,Harmonized-DB
+AIM,OC,CEDS+|9+ Sectors|Emissions|OC|Forest Burning|Harmonized-DB,Forest Burning,Harmonized-DB
+AIM,OC,CEDS+|9+ Sectors|Emissions|OC|Grassland Burning|Harmonized-DB,Grassland Burning,Harmonized-DB
+AIM,OC,CEDS+|9+ Sectors|Emissions|OC|Peat Burning|Harmonized-DB,Peat Burning,Harmonized-DB
+AIM,OC,CEDS+|9+ Sectors|Emissions|OC|Industrial Sector|Harmonized-DB,Industrial Sector,Harmonized-DB
+AIM,OC,CEDS+|9+ Sectors|Emissions|OC|Residential Commercial Other|Harmonized-DB,Residential Commercial Other,Harmonized-DB
+AIM,OC,CEDS+|9+ Sectors|Emissions|OC|Aircraft|Harmonized-DB,Aircraft,Harmonized-DB
+AIM,OC,CEDS+|9+ Sectors|Emissions|OC|Transportation Sector|Harmonized-DB,Transportation Sector,Harmonized-DB
+AIM,OC,CEDS+|9+ Sectors|Emissions|OC|International Shipping|Harmonized-DB,International Shipping,Harmonized-DB
+AIM,OC,CEDS+|9+ Sectors|Emissions|OC|Energy Sector|Harmonized-DB,Energy Sector,Harmonized-DB
+AIM,OC,CEDS+|9+ Sectors|Emissions|OC|Solvents Production and Application|Harmonized-DB,Solvents Production and Application,Harmonized-DB
+AIM,OC,CEDS+|9+ Sectors|Emissions|OC|Waste|Harmonized-DB,Waste,Harmonized-DB
+AIM,OC,CEDS+|9+ Sectors|Emissions|OC|Agriculture|Unharmonized,Agriculture,Unharmonized
+AIM,OC,CEDS+|9+ Sectors|Emissions|OC|Agricultural Waste Burning|Unharmonized,Agricultural Waste Burning,Unharmonized
+AIM,OC,CEDS+|9+ Sectors|Emissions|OC|Forest Burning|Unharmonized,Forest Burning,Unharmonized
+AIM,OC,CEDS+|9+ Sectors|Emissions|OC|Grassland Burning|Unharmonized,Grassland Burning,Unharmonized
+AIM,OC,CEDS+|9+ Sectors|Emissions|OC|Peat Burning|Unharmonized,Peat Burning,Unharmonized
+AIM,OC,CEDS+|9+ Sectors|Emissions|OC|Industrial Sector|Unharmonized,Industrial Sector,Unharmonized
+AIM,OC,CEDS+|9+ Sectors|Emissions|OC|Residential Commercial Other|Unharmonized,Residential Commercial Other,Unharmonized
+AIM,OC,CEDS+|9+ Sectors|Emissions|OC|Aircraft|Unharmonized,Aircraft,Unharmonized
+AIM,OC,CEDS+|9+ Sectors|Emissions|OC|Transportation Sector|Unharmonized,Transportation Sector,Unharmonized
+AIM,OC,CEDS+|9+ Sectors|Emissions|OC|International Shipping|Unharmonized,International Shipping,Unharmonized
+AIM,OC,CEDS+|9+ Sectors|Emissions|OC|Energy Sector|Unharmonized,Energy Sector,Unharmonized
+AIM,OC,CEDS+|9+ Sectors|Emissions|OC|Solvents Production and Application|Unharmonized,Solvents Production and Application,Unharmonized
+AIM,OC,CEDS+|9+ Sectors|Emissions|OC|Waste|Unharmonized,Waste,Unharmonized
+AIM,Sulfur,CEDS+|9+ Sectors|Emissions|Sulfur|Agriculture|Harmonized,Agriculture,Harmonized
+AIM,Sulfur,CEDS+|9+ Sectors|Emissions|Sulfur|Agricultural Waste Burning|Harmonized,Agricultural Waste Burning,Harmonized
+AIM,Sulfur,CEDS+|9+ Sectors|Emissions|Sulfur|Forest Burning|Harmonized,Forest Burning,Harmonized
+AIM,Sulfur,CEDS+|9+ Sectors|Emissions|Sulfur|Grassland Burning|Harmonized,Grassland Burning,Harmonized
+AIM,Sulfur,CEDS+|9+ Sectors|Emissions|Sulfur|Peat Burning|Harmonized,Peat Burning,Harmonized
+AIM,Sulfur,CEDS+|9+ Sectors|Emissions|Sulfur|Industrial Sector|Harmonized,Industrial Sector,Harmonized
+AIM,Sulfur,CEDS+|9+ Sectors|Emissions|Sulfur|Residential Commercial Other|Harmonized,Residential Commercial Other,Harmonized
+AIM,Sulfur,CEDS+|9+ Sectors|Emissions|Sulfur|Aircraft|Harmonized,Aircraft,Harmonized
+AIM,Sulfur,CEDS+|9+ Sectors|Emissions|Sulfur|Transportation Sector|Harmonized,Transportation Sector,Harmonized
+AIM,Sulfur,CEDS+|9+ Sectors|Emissions|Sulfur|International Shipping|Harmonized,International Shipping,Harmonized
+AIM,Sulfur,CEDS+|9+ Sectors|Emissions|Sulfur|Energy Sector|Harmonized,Energy Sector,Harmonized
+AIM,Sulfur,CEDS+|9+ Sectors|Emissions|Sulfur|Solvents Production and Application|Harmonized,Solvents Production and Application,Harmonized
+AIM,Sulfur,CEDS+|9+ Sectors|Emissions|Sulfur|Waste|Harmonized,Waste,Harmonized
+AIM,Sulfur,CEDS+|9+ Sectors|Emissions|Sulfur|Agriculture|Harmonized-DB,Agriculture,Harmonized-DB
+AIM,Sulfur,CEDS+|9+ Sectors|Emissions|Sulfur|Agricultural Waste Burning|Harmonized-DB,Agricultural Waste Burning,Harmonized-DB
+AIM,Sulfur,CEDS+|9+ Sectors|Emissions|Sulfur|Forest Burning|Harmonized-DB,Forest Burning,Harmonized-DB
+AIM,Sulfur,CEDS+|9+ Sectors|Emissions|Sulfur|Grassland Burning|Harmonized-DB,Grassland Burning,Harmonized-DB
+AIM,Sulfur,CEDS+|9+ Sectors|Emissions|Sulfur|Peat Burning|Harmonized-DB,Peat Burning,Harmonized-DB
+AIM,Sulfur,CEDS+|9+ Sectors|Emissions|Sulfur|Industrial Sector|Harmonized-DB,Industrial Sector,Harmonized-DB
+AIM,Sulfur,CEDS+|9+ Sectors|Emissions|Sulfur|Residential Commercial Other|Harmonized-DB,Residential Commercial Other,Harmonized-DB
+AIM,Sulfur,CEDS+|9+ Sectors|Emissions|Sulfur|Aircraft|Harmonized-DB,Aircraft,Harmonized-DB
+AIM,Sulfur,CEDS+|9+ Sectors|Emissions|Sulfur|Transportation Sector|Harmonized-DB,Transportation Sector,Harmonized-DB
+AIM,Sulfur,CEDS+|9+ Sectors|Emissions|Sulfur|International Shipping|Harmonized-DB,International Shipping,Harmonized-DB
+AIM,Sulfur,CEDS+|9+ Sectors|Emissions|Sulfur|Energy Sector|Harmonized-DB,Energy Sector,Harmonized-DB
+AIM,Sulfur,CEDS+|9+ Sectors|Emissions|Sulfur|Solvents Production and Application|Harmonized-DB,Solvents Production and Application,Harmonized-DB
+AIM,Sulfur,CEDS+|9+ Sectors|Emissions|Sulfur|Waste|Harmonized-DB,Waste,Harmonized-DB
+AIM,Sulfur,CEDS+|9+ Sectors|Emissions|Sulfur|Agriculture|Unharmonized,Agriculture,Unharmonized
+AIM,Sulfur,CEDS+|9+ Sectors|Emissions|Sulfur|Agricultural Waste Burning|Unharmonized,Agricultural Waste Burning,Unharmonized
+AIM,Sulfur,CEDS+|9+ Sectors|Emissions|Sulfur|Forest Burning|Unharmonized,Forest Burning,Unharmonized
+AIM,Sulfur,CEDS+|9+ Sectors|Emissions|Sulfur|Grassland Burning|Unharmonized,Grassland Burning,Unharmonized
+AIM,Sulfur,CEDS+|9+ Sectors|Emissions|Sulfur|Peat Burning|Unharmonized,Peat Burning,Unharmonized
+AIM,Sulfur,CEDS+|9+ Sectors|Emissions|Sulfur|Industrial Sector|Unharmonized,Industrial Sector,Unharmonized
+AIM,Sulfur,CEDS+|9+ Sectors|Emissions|Sulfur|Residential Commercial Other|Unharmonized,Residential Commercial Other,Unharmonized
+AIM,Sulfur,CEDS+|9+ Sectors|Emissions|Sulfur|Aircraft|Unharmonized,Aircraft,Unharmonized
+AIM,Sulfur,CEDS+|9+ Sectors|Emissions|Sulfur|Transportation Sector|Unharmonized,Transportation Sector,Unharmonized
+AIM,Sulfur,CEDS+|9+ Sectors|Emissions|Sulfur|International Shipping|Unharmonized,International Shipping,Unharmonized
+AIM,Sulfur,CEDS+|9+ Sectors|Emissions|Sulfur|Energy Sector|Unharmonized,Energy Sector,Unharmonized
+AIM,Sulfur,CEDS+|9+ Sectors|Emissions|Sulfur|Solvents Production and Application|Unharmonized,Solvents Production and Application,Unharmonized
+AIM,Sulfur,CEDS+|9+ Sectors|Emissions|Sulfur|Waste|Unharmonized,Waste,Unharmonized
+AIM,VOC,CEDS+|9+ Sectors|Emissions|VOC|Agriculture|Harmonized,Agriculture,Harmonized
+AIM,VOC,CEDS+|9+ Sectors|Emissions|VOC|Agricultural Waste Burning|Harmonized,Agricultural Waste Burning,Harmonized
+AIM,VOC,CEDS+|9+ Sectors|Emissions|VOC|Forest Burning|Harmonized,Forest Burning,Harmonized
+AIM,VOC,CEDS+|9+ Sectors|Emissions|VOC|Grassland Burning|Harmonized,Grassland Burning,Harmonized
+AIM,VOC,CEDS+|9+ Sectors|Emissions|VOC|Peat Burning|Harmonized,Peat Burning,Harmonized
+AIM,VOC,CEDS+|9+ Sectors|Emissions|VOC|Industrial Sector|Harmonized,Industrial Sector,Harmonized
+AIM,VOC,CEDS+|9+ Sectors|Emissions|VOC|Residential Commercial Other|Harmonized,Residential Commercial Other,Harmonized
+AIM,VOC,CEDS+|9+ Sectors|Emissions|VOC|Aircraft|Harmonized,Aircraft,Harmonized
+AIM,VOC,CEDS+|9+ Sectors|Emissions|VOC|Transportation Sector|Harmonized,Transportation Sector,Harmonized
+AIM,VOC,CEDS+|9+ Sectors|Emissions|VOC|International Shipping|Harmonized,International Shipping,Harmonized
+AIM,VOC,CEDS+|9+ Sectors|Emissions|VOC|Energy Sector|Harmonized,Energy Sector,Harmonized
+AIM,VOC,CEDS+|9+ Sectors|Emissions|VOC|Solvents Production and Application|Harmonized,Solvents Production and Application,Harmonized
+AIM,VOC,CEDS+|9+ Sectors|Emissions|VOC|Waste|Harmonized,Waste,Harmonized
+AIM,VOC,CEDS+|9+ Sectors|Emissions|VOC|Agriculture|Harmonized-DB,Agriculture,Harmonized-DB
+AIM,VOC,CEDS+|9+ Sectors|Emissions|VOC|Agricultural Waste Burning|Harmonized-DB,Agricultural Waste Burning,Harmonized-DB
+AIM,VOC,CEDS+|9+ Sectors|Emissions|VOC|Forest Burning|Harmonized-DB,Forest Burning,Harmonized-DB
+AIM,VOC,CEDS+|9+ Sectors|Emissions|VOC|Grassland Burning|Harmonized-DB,Grassland Burning,Harmonized-DB
+AIM,VOC,CEDS+|9+ Sectors|Emissions|VOC|Peat Burning|Harmonized-DB,Peat Burning,Harmonized-DB
+AIM,VOC,CEDS+|9+ Sectors|Emissions|VOC|Industrial Sector|Harmonized-DB,Industrial Sector,Harmonized-DB
+AIM,VOC,CEDS+|9+ Sectors|Emissions|VOC|Residential Commercial Other|Harmonized-DB,Residential Commercial Other,Harmonized-DB
+AIM,VOC,CEDS+|9+ Sectors|Emissions|VOC|Aircraft|Harmonized-DB,Aircraft,Harmonized-DB
+AIM,VOC,CEDS+|9+ Sectors|Emissions|VOC|Transportation Sector|Harmonized-DB,Transportation Sector,Harmonized-DB
+AIM,VOC,CEDS+|9+ Sectors|Emissions|VOC|International Shipping|Harmonized-DB,International Shipping,Harmonized-DB
+AIM,VOC,CEDS+|9+ Sectors|Emissions|VOC|Energy Sector|Harmonized-DB,Energy Sector,Harmonized-DB
+AIM,VOC,CEDS+|9+ Sectors|Emissions|VOC|Solvents Production and Application|Harmonized-DB,Solvents Production and Application,Harmonized-DB
+AIM,VOC,CEDS+|9+ Sectors|Emissions|VOC|Waste|Harmonized-DB,Waste,Harmonized-DB
+AIM,VOC,CEDS+|9+ Sectors|Emissions|VOC|Agriculture|Unharmonized,Agriculture,Unharmonized
+AIM,VOC,CEDS+|9+ Sectors|Emissions|VOC|Agricultural Waste Burning|Unharmonized,Agricultural Waste Burning,Unharmonized
+AIM,VOC,CEDS+|9+ Sectors|Emissions|VOC|Forest Burning|Unharmonized,Forest Burning,Unharmonized
+AIM,VOC,CEDS+|9+ Sectors|Emissions|VOC|Grassland Burning|Unharmonized,Grassland Burning,Unharmonized
+AIM,VOC,CEDS+|9+ Sectors|Emissions|VOC|Peat Burning|Unharmonized,Peat Burning,Unharmonized
+AIM,VOC,CEDS+|9+ Sectors|Emissions|VOC|Industrial Sector|Unharmonized,Industrial Sector,Unharmonized
+AIM,VOC,CEDS+|9+ Sectors|Emissions|VOC|Residential Commercial Other|Unharmonized,Residential Commercial Other,Unharmonized
+AIM,VOC,CEDS+|9+ Sectors|Emissions|VOC|Aircraft|Unharmonized,Aircraft,Unharmonized
+AIM,VOC,CEDS+|9+ Sectors|Emissions|VOC|Transportation Sector|Unharmonized,Transportation Sector,Unharmonized
+AIM,VOC,CEDS+|9+ Sectors|Emissions|VOC|International Shipping|Unharmonized,International Shipping,Unharmonized
+AIM,VOC,CEDS+|9+ Sectors|Emissions|VOC|Energy Sector|Unharmonized,Energy Sector,Unharmonized
+AIM,VOC,CEDS+|9+ Sectors|Emissions|VOC|Solvents Production and Application|Unharmonized,Solvents Production and Application,Unharmonized
+AIM,VOC,CEDS+|9+ Sectors|Emissions|VOC|Waste|Unharmonized,Waste,Unharmonized
