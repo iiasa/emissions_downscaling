@@ -27,7 +27,7 @@ PARAM_DIR <- "../code/parameters/"
 
 # Call standard script header function to read in universal header files -
 # provides logging, file support, and system functions - and start the script log.
-headers <- c( 'common_data.R', 'data_functions.R', 'module-A_functions.R', 'all_module_functions.R' )
+headers <- c()
 log_msg <- "Initiate downscaling routines."
 script_name <- "launch_downscaling.R"
 
@@ -38,72 +38,77 @@ initialize( script_name, log_msg, headers )
 # 1. Set up desired IAM to be processing
 
 # debug flag
-debug <- FALSE
+debug <- TRUE
 
 if (debug) {
-  args_from_makefile <- c( 'MESSAGE-GLOBIOM',
+  args_from_makefile <- c( 'AIM',
                            'Harmonized-DB',
-                           'C:/Users/guti220/Desktop/emissions_downscaling/input/IAM_emissions/MESSAGE-GLOBIOM_SSP2-45/output_harmonized.xlsx',
-                           'C:/Users/guti220/Desktop/emissions_downscaling/final-output/module-B',
-                           'C:/Users/guti220/Desktop/emissions_downscaling/final-output/module-C',
+                           'C:/Users/brau074/Documents/emissions_downscaling/input/IAM_emissions/AIM_SSP3-LowNTCF/output_harmonized.xlsx',
+                           'C:/Users/brau074/Documents/emissions_downscaling/final-output/module-B',
+                           'C:/Users/brau074/Documents/emissions_downscaling/final-output/module-C',
                            'NOTgridding' )
-  
-  calculationDir <- "C:/Users/guti220/Desktop/emissions_downscaling/code/error/parameters"
+
+  calculationDir <- "C:/Users/brau074/Documents/emissions_downscaling/code/error/parameters"
   calculationYears <- 2016:2020
 } else {
   # get args from command line
   args_from_makefile <- commandArgs( TRUE )
 }
 
+# extract arguments from args_from_makefile
+iam <-           args_from_makefile[ 1 ]
+harm_status <-   args_from_makefile[ 2 ]
+input_file <-    args_from_makefile[ 3 ]
+modb_out <-      args_from_makefile[ 4 ]
+modc_out <-      args_from_makefile[ 5 ]
+gridding_flag <- args_from_makefile[ 6 ]
+
 # the flag for intermediate file cleaning
 MED_OUT_CLEAN <- F
 
-# extract arguments from args_from_makefile
-iam <- args_from_makefile[ 1 ]
-harm_status <- args_from_makefile[ 2 ]
-input_file <- args_from_makefile[ 3 ]
-modb_out <- args_from_makefile[ 4 ]
-modc_out <- args_from_makefile[ 5 ]
-gridding_flag <- args_from_makefile[ 6 ]
 RUNSUFFIX <- substr( sha1( runif(1) ), 1, 6 )
 
 # update domainmapping for current run
 domainmapping <- read.csv( DOMAINPATHMAP, stringsAsFactors = F )
 
-# create modb_out
+# create output directories (if they don't already exist)
 dir.create( modb_out )
-# create modc_out if only the gridding flag is given
+
+# modc_out only needs to be created if only the gridding flag is given
 if ( gridding_flag == 'gridding' ) {
-dir.create( modc_out )
+  dir.create( modc_out )
 } else {
   modc_out <- NA
-  }
+}
 
 # create unique directory for intermediate files
 med_out <- paste0( '../intermediate-output', '/', RUNSUFFIX )
 dir.create( med_out )
 
-domainmapping[ domainmapping$Domain == 'MED_OUT', "PathToDomain" ] <- med_out
+domainmapping[ domainmapping$Domain == 'MED_OUT',  "PathToDomain" ] <- med_out
 domainmapping[ domainmapping$Domain == 'MODB_OUT', "PathToDomain" ] <- modb_out
 domainmapping[ domainmapping$Domain == 'MODC_OUT', "PathToDomain" ] <- modc_out
-#write.csv( domainmapping, DOMAINPATHMAP, row.names = F )
+
 
 # -----------------------------------------------------------------------------
 # 2. Source module-B script in order
-source( '../code/module-B/B.1.IAM_input_reformatting.R' )
-source( '../code/module-B/B.2.IAM_reference_emission_preparation.R' )
-source( '../code/module-B/B.3.regional_pop_gdp_preparation.R' )
-source( '../code/module-B/B.4.1.IAM_emissions_downscaling_linear.R' )
-source( '../code/module-B/B.4.2.IAM_emissions_downscaling_ipat.R' )
-source( '../code/module-B/B.4.3.IAM_emissions_downscaling_consistency_check.R' )
-source( '../code/module-B/B.5.IAM_emissions_downscaled_cleanup.R' )
+modb_in <- domainmapping[ domainmapping$Domain == 'MODB', "PathToDomain" ]
+source( paste0( modb_in, '/B.1.IAM_input_reformatting.R' ) )
+source( paste0( modb_in, '/B.2.IAM_reference_emission_preparation.R' ) )
+source( paste0( modb_in, '/B.3.regional_pop_gdp_preparation.R' ) )
+source( paste0( modb_in, '/B.4.1.IAM_emissions_downscaling_linear.R' ) )
+source( paste0( modb_in, '/B.4.2.IAM_emissions_downscaling_ipat.R' ) )
+source( paste0( modb_in, '/B.4.3.IAM_emissions_downscaling_consistency_check.R' ) )
+source( paste0( modb_in, '/B.5.IAM_emissions_downscaled_cleanup.R' ) )
+
 
 # -----------------------------------------------------------------------------
 # 3. Source module-C script in order
 if ( gridding_flag == 'gridding' ) {
-  source( '../code/module-C/C.1.gridding_data_reformatting.R' )
-  source( '../code/module-C/C.2.1.gridding_nonair.R' )
-  source( '../code/module-C/C.2.2.gridding_air.R' )
+  modc_in <- domainmapping[ domainmapping$Domain == 'MODC', "PathToDomain" ]
+  source( paste0( modc_in, '/C.1.gridding_data_reformatting.R' ) )
+  source( paste0( modc_in, '/C.2.1.gridding_nonair.R' ) )
+  source( paste0( modc_in, '/C.2.2.gridding_air.R' ) )
 }
 
 # -----------------------------------------------------------------------------

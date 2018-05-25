@@ -32,7 +32,7 @@ PARAM_DIR <- "../code/parameters/"
 
 # Call standard script header function to read in universal header files -
 # provides logging, file support, and system functions - and start the script log.
-headers <- c( 'common_data.R', 'data_functions.R', 'module-A_functions.R', 'all_module_functions.R' )
+headers <- c( 'module-A_functions.R', 'all_module_functions.R' )
 log_msg <- "Run checksum test on downscaling output"
 
 script_name <- "B.4.3.IAM_emissions_downscaling_consistency_check.R"

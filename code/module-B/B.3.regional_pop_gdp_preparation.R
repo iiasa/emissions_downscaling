@@ -30,7 +30,7 @@ PARAM_DIR <- "../code/parameters/"
 
 # Call standard script header function to read in universal header files -
 # provides logging, file support, and system functions - and start the script log.
-headers <- c( 'common_data.R', 'data_functions.R', 'module-A_functions.R', 'all_module_functions.R' )
+headers <- c( 'module-A_functions.R', 'all_module_functions.R' )
 log_msg <- "Prepare GDP and POP data for downscaling"
 script_name <- "B.3.regional_pop_gdp_preparation.R"
 

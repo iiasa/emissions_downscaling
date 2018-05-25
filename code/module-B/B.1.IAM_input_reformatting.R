@@ -29,7 +29,7 @@
 
 # Call standard script header function to read in universal header files -
 # provides logging, file support, and system functions - and start the script log.
-  headers <- c( 'common_data.R', 'data_functions.R', 'module-A_functions.R', 'all_module_functions.R' )
+  headers <- c( 'data_functions.R', 'module-A_functions.R', 'all_module_functions.R' )
   log_msg <- "Reformat IAM input to separate information for sector, species, etc. "
   script_name <- "B.1.IAM_input_reformatting"
 
@@ -46,7 +46,6 @@
   if ( is.na( iam ) ) iam <- "GCAM4"
   if ( is.na( input_file ) ) stop( 'No snapshot file provided!' )
 
-  MODULE_B <- "../code/module-B/"
 
 # ------------------------------------------------------------------------------
 # 1. Read mapping files and axtract iam info
@@ -64,7 +63,7 @@
 # 2. Read in the input data
 
   data_df <- read_excel( input_file )
-  colnames( data_df ) <- tolower( colnames( data_df ) )
+  names( data_df ) <- tolower( names( data_df ) )
 
 # -----------------------------------------------------------------------------
 # 3. Reformat the IAM data
@@ -73,22 +72,29 @@
   native_reg_list <- sort( unique( region_mapping$region ) )
 
   iam_data <- data_df[ , c( 'model', 'scenario', 'region', 'variable', year_list ) ]
-  
+
   # AIM Team requested model name be "AIM"
   if ( iam == 'AIM' && 'AIM/CGE' %in% iam_data$model ) {
     message( "Input model is 'AIM/CGE', but output will show 'AIM' only.")
     iam_data$model <- sub( '/CGE', '', iam_data$model, fixed = TRUE )
   }
-  
+
   iam_data <- iam_data[ iam_data$model %in% iam_name, ]
   iam_data <- merge( iam_data,
                      ds_sector_mapping[ ds_sector_mapping$harm_status == harm_status, c( 'em', 'variable', 'sector', 'harm_status' ) ],
                      by.x = 'variable', by.y = 'variable' )
   iam_data <- iam_data[ !is.na( iam_data$sector ), ]
   iam_data$unit <- 'Mt'
-  #iam_data <- iam_data[ iam_data$region %!in% R5_regions, ]
   iam_data <- iam_data[ , c( 'model', 'scenario', 'region', 'em', 'sector', 'harm_status', 'unit', year_list ) ]
   colnames( iam_data ) <- c( 'model', 'scenario', 'region', 'em', 'sector', 'harm_status', 'unit', x_year_list )
+
+  # Filter for if only one emission species is desired. Right now only
+  # controllable for VOCs with the global parameter 'voc_speciation'
+  VOC_SPEC <- get_global_constants( 'voc_speciation' )
+  if ( VOC_SPEC == 'only' ) {
+    iam_data <- iam_data[ iam_data$em == "VOC", ]
+  }
+
 
 # -----------------------------------------------------------------------------
 # 4. Complete the layout and fill the missing sector/region with value 0
@@ -153,7 +159,7 @@
     printLog( 'There are negative non-CO2 emissions in given input file!' )
   } else {
     printLog( 'All non-CO2 emissions are positive' )
-    }
+  }
 
 # -----------------------------------------------------------------------------
 # 5. Interpolate the iam_data into all years

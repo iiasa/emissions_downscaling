@@ -37,7 +37,7 @@ PARAM_DIR <- "../code/parameters/"
 
 # Call standard script header function to read in universal header files -
 # provides logging, file support, and system functions - and start the script log.
-headers <- c( 'common_data.R', 'data_functions.R', 'module-A_functions.R', 'all_module_functions.R' )
+headers <- c( 'module-A_functions.R', 'all_module_functions.R' )
 log_msg <- "Split IAM/reference emissions into separate intermediate files based on downscaling method then compute convergence year IAM emissions"
 script_name <- "B.2.IAM_reference_emission_preparation.R"
 
@@ -50,7 +50,6 @@ if ( !exists( 'args_from_makefile' ) ) args_from_makefile <- commandArgs( TRUE )
 iam <- args_from_makefile[ 1 ]
 if ( is.na( iam ) ) iam <- "GCAM4"
 
-MODULE_B <- "../code/module-B/"
 
 # ------------------------------------------------------------------------------
 # 1. Read mapping files and axtract iam info

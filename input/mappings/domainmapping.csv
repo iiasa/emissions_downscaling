@@ -11,6 +11,8 @@ DOCUMENTATION,../documentation
 SSP_IN,../input/SSP_pop_gdp
 INPUT,../input
 GRIDDING,../input/gridding
+MODB,../code/module-B
+MODC,../code/module-C
 MODB_OUT,C:/Users/feng999/Documents/emissions_downscaling/final-output/module-B
 MODC_OUT,C:/Users/feng999/Documents/emissions_downscaling/final-output/module-C
 ERR,../code/error

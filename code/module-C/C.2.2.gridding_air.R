@@ -27,7 +27,7 @@ PARAM_DIR <- "../code/parameters/"
 
 # Call standard script header function to read in universal header files -
 # provides logging, file support, and system functions - and start the script log.
-headers <- c( 'common_data.R', 'data_functions.R', 'module-A_functions.R', 'all_module_functions.R', 'gridding_functions.R', 'nc_generation_functions.R' )
+headers <- c( 'module-A_functions.R', 'all_module_functions.R', 'gridding_functions.R', 'nc_generation_functions.R' )
 log_msg <- "Gridding aircraft emissions in given IAM emissions file "
 script_name <- "C.2.2.gridding_air.R"
 

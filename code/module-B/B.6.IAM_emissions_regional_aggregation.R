@@ -28,7 +28,7 @@ PARAM_DIR <- "../code/parameters/"
 
 # Call standard script header function to read in universal header files -
 # provides logging, file support, and system functions - and start the script log.
-headers <- c( 'common_data.R', 'data_functions.R', 'module-A_functions.R', 'all_module_functions.R' )
+headers <- c( 'module-A_functions.R', 'all_module_functions.R' )
 log_msg <- "Aggregate downscaled emissions into regional level"
 script_name <- "B.6.IAM_emissions_regional_aggregation.R"
 
