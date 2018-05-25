@@ -32,7 +32,7 @@ iamInfoExtract <- function( master_config, iam ) {
   # and write the parameter into global environment 
   # then modifiy the list if necessary 
   iam_name <<- gsub( '.', '-', iam, fixed = T )
-  if ( iam == 'AIM' ) { iam_name <<- 'AIM/CGE' }
+  #if ( iam == 'AIM' ) { iam_name <<- 'AIM/CGE' } # AIM Team requested model name be "AIM"
   iam_path <<- tango_iam_list$model_datapath
   iam_domain_extension <<- tango_iam_list$iam_data_domain_extension
   iam_sheet_name <<- tango_iam_list$sheet_name
