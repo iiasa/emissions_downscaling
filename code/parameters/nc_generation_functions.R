@@ -171,6 +171,11 @@ generate_bulk_grids_nc <- function( allyear_grids_list,
   MD_source_value <- 'IAMC Scenario Database hosted at IIASA'
   scenario <- gsub("-SPA[0123456789]", "", scenario) # Remove SPA designation
   scenario <- gsub("SSP", "ssp", scenario) # Change case
+  scenario <- gsub("Ref", "ref", scenario) # Change case
+  # CMIP-specific change to RCP nomenclature
+  scenario <- gsub("ssp3-ref", "ssp3-70", scenario) # Change to RCP nomenclature
+  scenario <- gsub("ssp5-ref", "ssp5-85", scenario) # Change to RCP nomenclature
+
   MD_source_id_value <- paste0( iam, '-', scenario, '-', gsub("[.]", "-", dataset_version_number) ) 
   FN_source_id_value <- MD_source_id_value
   FN_variable_id_value <- paste0( FN_em, '-em-anthro' )
@@ -469,6 +474,11 @@ generate_openburning_grids_nc <- function( allyear_grids_list,
   MD_source_value <- 'IAMC Scenario Database hosted at IIASA'
   scenario <- gsub("-SPA[0123456789]", "", scenario) # Remove SPA designation
   scenario <- gsub("SSP", "ssp", scenario) # Change case
+  scenario <- gsub("Ref", "ref", scenario) # Change case
+  # CMIP-specific change to RCP nomenclature
+  scenario <- gsub("ssp3-ref", "ssp3-70", scenario) # Change to RCP nomenclature
+  scenario <- gsub("ssp5-ref", "ssp5-85", scenario) # Change to RCP nomenclature
+
   MD_source_id_value <- paste0( iam, '-', scenario, '-', gsub("[.]", "-", dataset_version_number) ) 
   FN_source_id_value <- MD_source_id_value
   FN_variable_id_value <- paste0( FN_em, '-em-openburning' )
@@ -734,6 +744,11 @@ generate_air_grids_nc <- function( allyear_grids_list,
   MD_source_value <- 'IAMC Scenario Database hosted at IIASA'
   scenario <- gsub("-SPA[0123456789]", "", scenario) # Remove SPA designation
   scenario <- gsub("SSP", "ssp", scenario) # Change case
+  scenario <- gsub("Ref", "ref", scenario) # Change case
+  # CMIP-specific change to RCP nomenclature
+  scenario <- gsub("ssp3-ref", "ssp3-70", scenario) # Change to RCP nomenclature
+  scenario <- gsub("ssp5-ref", "ssp5-85", scenario) # Change to RCP nomenclature
+  
   MD_source_id_value <- paste0( iam, '-', scenario, '-', gsub("[.]", "-", dataset_version_number) ) 
   FN_source_id_value <- MD_source_id_value
   FN_variable_id_value <- paste0( FN_em, '-em-aircraft-anthro' )
