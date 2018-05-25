@@ -162,6 +162,7 @@ generate_bulk_grids_nc <- function( allyear_grids_list,
   dataset_version_number <- get_global_constants( "dataset_version_number" )
   target_mip <- get_global_constants( "target_mip" )
 
+  # Generate comment here to preserve SPA information from original scenario
   MD_comment <- paste0( 'SSP harmonized, gridded emissions for ', iam, '_',
                      scenario, '. Data harmonized to historical emissions ',
                      'CEDS-v2017-05-18 (anthropogenic) and v1.2 (land-use change)' )
@@ -459,6 +460,7 @@ generate_openburning_grids_nc <- function( allyear_grids_list,
   dataset_version_number <- get_global_constants( "dataset_version_number" )
   target_mip <- get_global_constants( "target_mip" )
 
+  # Generate comment here to preserve SPA information from original scenario
   MD_comment <- paste0( 'SSP harmonized, gridded emissions for ', iam, '_',
                      scenario, '. Data harmonized to historical emissions ',
                      'CEDS-v2017-05-18 (anthropogenic) and v1.2 (land-use change)' )
@@ -524,7 +526,7 @@ generate_openburning_grids_nc <- function( allyear_grids_list,
   ncatt_put( nc_new, "time", "realtopology", "linear" )
   ncatt_put( nc_new, "time", "standard_name", "time" )
   ncatt_put( nc_new, "sector", "bounds", "sector_bnds" )
-  ncatt_put( nc_new, "sector", "ids", "0: Agriculture; 1: Energy; 2: Industrial; 3: Transportation; 4: Residential, Commercial, Other; 5: Solvents production and application; 6: Waste; 7: International Shipping" )
+  ncatt_put( nc_new, "sector", "ids", "0: Agricultural Waste Burning On Fields; 1: Forest Burning; 2: Grassland Burning; 3: Peat Burning" )
   # attributes for variables
   ncatt_put( nc_new, flat_var_name, 'cell_methods', 'time: mean' )
   ncatt_put( nc_new, flat_var_name, 'long_name', flat_var_longname )
@@ -723,6 +725,7 @@ generate_air_grids_nc <- function( allyear_grids_list,
   dataset_version_number <- get_global_constants( "dataset_version_number" )
   target_mip <- get_global_constants( "target_mip" )
 
+  # Generate comment here to preserve SPA information from original scenario
   MD_comment <- paste0( 'SSP harmonized, gridded emissions for ', iam, '_',
                      scenario, '. Data harmonized to historical emissions ',
                      'CEDS-v2017-05-18 (anthropogenic) and v1.2 (land-use change)' )
