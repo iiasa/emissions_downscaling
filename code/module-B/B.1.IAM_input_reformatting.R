@@ -73,6 +73,13 @@
   native_reg_list <- sort( unique( region_mapping$region ) )  
 
   iam_data <- data_df[ , c( 'model', 'scenario', 'region', 'variable', year_list ) ]
+  
+  # AIM Team requested model name be "AIM"
+  if ( iam == 'AIM' && 'AIM/CGE' %in% iam_data$model ) {
+    message( "Input model is 'AIM/CGE', but output will show 'AIM' only.")
+    iam_data$model <- sub( '/CGE', '', iam_data$model, fixed = TRUE )
+  }
+  
   iam_data <- iam_data[ iam_data$model %in% iam_name, ]
   iam_data <- merge( iam_data, 
                      ds_sector_mapping[ ds_sector_mapping$harm_status == harm_status, c( 'em', 'variable', 'sector', 'harm_status' ) ], 
