@@ -98,7 +98,7 @@ source("../code/module-B/downscaling_ipat_functions.R")
 
 out_nonCO2_posCY <- downscaleIAMemissions( wide_df_nonCO2_posCY, con_year_mapping, CO2_or_negCY = FALSE)
 
-out_CO2_or_negCY <- downscaleIAMemissions( wide_df_CO2_or_negCY, con_year_mapping, CO2_or_negCY = TRUE)
+out_CO2_or_negCY <- downscaleIAMemissions( wide_df_CO2_or_negCY, con_year_mapping, CO2_or_negCY = TRUE, twoGrowthRates)
 
 # annual downscaled emissions
 ds_df <- rbind(out_nonCO2_posCY[[1]], out_CO2_or_negCY[[1]])

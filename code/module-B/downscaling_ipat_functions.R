@@ -1,7 +1,7 @@
 
 
 # downscaleIAMemissions ----------------------------------------
-downscaleIAMemissions <- function( wide_df, con_year_mapping, CO2_or_negCY) { 
+downscaleIAMemissions <- function( wide_df, con_year_mapping, CO2_or_negCY, twoGrowthRates = FALSE) { 
   
   # set up two working df: parameter data frame and results data frame
   
@@ -22,7 +22,7 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping, CO2_or_negCY) {
   res_df <- wide_df %>% 
     select( region, iso, ssp_label, em, sector, model, scenario, unit, paste0('ctry_ref_em_X', base_year) )
   
-  if (CO2_or_negCY) {
+  if (CO2_or_negCY & twoGrowthRates) {
     # adds 'numGrowthRates' column which identifies whether emissions 
     # (1) peak in BY or CY -> 1 growth rate
     # (2) never peak -> "0"(-valued) growth rate
@@ -39,7 +39,7 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping, CO2_or_negCY) {
   }
   
   # replace zero-valued emissions intensity in BY with 1/3 regional minimum
-  out <- adjustEICBY( par_df, CO2_or_negCY )
+  out <- adjustEICBY( par_df, CO2_or_negCY , twoGrowthRates)
   par_df <- out[[1]]
   zero_in_BY.trunc <- out[[2]] # record which rows required adjustment
   
@@ -51,7 +51,7 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping, CO2_or_negCY) {
     res_df_ssp <- res_df %>% filter( ssp_label == ssp )
     wide_df_ssp <- wide_df %>% filter( ssp_label == ssp ) 
 
-    if (CO2_or_negCY) {
+    if (CO2_or_negCY & twoGrowthRates) {
       # calculate EI_gr_C_am
       par_df_ssp <- equation2a_EI_gr_C_am( par_df_ssp )
     } else {
@@ -64,7 +64,7 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping, CO2_or_negCY) {
     # calculation of each year's downscaled country emissions
     for ( year in seq( base_year + 1, ds_end_year ) ) {
       
-      if (CO2_or_negCY) {
+      if (CO2_or_negCY & twoGrowthRates) {
         
         # before applying growth rate, we must identify whether we are using EI_gr_C_am or EI_gr_C_pm
         par_df_ssp <- identify_EI_gr_C( par_df_ssp, year )
@@ -94,17 +94,17 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping, CO2_or_negCY) {
       
       if ( debug ) {
         
-        # output calculation parameters data.frame
-        if ( year %in% calculationYears ) {
-          saveCalculation( par_df_ssp, year, calculationYears, calculationDir )
-        }
-        
-        # save_parameter( par_df_ssp, year, DiffR, calculationDir )
-        save_parameter( par_df_ssp, year, EI_star, calculationDir )
+        # # output calculation parameters data.frame
+        # if ( year %in% calculationYears ) {
+        #   saveCalculation( par_df_ssp, year, calculationYears, calculationDir )
+        # }
+        # 
+        # # save_parameter( par_df_ssp, year, DiffR, calculationDir )
+        # save_parameter( par_df_ssp, year, EI_star, calculationDir )
         
       }
       
-      if (CO2_or_negCY) {
+      if (CO2_or_negCY & twoGrowthRates) {
         # calculate EI_gr_C_pm (updates column if numGrowthRates = 2 & year == peak_year)
         par_df_ssp <- equation2a_EI_gr_C_pm( par_df_ssp, year )
       }
@@ -298,9 +298,9 @@ equation1 <- function(wide_df, con_year_mapping, par_df) {
 }
 
 # replace zero-valued emissions intensity in BY with 1/3 regional minimum
-adjustEICBY <- function(par_df, CO2_or_negCY) {
+adjustEICBY <- function(par_df, CO2_or_negCY, twoGrowthRates) {
   
-  if (CO2_or_negCY) {
+  if (CO2_or_negCY & twoGrowthRates) {
     joinCols <- c("region", "iso", "ssp_label", "em", "sector", "model", "scenario", "unit", 
       "base_year", "con_year", "numGrowthRates", "peak_year", 
       "reg_iam_em_Xcon_year", "reg_gdp_Xcon_year", "ctry_ref_em_Xbase_year", "ctry_gdp_Xbase_year", "reg_iam_em_Xpeak_year", "reg_gdp_Xpeak_year", 
