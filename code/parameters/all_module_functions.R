@@ -54,8 +54,8 @@ iamInfoExtract <- function( master_config, iam ) {
   if ( harmonization_method_specific_flag == 'Y' ) {
     harm_method_specific_type <<- tango_iam_list$harmonization_method_specific_type
     harm_method_specific_mapping <<- tango_iam_list$harmonization_method_specific_mapping
-    print( paste0( harm_method_specific_type, '-specified harmonization method is provided. Check ',
-                   harm_method_specific_mapping, '.csv for detailed harmonization method seetings' ) )
+    printLog( paste0( harm_method_specific_type, '-specified harmonization method is provided. Check ',
+                      harm_method_specific_mapping, '.csv for detailed harmonization method seetings' ) )
     harmonization_method <<- NA
     harm_type <<- NA
     offset_reduce_value <<- NA

@@ -51,7 +51,7 @@ master_config <- readData( 'MAPPINGS', 'master_config', column_names = F )
 # select iam configuration line from the mapping and read the iam information as a list
 iam_info_list <- iamInfoExtract( master_config, iam )
 
-print( paste0( 'The IAM to be processed is: ', iam_name  ) )
+printLog( paste0( 'The IAM to be processed is: ', iam_name  ) )
 
 
 # -----------------------------------------------------------------------------
@@ -73,6 +73,9 @@ if ( VOC_SPEC != 'none' ) {
   VOC_names <-  readData( 'GRIDDING', 'VOC_id_name_mapping' , domain_extension = "gridding-mappings/" )
   CEDS_maps <-  readData( 'MAPPINGS', 'CEDS_sector_mapping')
 
+  VOC_ratios$iso <- gsub( 'global', 'World', VOC_ratios$iso )
+  VOC_ratios$sector <- gsub( 'TANK', 'SHP', VOC_ratios$sector )
+
   # create map from CEDS16_abr format (ex. WST) to CEDS9 format (ex. Waste)
   CEDS16_abr_to_CEDS9 <- CEDS_maps %>%
     dplyr::select( CEDS16_abr, CEDS9 ) %>%
@@ -81,7 +84,7 @@ if ( VOC_SPEC != 'none' ) {
 
   # map the sub-VOC shares of each sector to CEDS9 format
   VOC_ratios_CEDS9 <- VOC_ratios %>%
-    dplyr::filter( iso != 'global' ) %>%
+    # dplyr::filter( iso != 'global' ) %>%
     dplyr::left_join( CEDS16_abr_to_CEDS9, by = c( 'sector' = 'CEDS16_abr' ) ) %>%
     dplyr::mutate( em = 'VOC' ) %>%
     tidyr::gather( sub_VOC, ratio, VOC01:VOC25 ) %>%

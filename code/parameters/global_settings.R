@@ -21,9 +21,10 @@ loadPackage <- function(pName, versions = NULL){
   }
 }
 
-libs <- c( dplyr = "0.7.2", ggplot2 = "2.2.0", gridExtra = "2.2.1",
-           magrittr = "1.5", plyr = "1.8.4", readxl = "1.0.0", stringr = "1.1.0",
-           tidyr = "0.6.3", openxlsx = "4.0.0", zoo = "1.7-14" )
+libs <- c( plyr = "1.8.4", dplyr = "0.7.2", ggplot2 = "2.2.0",
+           gridExtra = "2.2.1", magrittr = "1.5", readxl = "1.0.0",
+           stringr = "1.1.0", tidyr = "0.6.3", openxlsx = "4.0.0",
+           zoo = "1.7-14" )
 
 lapply(names(libs), loadPackage, libs)
 

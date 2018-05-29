@@ -27,12 +27,14 @@ PARAM_DIR <- "../code/parameters/"
 
 # Call standard script header function to read in universal header files -
 # provides logging, file support, and system functions - and start the script log.
-headers <- c( 'module-A_functions.R', 'all_module_functions.R', 'gridding_functions.R', 'nc_generation_functions.R' )
-log_msg <- "Gridding none-aircraft emissions in given IAM emissions file "
+headers <- c( 'data_functions.R', 'gridding_functions.R', 'module-A_functions.R',
+              'all_module_functions.R', 'nc_generation_functions.R' )
+log_msg <- "Gridding none-aircraft emissions in given IAM emissions file"
 script_name <- "C.2.1.gridding_nonair.R"
 
 source( paste0( PARAM_DIR, "header.R" ) )
 initialize( script_name, log_msg, headers )
+
 
 # ------------------------------------------------------------------------------
 # 0.5 Define IAM variable
@@ -51,7 +53,8 @@ master_config <- readData( 'MAPPINGS', 'master_config', column_names = F )
 # select iam configuration line from the mapping and read the iam information as a list
 iam_info_list <- iamInfoExtract( master_config, iam )
 
-print( paste0( 'The IAM to be processed is: ', iam_name  ) )
+printLog( paste0( 'The IAM to be processed is: ', iam_name  ) )
+
 
 # -----------------------------------------------------------------------------
 # 2. Initialize gridding settings
@@ -62,15 +65,16 @@ mask_dir <- filePath( "GRIDDING", "", extension = "", domain_extension = "mask/"
 seasonality_dir <- filePath( "GRIDDING", "", extension = "", domain_extension = "seasonality-CEDS9/" )
 
 gridding_initialize( grid_resolution = grid_resolution,
-                     start_year = 2015,
-                     end_year = 2100,
+                     start_year = ds_start_year,
+                     end_year = ds_end_year,
                      load_masks = T,
                      load_seasonality_profile = T )
 
+
 # -----------------------------------------------------------------------------
 # 3. Read in emissions file and mappings
-iam_data <- readData( domain = 'MED_OUT',
-                      file_name = paste0( 'C.', iam, '_',  harm_status, '_emissions_reformatted', '_', RUNSUFFIX ) )
+iam_data_fname <- paste0( 'C.', iam, '_', harm_status, '_emissions_reformatted_', RUNSUFFIX )
+iam_data <- readData( domain = 'MED_OUT', file_name = iam_data_fname )
 
 proxy_mapping  <- readData( domain = 'GRIDDING',
                             domain_extension = 'gridding-mappings/',
@@ -92,20 +96,21 @@ diagnostic_cells <- readData( domain = 'GRIDDING',
                               domain_extension = 'gridding-mappings/',
                               file_name = 'diagnostic_cells' )
 
+
 # -----------------------------------------------------------------------------
 # 4. Pre-processing of iam emissions
 # remove AIR sector which will be gridded in a separate routine
 iam_em <- iam_data[ iam_data$sector != 'AIR', ]
 
-em_list <- sort( unique( iam_em$em ) )
+emissions <- sort( unique( iam_em$em ) )
+scenarios <- sort( unique( iam_em$scenario ) )
 
-scenario_list <- sort( unique( iam_em$scenario ) )
 
 # -----------------------------------------------------------------------------
 # 5. Gridding and writing output data
 
-for ( scenario in scenario_list ) {
-  for ( em in em_list ) {
+for ( scenario in scenarios ) {
+  for ( em in emissions ) {
     gridding_em <- iam_em[ iam_em$scenario == scenario & iam_em$em == em, ]
 
     allyear_grids_list <- grid_all_years( year_list,

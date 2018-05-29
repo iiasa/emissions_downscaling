@@ -51,7 +51,7 @@ master_config <- readData( 'MAPPINGS', 'master_config', column_names = F )
 # select iam configuration line from the mapping and read the iam information as a list
 iam_info_list <- iamInfoExtract( master_config, iam )
 
-print( paste0( 'The IAM to be processed is: ', iam_name  ) )
+printLog( paste0( 'The IAM to be processed is: ', iam_name  ) )
 
 # -----------------------------------------------------------------------------
 # 2. Initialize gridding settings
