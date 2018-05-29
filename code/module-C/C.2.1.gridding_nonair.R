@@ -43,7 +43,6 @@ modc_out <- args_from_makefile[ 5 ]
 if ( is.na( iam ) ) iam <- "GCAM4"
 if ( is.na( modc_out ) ) iam <- "../final-output/module-C"
 
-MODULE_C <- "../code/module-C/"
 
 # ------------------------------------------------------------------------------
 # 1. Read mapping files and axtract iam info
