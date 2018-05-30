@@ -280,7 +280,6 @@ generate_bulk_grids_nc <- function( allyear_grids_list,
 
   # some other metadata
   ncatt_put( nc_new, 0, 'data_usage_tips', 'Note that these are monthly average fluxes. Note that emissions are provided in uneven year intervals (2015, 2020, then at 10 year intervals) as these are the years for which projection data is available.' )
-  info_line <- reporting_info[ reporting_info$em == em, 'info' ]
   reporting_info <- c ( Sulfur = 'Mass flux of SOx, reported as SO2',
                         NOx =    'Mass flux of NOx, reported as NO2',
                         CO =     'Mass flux of CO',
