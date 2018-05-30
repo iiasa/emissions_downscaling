@@ -13,6 +13,8 @@ library( 'ncdf4' )
 library( 'sp' )
 library( 'geosphere' )
 
+license <- "ScenarioMIP gridded emissions data produced by IAMC is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License (https://creativecommons.org/licenses). Consult https://pcmdi.llnl.gov/CMIP6/TermsOfUse for terms of use governing input4MIPs output, including citation requirements and proper acknowledgment. Further information about this data, including some limitations, can be found via the further_info_url (recorded as a global attribute in this file). The data producers and data providers make no warranty, either express or implied, including, but not limited to, warranties of merchantability and fitness for a particular purpose. All liabilities arising from the supply of the information (including any liability arising in negligence) are excluded to the fullest extent permitted by law."
+
 # =====================================================================
 # -------------------------------------------------
 # generate_bulk_grids_nc
@@ -269,7 +271,7 @@ generate_bulk_grids_nc <- function( allyear_grids_list,
   ncatt_put( nc_new, 0, 'target_mip', target_mip )
   ncatt_put( nc_new, 0, 'title', paste0( 'Future Anthropogenic Emissions of ', FN_em, ' prepared for input4MIPs' ) )
   ncatt_put( nc_new, 0, 'variable_id', MD_variable_id_value )
-  ncatt_put( nc_new, 0, 'license', "Consult https://pcmdi.llnl.gov/CMIP6/TermsOfUse for terms of use governing input4MIPs output, including citation requirements and proper acknowledgment. Further information about this data, including some limitations, can be found via the further_info_url (recorded as a global attribute in this file). The data producers and data providers make no warranty, either express or implied, including, but not limited to, warranties of merchantability and fitness for a particular purpose. All liabilities arising from the supply of the information (including any liability arising in negligence) are excluded to the fullest extent permitted by law" )
+  ncatt_put( nc_new, 0, 'license', license )
   
   # some other metadata
   ncatt_put( nc_new, 0, 'data_usage_tips', 'Note that these are monthly average fluxes. Note that emissions are provided in uneven year intervals (2015, 2020, then at 10 year intervals) as these are the years for which projection data is available.' )
@@ -570,8 +572,8 @@ generate_openburning_grids_nc <- function( allyear_grids_list,
   ncatt_put( nc_new, 0, 'target_mip', target_mip )
   ncatt_put( nc_new, 0, 'title', paste0( 'Future Anthropogenic Emissions of ', FN_em, ' prepared for input4MIPs' ) )
   ncatt_put( nc_new, 0, 'variable_id', MD_variable_id_value )
-  ncatt_put( nc_new, 0, 'license', "Consult https://pcmdi.llnl.gov/CMIP6/TermsOfUse for terms of use governing input4MIPs output, including citation requirements and proper acknowledgment. Further information about this data, including some limitations, can be found via the further_info_url (recorded as a global attribute in this file). The data producers and data providers make no warranty, either express or implied, including, but not limited to, warranties of merchantability and fitness for a particular purpose. All liabilities arising from the supply of the information (including any liability arising in negligence) are excluded to the fullest extent permitted by law" )
-  
+  ncatt_put( nc_new, 0, 'license', license )
+ 
   # some other metadata
   ncatt_put( nc_new, 0, 'data_usage_tips', 'Note that these are monthly average fluxes. Note that emissions are provided in uneven year intervals (2015, 2020, then at 10 year intervals) as these are the years for which projection data is available.' )
   reporting_info <- data.frame( em = c( 'Sulfur', 'NOx', 'CO', 'VOC', 'NH3', 'BC', 'OC', 'CO2', 'CH4' ), info = c( 'Mass flux of SOx, reported as SO2', 'Mass flux of NOx, reported as NO2', 'Mass flux of CO', 'Mass flux of NMVOC (total mass emitted)', 'Mass flux of NH3', 'Mass flux of BC, reported as carbon mass', 'Mass flux of OC, reported as carbon mass', 'Mass flux of CO2', 'Mass flux of CH4' ), stringsAsFactors = F )
@@ -836,7 +838,7 @@ generate_air_grids_nc <- function( allyear_grids_list,
   ncatt_put( nc_new, 0, 'target_mip', target_mip )
   ncatt_put( nc_new, 0, 'title', paste0( 'Future Anthropogenic Aircraft Emissions of ', FN_em, ' prepared for input4MIPs' ) )
   ncatt_put( nc_new, 0, 'variable_id', MD_variable_id_value )
-  ncatt_put( nc_new, 0, 'license', "Consult https://pcmdi.llnl.gov/CMIP6/TermsOfUse for terms of use governing input4MIPs output, including citation requirements and proper acknowledgment. Further information about this data, including some limitations, can be found via the further_info_url (recorded as a global attribute in this file). The data producers and data providers make no warranty, either express or implied, including, but not limited to, warranties of merchantability and fitness for a particular purpose. All liabilities arising from the supply of the information (including any liability arising in negligence) are excluded to the fullest extent permitted by law" )
+  ncatt_put( nc_new, 0, 'license', license )
   
   # some other metadata
   ncatt_put( nc_new, 0, 'data_usage_tips', 'Note that these are monthly average fluxes. Note that emissions are provided in uneven year intervals (2015, 2020, then at 10 year intervals) as these are the years for which projection data is available.' )
