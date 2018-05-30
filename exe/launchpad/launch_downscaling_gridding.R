@@ -43,9 +43,9 @@ debug <- TRUE
 if (debug) {
   args_from_makefile <- c( 'AIM',
                            'Harmonized-DB',
-                           'C:/Users/brau074/Documents/emissions_downscaling/input/IAM_emissions/AIM_SSP3-LowNTCF/output_harmonized.xlsx',
-                           'C:/Users/brau074/Documents/emissions_downscaling/final-output/module-B',
-                           'C:/Users/brau074/Documents/emissions_downscaling/final-output/module-C',
+                           '/Users/Caleb/Documents/JGCRI/emissions_downscaling/input/IAM_emissions/AIM_SSP3-LowNTCF/output_harmonized.xlsx',
+                           '/Users/Caleb/Documents/JGCRI/emissions_downscaling/final-output/module-B',
+                           '/Users/Caleb/Documents/JGCRI/emissions_downscaling/final-output/module-C',
                            'NOTgridding' )
 
   calculationDir <- "C:/Users/brau074/Documents/emissions_downscaling/code/error/parameters"
@@ -66,7 +66,7 @@ gridding_flag <- args_from_makefile[ 6 ]
 # the flag for intermediate file cleaning
 MED_OUT_CLEAN <- F
 
-RUNSUFFIX <- substr( sha1( runif(1) ), 1, 6 )
+RUNSUFFIX <- format( Sys.time(), '%m-%d-%H%M%S' )
 
 # update domainmapping for current run
 domainmapping <- read.csv( DOMAINPATHMAP, stringsAsFactors = F )

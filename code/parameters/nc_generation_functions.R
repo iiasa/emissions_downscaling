@@ -34,7 +34,12 @@ generate_bulk_grids_nc <- function( allyear_grids_list,
   # ---
   # 0. Define some needed variables
   bulk_sectors <- c( "AGR", "ENE", "IND", "RCO", "SHP", "SLV", "TRA", "WST" )
-  bulk_sectors <- intersect( names(allyear_grids_list[[1]]), bulk_sectors )
+  if ( !all( bulk_sectors %in% names( allyear_grids_list[[1]] ) ) ) {
+    missing_sectors <- setdiff( bulk_sectors, names( allyear_grids_list[[1]] ) )
+    warning( paste( c( "Not all anthro", em, "emissions found. Missing sectors:",
+                       missing_sectors ), collapse = ' ' ) )
+    return( invisible( NULL ) )
+  }
 
   # ---
   # 1. Prepare data from writing
@@ -275,8 +280,21 @@ generate_bulk_grids_nc <- function( allyear_grids_list,
 
   # some other metadata
   ncatt_put( nc_new, 0, 'data_usage_tips', 'Note that these are monthly average fluxes. Note that emissions are provided in uneven year intervals (2015, 2020, then at 10 year intervals) as these are the years for which projection data is available.' )
-  reporting_info <- data.frame( em = c( 'Sulfur', 'NOx', 'CO', 'VOC', 'NH3', 'BC', 'OC', 'CO2', 'CH4' ), info = c( 'Mass flux of SOx, reported as SO2', 'Mass flux of NOx, reported as NO2', 'Mass flux of CO', 'Mass flux of NMVOC (total mass emitted)', 'Mass flux of NH3', 'Mass flux of BC, reported as carbon mass', 'Mass flux of OC, reported as carbon mass', 'Mass flux of CO2', 'Mass flux of CH4' ), stringsAsFactors = F )
   info_line <- reporting_info[ reporting_info$em == em, 'info' ]
+  reporting_info <- c ( Sulfur = 'Mass flux of SOx, reported as SO2',
+                        NOx =    'Mass flux of NOx, reported as NO2',
+                        CO =     'Mass flux of CO',
+                        VOC =    'Mass flux of NMVOC (total mass emitted)',
+                        NH3 =    'Mass flux of NH3',
+                        BC =     'Mass flux of BC, reported as carbon mass',
+                        OC =     'Mass flux of OC, reported as carbon mass',
+                        CO2 =    'Mass flux of CO2',
+                        CH4 =    'Mass flux of CH4' )
+  if ( grepl( 'VOC\\d\\d', em ) ) {
+    info_line <- paste( 'Mass flux of', em, '(total mass emitted)' )
+  } else {
+    info_line <- reporting_info[ em ]
+  }
   ncatt_put( nc_new, 0, 'reporting_unit', info_line )
 
   # ---
@@ -338,6 +356,12 @@ generate_openburning_grids_nc <- function( allyear_grids_list,
   # ---
   # 0. Define some needed variables
   openburning_sectors <- c( "AWB", "FRTB", "GRSB", "PEAT" )
+  if ( !all( openburning_sectors %in% names( allyear_grids_list[[1]] ) ) ) {
+    missing_sectors <- setdiff( openburning_sectors, names( allyear_grids_list[[1]] ) )
+    warning( paste( c( "Not all anthro", em, "emissions found. Missing sectors:",
+                       missing_sectors ), collapse = ' ' ) )
+    return( invisible( NULL ) )
+  }
 
   # ---
   # 1. Prepare data from writing
