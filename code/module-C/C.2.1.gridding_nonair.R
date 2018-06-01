@@ -29,7 +29,7 @@ PARAM_DIR <- "../code/parameters/"
 # provides logging, file support, and system functions - and start the script log.
 headers <- c( 'data_functions.R', 'gridding_functions.R', 'module-A_functions.R',
               'all_module_functions.R', 'nc_generation_functions.R' )
-log_msg <- "Gridding none-aircraft emissions in given IAM emissions file"
+log_msg <- "Gridding non-aircraft emissions in given IAM emissions file"
 script_name <- "C.2.1.gridding_nonair.R"
 
 source( paste0( PARAM_DIR, "header.R" ) )
@@ -76,25 +76,19 @@ gridding_initialize( grid_resolution = grid_resolution,
 iam_data_fname <- paste0( 'C.', iam, '_', harm_status, '_emissions_reformatted_', RUNSUFFIX )
 iam_data <- readData( domain = 'MED_OUT', file_name = iam_data_fname )
 
-proxy_mapping  <- readData( domain = 'GRIDDING',
-                            domain_extension = 'gridding-mappings/',
-                            file_name = gridding_proxy_mapping )
-location_index <- readData( domain = 'GRIDDING',
-                            domain_extension = 'gridding-mappings/',
-                            file_name = gridding_location_index )
-seasonality_mapping <- readData( domain = 'GRIDDING',
-                                 domain_extension = 'gridding-mappings/',
+grid_maps_ext <- 'gridding-mappings/'
+seasonality_mapping <- readData( 'GRIDDING', domain_extension = grid_maps_ext,
                                  file_name = gridding_seasonality_mapping )
-proxy_substitution_mapping <- readData( domain = 'GRIDDING',
-                                        domain_extension = 'gridding-mappings/',
-                                        file_name = gridding_proxy_substitution_mapping )
-sector_name_mapping <- readData( domain = 'GRIDDING',
-                                 domain_extension = 'gridding-mappings/',
+sector_name_mapping <- readData( 'GRIDDING', domain_extension = grid_maps_ext,
                                  file_name = gridding_sector_mapping )
-
-diagnostic_cells <- readData( domain = 'GRIDDING',
-                              domain_extension = 'gridding-mappings/',
-                              file_name = 'diagnostic_cells' )
+location_index <-      readData( 'GRIDDING', domain_extension = grid_maps_ext,
+                                 file_name = gridding_location_index )
+proxy_mapping <-       readData( 'GRIDDING', domain_extension = grid_maps_ext,
+                                 file_name = gridding_proxy_mapping )
+proxy_sub_mapping <-   readData( 'GRIDDING', domain_extension = grid_maps_ext,
+                                 file_name = gridding_proxy_substitution_mapping )
+diagnostic_cells <-    readData( 'GRIDDING', domain_extension = grid_maps_ext,
+                                 file_name = 'diagnostic_cells' )
 
 
 # -----------------------------------------------------------------------------
@@ -119,7 +113,7 @@ for ( scenario in scenarios ) {
                                           gridding_em,
                                           location_index,
                                           proxy_mapping,
-                                          proxy_substitution_mapping )
+                                          proxy_sub_mapping )
 
     generate_bulk_grids_nc( allyear_grids_list,
                             output_dir,
@@ -137,10 +131,4 @@ for ( scenario in scenarios ) {
   }
 }
 
-# -----------------------------------------------------------------------------
-# 6. Write out
-# nothing to write
-
-# END
 logStop()
-

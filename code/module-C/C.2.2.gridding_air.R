@@ -27,12 +27,14 @@ PARAM_DIR <- "../code/parameters/"
 
 # Call standard script header function to read in universal header files -
 # provides logging, file support, and system functions - and start the script log.
-headers <- c( 'module-A_functions.R', 'all_module_functions.R', 'gridding_functions.R', 'nc_generation_functions.R' )
-log_msg <- "Gridding aircraft emissions in given IAM emissions file "
+headers <- c( 'gridding_functions.R', 'module-A_functions.R',
+              'all_module_functions.R', 'nc_generation_functions.R' )
+log_msg <- "Gridding aircraft emissions in given IAM emissions file"
 script_name <- "C.2.2.gridding_air.R"
 
 source( paste0( PARAM_DIR, "header.R" ) )
 initialize( script_name, log_msg, headers )
+
 
 # ------------------------------------------------------------------------------
 # 0.5 Define IAM variable
@@ -53,6 +55,7 @@ iam_info_list <- iamInfoExtract( master_config, iam )
 
 printLog( paste0( 'The IAM to be processed is: ', iam_name  ) )
 
+
 # -----------------------------------------------------------------------------
 # 2. Initialize gridding settings
 output_dir <- modc_out
@@ -62,31 +65,21 @@ mask_dir <- filePath( "GRIDDING", "", extension = "", domain_extension = "mask/"
 seasonality_dir <- filePath( "GRIDDING", "", extension = "", domain_extension = "seasonality-CEDS9/" )
 
 gridding_initialize( grid_resolution = grid_resolution,
-                     start_year = 2015,
-                     end_year = 2100,
+                     start_year = ds_start_year,
+                     end_year = ds_end_year,
                      load_masks = T,
                      load_seasonality_profile = T )
 
+
 # -----------------------------------------------------------------------------
 # 3. Read in emissions file and mappings
-iam_data <- readData( domain = 'MED_OUT',
-                      file_name = paste0( 'C.', iam, '_',  harm_status, '_emissions_reformatted', '_', RUNSUFFIX ) )
+iam_data_fname <- paste0( 'C.', iam, '_', harm_status, '_emissions_reformatted_', RUNSUFFIX )
+iam_data <- readData( domain = 'MED_OUT', file_name = iam_data_fname )
 
-proxy_mapping  <- readData( domain = 'GRIDDING',
-                            domain_extension = 'gridding-mappings/',
-                            file_name = gridding_proxy_mapping )
-location_index <- readData( domain = 'GRIDDING',
-                            domain_extension = 'gridding-mappings/',
-                            file_name = gridding_location_index )
-seasonality_mapping <- readData( domain = 'GRIDDING',
-                                 domain_extension = 'gridding-mappings/',
-                                 file_name = gridding_seasonality_mapping )
-proxy_substitution_mapping <- readData( domain = 'GRIDDING',
-                                        domain_extension = 'gridding-mappings/',
-                                        file_name = gridding_proxy_substitution_mapping )
-sector_name_mapping <- readData( domain = 'GRIDDING',
-                                 domain_extension = 'gridding-mappings/',
-                                 file_name = gridding_sector_mapping )
+grid_maps_ext <- 'gridding-mappings/'
+proxy_mapping <- readData( 'GRIDDING', domain_extension = grid_maps_ext,
+                           file_name = gridding_proxy_mapping )
+
 
 # -----------------------------------------------------------------------------
 # 4. Pre-processing of iam emissions
@@ -94,15 +87,15 @@ sector_name_mapping <- readData( domain = 'GRIDDING',
 iam_em <- iam_data[ iam_data$sector == 'AIR', ]
 iam_em$iso <- 'global'
 
-em_list <- sort( unique( iam_em$em ) )
+emissions <- sort( unique( iam_em$em ) )
+scenarios <- sort( unique( iam_em$scenario ) )
 
-scenario_list <- sort( unique( iam_em$scenario ) )
 
 # -----------------------------------------------------------------------------
 # 5. Gridding and writing output data
 
-for ( scenario in scenario_list ) {
-  for ( em in em_list ) {
+for ( scenario in scenarios ) {
+  for ( em in emissions ) {
     gridding_em <- iam_em[ iam_em$scenario == scenario & iam_em$em == em, ]
 
     allyear_grids_list <- grid_all_years_air( year_list,
@@ -120,10 +113,4 @@ for ( scenario in scenario_list ) {
   }
 }
 
-# -----------------------------------------------------------------------------
-# 6. Write out
-# nothing to write
-
-# END
 logStop()
-
