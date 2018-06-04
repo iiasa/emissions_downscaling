@@ -97,7 +97,10 @@ generate_openburning_grids_nc <- function( allyear_grids_list,
   #             out_name - output file name
   diagnostics <- build_ncdf( allyear_grids_list, output_dir, grid_resolution,
                              year_list, em, openburning_sectors, sector_type,
-                             sector_ids )
+                             sector_ids, aggregate_sectors = TRUE )
+  diagnostics <- build_ncdf( allyear_grids_list, output_dir, grid_resolution,
+                             year_list, em, openburning_sectors, sector_type,
+                             sector_ids, sector_shares = TRUE)
 
   # 2. Create diagnostic cells plots
   diagnostic_cells <- do.call( 'rbind', diagnostics$diag_cells )
@@ -462,10 +465,12 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
                                                          length( year_list ) * 12 ) )
   if ( aggregate_sectors ) {
     em_array <- apply(em_array, c( 1, 2, 4 ), sum)
+    sector_type <- paste0( sector_type, '-agg')
   }
   if ( sector_shares ) {
     em_array <- prop.table( em_array, c( 1, 2, 4 ) )
     em_array[is.nan(em_array)] <- 0
+    sector_type <- paste0( sector_type, '-share')
   }
 
   # (2) lons data and lon bound data
