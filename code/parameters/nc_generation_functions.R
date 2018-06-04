@@ -461,7 +461,11 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
                                                          length( ncdf_sectors ),
                                                          length( year_list ) * 12 ) )
   if ( aggregate_sectors ) {
-    em_array <- apply(em_array, c(1, 2, 4), sum)
+    em_array <- apply(em_array, c( 1, 2, 4 ), sum)
+  }
+  if ( sector_shares ) {
+    em_array <- prop.table( em_array, c( 1, 2, 4 ) )
+    em_array[is.nan(em_array)] <- 0
   }
 
   # (2) lons data and lon bound data
