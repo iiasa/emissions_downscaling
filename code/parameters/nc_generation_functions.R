@@ -254,8 +254,6 @@ generate_air_grids_nc <- function( allyear_grids_list,
   MD_comment <- paste0( 'SSP harmonized, gridded emissions for ', iam, '_',
                         scenario, '. Data harmonized to historical emissions ',
                         'CEDS-v2017-05-18 (anthropogenic) and v1.2 (land-use change)' )
-  FN_version_tag <- paste0( 'IAMC', '-', dataset_version_number )
-  MD_source_value <- 'IAMC Scenario Database hosted at IIASA'
   scenario <- tolower( scenario ) # Change case
   scenario <- gsub("-spa[0123456789]", "", scenario) # Remove SPA designation
   scenario <- gsub("ssp3-ref", "ssp3-70", scenario) # CMIP-specific change to RCP nomenclature
@@ -267,7 +265,6 @@ generate_air_grids_nc <- function( allyear_grids_list,
   scenario <- paste0( scen_start, scen_end )
 
   MD_source_id_value <- paste0( iam, '-', scenario, '-', gsub("[.]", "-", dataset_version_number) )
-  FN_source_id_value <- MD_source_id_value
   FN_variable_id_value <- paste0( FN_em, '-em-aircraft-anthro' )
   nc_file_name <- paste0( FN_variable_id_value, '_input4MIPs_emissions_',target_mip,'_', MD_source_id_value, '_gn_201501-210012.nc' )
   nc_file_name_w_path <- paste0( output_dir, '/', nc_file_name )
@@ -542,13 +539,11 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
 
   # Add description of aggregate open burning
 	if ( aggregate_sectors && ( sector_type == "openburning" ) ) {
-	MD_comment <- paste0(MD_comment, ' ',sector_type, ' emissions',
-								' are provided here as one aggregate total. ',
-								' Future emissions shares by land-type are provided in a separate file.')
+  	MD_comment <- paste( MD_comment, sector_type, 'emissions are provided here',
+                        'as one aggregate total. Future emissions shares by',
+                        'land-type are provided in a separate file.' )
 	}
 
-  FN_version_tag <- paste0( 'IAMC', '-', dataset_version_number )
-  MD_source_value <- 'IAMC Scenario Database hosted at IIASA'
   scenario <- tolower( scenario ) # Change case
   scenario <- gsub("-spa[0123456789]", "", scenario) # Remove SPA designation
   scenario <- gsub("ssp3-ref", "ssp3-70", scenario) # CMIP-specific change to RCP nomenclature
@@ -560,7 +555,6 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
   scenario <- paste0( scen_start, scen_end )
 
   MD_source_id_value <- paste0( iam, '-', scenario, '-', gsub("[.]", "-", dataset_version_number) )
-  FN_source_id_value <- MD_source_id_value
   FN_variable_id_value <- paste( FN_em, 'em', sector_type_for_filename, sep = '-' )
   nc_file_name <- paste( FN_variable_id_value, 'input4MIPs_emissions', target_mip, MD_source_id_value, 'gn_201501-210012.nc', sep = '_' )
   nc_file_name_w_path <- paste0( output_dir, '/', nc_file_name )
@@ -575,6 +569,15 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
   # define unit and missing value
   data_unit <- 'kg m-2 s-1'
   missing_value <- 1.e20
+
+  sector_long_name <- 'anthropogenic emissions'
+  if ( sector_type == 'openburning' ) {
+    sector_long_name <- 'open burning'
+    if (sector_shares)
+      sector_long_name <- paste( sector_long_name, 'sector shares' )
+    if (aggregate_sectors)
+      sector_long_name <- paste( 'total', sector_long_name, 'emissions' )
+  }
 
   # ---
   # 4. define nc variables
@@ -657,15 +660,7 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
   ncatt_put( nc_new, 0, 'source_version', as.numeric( dataset_version_number ), 'float' )
   ncatt_put( nc_new, 0, 'table_id', 'input4MIPs' )
   ncatt_put( nc_new, 0, 'target_mip', target_mip )
-  
-  sector_long_name = 'anthropogenic emissions'
-  if ( sector_type == 'openburning' ) {
-    sector_long_name = 'open burning'
-    if (sector_shares) sector_long_name = paste(sector_long_name,'sector shares')
-    if (aggregate_sectors) sector_long_name = paste('total',sector_long_name,'emissions')
- }
-  ncatt_put( nc_new, 0, 'title', paste0( 'Future ',sector_long_name,' of ', FN_em, ' prepared for input4MIPs' ) )
-  
+  ncatt_put( nc_new, 0, 'title', paste( 'Future', sector_long_name, 'of', FN_em, 'prepared for input4MIPs' ) )
   ncatt_put( nc_new, 0, 'variable_id', MD_variable_id_value )
   ncatt_put( nc_new, 0, 'license', license )
 
