@@ -553,15 +553,11 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
                         'land-type are provided in a separate file.' )
 	}
 
-  scenario <- tolower( scenario ) # Change case
+  scenario <- gsub("SSP", "ssp", scenario) # Change case
   scenario <- gsub("-spa[0123456789]", "", scenario) # Remove SPA designation
   scenario <- gsub("ssp3-ref", "ssp3-70", scenario) # CMIP-specific change to RCP nomenclature
   scenario <- gsub("ssp5-ref", "ssp5-85", scenario) # CMIP-specific change to RCP nomenclature
-
-  # Remove all hyphens after first
-  scen_start <- sub('([^-]*-[^-]*)-.*', '\\1', scenario)
-  scen_end <- gsub('-', '', substr( scenario, nchar( scen_start ) + 1, nchar( scenario ) ) )
-  scenario <- paste0( scen_start, scen_end )
+  scenario <- gsub("(ssp\\d)-(\\d)\\.?(\\d)", "\\1\\2\\3", scenario) # Remove ssp hyphen
 
   MD_source_id_value <- paste0( iam, '-', scenario, '-', gsub("[.]", "-", dataset_version_number) )
   nc_file_name <- paste( FN_variable_id_value, 'input4MIPs_emissions', target_mip, MD_source_id_value, 'gn_201501-210012.nc', sep = '_' )
