@@ -461,16 +461,12 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
                                                          length( ncdf_sectors ),
                                                          length( year_list ) * 12 ) )
 
-  # The default file is emissions, so don't append any additional identifier for aggregated emissions
-  # But do add this information later in descriptive metadata
   if ( aggregate_sectors ) {
     em_array <- apply(em_array, c( 1, 2, 4 ), sum)
-    sector_type_for_filename <- sector_type
   }
   if ( sector_shares ) {
     em_array <- prop.table( em_array, c( 1, 2, 4 ) )
     em_array[is.nan(em_array)] <- 0
-    sector_type_for_filename <- paste0( sector_type, '-share')
   }
 
   # (2) lons data and lon bound data
@@ -531,17 +527,25 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
   dataset_version_number <- get_global_constants( "dataset_version_number" )
   target_mip <- get_global_constants( "target_mip" )
 
+  # The default file is emissions, so don't append any additional identifier for
+  # aggregated emissions; Do add this information later in descriptive metadata
+  if ( sector_shares ) {
+    sector_type_for_filename <- paste0( sector_type, '-share')
+  } else {
+    sector_type_for_filename <- sector_type
+  }
+
   # Generate comment here to preserve SPA information from original scenario
   # (iam and scenario are variables in the global namespace)
-  MD_comment <- paste0( 'SSP harmonized, gridded emissions for ', iam, '_',
-                        scenario, '. Data harmonized to historical emissions ',
-                        'CEDS-v2017-05-18 (anthropogenic) and v1.2 (land-use change).' )
-
   # Add description of aggregate open burning
 	if ( aggregate_sectors && ( sector_type == "openburning" ) ) {
   	MD_comment <- paste( MD_comment, sector_type, 'emissions are provided here',
                         'as one aggregate total. Future emissions shares by',
                         'land-type are provided in a separate file.' )
+	} else {
+    MD_comment <- paste0( 'SSP harmonized, gridded emissions for ', iam, '_',
+                          scenario, '. Data harmonized to historical emissions ',
+                          'CEDS-v2017-05-18 (anthropogenic) and v1.2 (land-use change).' )
 	}
 
   scenario <- tolower( scenario ) # Change case
