@@ -531,21 +531,26 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
   # aggregated emissions; Do add this information later in descriptive metadata
   if ( sector_shares ) {
     sector_type_for_filename <- paste0( sector_type, '-share')
+    FN_variable_id_value <- paste( FN_em, sector_type_for_filename, sep = '-' )
+    data_unit <- 'percent'
   } else {
     sector_type_for_filename <- sector_type
+    FN_variable_id_value <- paste( FN_em, 'em', sector_type_for_filename, sep = '-' )
+    data_unit <- 'kg m-2 s-1'
   }
+
+  missing_value <- 1.e20
 
   # Generate comment here to preserve SPA information from original scenario
   # (iam and scenario are variables in the global namespace)
   # Add description of aggregate open burning
+  MD_comment <- paste0( 'SSP harmonized, gridded emissions for ', iam, '_',
+                        scenario, '. Data harmonized to historical emissions ',
+                        'CEDS-v2017-05-18 (anthropogenic) and v1.2 (land-use change).' )
 	if ( aggregate_sectors && ( sector_type == "openburning" ) ) {
   	MD_comment <- paste( MD_comment, sector_type, 'emissions are provided here',
                         'as one aggregate total. Future emissions shares by',
                         'land-type are provided in a separate file.' )
-	} else {
-    MD_comment <- paste0( 'SSP harmonized, gridded emissions for ', iam, '_',
-                          scenario, '. Data harmonized to historical emissions ',
-                          'CEDS-v2017-05-18 (anthropogenic) and v1.2 (land-use change).' )
 	}
 
   scenario <- tolower( scenario ) # Change case
@@ -559,7 +564,6 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
   scenario <- paste0( scen_start, scen_end )
 
   MD_source_id_value <- paste0( iam, '-', scenario, '-', gsub("[.]", "-", dataset_version_number) )
-  FN_variable_id_value <- paste( FN_em, 'em', sector_type_for_filename, sep = '-' )
   nc_file_name <- paste( FN_variable_id_value, 'input4MIPs_emissions', target_mip, MD_source_id_value, 'gn_201501-210012.nc', sep = '_' )
   nc_file_name_w_path <- paste0( output_dir, '/', nc_file_name )
 
@@ -569,10 +573,6 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
   MD_variable_id_value <- gsub( "-", "_", FN_variable_id_value ) # Change to underscore for metadata
   flat_var_name <- MD_variable_id_value
   flat_var_longname <- flat_var_name
-
-  # define unit and missing value
-  data_unit <- 'kg m-2 s-1'
-  missing_value <- 1.e20
 
   sector_long_name <- 'anthropogenic emissions'
   if ( sector_type == 'openburning' ) {
