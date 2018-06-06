@@ -254,19 +254,15 @@ generate_air_grids_nc <- function( allyear_grids_list,
   MD_comment <- paste0( 'SSP harmonized, gridded emissions for ', iam, '_',
                         scenario, '. Data harmonized to historical emissions ',
                         'CEDS-v2017-05-18 (anthropogenic) and v1.2 (land-use change)' )
-  scenario <- tolower( scenario ) # Change case
+  scenario <- tolower( scenario )
   scenario <- gsub("-spa[0123456789]", "", scenario) # Remove SPA designation
   scenario <- gsub("ssp3-ref", "ssp3-70", scenario) # CMIP-specific change to RCP nomenclature
   scenario <- gsub("ssp5-ref", "ssp5-85", scenario) # CMIP-specific change to RCP nomenclature
-
-  # Remove all hyphens after first
-  scen_start <- sub('([^-]*-[^-]*)-.*', '\\1', scenario)
-  scen_end <- gsub('-', '', substr( scenario, nchar( scen_start ) + 1, nchar( scenario ) ) )
-  scenario <- paste0( scen_start, scen_end )
+  scenario <- gsub("(ssp\\d)-(\\d)\\.?(\\d)", "\\1\\2\\3", scenario) # Remove ssp hyphen
 
   MD_source_id_value <- paste0( iam, '-', scenario, '-', gsub("[.]", "-", dataset_version_number) )
   FN_variable_id_value <- paste0( FN_em, '-em-aircraft-anthro' )
-  nc_file_name <- paste0( FN_variable_id_value, '_input4MIPs_emissions_',target_mip,'_', MD_source_id_value, '_gn_201501-210012.nc' )
+  nc_file_name <- paste( FN_variable_id_value, 'input4MIPs_emissions', target_mip, MD_source_id_value, 'gn_201501-210012.nc', sep = '_' )
   nc_file_name_w_path <- paste0( output_dir, '/', nc_file_name )
 
   # generate flat_var variable name
@@ -344,14 +340,14 @@ generate_air_grids_nc <- function( allyear_grids_list,
   ncatt_put( nc_new, 0, 'references', 'See: https://secure.iiasa.ac.at/web-apps/ene/SspDb/ for references' )
   ncatt_put( nc_new, 0, 'source', 'IAMC Scenario Database hosted at IIASA' )
   ncatt_put( nc_new, 0, 'source_id', MD_source_id_value )
-  ncatt_put( nc_new, 0, 'source_version', as.numeric( dataset_version_number ), 'float' )
+  ncatt_put( nc_new, 0, 'source_version', dataset_version_number )
   ncatt_put( nc_new, 0, 'table_id', 'input4MIPs' )
   ncatt_put( nc_new, 0, 'target_mip', target_mip )
-  ncatt_put( nc_new, 0, 'title', paste0( 'Future Anthropogenic Aircraft Emissions of ', FN_em, ' prepared for input4MIPs' ) )
+  ncatt_put( nc_new, 0, 'title', paste0( 'Future anthropogenic aircraft emissions of ', FN_em, ' prepared for input4MIPs' ) )
   ncatt_put( nc_new, 0, 'variable_id', MD_variable_id_value )
-  ncatt_put( nc_new, 0, 'license', license )
 
   # some other metadata
+  ncatt_put( nc_new, 0, 'license', license )
   ncatt_put( nc_new, 0, 'data_usage_tips', 'Note that these are monthly average fluxes. Note that emissions are provided in uneven year intervals (2015, 2020, then at 10 year intervals) as these are the years for which projection data is available.' )
   reporting_info <- data.frame( em = c( 'Sulfur', 'NOx', 'CO', 'VOC', 'NH3', 'BC', 'OC', 'CO2', 'CH4' ), info = c( 'Mass flux of SOx, reported as SO2', 'Mass flux of NOx, reported as NO2', 'Mass flux of CO', 'Mass flux of NMVOC (total mass emitted)', 'Mass flux of NH3', 'Mass flux of BC, reported as carbon mass', 'Mass flux of OC, reported as carbon mass', 'Mass flux of CO2', 'Mass flux of CH4' ), stringsAsFactors = F )
   info_line <- reporting_info[ reporting_info$em == em, 'info' ]
@@ -553,8 +549,8 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
                         'land-type are provided in a separate file.' )
 	}
 
-  scenario <- gsub("SSP", "ssp", scenario) # Change SSP to lowercase
-  scenario <- gsub("-SPA[0123456789]", "", scenario) # Remove SPA designation
+  scenario <- tolower( scenario )
+  scenario <- gsub("-spa[0123456789]", "", scenario) # Remove SPA designation
   scenario <- gsub("ssp3-ref", "ssp3-70", scenario) # CMIP-specific change to RCP nomenclature
   scenario <- gsub("ssp5-ref", "ssp5-85", scenario) # CMIP-specific change to RCP nomenclature
   scenario <- gsub("(ssp\\d)-(\\d)\\.?(\\d)", "\\1\\2\\3", scenario) # Remove ssp hyphen
@@ -674,7 +670,7 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
   ncatt_put( nc_new, 0, 'references', 'See: https://secure.iiasa.ac.at/web-apps/ene/SspDb/ for references' )
   ncatt_put( nc_new, 0, 'source', 'IAMC Scenario Database hosted at IIASA' )
   ncatt_put( nc_new, 0, 'source_id', MD_source_id_value )
-  ncatt_put( nc_new, 0, 'source_version', as.numeric( dataset_version_number ), 'float' )
+  ncatt_put( nc_new, 0, 'source_version', dataset_version_number )
   ncatt_put( nc_new, 0, 'table_id', 'input4MIPs' )
   ncatt_put( nc_new, 0, 'target_mip', target_mip )
   ncatt_put( nc_new, 0, 'title', paste( 'Future', sector_long_name, 'of', FN_em, 'prepared for input4MIPs' ) )
