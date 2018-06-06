@@ -553,8 +553,8 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
                         'land-type are provided in a separate file.' )
 	}
 
-  scenario <- gsub("SSP", "ssp", scenario) # Change case
-  scenario <- gsub("-spa[0123456789]", "", scenario) # Remove SPA designation
+  scenario <- gsub("SSP", "ssp", scenario) # Change SSP to lowercase
+  scenario <- gsub("-SPA[0123456789]", "", scenario) # Remove SPA designation
   scenario <- gsub("ssp3-ref", "ssp3-70", scenario) # CMIP-specific change to RCP nomenclature
   scenario <- gsub("ssp5-ref", "ssp5-85", scenario) # CMIP-specific change to RCP nomenclature
   scenario <- gsub("(ssp\\d)-(\\d)\\.?(\\d)", "\\1\\2\\3", scenario) # Remove ssp hyphen
@@ -573,11 +573,28 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
   sector_long_name <- 'anthropogenic emissions'
   if ( sector_type == 'openburning' ) {
     sector_long_name <- 'open burning'
-    if (sector_shares)
+    if ( sector_shares )
       sector_long_name <- paste( sector_long_name, 'sector shares' )
-    if (aggregate_sectors)
+    if ( aggregate_sectors )
       sector_long_name <- paste( 'total', sector_long_name, 'emissions' )
   }
+
+  # Data usage tips and reporting unit change if they are shares or not
+  em_key <- c( 'Sulfur', 'NOx', 'CO', 'VOC', 'NH3', 'BC', 'OC', 'CO2', 'CH4' )
+  em_actual <- c( 'SOx', 'NOx', 'CO', 'NMVOC', 'NH3', 'BC', 'OC', 'CO2', 'CH4' )
+  em_val <- em_actual[ em == em_key ]
+  if ( sector_shares ) {
+    data_usage_tips <- 'These are monthly averages.'
+    info_line <- paste( 'Fraction of', em_val, 'from each land category listed in the sector variable' )
+  } else {
+    data_usage_tips <- 'Note that these are monthly average fluxes.'
+    info_line <- paste( 'Mass flux of', em_val )
+    if ( em_val == 'NMVOC' ) info_line <- paste( info_line, '(total mass emitted)' )
+    if ( em_val == 'BC' || em_val == 'OC' ) info_line <- paste0( info_line, ', reported as carbon mass' )
+  }
+  if ( em_val == 'SOx' ) info_line <- paste0( info_line, ', reported as SO2' )
+  if ( em_val == 'NOx' ) info_line <- paste0( info_line, ', reported as NO2' )
+  data_usage_tips <- paste( data_usage_tips, 'Note that emissions are provided in uneven year intervals (2015, 2020, then at 10 year intervals) as these are the years for which projection data is available.' )
 
   # ---
   # 4. define nc variables
@@ -662,12 +679,9 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
   ncatt_put( nc_new, 0, 'target_mip', target_mip )
   ncatt_put( nc_new, 0, 'title', paste( 'Future', sector_long_name, 'of', FN_em, 'prepared for input4MIPs' ) )
   ncatt_put( nc_new, 0, 'variable_id', MD_variable_id_value )
-  ncatt_put( nc_new, 0, 'license', license )
-
   # some other metadata
-  ncatt_put( nc_new, 0, 'data_usage_tips', 'Note that these are monthly average fluxes. Note that emissions are provided in uneven year intervals (2015, 2020, then at 10 year intervals) as these are the years for which projection data is available.' )
-  reporting_info <- data.frame( em = c( 'Sulfur', 'NOx', 'CO', 'VOC', 'NH3', 'BC', 'OC', 'CO2', 'CH4' ), info = c( 'Mass flux of SOx, reported as SO2', 'Mass flux of NOx, reported as NO2', 'Mass flux of CO', 'Mass flux of NMVOC (total mass emitted)', 'Mass flux of NH3', 'Mass flux of BC, reported as carbon mass', 'Mass flux of OC, reported as carbon mass', 'Mass flux of CO2', 'Mass flux of CH4' ), stringsAsFactors = F )
-  info_line <- reporting_info[ reporting_info$em == em, 'info' ]
+  ncatt_put( nc_new, 0, 'license', license )
+  ncatt_put( nc_new, 0, 'data_usage_tips', data_usage_tips )
   ncatt_put( nc_new, 0, 'reporting_unit', info_line )
   ncatt_put( nc_new, 0, 'tracking_id', paste0( "hdl:21.14100/", uuid() ) )
 
@@ -691,7 +705,7 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
 #
 # Modified from https://gist.github.com/cbare/5979354
 uuid <- function() {
-  hex_digits <- c( as.character(0:9), letters[1:6] )
+  hex_digits <- as.hexmode( 0:15 )
   y_digits <- hex_digits[9:12]
 
   paste(
