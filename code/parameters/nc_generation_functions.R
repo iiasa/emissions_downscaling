@@ -30,10 +30,11 @@ generate_bulk_grids_nc <- function( allyear_grids_list,
                                     em ) {
 
   # ---
-  # 0. Define variables specific to openburning
-  bulk_sectors <- c( "AGR", "ENE", "IND", "RCO", "SHP", "SLV", "TRA", "WST" )
-  sector_type <- "anthro"
+  # 0. Define variables specific to anthro
+  #    Order matters, so make sure bulk_sectors and sector_ids are in correct positions
+  bulk_sectors <- c( "AGR", "ENE", "IND", "TRA", "RCO", "SLV", "WST", "SHP" )
   sector_ids <- "0: Agriculture; 1: Energy; 2: Industrial; 3: Transportation; 4: Residential, Commercial, Other; 5: Solvents production and application; 6: Waste; 7: International Shipping"
+  sector_type <- "anthro"
 
   # 1. Build and write out netCDF file
   #    Returns: diag_cells - diagnostic cells list
@@ -689,6 +690,35 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
   # 10. add checksum file
   out_name <- gsub( '.nc', '.csv', nc_file_name_w_path, fixed = T )
   out_df <- do.call( 'rbind', checksum_df_list )
+
+  # diag
+  sector_mapping <- readData( domain = 'GRIDDING', domain_extension = 'gridding-mappings/', file_name = gridding_sector_mapping )
+  in_df <- readData('MED_OUT', paste0( 'B.', iam, '_emissions_reformatted', '_', RUNSUFFIX )) %>%
+    dplyr::filter(em == !!em) %>%
+    dplyr::select(sector_name = sector, one_of(make.names(year_list))) %>%
+    dplyr::group_by(sector_name) %>%
+    dplyr::summarise_if(is.numeric, sum) %>%
+    tidyr::gather(year, value, make.names(year_list)) %>%
+    dplyr::mutate(year = as.integer(sub('X', '', year)))
+  diff_df <- out_df %>%
+    dplyr::mutate(sector_short = as.character(sector)) %>%
+    dplyr::select(-sector, -em, -month) %>%
+    dplyr::group_by(sector_short, year, unit) %>%
+    dplyr::summarise(value = sum(value)) %>%
+    dplyr::ungroup() %>%
+    dplyr::left_join(sector_mapping, by = 'sector_short') %>%
+    dplyr::left_join(in_df, by = c('year', 'sector_name')) %>%
+    dplyr::mutate(pct_diff = (value.x - value.y) / value.y) %>%
+    dplyr::mutate(pct_diff = if_else(is.nan(pct_diff), 0, pct_diff * 100)) %>%
+    dplyr::rename(grid_sum = value.x, orig_sum = value.y) %>%
+    dplyr::select(sector_name, year, unit, grid_sum, orig_sum, pct_diff)
+
+  largest_diff <- round(max(abs(diff_df$pct_diff), na.rm = T), 4)
+  if (largest_diff > 1) {
+    warning(paste('Values for', em, 'were modified by up to', largest_diff, 'percent'))
+  }
+
+  writeData( diff_df, 'DIAG_OUT', sub( '.nc', '_DIFF', nc_file_name, fixed = T), meta = F )
   write.csv( out_df, out_name, row.names = F )
 
   return( list( out_name = nc_file_name, diag_cells = diagnostic_cells_list ) )
