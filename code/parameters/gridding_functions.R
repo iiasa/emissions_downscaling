@@ -497,7 +497,7 @@ get_proxy <- function( em, year, sector, proxy_mapping, proxy_type = 'primary' )
 # seasonality functions
 # ------------------------------------------------------------------------------
 # add_seasonality
-# Brief: add seasoanlity to annual flux grids; different stradegies are adapted for different sectors
+# Brief: add seasonlity to annual flux grids; different strategies are adapted for different sectors
 # Dependencies:
 # Author: Leyang Feng
 # parameters: annual_flux - the annual flux matrix that needs to add seasonality
@@ -742,5 +742,3 @@ gridding_initialize <- function( grid_resolution = 0.5,
   # other pre-set values
   days_in_month <<- c( 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 )
 }
-
-
