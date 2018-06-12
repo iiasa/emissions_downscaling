@@ -262,7 +262,7 @@ generate_air_grids_nc <- function( allyear_grids_list,
   scenario <- gsub("(ssp\\d)-(\\d)\\.?(\\d)", "\\1\\2\\3", scenario) # Remove ssp hyphen
 
   MD_source_id_value <- paste0( iam, '-', scenario, '-', gsub("[.]", "-", dataset_version_number) )
-  FN_variable_id_value <- paste0( FN_em, '-em-aircraft-anthro' )
+  FN_variable_id_value <- paste0( FN_em, '-em-AIR-anthro' )
   nc_file_name <- paste( FN_variable_id_value, 'input4MIPs_emissions', target_mip, MD_source_id_value, 'gn_201501-210012.nc', sep = '_' )
   nc_file_name_w_path <- paste0( output_dir, '/', nc_file_name )
 
