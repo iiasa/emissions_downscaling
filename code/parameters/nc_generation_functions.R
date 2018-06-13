@@ -252,7 +252,7 @@ generate_air_grids_nc <- function( allyear_grids_list,
   license <- "ScenarioMIP gridded emissions data produced by the IAMC are licensed under a Creative Commons Attribution-ShareAlike 4.0 International License (https://creativecommons.org/licenses). Consult https://pcmdi.llnl.gov/CMIP6/TermsOfUse for terms of use governing input4MIPs output, including citation requirements and proper acknowledgment. Further information about this data, including some limitations, can be found via the further_info_url (recorded as a global attribute in this file). The data producers and data providers make no warranty, either express or implied, including, but not limited to, warranties of merchantability and fitness for a particular purpose. All liabilities arising from the supply of the information (including any liability arising in negligence) are excluded to the fullest extent permitted by law."
 
   # Generate comment here to preserve SPA information from original scenario
-  MD_comment <- paste0( 'SSP harmonized, gridded emissions for ', iam, '_',
+  MD_comment <- paste0( 'SSP harmonized, gridded emissions for IAMC-', iam, '_',
                         scenario, '. Data harmonized to historical emissions ',
                         'CEDS-v2017-05-18 (anthropogenic) and v1.2 (land-use change)' )
   scenario <- tolower( scenario )
@@ -261,7 +261,7 @@ generate_air_grids_nc <- function( allyear_grids_list,
   scenario <- gsub("ssp5-ref", "ssp5-85", scenario) # CMIP-specific change to RCP nomenclature
   scenario <- gsub("(ssp\\d)-(\\d)\\.?(\\d)", "\\1\\2\\3", scenario) # Remove ssp hyphen
 
-  MD_source_id_value <- paste0( iam, '-', scenario, '-', gsub("[.]", "-", dataset_version_number) )
+  MD_source_id_value <- paste0( 'IAMC-', iam, '-', scenario, '-', gsub("[.]", "-", dataset_version_number) )
   FN_variable_id_value <- paste0( FN_em, '-em-AIR-anthro' )
   nc_file_name <- paste( FN_variable_id_value, 'input4MIPs_emissions', target_mip, MD_source_id_value, 'gn_201501-210012.nc', sep = '_' )
   nc_file_name_w_path <- paste0( output_dir, '/', nc_file_name )
@@ -350,7 +350,7 @@ generate_air_grids_nc <- function( allyear_grids_list,
   # some other metadata
   ncatt_put( nc_new, 0, 'license', license )
   ncatt_put( nc_new, 0, 'data_usage_tips', 'Note that these are monthly average fluxes. Note that emissions are provided in uneven year intervals (2015, 2020, then at 10 year intervals) as these are the years for which projection data is available.' )
-  reporting_info <- data.frame( em = c( 'Sulfur', 'NOx', 'CO', 'VOC', 'NH3', 'BC', 'OC', 'CO2', 'CH4' ), info = c( 'Mass flux of SOx, reported as SO2', 'Mass flux of NOx, reported as NO2', 'Mass flux of CO', 'Mass flux of NMVOC (total mass emitted)', 'Mass flux of NH3', 'Mass flux of BC, reported as carbon mass', 'Mass flux of OC, reported as carbon mass', 'Mass flux of CO2', 'Mass flux of CH4' ), stringsAsFactors = F )
+  reporting_info <- data.frame( em = c( 'Sulfur', 'NOx', 'CO', 'VOC', 'NH3', 'BC', 'OC', 'CO2', 'CH4' ), info = c( 'Mass flux of SOx, reported as SO2', 'Mass flux of NOx, reported as NO', 'Mass flux of CO', 'Mass flux of NMVOC (total mass emitted)', 'Mass flux of NH3', 'Mass flux of BC, reported as carbon mass', 'Mass flux of OC, reported as carbon mass', 'Mass flux of CO2', 'Mass flux of CH4' ), stringsAsFactors = F )
   info_line <- reporting_info[ reporting_info$em == em, 'info' ]
   ncatt_put( nc_new, 0, 'reporting_unit', info_line )
   ncatt_put( nc_new, 0, 'tracking_id', paste0( "hdl:21.14100/", uuid() ) )
@@ -541,7 +541,7 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
   # Generate comment here to preserve SPA information from original scenario
   # (iam and scenario are variables in the global namespace)
   # Add description of aggregate open burning
-  MD_comment <- paste0( 'SSP harmonized, gridded emissions for ', iam, '_',
+  MD_comment <- paste0( 'SSP harmonized, gridded emissions for IAMC-', iam, '_',
                         scenario, '. Data harmonized to historical emissions ',
                         'CEDS-v2017-05-18 (anthropogenic) and v1.2 (land-use change).' )
 	if ( aggregate_sectors && ( sector_type == "openburning" ) ) {
@@ -556,7 +556,7 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
   scenario <- gsub("ssp5-ref", "ssp5-85", scenario) # CMIP-specific change to RCP nomenclature
   scenario <- gsub("(ssp\\d)-(\\d)\\.?(\\d)", "\\1\\2\\3", scenario) # Remove ssp hyphen
 
-  MD_source_id_value <- paste0( iam, '-', scenario, '-', gsub("[.]", "-", dataset_version_number) )
+  MD_source_id_value <- paste0( 'IAMC-', iam, '-', scenario, '-', gsub("[.]", "-", dataset_version_number) )
   nc_file_name <- paste( FN_variable_id_value, 'input4MIPs_emissions', target_mip, MD_source_id_value, 'gn_201501-210012.nc', sep = '_' )
   nc_file_name_w_path <- paste0( output_dir, '/', nc_file_name )
 
@@ -590,7 +590,7 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
     if ( em_val == 'BC' || em_val == 'OC' ) info_line <- paste0( info_line, ', reported as carbon mass' )
   }
   if ( em_val == 'SOx' ) info_line <- paste0( info_line, ', reported as SO2' )
-  if ( em_val == 'NOx' ) info_line <- paste0( info_line, ', reported as NO2' )
+  if ( em_val == 'NOx' ) info_line <- paste0( info_line, ', reported as NO' )
   data_usage_tips <- paste( data_usage_tips, 'Note that emissions are provided in uneven year intervals (2015, 2020, then at 10 year intervals) as these are the years for which projection data is available.' )
 
   # ---
