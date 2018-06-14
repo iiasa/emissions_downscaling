@@ -90,7 +90,7 @@
 
   # Filter for if only one emission species is desired. Right now only
   # controllable for VOCs with the global parameter 'voc_speciation'
-  VOC_SPEC <- get_global_constants( 'voc_speciation' )
+  VOC_SPEC <- get_global_constant( 'voc_speciation' )
   if ( VOC_SPEC == 'only' ) {
     iam_data <- iam_data[ iam_data$em == "VOC", ]
   }

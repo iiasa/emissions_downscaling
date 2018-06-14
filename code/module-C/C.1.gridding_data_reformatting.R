@@ -66,7 +66,7 @@ sector_mapping <- readData( domain = 'GRIDDING',
 # -----------------------------------------------------------------------------
 # 3. Disaggregate VOCs
 # Take the anthropogenic VOC emissions and speciate them into the CEDS species
-VOC_SPEC <- get_global_constants('voc_speciation')
+VOC_SPEC <- get_global_constant('voc_speciation')
 
 if ( VOC_SPEC != 'none' ) {
   VOC_ratios <- readData( 'GRIDDING', 'VOC_ratio_AllSectors', domain_extension = "gridding-mappings/" )

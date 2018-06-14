@@ -182,7 +182,7 @@ generate_air_grids_nc <- function( allyear_grids_list,
     temp_checksum_df <- data.frame( em = em,
                                     sector = 'AIR',
                                     year = year,
-                                    month = 1 : 12,
+                                    month = 1:12,
                                     unit = 'Mt',
                                     value = temp_array_checksum,
                                     stringsAsFactors = F )
@@ -198,44 +198,35 @@ generate_air_grids_nc <- function( allyear_grids_list,
 
   # (2) lons data and lon bound data
   lons <- seq( -180 + grid_resolution / 2, 180 - grid_resolution / 2, grid_resolution )
-  lon_bnds_data <- cbind( seq( -180, ( 180 - grid_resolution ), grid_resolution ),
-                          seq( ( -180 + grid_resolution ), 180, grid_resolution ) )
+  lon_bnds_data <- cbind( lons - grid_resolution / 2, lons + grid_resolution / 2 )
 
   # (3) lats data and lat bound data
   lats <- seq( -90 + grid_resolution / 2, 90 - grid_resolution / 2, grid_resolution )
-  lat_bnds_data <- cbind( seq( -90, (90 - grid_resolution) , grid_resolution),
-                          seq( ( -90 + grid_resolution ), 90, grid_resolution ) )
+  lat_bnds_data <- cbind( lats - grid_resolution / 2, lats + grid_resolution / 2 )
 
   # (4) levs data and levs bound data
   levs <- seq( 0.305, 14.945, 0.61 )
 
   # (5) time dimension data
-  month_middle_days <- floor( c( 15.5, 45, 74.5, 105, 135.5, 166, 196.5, 227.5, 258, 288.5, 319, 349.5 ) )
-  time_data <- c( )
-  for ( year  in year_list ) {
-    base_days <- ( year - 2015 ) * 365
-    time_data <- c( time_data, month_middle_days + base_days )
-  }
+  month_middle_days <- floor(cumsum(days_in_month) - days_in_month / 2)
+  time_data <- rep( ( year_list - 2015 ) * 365, each = 12 ) + month_middle_days
 
   # (6) time dimension bounds data
-  month_bnds_days <- cbind( c( 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334 ),
-                            c( 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365 ) )
-  time_bnds_data <- matrix( ncol = 2 )
-  for ( year  in year_list ) {
-    base_days <- ( year - 2015 ) * 365
-    time_bnds_data <- rbind( time_bnds_data, month_bnds_days + base_days )
-  }
-  time_bnds_data <- time_bnds_data[ 2 : nrow( time_bnds_data ), ]
+  month_bnds_days <- cbind( c( 0, cumsum(days_in_month)[1:11] ), cumsum(days_in_month) )
+  time_bnds_data <- do.call( rbind, lapply( year_list, function( yr ) {
+    month_bnds_days + ( ( yr - 2015 ) * 365 )
+  } ) )
 
   # (7) upper lower bnds data
   bnds <- 1 : 2
 
   # ---
   # 2. define nc dimensions
-  londim <- ncdim_def( "lon", "degrees_east", as.double( lons ), longname = 'longitude' )
-  latdim <- ncdim_def( "lat", "degrees_north", as.double( lats ), longname = 'latitude' )
+  # Define nc dimensions
+  londim <- ncdim_def( "lon", "degrees_east",  lons, longname = 'longitude' )
+  latdim <- ncdim_def( "lat", "degrees_north", lats, longname = 'latitude' )
   levdim <- ncdim_def( "level", "km", as.double ( levs ), longname = 'altitude' )
-  timedim <- ncdim_def( "time", paste0( "days since 2015-01-01 0:0:0" ), as.double( time_data ),
+  timedim <- ncdim_def( "time", paste0( "days since 2015-01-01 0:0:0" ), time_data,
                         calendar = '365_day', longname = 'time', unlim = T )
 
   dim_list <- list( londim, latdim, levdim, timedim )
@@ -246,20 +237,15 @@ generate_air_grids_nc <- function( allyear_grids_list,
   # 3. generate nc file name and some variables
   if (em == 'Sulfur') {FN_em <- 'SO2'} else {FN_em <- em}
 
-  dataset_version_number <- get_global_constants( "dataset_version_number" )
-  target_mip <- get_global_constants( "target_mip" )
-
-  license <- "ScenarioMIP gridded emissions data produced by the IAMC are licensed under a Creative Commons Attribution-ShareAlike 4.0 International License (https://creativecommons.org/licenses). Consult https://pcmdi.llnl.gov/CMIP6/TermsOfUse for terms of use governing input4MIPs output, including citation requirements and proper acknowledgment. Further information about this data, including some limitations, can be found via the further_info_url (recorded as a global attribute in this file). The data producers and data providers make no warranty, either express or implied, including, but not limited to, warranties of merchantability and fitness for a particular purpose. All liabilities arising from the supply of the information (including any liability arising in negligence) are excluded to the fullest extent permitted by law."
+  dataset_version_number <- get_global_constant( "dataset_version_number" )
+  target_mip <- get_global_constant( "target_mip" )
+  license <- get_global_constant( "license" )
 
   # Generate comment here to preserve SPA information from original scenario
   MD_comment <- paste0( 'SSP harmonized, gridded emissions for ', iam, '_',
                         scenario, '. Data harmonized to historical emissions ',
                         'CEDS-v2017-05-18 (anthropogenic) and v1.2 (land-use change)' )
-  scenario <- tolower( scenario )
-  scenario <- gsub("-spa[0123456789]", "", scenario) # Remove SPA designation
-  scenario <- gsub("ssp3-ref", "ssp3-70", scenario) # CMIP-specific change to RCP nomenclature
-  scenario <- gsub("ssp5-ref", "ssp5-85", scenario) # CMIP-specific change to RCP nomenclature
-  scenario <- gsub("(ssp\\d)-(\\d)\\.?(\\d)", "\\1\\2\\3", scenario) # Remove ssp hyphen
+  scenario <- clean_scenario_name( scenario )
 
   MD_source_id_value <- paste0( iam, '-', scenario, '-', gsub("[.]", "-", dataset_version_number) )
   FN_variable_id_value <- paste0( FN_em, '-em-aircraft-anthro' )
@@ -452,7 +438,7 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
     temp_checksum_df <- data.frame( em = em,
                                     sector = unlist( lapply( ncdf_sectors, rep, 12 ) ),
                                     year = year,
-                                    month = rep( 1 : 12, length( ncdf_sectors ) ),
+                                    month = rep( 1:12, length( ncdf_sectors ) ),
                                     unit = 'Mt',
                                     value = temp_checksum_storage,
                                     stringsAsFactors = F )
@@ -479,38 +465,26 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
 
   # (2) lons data and lon bound data
   lons <- seq( -180 + grid_resolution / 2, 180 - grid_resolution / 2, grid_resolution )
-  lon_bnds_data <- cbind( seq( -180, ( 180 - grid_resolution ), grid_resolution ),
-                          seq( ( -180 + grid_resolution ), 180, grid_resolution ) )
+  lon_bnds_data <- cbind( lons - grid_resolution / 2, lons + grid_resolution / 2 )
 
   # (3) lats data and lat bound data
   lats <- seq( -90 + grid_resolution / 2, 90 - grid_resolution / 2, grid_resolution )
-  lat_bnds_data <- cbind( seq( -90, (90 - grid_resolution) , grid_resolution),
-                          seq( ( -90 + grid_resolution ), 90, grid_resolution ) )
+  lat_bnds_data <- cbind( lats - grid_resolution / 2, lats + grid_resolution / 2 )
 
   # (4) time dimension data
-  # floor(cumsum(days_in_month) - days_in_month / 2)
-  month_middle_days <- floor( c( 15.5, 45, 74.5, 105, 135.5, 166, 196.5, 227.5, 258, 288.5, 319, 349.5 ) )
-  time_data <- c( )
-  for ( year  in year_list ) {
-    base_days <- ( year - 2015 ) * 365
-    time_data <- c( time_data, month_middle_days + base_days )
-  }
+  month_middle_days <- floor(cumsum(days_in_month) - days_in_month / 2)
+  time_data <- rep( ( year_list - 2015 ) * 365, each = 12 ) + month_middle_days
 
   # (5) time dimension bounds data
-  # month_bnds_days <- cbind( c( 0, cumsum(days_in_month)[1:11] ), cumsum(days_in_month) )
-  month_bnds_days <- cbind( c( 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334 ),
-                            c( 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365 ) )
-  time_bnds_data <- matrix( ncol = 2 )
-  for ( year  in year_list ) {
-    base_days <- ( year - 2015 ) * 365
-    time_bnds_data <- rbind( time_bnds_data, month_bnds_days + base_days )
-  }
-  time_bnds_data <- time_bnds_data[ 2 : nrow( time_bnds_data ), ]
+  month_bnds_days <- cbind( c( 0, cumsum(days_in_month)[1:11] ), cumsum(days_in_month) )
+  time_bnds_data <- do.call( rbind, lapply( year_list, function( yr ) {
+    month_bnds_days + ( ( yr - 2015 ) * 365 )
+  } ) )
 
   # Define nc dimensions
-  londim <- ncdim_def( "lon", "degrees_east", as.double( lons ), longname = 'longitude' )
-  latdim <- ncdim_def( "lat", "degrees_north", as.double( lats ), longname = 'latitude' )
-  timedim <- ncdim_def( "time", paste0( "days since 2015-01-01 0:0:0" ), as.double( time_data ),
+  londim <- ncdim_def( "lon", "degrees_east",  lons, longname = 'longitude' )
+  latdim <- ncdim_def( "lat", "degrees_north", lats, longname = 'latitude' )
+  timedim <- ncdim_def( "time", paste0( "days since 2015-01-01 0:0:0" ), time_data,
                         calendar = '365_day', longname = 'time', unlim = T )
 
   # sector dimension data and bounds data
@@ -525,14 +499,12 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
 
   # upper lower bnds data
   bnds <- 1 : 2
-  bndsdim <- ncdim_def( 'bound', '', as.integer( bnds ), longname = 'bound', create_dimvar = F )
+  bndsdim <- ncdim_def( 'bound', '', bnds, longname = 'bound', create_dimvar = F )
 
   # Generate nc file name and some variables
-
-  license <- "ScenarioMIP gridded emissions data produced by the IAMC are licensed under a Creative Commons Attribution-ShareAlike 4.0 International License (https://creativecommons.org/licenses). Consult https://pcmdi.llnl.gov/CMIP6/TermsOfUse for terms of use governing input4MIPs output, including citation requirements and proper acknowledgment. Further information about this data, including some limitations, can be found via the further_info_url (recorded as a global attribute in this file). The data producers and data providers make no warranty, either express or implied, including, but not limited to, warranties of merchantability and fitness for a particular purpose. All liabilities arising from the supply of the information (including any liability arising in negligence) are excluded to the fullest extent permitted by law."
-
-  dataset_version_number <- get_global_constants( "dataset_version_number" )
-  target_mip <- get_global_constants( "target_mip" )
+  dataset_version_number <- get_global_constant( "dataset_version_number" )
+  target_mip <- get_global_constant( "target_mip" )
+  license <- get_global_constant( "license" )
 
   # Sulfur and sub-VOCs get renamed for the file output
   if ( em == 'Sulfur' ) {
@@ -556,7 +528,11 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
     data_unit <- 'kg m-2 s-1'
   }
 
-  if ( grepl( 'VOC\\d\\d', em ) ) { FN_em <- paste( em, get_VOC_name( em ) ) }
+  product <- 'primary-emissions-data'
+  if ( grepl( 'VOC\\d\\d', em ) ) {
+    FN_em <- paste( em, get_VOC_name( em ) )
+    product <- 'supplementary-emissions-data'
+  }
 
   missing_value <- 1.e20
 
@@ -572,11 +548,7 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
                         'land-type are provided in a separate file.' )
 	}
 
-  scenario <- tolower( scenario )
-  scenario <- gsub("-spa[0123456789]", "", scenario) # Remove SPA designation
-  scenario <- gsub("ssp3-ref", "ssp3-70", scenario) # CMIP-specific change to RCP nomenclature
-  scenario <- gsub("ssp5-ref", "ssp5-85", scenario) # CMIP-specific change to RCP nomenclature
-  scenario <- gsub("(ssp\\d)-(\\d)\\.?(\\d)", "\\1\\2\\3", scenario) # Remove ssp hyphen
+  scenario <- clean_scenario_name( scenario )
 
   MD_source_id_value <- paste0( iam, '-', scenario, '-', gsub("[.]", "-", dataset_version_number) )
   nc_file_name <- paste( FN_variable_id_value, 'input4MIPs_emissions', target_mip, MD_source_id_value, 'gn_201501-210012.nc', sep = '_' )
@@ -587,7 +559,6 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
   # generate flat_var variable name
   MD_variable_id_value <- gsub( "-", "_", FN_variable_id_value ) # Change to underscore for metadata
   flat_var_name <- MD_variable_id_value
-  flat_var_longname <- flat_var_name
 
   sector_long_name <- 'anthropogenic emissions'
   if ( sector_type == 'openburning' ) {
@@ -597,6 +568,7 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
     if ( aggregate_sectors )
       sector_long_name <- paste( 'total', sector_long_name, 'emissions' )
   }
+  longname <- paste( FN_em, toTitleCase( sector_long_name ) )
 
   # Data usage tips and reporting unit change if they are shares or not
   em_key <- c( 'Sulfur', 'NOx', 'CO', 'VOC', 'NH3', 'BC', 'OC', 'CO2', 'CH4' )
@@ -620,7 +592,7 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
 
   # ---
   # 4. define nc variables
-  flat_var <- ncvar_def( flat_var_name, data_unit, dim_list, missval = missing_value, longname = flat_var_longname, compression = 5 )
+  flat_var <- ncvar_def( flat_var_name, data_unit, dim_list, missval = missing_value, longname = longname, compression = 5 )
   lon_bnds <- ncvar_def( 'lon_bnds', '', list( bndsdim, londim ), prec = 'double' )
   lat_bnds <- ncvar_def( 'lat_bnds', '', list( bndsdim, latdim ), prec = 'double' )
   time_bnds <- ncvar_def( 'time_bnds', '', list( bndsdim, timedim ), prec = 'double' )
@@ -671,7 +643,7 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
   }
   # attributes for variables
   ncatt_put( nc_new, flat_var_name, 'cell_methods', 'time: mean' )
-  ncatt_put( nc_new, flat_var_name, 'long_name', flat_var_longname )
+  ncatt_put( nc_new, flat_var_name, 'long_name', longname )
   ncatt_put( nc_new, flat_var_name, 'missing_value', 1e+20, prec = 'float' )
   # nc global attributes
   ncatt_put( nc_new, 0, 'Conventions', 'CF-1.6' )
@@ -691,7 +663,7 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
   ncatt_put( nc_new, 0, 'institution', 'Integrated Assessment Modeling Consortium' )
   ncatt_put( nc_new, 0, 'institution_id', 'IAMC' )
   ncatt_put( nc_new, 0, 'mip_era', 'CMIP6' )
-  ncatt_put( nc_new, 0, 'product', 'primary-emissions-data' )
+  ncatt_put( nc_new, 0, 'product', product )
   ncatt_put( nc_new, 0, 'realm', 'atmos' )
   ncatt_put( nc_new, 0, 'references', 'See: https://secure.iiasa.ac.at/web-apps/ene/SspDb/ for references' )
   ncatt_put( nc_new, 0, 'source', 'IAMC Scenario Database hosted at IIASA' )
@@ -775,4 +747,13 @@ get_VOC_name <- function( voc ) {
   voc_map <- read.csv( 'gridding/gridding-mappings/VOC_id_name_mapping.csv',
                        row.names = 1, stringsAsFactors = F )
   voc_map[ voc, 'VOC_name' ]
+}
+
+clean_scenario_name <- function( scenario ) {
+  scenario <- tolower( scenario )
+  scenario <- gsub("lowntcf", "lowNTCF", scenario) # Special capitalization case
+  scenario <- gsub("-spa[0123456789]", "", scenario) # Remove SPA designation
+  scenario <- gsub("ssp3-ref", "ssp3-70", scenario) # CMIP-specific change to RCP nomenclature
+  scenario <- gsub("ssp5-ref", "ssp5-85", scenario) # CMIP-specific change to RCP nomenclature
+  scenario <- gsub("(ssp\\d)-(\\d)\\.?(\\d)", "\\1\\2\\3", scenario) # Remove ssp hyphen
 }
