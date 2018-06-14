@@ -238,7 +238,10 @@ generate_air_grids_nc <- function( allyear_grids_list,
   if (em == 'Sulfur') {FN_em <- 'SO2'} else {FN_em <- em}
 
   dataset_version_number <- get_global_constant( "dataset_version_number" )
+  institution_id <- get_global_constant( "institution_id" )
+  institution <- get_global_constant( "institution" )
   target_mip <- get_global_constant( "target_mip" )
+  location <- get_global_constant( "location" )
   license <- get_global_constant( "license" )
 
   # Generate comment here to preserve SPA information from original scenario
@@ -246,9 +249,18 @@ generate_air_grids_nc <- function( allyear_grids_list,
                         scenario, '. Data harmonized to historical emissions ',
                         'CEDS-v2017-05-18 (anthropogenic) and v1.2 (land-use change)' )
   scenario <- clean_scenario_name( scenario )
+  history <- paste0( format( as.POSIXlt( Sys.time(), "UTC" ), format = '%d-%m-%Y %H:%M:%S %p %Z' ), '; ', location )
 
-  MD_source_id_value <- paste0( iam, '-', scenario, '-', gsub("[.]", "-", dataset_version_number) )
-  FN_variable_id_value <- paste0( FN_em, '-em-aircraft-anthro' )
+  # In UoM-AIM-ssp370-lowNTCF all instances of ScenarioMIP are to be changed to
+  # AerChemMIP, including filename.
+  if ( scenario == 'AIM-ssp370-lowNTCF' ) {
+    new_target <- 'AerChemMIP'
+    license <- gsub( target_mip, new_target, license )
+    target_mip <- new_target
+  }
+
+  MD_source_id_value <- paste0( institution_id, '-', iam, '-', scenario, '-', gsub("[.]", "-", dataset_version_number) )
+  FN_variable_id_value <- paste0( FN_em, '-em-AIR-anthro' )
   nc_file_name <- paste( FN_variable_id_value, 'input4MIPs_emissions', target_mip, MD_source_id_value, 'gn_201501-210012.nc', sep = '_' )
   nc_file_name_w_path <- paste0( output_dir, '/', nc_file_name )
 
@@ -318,9 +330,9 @@ generate_air_grids_nc <- function( allyear_grids_list,
   ncatt_put( nc_new, 0, 'grid', '0.5x0.5 degree latitude x longitude' )
   ncatt_put( nc_new, 0, 'grid_label', 'gn' )
   ncatt_put( nc_new, 0, 'nominal_resolution', '50 km' )
-  ncatt_put( nc_new, 0, 'history', paste0( as.character( format( as.POSIXlt( Sys.time(), "UTC"), format = '%d-%m-%Y %H:%M:%S %p %Z' ) ), '; College Park, MD, USA') )
-  ncatt_put( nc_new, 0, 'institution', 'Integrated Assessment Modeling Consortium' )
-  ncatt_put( nc_new, 0, 'institution_id', 'IAMC' )
+  ncatt_put( nc_new, 0, 'history', history )
+  ncatt_put( nc_new, 0, 'institution', institution )
+  ncatt_put( nc_new, 0, 'institution_id', institution_id )
   ncatt_put( nc_new, 0, 'mip_era', 'CMIP6' )
   ncatt_put( nc_new, 0, 'product', 'primary-emissions-data' )
   ncatt_put( nc_new, 0, 'realm', 'atmos' )
@@ -503,7 +515,10 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
 
   # Generate nc file name and some variables
   dataset_version_number <- get_global_constant( "dataset_version_number" )
+  institution_id <- get_global_constant( "institution_id" )
+  institution <- get_global_constant( "institution" )
   target_mip <- get_global_constant( "target_mip" )
+  location <- get_global_constant( "location" )
   license <- get_global_constant( "license" )
 
   # Sulfur and sub-VOCs get renamed for the file output
@@ -549,8 +564,17 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
 	}
 
   scenario <- clean_scenario_name( scenario )
+  history <- paste0( format( as.POSIXlt( Sys.time(), "UTC" ), format = '%d-%m-%Y %H:%M:%S %p %Z' ), '; ', location )
 
-  MD_source_id_value <- paste0( iam, '-', scenario, '-', gsub("[.]", "-", dataset_version_number) )
+  # In UoM-AIM-ssp370-lowNTCF all instances of ScenarioMIP are to be changed to
+  # AerChemMIP, including filename.
+  if ( scenario == 'AIM-ssp370-lowNTCF' ) {
+    new_target <- 'AerChemMIP'
+    license <- gsub( target_mip, new_target, license )
+    target_mip <- new_target
+  }
+
+  MD_source_id_value <- paste0( institution_id, '-', iam, '-', scenario, '-', gsub("[.]", "-", dataset_version_number) )
   nc_file_name <- paste( FN_variable_id_value, 'input4MIPs_emissions', target_mip, MD_source_id_value, 'gn_201501-210012.nc', sep = '_' )
   nc_file_name_w_path <- paste0( output_dir, '/', nc_file_name )
 
@@ -585,7 +609,10 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
     if ( em_val == 'BC' || em_val == 'OC' ) info_line <- paste0( info_line, ', reported as carbon mass' )
   }
   if ( em_val == 'SOx' ) info_line <- paste0( info_line, ', reported as SO2' )
-  if ( em_val == 'NOx' ) info_line <- paste0( info_line, ', reported as NO2' )
+  if ( em_val == 'NOx' ) {
+    reporting_unit <- if ( sector_type == 'openburning' ) 'NO' else 'NO2'
+    info_line <- paste0( info_line, ', reported as ', reporting_unit )
+  }
   if ( grepl( 'VOC\\d\\d', em ) ) { info_line <- paste( 'Mass flux of', FN_em, '(total mass emitted)' ) }
 
   data_usage_tips <- paste( data_usage_tips, 'Note that emissions are provided in uneven year intervals (2015, 2020, then at 10 year intervals) as these are the years for which projection data is available.' )
@@ -659,9 +686,9 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
   ncatt_put( nc_new, 0, 'grid', '0.5x0.5 degree latitude x longitude' )
   ncatt_put( nc_new, 0, 'grid_label', 'gn' )
   ncatt_put( nc_new, 0, 'nominal_resolution', '50 km' )
-  ncatt_put( nc_new, 0, 'history', paste0( as.character( format( as.POSIXlt( Sys.time(), "UTC"), format = '%d-%m-%Y %H:%M:%S %p %Z' ) ), '; College Park, MD, USA') )
-  ncatt_put( nc_new, 0, 'institution', 'Integrated Assessment Modeling Consortium' )
-  ncatt_put( nc_new, 0, 'institution_id', 'IAMC' )
+  ncatt_put( nc_new, 0, 'history', history )
+  ncatt_put( nc_new, 0, 'institution', institution )
+  ncatt_put( nc_new, 0, 'institution_id', institution_id )
   ncatt_put( nc_new, 0, 'mip_era', 'CMIP6' )
   ncatt_put( nc_new, 0, 'product', product )
   ncatt_put( nc_new, 0, 'realm', 'atmos' )
@@ -752,6 +779,7 @@ get_VOC_name <- function( voc ) {
 clean_scenario_name <- function( scenario ) {
   scenario <- tolower( scenario )
   scenario <- gsub("lowntcf", "lowNTCF", scenario) # Special capitalization case
+  scenario <- gsub("-os", "-over", scenario) # Special case for REMIND-MAGPIE-ssp534-os
   scenario <- gsub("-spa[0123456789]", "", scenario) # Remove SPA designation
   scenario <- gsub("ssp3-ref", "ssp3-70", scenario) # CMIP-specific change to RCP nomenclature
   scenario <- gsub("ssp5-ref", "ssp5-85", scenario) # CMIP-specific change to RCP nomenclature
