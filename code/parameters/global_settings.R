@@ -64,7 +64,12 @@ get_global_constants <- function (const_name) {
 
 em_gridding_env$dataset_version_number <- '1.0'
 em_gridding_env$target_mip             <- 'ScenarioMIP'
-em_gridding_env$voc_speciation         <- 'only' # one of 'all', 'only', 'none'
+
+# How should VOC speciation be done? Value must be one of the following:
+#   'all'  - Do VOC speciation along with all other emissions
+#   'only' - Do VOC speciation and no other emissions
+#   'none' - Do not do VOC speciation
+em_gridding_env$voc_speciation <- 'only'
 
 # The below are not used anywhere, but may be good references
 em_gridding_env$supported_species       <- c( 'BC', 'CO', 'NH3', 'NOx', 'OC', 'Sulfur', 'VOC' )

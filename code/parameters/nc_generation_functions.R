@@ -528,12 +528,21 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
   bndsdim <- ncdim_def( 'bound', '', as.integer( bnds ), longname = 'bound', create_dimvar = F )
 
   # Generate nc file name and some variables
-  if (em == 'Sulfur') { FN_em <- 'SO2' } else { FN_em <- em }
 
   license <- "ScenarioMIP gridded emissions data produced by the IAMC are licensed under a Creative Commons Attribution-ShareAlike 4.0 International License (https://creativecommons.org/licenses). Consult https://pcmdi.llnl.gov/CMIP6/TermsOfUse for terms of use governing input4MIPs output, including citation requirements and proper acknowledgment. Further information about this data, including some limitations, can be found via the further_info_url (recorded as a global attribute in this file). The data producers and data providers make no warranty, either express or implied, including, but not limited to, warranties of merchantability and fitness for a particular purpose. All liabilities arising from the supply of the information (including any liability arising in negligence) are excluded to the fullest extent permitted by law."
 
   dataset_version_number <- get_global_constants( "dataset_version_number" )
   target_mip <- get_global_constants( "target_mip" )
+
+  # Sulfur and sub-VOCs get renamed for the file output
+  if ( em == 'Sulfur' ) {
+    FN_em <- 'SO2'
+  } else if ( grepl( 'VOC\\d\\d', em ) ) {
+    FN_em <- paste0( em, '-', substr( sub( '_', '-', get_VOC_name( em ) ), 1, 10 ) )
+    sector_type <- paste0( 'speciated-VOC-', sector_type )
+  } else {
+    FN_em <- em
+  }
 
   # The default file is emissions, so don't append any additional identifier for
   # aggregated emissions; Do add this information later in descriptive metadata
@@ -546,6 +555,8 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
     FN_variable_id_value <- paste( FN_em, 'em', sector_type_for_filename, sep = '-' )
     data_unit <- 'kg m-2 s-1'
   }
+
+  if ( grepl( 'VOC\\d\\d', em ) ) { FN_em <- paste( em, get_VOC_name( em ) ) }
 
   missing_value <- 1.e20
 
@@ -591,6 +602,7 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
   em_key <- c( 'Sulfur', 'NOx', 'CO', 'VOC', 'NH3', 'BC', 'OC', 'CO2', 'CH4' )
   em_actual <- c( 'SOx', 'NOx', 'CO', 'NMVOC', 'NH3', 'BC', 'OC', 'CO2', 'CH4' )
   em_val <- em_actual[ em == em_key ]
+  if (length(em_val)==0) {em_val <- 'VOC'}
   if ( sector_shares ) {
     data_usage_tips <- 'These are monthly averages.'
     info_line <- paste( 'Fraction of', em_val, 'from each land category listed in the sector variable' )
@@ -602,6 +614,8 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
   }
   if ( em_val == 'SOx' ) info_line <- paste0( info_line, ', reported as SO2' )
   if ( em_val == 'NOx' ) info_line <- paste0( info_line, ', reported as NO2' )
+  if ( grepl( 'VOC\\d\\d', em ) ) { info_line <- paste( 'Mass flux of', FN_em, '(total mass emitted)' ) }
+
   data_usage_tips <- paste( data_usage_tips, 'Note that emissions are provided in uneven year intervals (2015, 2020, then at 10 year intervals) as these are the years for which projection data is available.' )
 
   # ---
@@ -753,4 +767,12 @@ uuid <- function() {
     paste0( sample( hex_digits, 12, replace=TRUE ), collapse='' ),
     sep = '-'
   )
+}
+
+
+# Historically, only the first 10 letters of the voc name are included
+get_VOC_name <- function( voc ) {
+  voc_map <- read.csv( 'gridding/gridding-mappings/VOC_id_name_mapping.csv',
+                       row.names = 1, stringsAsFactors = F )
+  voc_map[ voc, 'VOC_name' ]
 }
