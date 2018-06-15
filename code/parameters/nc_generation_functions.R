@@ -328,8 +328,8 @@ generate_air_grids_nc <- function( allyear_grids_list,
   ncatt_put( nc_new, flat_var_name, 'long_name', flat_var_longname )
   ncatt_put( nc_new, flat_var_name, 'missing_value', 1e+20, prec = 'float' )
   # nc global attributes
-  add_global_atts( nc_new, MD_comment, institution, institution_id,
-                   product, dataset_version_number, MD_source_id_value,
+  add_global_atts( nc_new, MD_comment, institution, institution_id, product,
+                   dataset_version_number, target_MIP, MD_source_id_value,
                    sector_long_name, FN_em, MD_variable_id_value )
 
   # some other metadata
@@ -658,8 +658,8 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
   ncatt_put( nc_new, flat_var_name, 'long_name', longname )
   ncatt_put( nc_new, flat_var_name, 'missing_value', 1e+20, prec = 'float' )
   # nc global attributes
-  add_global_atts( nc_new, MD_comment, institution, institution_id,
-                   product, dataset_version_number, MD_source_id_value,
+  add_global_atts( nc_new, MD_comment, institution, institution_id, product,
+                   dataset_version_number, target_MIP, MD_source_id_value,
                    sector_long_name, FN_em, MD_variable_id_value )
   # some other metadata
   ncatt_put( nc_new, 0, 'license', license )
