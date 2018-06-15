@@ -241,7 +241,6 @@ generate_air_grids_nc <- function( allyear_grids_list,
   institution_id <- get_global_constant( "institution_id" )
   institution <- get_global_constant( "institution" )
   target_mip <- get_global_constant( "target_mip" )
-  location <- get_global_constant( "location" )
   license <- get_global_constant( "license" )
 
   # Generate comment here to preserve SPA information from original scenario
@@ -249,7 +248,6 @@ generate_air_grids_nc <- function( allyear_grids_list,
                         scenario, '. Data harmonized to historical emissions ',
                         'CEDS-v2017-05-18 (anthropogenic) and v1.2 (land-use change)' )
   scenario <- clean_scenario_name( scenario )
-  history <- paste0( format( as.POSIXlt( Sys.time(), "UTC" ), format = '%d-%m-%Y %H:%M:%S %p %Z' ), '; ', location )
 
   # In UoM-AIM-ssp370-lowNTCF all instances of ScenarioMIP are to be changed to
   # AerChemMIP, including filename.
@@ -272,6 +270,9 @@ generate_air_grids_nc <- function( allyear_grids_list,
   # define unit and missing value
   data_unit <- 'kg m-2 s-1'
   missing_value <- 1.e20
+
+  sector_long_name <- 'anthropogenic aircraft emissions'
+  product <- 'primary-emissions-data'
 
   # ---
   # 4. define nc variables
@@ -317,33 +318,9 @@ generate_air_grids_nc <- function( allyear_grids_list,
   ncatt_put( nc_new, flat_var_name, 'long_name', flat_var_longname )
   ncatt_put( nc_new, flat_var_name, 'missing_value', 1e+20, prec = 'float' )
   # nc global attributes
-  ncatt_put( nc_new, 0, 'Conventions', 'CF-1.6' )
-  ncatt_put( nc_new, 0, 'activity_id', 'input4MIPs' )
-  ncatt_put( nc_new, 0, 'comment', MD_comment )
-  ncatt_put( nc_new, 0, 'contact', 'Steven J. Smith (ssmith@pnnl.gov)' )
-  ncatt_put( nc_new, 0, 'creation_date', as.character( format( as.POSIXlt( Sys.time(), "UTC"), format = '%Y-%m-%dT%H:%M:%SZ' ) ) )
-  ncatt_put( nc_new, 0, 'data_structure', 'grid' )
-  ncatt_put( nc_new, 0, 'dataset_category', 'emissions' )
-  ncatt_put( nc_new, 0, 'external_variables', 'gridcell_area' )
-  ncatt_put( nc_new, 0, 'frequency', 'mon' )
-  ncatt_put( nc_new, 0, 'further_info_url', 'https://secure.iiasa.ac.at/web-apps/ene/SspDb/' )
-  ncatt_put( nc_new, 0, 'grid', '0.5x0.5 degree latitude x longitude' )
-  ncatt_put( nc_new, 0, 'grid_label', 'gn' )
-  ncatt_put( nc_new, 0, 'nominal_resolution', '50 km' )
-  ncatt_put( nc_new, 0, 'history', history )
-  ncatt_put( nc_new, 0, 'institution', institution )
-  ncatt_put( nc_new, 0, 'institution_id', institution_id )
-  ncatt_put( nc_new, 0, 'mip_era', 'CMIP6' )
-  ncatt_put( nc_new, 0, 'product', 'primary-emissions-data' )
-  ncatt_put( nc_new, 0, 'realm', 'atmos' )
-  ncatt_put( nc_new, 0, 'references', 'See: https://secure.iiasa.ac.at/web-apps/ene/SspDb/ for references' )
-  ncatt_put( nc_new, 0, 'source', 'IAMC Scenario Database hosted at IIASA' )
-  ncatt_put( nc_new, 0, 'source_id', MD_source_id_value )
-  ncatt_put( nc_new, 0, 'source_version', dataset_version_number )
-  ncatt_put( nc_new, 0, 'table_id', 'input4MIPs' )
-  ncatt_put( nc_new, 0, 'target_mip', target_mip )
-  ncatt_put( nc_new, 0, 'title', paste0( 'Future anthropogenic aircraft emissions of ', FN_em, ' prepared for input4MIPs' ) )
-  ncatt_put( nc_new, 0, 'variable_id', MD_variable_id_value )
+  add_global_atts( nc_new, MD_comment, institution, institution_id,
+                   product, dataset_version_number, MD_source_id_value,
+                   sector_long_name, FN_em, MD_variable_id_value )
 
   # some other metadata
   ncatt_put( nc_new, 0, 'license', license )
@@ -518,7 +495,6 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
   institution_id <- get_global_constant( "institution_id" )
   institution <- get_global_constant( "institution" )
   target_mip <- get_global_constant( "target_mip" )
-  location <- get_global_constant( "location" )
   license <- get_global_constant( "license" )
 
   # Sulfur and sub-VOCs get renamed for the file output
@@ -564,7 +540,6 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
 	}
 
   scenario <- clean_scenario_name( scenario )
-  history <- paste0( format( as.POSIXlt( Sys.time(), "UTC" ), format = '%d-%m-%Y %H:%M:%S %p %Z' ), '; ', location )
 
   # In UoM-AIM-ssp370-lowNTCF all instances of ScenarioMIP are to be changed to
   # AerChemMIP, including filename.
@@ -673,33 +648,9 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
   ncatt_put( nc_new, flat_var_name, 'long_name', longname )
   ncatt_put( nc_new, flat_var_name, 'missing_value', 1e+20, prec = 'float' )
   # nc global attributes
-  ncatt_put( nc_new, 0, 'Conventions', 'CF-1.6' )
-  ncatt_put( nc_new, 0, 'activity_id', 'input4MIPs' )
-  ncatt_put( nc_new, 0, 'comment', MD_comment )
-  ncatt_put( nc_new, 0, 'contact', 'Steven J. Smith (ssmith@pnnl.gov)' )
-  ncatt_put( nc_new, 0, 'creation_date', as.character( format( as.POSIXlt( Sys.time(), "UTC"), format = '%Y-%m-%dT%H:%M:%SZ' ) ) )
-  ncatt_put( nc_new, 0, 'data_structure', 'grid' )
-  ncatt_put( nc_new, 0, 'dataset_category', 'emissions' )
-  ncatt_put( nc_new, 0, 'external_variables', 'gridcell_area' )
-  ncatt_put( nc_new, 0, 'frequency', 'mon' )
-  ncatt_put( nc_new, 0, 'further_info_url', 'https://secure.iiasa.ac.at/web-apps/ene/SspDb/' )
-  ncatt_put( nc_new, 0, 'grid', '0.5x0.5 degree latitude x longitude' )
-  ncatt_put( nc_new, 0, 'grid_label', 'gn' )
-  ncatt_put( nc_new, 0, 'nominal_resolution', '50 km' )
-  ncatt_put( nc_new, 0, 'history', history )
-  ncatt_put( nc_new, 0, 'institution', institution )
-  ncatt_put( nc_new, 0, 'institution_id', institution_id )
-  ncatt_put( nc_new, 0, 'mip_era', 'CMIP6' )
-  ncatt_put( nc_new, 0, 'product', product )
-  ncatt_put( nc_new, 0, 'realm', 'atmos' )
-  ncatt_put( nc_new, 0, 'references', 'See: https://secure.iiasa.ac.at/web-apps/ene/SspDb/ for references' )
-  ncatt_put( nc_new, 0, 'source', 'IAMC Scenario Database hosted at IIASA' )
-  ncatt_put( nc_new, 0, 'source_id', MD_source_id_value )
-  ncatt_put( nc_new, 0, 'source_version', dataset_version_number )
-  ncatt_put( nc_new, 0, 'table_id', 'input4MIPs' )
-  ncatt_put( nc_new, 0, 'target_mip', target_mip )
-  ncatt_put( nc_new, 0, 'title', paste( 'Future', sector_long_name, 'of', FN_em, 'prepared for input4MIPs' ) )
-  ncatt_put( nc_new, 0, 'variable_id', MD_variable_id_value )
+  add_global_atts( nc_new, MD_comment, institution, institution_id,
+                   product, dataset_version_number, MD_source_id_value,
+                   sector_long_name, FN_em, MD_variable_id_value )
   # some other metadata
   ncatt_put( nc_new, 0, 'license', license )
   ncatt_put( nc_new, 0, 'data_usage_tips', data_usage_tips )
@@ -749,6 +700,45 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
 }
 
 
+# Add global attributes to a netCDF file
+add_global_atts <- function( nc_new, MD_comment, institution, institution_id,
+                             product, dataset_version_number, MD_source_id_value,
+                             sector_long_name, FN_em, MD_variable_id_value ) {
+
+  creation_date <- as.POSIXlt( Sys.time(), "UTC" )
+  location <- get_global_constant( "location" )
+  history <- paste0( format( creation_date, format = '%d-%m-%Y %H:%M:%S %p %Z' ), '; ', location )
+
+  ncatt_put( nc_new, 0, 'Conventions', 'CF-1.6' )
+  ncatt_put( nc_new, 0, 'activity_id', 'input4MIPs' )
+  ncatt_put( nc_new, 0, 'comment', MD_comment )
+  ncatt_put( nc_new, 0, 'contact', 'Steven J. Smith (ssmith@pnnl.gov)' )
+  ncatt_put( nc_new, 0, 'creation_date', format( creation_date, format = '%Y-%m-%dT%H:%M:%SZ' ) )
+  ncatt_put( nc_new, 0, 'data_structure', 'grid' )
+  ncatt_put( nc_new, 0, 'dataset_category', 'emissions' )
+  ncatt_put( nc_new, 0, 'external_variables', 'gridcell_area' )
+  ncatt_put( nc_new, 0, 'frequency', 'mon' )
+  ncatt_put( nc_new, 0, 'further_info_url', 'https://secure.iiasa.ac.at/web-apps/ene/SspDb/' )
+  ncatt_put( nc_new, 0, 'grid', '0.5x0.5 degree latitude x longitude' )
+  ncatt_put( nc_new, 0, 'grid_label', 'gn' )
+  ncatt_put( nc_new, 0, 'nominal_resolution', '50 km' )
+  ncatt_put( nc_new, 0, 'history', history )
+  ncatt_put( nc_new, 0, 'institution', institution )
+  ncatt_put( nc_new, 0, 'institution_id', institution_id )
+  ncatt_put( nc_new, 0, 'mip_era', 'CMIP6' )
+  ncatt_put( nc_new, 0, 'product', product )
+  ncatt_put( nc_new, 0, 'realm', 'atmos' )
+  ncatt_put( nc_new, 0, 'references', 'See: https://secure.iiasa.ac.at/web-apps/ene/SspDb/ for references' )
+  ncatt_put( nc_new, 0, 'source', 'IAMC Scenario Database hosted at IIASA' )
+  ncatt_put( nc_new, 0, 'source_id', MD_source_id_value )
+  ncatt_put( nc_new, 0, 'source_version', dataset_version_number )
+  ncatt_put( nc_new, 0, 'table_id', 'input4MIPs' )
+  ncatt_put( nc_new, 0, 'target_mip', target_mip )
+  ncatt_put( nc_new, 0, 'title', paste( 'Future', sector_long_name, 'of', FN_em, 'prepared for input4MIPs' ) )
+  ncatt_put( nc_new, 0, 'variable_id', MD_variable_id_value )
+}
+
+
 # Version 4 UUIDs have the form xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx
 # where x is any hexadecimal digit and y is one of 8, 9, A, or B
 # e.g., f47ac10b-58cc-4372-a567-0e02b2c3d479
@@ -782,6 +772,7 @@ clean_scenario_name <- function( scenario ) {
   scenario <- gsub("-os", "-over", scenario) # Special case for REMIND-MAGPIE-ssp534-os
   scenario <- gsub("-spa[0123456789]", "", scenario) # Remove SPA designation
   scenario <- gsub("ssp3-ref", "ssp3-70", scenario) # CMIP-specific change to RCP nomenclature
+  scenario <- gsub("ssp3-lowNTCF", "ssp3-70-lowNTCF", scenario) # CMIP-specific change to RCP nomenclature
   scenario <- gsub("ssp5-ref", "ssp5-85", scenario) # CMIP-specific change to RCP nomenclature
   scenario <- gsub("(ssp\\d)-(\\d)\\.?(\\d)", "\\1\\2\\3", scenario) # Remove ssp hyphen
 }
