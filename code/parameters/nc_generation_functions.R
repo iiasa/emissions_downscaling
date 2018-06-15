@@ -36,6 +36,11 @@ generate_bulk_grids_nc <- function( allyear_grids_list,
   sector_ids <- "0: Agriculture; 1: Energy; 2: Industrial; 3: Transportation; 4: Residential, Commercial, Other; 5: Solvents production and application; 6: Waste; 7: International Shipping"
   sector_type <- "anthro"
 
+  if ( !any( names( allyear_grids_list[[1]] ) %in% bulk_sectors ) ) {
+    warning( paste( "No bulk sectors found for", em, "in", scenario ) )
+    return( invisible( NULL ) )
+  }
+
   # 1. Build and write out netCDF file
   #    Returns: diag_cells - diagnostic cells list
   #             out_name - output file name
@@ -92,6 +97,11 @@ generate_openburning_grids_nc <- function( allyear_grids_list,
   openburning_sectors <- c( "AWB", "FRTB", "GRSB", "PEAT" )
   sector_type <- "openburning"
   sector_ids <- "0: Agricultural Waste Burning On Fields; 1: Forest Burning; 2: Grassland Burning; 3: Peat Burning"
+
+  if ( !any( names( allyear_grids_list[[1]] ) %in% openburning_sectors ) ) {
+    warning( paste( "No open burning sectors found for", em, "in", scenario ) )
+    return( invisible( NULL ) )
+  }
 
   # 1. Build and write out netCDF file
   #    Returns: diag_cells - diagnostic cells list

@@ -70,7 +70,6 @@ VOC_SPEC <- get_global_constant('voc_speciation')
 
 if ( VOC_SPEC != 'none' ) {
   VOC_ratios <- readData( 'GRIDDING', 'VOC_ratio_AllSectors', domain_extension = "gridding-mappings/" )
-  VOC_names <-  readData( 'GRIDDING', 'VOC_id_name_mapping' , domain_extension = "gridding-mappings/" )
   CEDS_maps <-  readData( 'MAPPINGS', 'CEDS_sector_mapping')
 
   VOC_ratios$iso <- gsub( 'global', 'World', VOC_ratios$iso )
@@ -105,6 +104,11 @@ if ( VOC_SPEC != 'none' ) {
                    em    = if_else( is.na( sub_VOC ), em, sub_VOC ) ) %>%
     dplyr::mutate_at( vars( num_range( 'X', ds_start_year:ds_end_year ) ), funs( . * ratio ) ) %>%
     dplyr::select( -sub_VOC, -ratio )
+
+  # Remove non-sub-VOC emissions if specified
+  if ( VOC_SPEC == 'only' ) {
+    iam_data <- dplyr::filter( iam_data, em %in% names( VOC_ratios ) )
+  }
 }
 
 
