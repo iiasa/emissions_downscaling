@@ -254,7 +254,7 @@ generate_air_grids_nc <- function( allyear_grids_list,
   license <- get_global_constant( "license" )
 
   # Generate comment here to preserve SPA information from original scenario
-  MD_comment <- paste0( 'SSP harmonized, gridded emissions for ', iam, '_',
+  MD_comment <- paste0( 'SSP harmonized, gridded emissions for IAMC-', iam, '_',
                         scenario, '. Data harmonized to historical emissions ',
                         'CEDS-v2017-05-18 (anthropogenic) and v1.2 (land-use change)' )
   scenario <- clean_scenario_name( scenario )
@@ -540,7 +540,7 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
   # Generate comment here to preserve SPA information from original scenario
   # (iam and scenario are variables in the global namespace)
   # Add description of aggregate open burning
-  MD_comment <- paste0( 'SSP harmonized, gridded emissions for ', iam, '_',
+  MD_comment <- paste0( 'SSP harmonized, gridded emissions for IAMC-', iam, '_',
                         scenario, '. Data harmonized to historical emissions ',
                         'CEDS-v2017-05-18 (anthropogenic) and v1.2 (land-use change).' )
 	if ( aggregate_sectors && ( sector_type == "openburning" ) ) {
