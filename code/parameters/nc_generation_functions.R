@@ -744,7 +744,7 @@ add_global_atts <- function( nc_new, MD_comment, institution, institution_id,
   ncatt_put( nc_new, 0, 'source_id', MD_source_id_value )
   ncatt_put( nc_new, 0, 'source_version', dataset_version_number )
   ncatt_put( nc_new, 0, 'table_id', 'input4MIPs' )
-  ncatt_put( nc_new, 0, 'target_mip', target_mip )
+  ncatt_put( nc_new, 0, 'target_mip', target_MIP )
   ncatt_put( nc_new, 0, 'title', paste( 'Future', sector_long_name, 'of', FN_em, 'prepared for input4MIPs' ) )
   ncatt_put( nc_new, 0, 'variable_id', MD_variable_id_value )
 }
