@@ -659,7 +659,7 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
   ncatt_put( nc_new, flat_var_name, 'missing_value', 1e+20, prec = 'float' )
   # nc global attributes
   add_global_atts( nc_new, MD_comment, institution, institution_id, product,
-                   dataset_version_number, target_MIP, MD_source_id_value,
+                   dataset_version_number, target_mip, MD_source_id_value,
                    sector_long_name, FN_em, MD_variable_id_value )
   # some other metadata
   ncatt_put( nc_new, 0, 'license', license )
@@ -712,7 +712,7 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
 
 # Add global attributes to a netCDF file
 add_global_atts <- function( nc_new, MD_comment, institution, institution_id,
-                             product, dataset_version_number, target_MIP,
+                             product, dataset_version_number, target_mip,
                              MD_source_id_value, sector_long_name, FN_em,
                              MD_variable_id_value ) {
 
@@ -744,7 +744,7 @@ add_global_atts <- function( nc_new, MD_comment, institution, institution_id,
   ncatt_put( nc_new, 0, 'source_id', MD_source_id_value )
   ncatt_put( nc_new, 0, 'source_version', dataset_version_number )
   ncatt_put( nc_new, 0, 'table_id', 'input4MIPs' )
-  ncatt_put( nc_new, 0, 'target_mip', target_MIP )
+  ncatt_put( nc_new, 0, 'target_mip', target_mip )
   ncatt_put( nc_new, 0, 'title', paste( 'Future', sector_long_name, 'of', FN_em, 'prepared for input4MIPs' ) )
   ncatt_put( nc_new, 0, 'variable_id', MD_variable_id_value )
 }
