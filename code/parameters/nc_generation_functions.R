@@ -712,8 +712,9 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
 
 # Add global attributes to a netCDF file
 add_global_atts <- function( nc_new, MD_comment, institution, institution_id,
-                             product, dataset_version_number, MD_source_id_value,
-                             sector_long_name, FN_em, MD_variable_id_value ) {
+                             product, dataset_version_number, target_MIP,
+                             MD_source_id_value, sector_long_name, FN_em,
+                             MD_variable_id_value ) {
 
   creation_date <- as.POSIXlt( Sys.time(), "UTC" )
   location <- get_global_constant( "location" )
