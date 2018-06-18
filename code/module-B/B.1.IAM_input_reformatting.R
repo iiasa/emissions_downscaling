@@ -43,6 +43,7 @@
   harm_status <- args_from_makefile[ 2 ]
   input_file <- args_from_makefile[ 3 ]
   modb_out <- args_from_makefile[ 4 ]
+  run_species <- args_from_makefile[ 7 ]
   if ( is.na( iam ) ) iam <- "GCAM4"
   if ( is.na( input_file ) ) stop( 'No snapshot file provided!' )
 
@@ -88,11 +89,13 @@
   iam_data <- iam_data[ , c( 'model', 'scenario', 'region', 'em', 'sector', 'harm_status', 'unit', year_list ) ]
   colnames( iam_data ) <- c( 'model', 'scenario', 'region', 'em', 'sector', 'harm_status', 'unit', x_year_list )
 
-  # Filter for if only one emission species is desired. Right now only
-  # controllable for VOCs with the global parameter 'voc_speciation'
+  # Filter for if only one emission species is desired.
   VOC_SPEC <- get_global_constant( 'voc_speciation' )
   if ( VOC_SPEC == 'only' ) {
     iam_data <- iam_data[ iam_data$em == "VOC", ]
+  }
+  if ( !is.na( run_species ) && run_species %in% iam_data$em ) {
+    iam_data <- iam_data[ iam_data$em == run_species, ]
   }
 
 

@@ -530,9 +530,11 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
   }
 
   product <- 'primary-emissions-data'
+  dtype <- ''
   if ( grepl( 'VOC\\d\\d', em ) ) {
     FN_em <- paste( em, get_VOC_name( em ) )
     product <- 'supplementary-emissions-data'
+    dtype <- '-supplemental-data'
   }
 
   missing_value <- 1.e20
@@ -559,7 +561,7 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
     target_mip <- new_target
   }
 
-  MD_source_id_value <- paste0( institution_id, '-', iam, '-', scenario, '-', gsub("[.]", "-", dataset_version_number) )
+  MD_source_id_value <- paste0( institution_id, '-', iam, '-', scenario, '-', gsub("[.]", "-", dataset_version_number), dtype )
   nc_file_name <- paste( FN_variable_id_value, 'input4MIPs_emissions', target_mip, MD_source_id_value, 'gn_201501-210012.nc', sep = '_' )
   nc_file_name_w_path <- paste0( output_dir, '/', nc_file_name )
 

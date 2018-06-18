@@ -43,9 +43,9 @@ debug <- F
 if (debug) {
   args_from_makefile <- c( 'AIM',
                            'Harmonized-DB',
-                           '/Users/Caleb/Documents/JGCRI/emissions_downscaling/input/IAM_emissions/AIM_SSP3-LowNTCF/output_harmonized.xlsx',
-                           '/Users/Caleb/Documents/JGCRI/emissions_downscaling/final-output/module-B',
-                           '/Users/Caleb/Documents/JGCRI/emissions_downscaling/final-output/module-C',
+                           'C:/Users/brau074/Documents/emissions_downscaling/input/IAM_emissions/AIM_SSP3-LowNTCF/output_harmonized.xlsx',
+                           'C:/Users/brau074/Documents/emissions_downscaling/final-output/module-B',
+                           'C:/Users/brau074/Documents/emissions_downscaling/final-output/module-C',
                            'NOTgridding' )
 
   calculationDir <- "C:/Users/brau074/Documents/emissions_downscaling/code/error/parameters"
@@ -62,6 +62,7 @@ input_file <-    args_from_makefile[ 3 ]
 modb_out <-      args_from_makefile[ 4 ]
 modc_out <-      args_from_makefile[ 5 ]
 gridding_flag <- args_from_makefile[ 6 ]
+run_species <-   args_from_makefile[ 7 ]
 
 # the flag for intermediate file cleaning
 MED_OUT_CLEAN <- F
