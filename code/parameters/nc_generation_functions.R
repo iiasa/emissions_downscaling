@@ -329,7 +329,7 @@ generate_air_grids_nc <- function( allyear_grids_list,
   ncatt_put( nc_new, flat_var_name, 'missing_value', 1e+20, prec = 'float' )
   # nc global attributes
   add_global_atts( nc_new, MD_comment, institution, institution_id, product,
-                   dataset_version_number, target_MIP, MD_source_id_value,
+                   dataset_version_number, target_mip, MD_source_id_value,
                    sector_long_name, FN_em, MD_variable_id_value )
 
   # some other metadata
@@ -553,7 +553,7 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
 
   # In UoM-AIM-ssp370-lowNTCF all instances of ScenarioMIP are to be changed to
   # AerChemMIP, including filename.
-  if ( scenario == 'AIM-ssp370-lowNTCF' ) {
+  if ( iam == 'AIM' && scenario == 'ssp370-lowNTCF' ) {
     new_target <- 'AerChemMIP'
     license <- gsub( target_mip, new_target, license )
     target_mip <- new_target

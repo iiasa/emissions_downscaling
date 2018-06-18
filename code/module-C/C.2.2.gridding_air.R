@@ -79,13 +79,15 @@ iam_data <- readData( domain = 'MED_OUT', file_name = iam_data_fname )
 grid_maps_ext <- 'gridding-mappings/'
 proxy_mapping <- readData( 'GRIDDING', domain_extension = grid_maps_ext,
                            file_name = gridding_proxy_mapping )
+seasonality_mapping <- readData( 'GRIDDING', domain_extension = grid_maps_ext,
+                                 file_name = gridding_seasonality_mapping )
 
 
 # -----------------------------------------------------------------------------
 # 4. Pre-processing of iam emissions
-# remove AIR sector which will be gridded in a separate routine
+# remove all non-AIR sectors which have been gridded in a previous routine
 iam_em <- iam_data[ iam_data$sector == 'AIR', ]
-iam_em$iso <- 'global'
+if ( nrow( iam_em ) ) iam_em$iso <- 'global'
 
 emissions <- sort( unique( iam_em$em ) )
 scenarios <- sort( unique( iam_em$scenario ) )
@@ -102,7 +104,8 @@ for ( scenario in scenarios ) {
                                               em,
                                               grid_resolution,
                                               gridding_em,
-                                              proxy_mapping )
+                                              proxy_mapping,
+                                              seasonality_mapping )
 
     generate_air_grids_nc( allyear_grids_list,
                            output_dir,

@@ -387,7 +387,8 @@ grid_one_year_air <- function( em,
                                year,
                                grid_resolution,
                                gridding_emissions,
-                               proxy_mapping ) {
+                               proxy_mapping,
+                               seasonality_mapping ) {
 
   current_x_year <- paste0( 'X', year )
   gridding_emissions_xyear <- gridding_emissions[ c( 'iso', 'sector', current_x_year ) ]
@@ -431,16 +432,18 @@ grid_all_years_air <- function( year_list,
                                 em,
                                 grid_resolution,
                                 gridding_em,
-                                proxy_mapping ) {
+                                proxy_mapping,
+                                seasonality_mapping ) {
 
 
   allyear_grids_list <- lapply( year_list, function( year ) {
 
     fin_grids_list <- grid_one_year_air( em,
-                                          year,
-                                          grid_resolution,
-                                          gridding_em,
-                                          proxy_mapping )
+                                         year,
+                                         grid_resolution,
+                                         gridding_em,
+                                         proxy_mapping,
+                                         seasonality_mapping )
   } )
 
   names( allyear_grids_list ) <- paste0( 'X', year_list )
