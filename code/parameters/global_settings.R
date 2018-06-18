@@ -73,7 +73,7 @@ em_gridding_env$institution_id         <- 'IAMC'
 #   'all'  - Do VOC speciation along with all other emissions
 #   'only' - Do VOC speciation and no other emissions
 #   'none' - Do not do VOC speciation
-em_gridding_env$voc_speciation <- 'only'
+em_gridding_env$voc_speciation <- 'all'
 
 # The below are not used anywhere, but may be good references
 em_gridding_env$supported_species       <- c( 'BC', 'CO', 'NH3', 'NOx', 'OC', 'Sulfur', 'VOC' )

@@ -261,7 +261,7 @@ generate_air_grids_nc <- function( allyear_grids_list,
 
   # In UoM-AIM-ssp370-lowNTCF all instances of ScenarioMIP are to be changed to
   # AerChemMIP, including filename.
-  if ( scenario == 'AIM-ssp370-lowNTCF' ) {
+  if ( iam == 'AIM' && scenario == 'ssp370-lowNTCF' ) {
     new_target <- 'AerChemMIP'
     license <- gsub( target_mip, new_target, license )
     target_mip <- new_target
