@@ -118,8 +118,6 @@ collapseList <- function( src_list, sep = "\n" ){
 # Output Files: IO_documentation.csv, [fn].log
 logStop <- function() {
 
-    printLog(warnings())
-
     # Retrieve file name
     fn <- GCAM_SOURCE_FN[ GCAM_SOURCE_RD ]
 
