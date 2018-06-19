@@ -70,7 +70,7 @@ VOC_SPEC <- get_global_constant('voc_speciation')
 
 if ( VOC_SPEC != 'none' ) {
   VOC_ratios <- readData( 'GRIDDING', 'VOC_ratio_AllSectors', domain_extension = "gridding-mappings/" )
-  CEDS_maps <-  readData( 'MAPPINGS', 'CEDS_sector_mapping')
+  CEDS_maps <-  readData( 'MAPPINGS', 'CEDS_sector_mapping' )
 
   VOC_ratios$iso <- gsub( 'global', 'World', VOC_ratios$iso )
   VOC_ratios$sector <- gsub( 'TANK', 'SHP', VOC_ratios$sector )
@@ -98,16 +98,19 @@ if ( VOC_SPEC != 'none' ) {
 
   # disaggregate VOCs into sub-VOCs, then multiply each sub-VOC by its
   # corresponding ratio
-  iam_data <- iam_data %>%
+  iam_data_sub_vocs <- iam_data %>%
     dplyr::left_join( VOC_ratios_CEDS9, by = c( 'iso', 'em', 'sector' = 'CEDS9' ) ) %>%
     dplyr::mutate( ratio = if_else( is.na( ratio ), 1, ratio ),
                    em    = if_else( is.na( sub_VOC ), em, sub_VOC ) ) %>%
+    dplyr::filter( em %in% names( VOC_ratios ) ) %>%
     dplyr::mutate_at( vars( num_range( 'X', ds_start_year:ds_end_year ) ), funs( . * ratio ) ) %>%
     dplyr::select( -sub_VOC, -ratio )
 
-  # Remove non-sub-VOC emissions if specified
-  if ( VOC_SPEC == 'only' ) {
-    iam_data <- dplyr::filter( iam_data, em %in% names( VOC_ratios ) )
+  # Remove non-sub-VOC emissions if specified, otherwise keep 'VOC' original
+  if ( VOC_SPEC == 'all' ) {
+    iam_data <- dplyr::bind_rows( iam_data, iam_data_sub_vocs )
+  } else {
+    iam_data <- iam_data_sub_vocs
   }
 }
 
