@@ -282,11 +282,13 @@ generate_air_grids_nc <- function( allyear_grids_list,
   missing_value <- 1.e20
 
   sector_long_name <- 'anthropogenic aircraft emissions'
+  longname <- paste( FN_em, toTitleCase( sector_long_name ) )
   product <- 'primary-emissions-data'
+
 
   # ---
   # 4. define nc variables
-  flat_var <- ncvar_def( flat_var_name, data_unit, dim_list, missval = missing_value, longname = flat_var_longname, compression = 5 )
+  flat_var <- ncvar_def( flat_var_name, data_unit, dim_list, missval = missing_value, longname = longname, compression = 5 )
   lon_bnds <- ncvar_def( 'lon_bnds', '', list( bndsdim, londim ), prec = 'double' )
   lat_bnds <- ncvar_def( 'lat_bnds', '', list( bndsdim, latdim ), prec = 'double' )
   time_bnds <- ncvar_def( 'time_bnds', '', list( bndsdim, timedim ), prec = 'double' )

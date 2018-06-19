@@ -65,7 +65,7 @@ get_global_constant <- function (const_name) {
 em_gridding_env$dataset_version_number <- '1.1'
 em_gridding_env$target_mip             <- 'ScenarioMIP'
 em_gridding_env$license                <- 'ScenarioMIP gridded emissions data produced by the IAMC are licensed under a Creative Commons Attribution-ShareAlike 4.0 International License (https://creativecommons.org/licenses). Consult https://pcmdi.llnl.gov/CMIP6/TermsOfUse for terms of use governing input4MIPs output, including citation requirements and proper acknowledgment. Further information about this data, including some limitations, can be found via the further_info_url (recorded as a global attribute in this file). The data producers and data providers make no warranty, either express or implied, including, but not limited to, warranties of merchantability and fitness for a particular purpose. All liabilities arising from the supply of the information (including any liability arising in negligence) are excluded to the fullest extent permitted by law.'
-em_gridding_env$location               <- 'Laxenburg, Austria'
+em_gridding_env$location               <- 'College Park, MD, USA'
 em_gridding_env$institution            <- 'Integrated Assessment Modeling Consortium'
 em_gridding_env$institution_id         <- 'IAMC'
 
@@ -73,7 +73,7 @@ em_gridding_env$institution_id         <- 'IAMC'
 #   'all'  - Do VOC speciation along with all other emissions
 #   'only' - Do VOC speciation and no other emissions
 #   'none' - Do not do VOC speciation
-em_gridding_env$voc_speciation <- 'all'
+em_gridding_env$voc_speciation <- 'none'
 
 # The below are not used anywhere, but may be good references
 em_gridding_env$supported_species       <- c( 'BC', 'CO', 'NH3', 'NOx', 'OC', 'Sulfur', 'VOC' )

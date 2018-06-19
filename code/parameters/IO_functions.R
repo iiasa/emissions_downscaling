@@ -16,11 +16,11 @@
 
 # -----------------------------------------------------------------------------
 # printLog
-# Brief:        Time-stamped output         
+# Brief:        Time-stamped output
 # Details:      Prints a message string to the log along with a timestamp
 # Dependencies: None
 # Author(s):    Ben Bond-Lamberty
-# Params:       
+# Params:
 #   msg:        String to be printed to the script log [required]
 #   ts:         Boolean indicating whether to add a timestamp to the output [default: TRUE]
 #   cr:         Boolean indicating whether to add a newline to the end of the output string [default: TRUE]
@@ -39,7 +39,7 @@ printLog <- function( msg, ..., ts=TRUE, cr=TRUE ) {
 # Details:      Start the log file for a CEDS R script
 # Dependencies: printLog
 # Author(s):    Ben Bond-Lamberty
-# Params:       
+# Params:
 #   fn:         String name of script being executed [required]
 #   savelog:    Boolean indicating whether to write to disk [default: TRUE]
 # Return:       None
@@ -53,7 +53,7 @@ logStart <- function( fn, savelog=T ) {
 	if( savelog ) sink( paste( logpath, fn, ".log", sep = "" ), split=T )
 	printLog( "-----" )
 	printLog( "Starting", fn )
-	
+
 	DEPENDENCIES[[ fn ]] <<- c( NULL ) # Create a new entry in the dependency list
 	OUTPUTS[[ fn ]] <<- c( NULL ) # Create a new entry in the output list
 }
@@ -64,7 +64,7 @@ logStart <- function( fn, savelog=T ) {
 # Details:      Writes the .d file for the current script
 # Dependencies: None
 # Author(s):    Ben Bond-Lamberty
-# Params:       
+# Params:
 #   outfile:    Path to the .log file for the script being executed [required]
 # Return:       None
 # Input Files:  None
@@ -81,16 +81,16 @@ writeMakeFileDepend <- function(outfile) {
         fn <- GCAM_SOURCE_FN[ GCAM_SOURCE_RD ]
 	dfile <- paste(of_root, ".d", sep="")
 	write(paste(outfile,": \\",sep=""),file=dfile)
-	cat("  ", DEPENDENCIES[[ fn ]], file=dfile, append=TRUE, sep=" \\\n  ") 
+	cat("  ", DEPENDENCIES[[ fn ]], file=dfile, append=TRUE, sep=" \\\n  ")
 }
 
 # -------------------------------------------------------------------------------
-# collapseList 
+# collapseList
 # Brief:        Collapse a list into a single character vector
 # Details:      Converts a list of strings into a single string with a separator between them
 # Dependencies: None
 # Author(s):    Jon Seibert
-# Params:       
+# Params:
 #   src_list:   List of string to be collapsed [required]
 #   sep:        String to separate the elements of the list [default: "\n"]
 # Return:       Collapsed string version of the list of strings
@@ -118,38 +118,40 @@ collapseList <- function( src_list, sep = "\n" ){
 # Output Files: IO_documentation.csv, [fn].log
 logStop <- function() {
 
+    printLog(warnings())
+
     # Retrieve file name
     fn <- GCAM_SOURCE_FN[ GCAM_SOURCE_RD ]
-    
+
     # Collapse input list
-    if( length( DEPENDENCIES[[ fn ]] ) > 0 ){ 
-        input <- collapseList( DEPENDENCIES[[ fn ]], sep = "\r\n" ) 
+    if( length( DEPENDENCIES[[ fn ]] ) > 0 ){
+        input <- collapseList( DEPENDENCIES[[ fn ]], sep = "\r\n" )
     } else{ input <- "" }
-    
+
     # Collapse output list
-    if( length( OUTPUTS[[ fn ]] ) > 0 ){ 
+    if( length( OUTPUTS[[ fn ]] ) > 0 ){
         output <- collapseList( OUTPUTS[[ fn ]], sep = "\r\n" )
     } else{ output <- "" }
 
 	# Detect if em exists first then writing/creating IO_documentation_RUNSUFFIX
-	
+
     # Full file path for IO documentation
-    IO_doc_path <- filePath( "DOCUMENTATION", paste0( "IO_documentation_", RUNSUFFIX ), ".csv" ) 
-    
+    IO_doc_path <- filePath( "DOCUMENTATION", paste0( "IO_documentation_", RUNSUFFIX ), ".csv" )
+
     printLog( "Writing dependency information for", fn, "..." )
-    
+
     # If IO_documentation exists, read it in. If it does not, create it.
     if( !file.exists( IO_doc_path ) ) {
-		IO_doc <- data.frame( file = "", description = "", input_files = "", 
+		IO_doc <- data.frame( file = "", description = "", input_files = "",
                                         output_files = "", output_description = "" )
         IO_doc <- IO_doc[ IO_doc$file == "No such file", ]
 	} else {
         IO_doc <- readData( "DOCUMENTATION", paste0( "IO_documentation_", RUNSUFFIX ), meta = FALSE, mute = TRUE, to_numeric=FALSE )
     }
-    
-    sys_doc <- readData( "DOCUMENTATION", "System_Documentation", ".xlsx", meta = FALSE, 
+
+    sys_doc <- readData( "DOCUMENTATION", "System_Documentation", ".xlsx", meta = FALSE,
                          mute = TRUE, sheet_selection = "Module Documentation" , to_numeric=FALSE)
-    
+
     # If there is no entry for the current script, make one.
     if( !( fn %in% IO_doc$file ) ){
         new <- IO_doc[1,]
@@ -160,29 +162,29 @@ logStop <- function() {
         new$output_description <- ""
         IO_doc <- rbind( IO_doc, new )
     }
-    
+
     # Acquire descriptions from System_Documentation.xlsx
     about <- sys_doc[ sys_doc$File == fn, "Description" ][ 1 ]
     about_output <- sys_doc[ sys_doc$File == fn, "Output File Description/Notes" ][ 1 ]
-    
+
     # If there were no entries in System_Documentation for the script's descriptions
     if( length( about ) == 0 ) about <- ""
     if( length( about_output ) == 0 ) about_output <- ""
-    
+
     IO_doc[ IO_doc$file == fn, "input_files" ] <- input
     IO_doc[ IO_doc$file == fn, "output_files" ] <- output
     IO_doc[ IO_doc$file == fn, "description" ] <- about
     IO_doc[ IO_doc$file == fn, "output_description" ] <- about_output
-    
+
     # Sort by file name
     IO_doc <- arrange( IO_doc, file )
-    
+
     writeData( IO_doc, "DOCUMENTATION", paste0( "IO_documentation_", RUNSUFFIX ), meta = FALSE, mute = TRUE )
 
-	
+
 	logfile <- paste( MODULE_PROC_ROOT, "/../logs/", fn, ".log", sep="" )
 	writeMakeFileDepend(logfile)
-	
+
 	printLog( "All done with", fn, "\n" )
 	if( GCAM_SOURCE_RD > 0 ) {
 		if( GCAM_LOG_SAVE[ GCAM_SOURCE_RD ] ) sink()
@@ -226,26 +228,26 @@ readDomainPathMap <- function() {
 		printLog( "Error: zero rows read from", fn )
 		stop()
 	}
-	
+
 	mylist <- list( NULL )		# make a lookup list of file names and paths
-	for( i in 1:nrow( fpm ) ) 
+	for( i in 1:nrow( fpm ) )
 		mylist[ as.character( fpm[ i, 1 ] ) ] <- as.character( fpm[ i, 2 ] )
 	return( mylist )
 }
 
 # -----------------------------------------------------------------------------
 # filePath
-# Brief:                Given a domain name and a file name, return path+name 
+# Brief:                Given a domain name and a file name, return path+name
 #                           (the fully qualified name).
 # Details:              Default extension is ".csv" but this can be overridden
 #                           This is the normal way for callers to get fqns for their files.
 # Dependencies:         readDomainPathMap, printLog
 # Author(s):            Ben Bond-Lamberty, Jon Seibert
-# Params:               
+# Params:
 #   domain:             CEDS domain name under which the file can be found [required]
 #   fn:                 Name of the file [required]
 #   extension:          Extension of the file [default: ".csv"]
-#   domain_extension:   Any additional path between the CEDS domain and the location of the 
+#   domain_extension:   Any additional path between the CEDS domain and the location of the
 #                           file [default: ""]
 # Return:               String of the file name appended to the full file path.
 # Input Files:          None
@@ -266,7 +268,7 @@ listZippedFiles <- function( file_path, remove_extension = FALSE ){
     contents <- unzip( file_path, list = TRUE )
     file_list <- contents$Name[ contents$Length > 0 ]
     if( length( file_list[ grep("MACOSX",file_list) ] ) > 0 ){
-        file_list <- file_list[ -grep("MACOSX",file_list) ] 
+        file_list <- file_list[ -grep("MACOSX",file_list) ]
     }
     if( remove_extension ){ file_list <- file_path_sans_ext( file_list ) }
     return( file_list )
@@ -275,15 +277,15 @@ listZippedFiles <- function( file_path, remove_extension = FALSE ){
 # -----------------------------------------------------------------------------
 # readData
 # Brief:            Read an arbitrary data file.
-# Details:          Reads a specified .csv, .xlsx, or .xls file (or multiple .csv files inside 
+# Details:          Reads a specified .csv, .xlsx, or .xls file (or multiple .csv files inside
 #                       a .zip file) into R as a data frame or list of data frames. Handles singular
 #                       .csv and .xlsx files (including multiple sheets within a single .xlsx file)
 #                       and multiple .csv files within a .zip file. To read multiple unzipped files
-#                       simultaneously, use the standard R function "lapply" in conjunction with 
+#                       simultaneously, use the standard R function "lapply" in conjunction with
 #                       readData.
 # Dependencies:     filePath, printLog, read.csv, readExcel, lapply, readMetaData
 # Author(s):        Page Kyle, Jon Seibert, Linh Vu
-# params:           
+# params:
 #   domain:             CEDS domain in which the file is located. [required]
 #   file_name:          Name of the file to read in, minus the file extension. [required]
 #   extension:          File extension (type): readData only accepts .csv, .xlsx, .xls, .zip files.
@@ -295,26 +297,26 @@ listZippedFiles <- function( file_path, remove_extension = FALSE ){
 #                           For .zip files only. [default: list()]
 #   zipped_extension:   Extension of file to read in inside .zip file. Currently only accepts .csv.
 #                           For .zip files only. [default: ".csv"]
-#   extract_all:        Boolean option indicating whether to read all files from within the specified 
-#                           .zip file. If FALSE (and attempting to read from a .zip file), a list of 
-#                           names must be supplied to the zipped_selection parameter. If TRUE, 
-#                           zipped_selection need not be used, and all contained files will be read. 
+#   extract_all:        Boolean option indicating whether to read all files from within the specified
+#                           .zip file. If FALSE (and attempting to read from a .zip file), a list of
+#                           names must be supplied to the zipped_selection parameter. If TRUE,
+#                           zipped_selection need not be used, and all contained files will be read.
 #                           For .zip files only. [default: FALSE]
-#   sheet_selection:    Either "ALL" (to read all sheets), a list of sheet names or numbers 
-#                           (to read a set of sheets), or single sheet name/number. 
+#   sheet_selection:    Either "ALL" (to read all sheets), a list of sheet names or numbers
+#                           (to read a set of sheets), or single sheet name/number.
 #                           For .xlsx .xls files only. [default: "ALL"]
 #   domain_extension:   Additional filepath to follow after locating the specified domain.
 #                           [default: ""]
-#   column_names:       Either TRUE to use the first row as column names, FALSE to number 
-#                           columns sequentially from X1 to Xn, or a character vector giving 
+#   column_names:       Either TRUE to use the first row as column names, FALSE to number
+#                           columns sequentially from X1 to Xn, or a character vector giving
 #                           a name for each column. For .xlsx .xls files only. [default: TRUE]
-#   column_types:       Either NULL to guess from the spreadsheet or a character vector 
-#                           containing "blank", "numeric", "date" or "text". For .xlsx files only. 
+#   column_types:       Either NULL to guess from the spreadsheet or a character vector
+#                           containing "blank", "numeric", "date" or "text". For .xlsx files only.
 #                           [default: NULL]
-#   missing_value:      Missing value. By default readxl converts blank cells to missing data. 
-#                           Set this value if you have used a sentinel value for missing values. 
+#   missing_value:      Missing value. By default readxl converts blank cells to missing data.
+#                           Set this value if you have used a sentinel value for missing values.
 #                           For .xlsx .xls files only. [default: ""]
-#   skip_rows:          Number of rows to skip before reading any data. For .xlsx .xls files only. 
+#   skip_rows:          Number of rows to skip before reading any data. For .xlsx .xls files only.
 #                           [default: 0]
 #   meta:               Boolean indicating whether to look for and read in metadata for the
 #                           input file. [default: TRUE]
@@ -324,11 +326,11 @@ listZippedFiles <- function( file_path, remove_extension = FALSE ){
 #                           the function, while FALSE allows the messages. [default: FALSE]
 #   to_numeric:         Boolean indicating whether to automatically convert columns begining with "X"
 #                           to numeric values. [default = TRUE]
-# Return:           Data frame of the read-in file, or a list of data frames of 
+# Return:           Data frame of the read-in file, or a list of data frames of
 #                   multiple sheets from a .xlsx .xls file
 # Input Files:      Specified in parameters
 # Output Files:     None
-# 
+#
 # Usage examples: readData( "MED_OUT", "A.energy_data" )
 #                 readData( "MAPPINGS", "Master_Fuel_Sector_List", ".xlsx", sheet_selection = "Sectors" )
 #                 readData( "EM_INV", domain_extension = "US_EPA/", "SCCactiveJul2015_NFRmap", ".xlsx", sheet_selection = "SCCsActiveJul2015_NFRmap" )
@@ -338,10 +340,10 @@ listZippedFiles <- function( file_path, remove_extension = FALSE ){
 # TODO: error handling (probably using try/catch)
 #       switch to read_csv from readr package
 #       read Excel from inside .zip (?not possible: http://stackoverflow.com/questions/26763377/)
-readData <- function( domain = "none", file_name = "none", extension = ".csv", 
+readData <- function( domain = "none", file_name = "none", extension = ".csv",
                       zipped_selection = list(), zipped_extension = ".csv", extract_all = FALSE,
-                      sheet_selection = "ALL", domain_extension = "", column_names = TRUE, 
-                      column_types = NULL, missing_value = "", skip_rows = 0, meta = TRUE, 
+                      sheet_selection = "ALL", domain_extension = "", column_names = TRUE,
+                      column_types = NULL, missing_value = "", skip_rows = 0, meta = TRUE,
                       meta_domain = domain, meta_extension = extension, mute = FALSE, to_numeric = TRUE ,... ) {
 
 	if( domain=="none" | file_name=="none" ) {
@@ -349,41 +351,41 @@ readData <- function( domain = "none", file_name = "none", extension = ".csv",
 		stop( "ERROR in readData: you need to specify both a filename and domain" )
 	}
 
-	full_file_path <- filePath( domain, file_name, extension, domain_extension ) 
+	full_file_path <- filePath( domain, file_name, extension, domain_extension )
 
     multi_sheet <- FALSE
-    
-    # Assign em so the correct [em]_IO_documentation can be found  
+
+    # Assign em so the correct [em]_IO_documentation can be found
 	if ( !exists( 'em', envir = .GlobalEnv ) ) em <- "CM"
-	
+
 	# Update dependency list, if necessary
 	deps <- DEPENDENCIES[[ GCAM_SOURCE_FN[ GCAM_SOURCE_RD ] ]]
 	if( !( full_file_path %in% deps ) && file_name != "System_Documentation" && file_name != paste0( em, "_", "IO_documentation" ) ) {
 		DEPENDENCIES[[ GCAM_SOURCE_FN[ GCAM_SOURCE_RD ] ]] <<- c( deps, full_file_path )
 	}
-	
+
 	if( mute == F ) printLog( "Reading", full_file_path, "\n", cr=F )
 	if( !file.exists( full_file_path ) ) {
 		stop( "ERROR in readData: file \"", full_file_path, "\" does not appear to exist" )
 	}
-    
+
     if( extension == ".csv" ){
         x <- ( read.csv( full_file_path, na.strings = missing_value, stringsAsFactors = F,
 						 comment.char = GCAM_DATA_COMMENT,	# Our comment signal
 						 ... ) )
-    
+
     } else if( extension == ".xlsx" | extension == ".xls" ){
-    
-        results <- readExcel( full_file_path, sheet_selection, column_names, 
+
+        results <- readExcel( full_file_path, sheet_selection, column_names,
                               column_types, missing_value, skip_rows )
-                              
+
         x <- results[[ 1 ]]
         multi_sheet <- results[[ 2 ]]
-        
+
     } else if( extension == ".zip" ){
-    
+
         if( zipped_extension == ".csv" ){ # .zip segment only accepts zipped .csv files at this time
-        
+
             if( extract_all ){ # Read all .csv files within the zip
                 zipped_files <- listZippedFiles ( full_file_path )
                 if ( length( zipped_files ) > 120  ) {
@@ -404,24 +406,24 @@ readData <- function( domain = "none", file_name = "none", extension = ".csv",
                               stringsAsFactors = F, comment.char = GCAM_DATA_COMMENT, # Our comment signal
                               ...)
                   }
-                              
+
             }else{
                 if( length ( zipped_selection ) == 0 ) { # If no file specified within zip
                     printLog( "ERROR in readData: no zipped files specified for ", file_name )
                     stop( "ERROR in readData: specify a zipped file name" )
                 }
-            
+
                 if( length ( zipped_selection ) == 1 ){ # If only one file to read from zip
-                
+
                     zipped_fn <- paste0( zipped_selection, zipped_extension )  # zipped file name with extension
-                    x <- ( read.csv( unz( full_file_path, zipped_fn ), na.strings = missing_value, 
-                            stringsAsFactors = F, comment.char = GCAM_DATA_COMMENT,	
+                    x <- ( read.csv( unz( full_file_path, zipped_fn ), na.strings = missing_value,
+                            stringsAsFactors = F, comment.char = GCAM_DATA_COMMENT,
                             ... ) )
-                            # x <- ( read.csv( unz( full_file_path, zipped_fn ), na.strings = missing_value, 
+                            # x <- ( read.csv( unz( full_file_path, zipped_fn ), na.strings = missing_value,
                             # stringsAsFactors = F, comment.char = GCAM_DATA_COMMENT ) )
-                } 
-                
-                if( length ( zipped_selection ) > 1 ){ # If multiple zipped files to read 
+                }
+
+                if( length ( zipped_selection ) > 1 ){ # If multiple zipped files to read
                     zipped_files <- paste0( zipped_selection, zipped_extension )
                     unz_files <- lapply( zipped_files, unz, description = full_file_path )
                     # unz_files <- list()
@@ -429,21 +431,21 @@ readData <- function( domain = "none", file_name = "none", extension = ".csv",
                         # unz_files <- c( unz_files, unz( full_file_path, fn ) )
                     # }
                     x <- lapply ( unz_files, read.csv, na.strings = missing_value,
-                                  stringsAsFactors = F, comment.char = GCAM_DATA_COMMENT,	
+                                  stringsAsFactors = F, comment.char = GCAM_DATA_COMMENT,
                                   ...)
                 }
             }
-        
+
         } else { # If zipped file extension not recognized
-            stop( "ERROR in readData(): Invalid inner file type. readData() only accepts 
+            stop( "ERROR in readData(): Invalid inner file type. readData() only accepts
                   .csv file inside .zip file." )
         }
-        
+
     } else { # If extension not recognized
-        stop( "ERROR in readData(): Invalid file type. readData() accepts .csv, .xlsx, .xls files, 
+        stop( "ERROR in readData(): Invalid file type. readData() accepts .csv, .xlsx, .xls files,
               or .csv files inside a .zip file." )
     }
-    
+
 	if( mute == F ) { # Print stats
         if( multi_sheet ){
             stats <- list()
@@ -451,17 +453,17 @@ readData <- function( domain = "none", file_name = "none", extension = ".csv",
                 stats <- c( stats, paste0( "    Done reading ", sheet, ": ", nrow( x[[ sheet ]] ), " rows, ", ncol( x[[ sheet ]] ), " cols" ) )
             }
             lapply( stats, printLog, ts=F )
-        } else if( extension == ".zip" ){ 
-            printLog( "    Done reading contents." ) 
-        } else { printLog( "    Done: ", nrow( x ), " rows, ", ncol( x ), " cols", ts = F ) }  
+        } else if( extension == ".zip" ){
+            printLog( "    Done reading contents." )
+        } else { printLog( "    Done: ", nrow( x ), " rows, ", ncol( x ), " cols", ts = F ) }
     }
-    
+
     # Get metadata and add to list of all metadata in the script
     if( meta == T ) {
         metadata <- readMetaData( meta_domain, file_name, meta_domain_ext = domain_extension )
     }
-  
-	  
+
+
 	return( x )
 }
 
@@ -471,65 +473,65 @@ readData <- function( domain = "none", file_name = "none", extension = ".csv",
 # Details:              Handles read logic and parsing of .xlsx .xls files for readData().
 # Dependencies:         read_excel, lapply
 # Author(s):            Jon Seibert
-# params:               
+# params:
 #   full_file_path:     Path to the .xlsx .xls file to read in [required]
-#   sheet_selection:    Either "ALL" (to read all sheets), a list of sheet names or numbers 
-#                           (to read a set of sheets), or single sheet name/number. 
+#   sheet_selection:    Either "ALL" (to read all sheets), a list of sheet names or numbers
+#                           (to read a set of sheets), or single sheet name/number.
 #                           For .xlsx .xls files only. [default: "ALL"]
-#   column_names:       Either TRUE to use the first row as column names, FALSE to number 
-#                           columns sequentially from X1 to Xn, or a character vector giving 
+#   column_names:       Either TRUE to use the first row as column names, FALSE to number
+#                           columns sequentially from X1 to Xn, or a character vector giving
 #                           a name for each column. For .xlsx .xls files only. [default: TRUE]
-#   column_types:       Either NULL to guess from the spreadsheet or a character vector 
-#                           containing "blank", "numeric", "date" or "text". For .xlsx .xls files only. 
+#   column_types:       Either NULL to guess from the spreadsheet or a character vector
+#                           containing "blank", "numeric", "date" or "text". For .xlsx .xls files only.
 #                           [default: NULL]
-#   missing_value:      Missing value. By default readxl converts blank cells to missing data. 
-#                           Set this value if you have used a sentinel value for missing values. 
+#   missing_value:      Missing value. By default readxl converts blank cells to missing data.
+#                           Set this value if you have used a sentinel value for missing values.
 #                           For .xlsx .xls files only. [default: ""]
-#   skip_rows:          Number of rows to skip before reading any data. For .xlsx .xls files only. 
+#   skip_rows:          Number of rows to skip before reading any data. For .xlsx .xls files only.
 #                           [default: 0]
-# Return:               Vector of the data frame (or list of data frames) and the boolean 
+# Return:               Vector of the data frame (or list of data frames) and the boolean
 #                           "multi_sheet" indicating whether the result is a list or a single
 #                           data frame.
-#                           
+#
 # Input Files:          Specified in full_file_path
 # Output Files:         None
-# 
+#
 # TODO: gsub to remove m-dashes does not work
-readExcel <- function( full_file_path, sheet_selection = "ALL", column_names = TRUE, 
+readExcel <- function( full_file_path, sheet_selection = "ALL", column_names = TRUE,
                        column_types = NULL, missing_value = "", skip_rows = 0 ){
 
     sheet_names <- excel_sheets( full_file_path )
     multi_sheet <- FALSE
-    
-    # Read all sheets, but only if there is more than one
-    if( sheet_selection == "ALL" && length( sheet_names ) > 1 ){ 
 
-        x <- lapply( excel_sheets( full_file_path ), read_excel, path = full_file_path, 
-                     col_names = column_names, col_types = column_types, 
+    # Read all sheets, but only if there is more than one
+    if( sheet_selection == "ALL" && length( sheet_names ) > 1 ){
+
+        x <- lapply( excel_sheets( full_file_path ), read_excel, path = full_file_path,
+                     col_names = column_names, col_types = column_types,
                      na = missing_value, skip = skip_rows) %>%
-            lapply( as.data.frame ) # Ensure result is in standard data frame form, 
+            lapply( as.data.frame ) # Ensure result is in standard data frame form,
                                     # instead of a "local data frame"
         names( x ) <- sheet_names # Fix names
         if( length( names( x ) ) > 1 ) multi_sheet <- TRUE
-        
+
     } else {
 
         if( length( sheet_selection ) > 1 ){ # Read a specific set of sheets
-        
+
             multi_sheet <- TRUE
-            x <- lapply( sheet_selection, read_excel, path = full_file_path, 
-                         col_names = column_names, col_types = column_types, 
+            x <- lapply( sheet_selection, read_excel, path = full_file_path,
+                         col_names = column_names, col_types = column_types,
                          na = missing_value, skip = skip_rows) %>%
                 lapply( as.data.frame )
             names( x ) <- sheet_selection
-            
+
         } else { # Read one sheet
-        
+
             # If only one sheet exists
-            if( sheet_selection == "ALL" ) sheet_selection <- sheet_names[ 1 ] 
-        
-            x <- read_excel( path = full_file_path, sheet = sheet_selection, 
-                             col_names = column_names, col_types = column_types, 
+            if( sheet_selection == "ALL" ) sheet_selection <- sheet_names[ 1 ]
+
+            x <- read_excel( path = full_file_path, sheet = sheet_selection,
+                             col_names = column_names, col_types = column_types,
                              na = missing_value, skip = skip_rows ) %>%
                 as.data.frame()
         }
@@ -538,9 +540,9 @@ readExcel <- function( full_file_path, sheet_selection = "ALL", column_names = T
     # Replace en-dashes and em-dashes with hyphens
     names( x ) <- gsub( "—", "-", names( x ) )
     names( x ) <- gsub( "–", "-", names( x ) )
-    
+
     return( list( x, multi_sheet ) )
-    
+
 }
 
 # -----------------------------------------------------------------------------
@@ -549,7 +551,7 @@ readExcel <- function( full_file_path, sheet_selection = "ALL", column_names = T
 # Details:      Source a CEDS R script used to define shared data or calculate required values.
 # Dependencies: printLog
 # Author(s):    Ben Bond-Lamberty
-# Params:       
+# Params:
 #   domain:     CEDS domain in which the script can be found [required]
 #   fn:         Name of the script [required]
 #   extension:  File extension for the script [default: ".R"]
@@ -571,12 +573,12 @@ sourceData <- function( domain="none", fn="none", extension=".R", ... ) {
 	if( !( myfn %in% deps ) ) {
 		DEPENDENCIES[[ GCAM_SOURCE_FN[ GCAM_SOURCE_RD ] ]] <<- c( deps, myfn )
 	}
-	
+
 	printLog( "Reading", myfn, cr=F )
 	if( !file.exists( myfn ) ) {
 		printLog( "WARNING: file", myfn, "does not appear to exist" )
 	}
-	source( myfn )	
+	source( myfn )
 	printLog( "...OK.", ts=F )
 }
 
@@ -587,7 +589,7 @@ sourceData <- function( domain="none", fn="none", extension=".R", ... ) {
 #                   dependency list, and adds it if not.
 # Dependencies: None
 # Author(s):    Page Kyle
-# Params:       
+# Params:
 #   fqn:        File name to add to the list [required]
 # Return:       None
 # Input Files:  None
@@ -606,12 +608,12 @@ addDependency <- function( fqn, ... ) {
 # writeData
 # Brief:            Write an arbitrary data file.
 # Details:          Write out an R data frame as a .csv file in CEDS standard format.
-# Dependencies:     
+# Dependencies:
 # Author(s):        Page Kyle, Jon Seibert
-# params:           
+# params:
 #   x:                  Data frame to be output as a .csv file.
 #   domain:             CEDS domain in which the file is located. [default: "MED_OUT"]
-#   fn:                 Name of the file to read in, minus the file extension. 
+#   fn:                 Name of the file to read in, minus the file extension.
 #                       [default: GCAM_SOURCE_FN]
 #   fn_sfx:             Suffix to append to the file name. [default: NULL]
 #   comments:           Output comments to be included at the top of the output file.
@@ -622,15 +624,15 @@ addDependency <- function( fqn, ... ) {
 #                       the function, while FALSE allows the messages. [default: FALSE]
 #   domain_extension:   Additional filepath to follow after locating the specified domain.
 #                       [default: ""]
-# 
+#
 # Return:               None
 # Input Files:          None
 # Output Files:         Specified in "fn"
-# 
+#
 # Usage examples: writeData( A.energy_data, "MED_OUT", "A.energy_data" )
 #                 writeData( Xwalk_onetab, "EM_INV", domain_extension = "US_EPA/Processed_data/", fn = "Xwalk_onetab" )
-# TODO: 
-writeData <- function( x, domain = "MED_OUT", fn = GCAM_SOURCE_FN, fn_sfx = NULL, 
+# TODO:
+writeData <- function( x, domain = "MED_OUT", fn = GCAM_SOURCE_FN, fn_sfx = NULL,
                        comments = NULL, meta = TRUE, mute = FALSE, domain_extension = "", ... ) {
 
     # # DEBUG
@@ -642,23 +644,23 @@ writeData <- function( x, domain = "MED_OUT", fn = GCAM_SOURCE_FN, fn_sfx = NULL
     # meta <- TRUE
     # mute <- FALSE
     # domain_extension <- ""
-                       
+
 	if( length( fn_sfx ) ) {
 		myfn <- paste( fn, "_", fn_sfx, sep="" )
 	}
 	myfn <- filePath( domain, fn, domain_extension = domain_extension )
-    
+
     full_fn <- paste0( fn, ".csv" )
-	
+
     # Update dependency list, if necessary
 	outs <- OUTPUTS[[ GCAM_SOURCE_FN[ GCAM_SOURCE_RD ] ]]
 	if( !( full_fn %in% outs ) && fn != paste0( "IO_documentation_", RUNSUFFIX ) ) {
 		OUTPUTS[[ GCAM_SOURCE_FN[ GCAM_SOURCE_RD ] ]] <<- c( outs, full_fn )
 	}
-    
+
     # Ensure all data entries are strings, not lists, to avoid strange errors in write.csv
     x <- data.frame( lapply( x, as.character ), stringsAsFactors = FALSE )
-	
+
 	if( !mute ) printLog( "Writing", myfn, "w/", length( comments ), "comments" )
 
 	tryCatch( {
@@ -681,7 +683,7 @@ writeData <- function( x, domain = "MED_OUT", fn = GCAM_SOURCE_FN, fn_sfx = NULL
 			printLog( as.character( err ) )
 			stop( err )		# can't recover from this
 		}
-        
+
 	) # tryCatch
 
     # Write out accumulated metadata and notes if applicable
@@ -709,7 +711,7 @@ writeData <- function( x, domain = "MED_OUT", fn = GCAM_SOURCE_FN, fn_sfx = NULL
 #                   to this object. The function is automatically called by readdata, and
 #                   can also be used as a standalone function. If metadata is not created
 #                   for a file, a default template will be used. Additional categories
-#                   can be added by adding them directly to the metadata file. 
+#                   can be added by adding them directly to the metadata file.
 # Dependencies: printLog(), filePath()
 # Author(s):       Tyler Pitkanen, Jon Seibert
 # parameters:
@@ -729,15 +731,15 @@ readMetaData <- function( meta_domain="none", file_name="none", meta_name = 'non
     # meta_domain <- "MED_OUT"
     # file_name <- "C.SO2_default_emissions"
     # meta_name <- "none"
-    
+
     if( meta_domain == 'none' || ( file_name == 'none' && meta_name == 'none' ) ) {
         return( warning( 'Must specify domain and file name' ) )
     }
-    
+
     # Determine new metadata file name and location
     if( meta_name == 'none' ) meta_name <- paste0( file_name, "-metadata" )
     mymeta_name <- filePath( meta_domain, meta_name, '.csv', meta_domain_ext )
-    
+
     # Check if the file exists and set 'new_metadata' object. If the file isn't
     #   found, make a note
     if( file.exists( mymeta_name ) ) {
@@ -745,49 +747,49 @@ readMetaData <- function( meta_domain="none", file_name="none", meta_name = 'non
         new_metadata <- read.csv( mymeta_name, na.strings="", check.names = FALSE )
         new_metadata <- data.frame( new_metadata, row.names = NULL )
     } else new_metadata_exists <- FALSE
-    
+
     # If the object all_metadata doesn't exist, create it. This code should run once
     #   per script upon the first addition of metadata.
     if( exists( 'all_metadata' ) == FALSE ) {
         # If the new metadata file doesn't exist, use a default metadata placeholder
         if( new_metadata_exists == FALSE ) {
-            default_names <- c( 'Data-Type', 'Emission', 'Region', 'Sector', 
+            default_names <- c( 'Data-Type', 'Emission', 'Region', 'Sector',
                                 'Start-Year', 'End-Year', 'Source/Comment' )
             colsize <- length( default_names )
-            new_metadata <- c( rep( "Unknown", colsize - 1 ), 
+            new_metadata <- c( rep( "Unknown", colsize - 1 ),
                                paste0( "Metadata input file missing for data file ", file_name ) )
             new_metadata <- data.frame( t( new_metadata ), row.names = NULL )
-            colnames( new_metadata ) <- default_names     
+            colnames( new_metadata ) <- default_names
         }
-        # Since no other metadata exists, set new_metadata as all_metadata    
+        # Since no other metadata exists, set new_metadata as all_metadata
         all_metadata <- new_metadata
         # Return the all_metadata object and end the function
         assign( 'all_metadata', all_metadata, .GlobalEnv )
         return( invisible( all_metadata ) )
     }
-    
+
     # If the object all_metadata does already exist, append the new metadata and
     #   update the all_metadata object
     if( exists( 'all_metadata' ) == TRUE ) {
         all_metadata <- data.frame( all_metadata, row.names = NULL )
         old_metadata <- all_metadata
-        old_names  <- colnames( old_metadata ) 
+        old_names  <- colnames( old_metadata )
         old_rownum <- nrow( all_metadata )
-        old_colnum <- ncol( all_metadata )          
-        
+        old_colnum <- ncol( all_metadata )
+
         if( new_metadata_exists == TRUE ) {
             new_names <- colnames( new_metadata )
             new_rownum <- nrow( new_metadata )
             new_colnum <- ncol( new_metadata )
-            
+
             # Check if any new categories are included in the newly added metadata. If
             #   new columns are included, update the old metadata
             new_cols <- new_names %!in% old_names
             if( any( new_cols ) ) {
                 # Print a lot message noting the addition of new columns
-                printLog( 'New categories added for', file_name, 'metadata: ', 
+                printLog( 'New categories added for', file_name, 'metadata: ',
                           paste( new_names[ new_cols ], collapse = ',' ) )
-                
+
                 # Add the new columns to the previously read-in metadata with filler
                 #   'NA' values for the column entries
                 new_colnum <- length( new_cols )
@@ -796,7 +798,7 @@ readMetaData <- function( meta_domain="none", file_name="none", meta_name = 'non
                 # Add in the filler columns to the old metadata
                 old_metadata <- cbind( old_metadata, old_filler )
             }
-            
+
             missing_cols <- old_names  %!in% new_names
             if( any( missing_cols ) ) {
                 # Add the missing columns to the new metadata with filler
@@ -804,19 +806,19 @@ readMetaData <- function( meta_domain="none", file_name="none", meta_name = 'non
                 missing_col_num <- length( missing_cols )
                 new_filler <- array( 'NA', c( new_rownum, missing_col_num ) )
                 colnames( new_filler ) <- missing_cols
-                # Add in the filler columns to the new metadata            
+                # Add in the filler columns to the new metadata
                 new_metadata <- cbind( new_metadata, new_filler )
             }
-            
+
         } else if( new_metadata_exists == FALSE ) {
             # If the metadata file doesn't exist, create a default entry with the
             new_colnum <- old_colnum
-            new_metadata <- c( rep( "Unknown", new_colnum - 1 ), 
+            new_metadata <- c( rep( "Unknown", new_colnum - 1 ),
                                paste0( "Metadata input file missing for data file ", file_name ) )
             new_metadata <- data.frame( t( new_metadata ), row.names = NULL )
-            colnames( new_metadata ) <- old_names             
+            colnames( new_metadata ) <- old_names
         }
-        
+
         # If new columns are added, match the column order to the new metadata. If
         #   new columns were not added, keep the old order.
         if( exists( 'new_cols' ) && any( new_cols ) ) {
@@ -825,16 +827,16 @@ readMetaData <- function( meta_domain="none", file_name="none", meta_name = 'non
         } else {
             all_metadata <- rbind( old_metadata, new_metadata, deparse.level = 0 )
         }
-        
+
         assign( 'all_metadata', all_metadata, .GlobalEnv )
-    } 
+    }
 }
 
 # ------------------------------------------------------------------------------
 # addMetaData
 # Brief: Allows a user to type out a metadata addition within a script
 # Details: If called before readMetaData, the function creates an object to store
-#          the metadata of a script. On subsequent calls, the function adds 
+#          the metadata of a script. On subsequent calls, the function adds
 #          metadata to this object. Functionality is similar to readMetaData,
 #          except it creates a metadata entry from R objects in a script rather
 #          than loading from a csv file.
@@ -848,13 +850,13 @@ readMetaData <- function( meta_domain="none", file_name="none", meta_name = 'non
 # input files: metadata file, e.g. 'example-metadata.csv'
 # output files: null
 addMetaData <- function( metadata = NULL, metadata_names = NULL ) {
-    
+
     # Load defaults for created data and names if unspecified
     if( is.null( metadata_names ) || is.null( metadata ) ) {
         return( warning( 'Metadata and names must be specified' ) )
     } else new_metadata_exists <- TRUE
-    
-    # Assign the specified names to the metadata. Return a warning if there isn't 
+
+    # Assign the specified names to the metadata. Return a warning if there isn't
     #   one column name per column
     if( length( metadata ) != length( metadata_names ) ) {
         return( warning( 'Metadata and names must have same length' ) )
@@ -864,48 +866,48 @@ addMetaData <- function( metadata = NULL, metadata_names = NULL ) {
         colnames( metadata ) <- metadata_names
         new_metadata <- metadata
     }
-    
+
     # If the object all_metadata doesn't exist, create it. This should occur once
     #   per script upon the first addition of metadata.
     if( exists( 'all_metadata' ) == FALSE ) {
-        # Since no other metadata exists, set new_metadata as all_metadata    
+        # Since no other metadata exists, set new_metadata as all_metadata
         all_metadata <- new_metadata
         # Return the all_metadata object and end the function
         assign( 'all_metadata', all_metadata, .GlobalEnv )
         return( invisible( all_metadata ) )
     }
-    
+
     # If the object all_metadata does already exist, append the new metadata and
     #   update the all_metadata object
     all_metadata <- data.frame( all_metadata, row.names = NULL )
     old_metadata <- all_metadata
-    old_names <- colnames( old_metadata ) 
+    old_names <- colnames( old_metadata )
     old_rownum <- nrow( all_metadata )
-    old_colnum <- ncol( all_metadata )          
-    
+    old_colnum <- ncol( all_metadata )
+
     if( new_metadata_exists == TRUE ) {
         new_names <- colnames( new_metadata )
         new_rownum <- nrow( new_metadata )
         new_colnum <- ncol( new_metadata )
-        
+
         # Check if any new categories are included in the newly added metadata. If
         #   new columns are included, update the old metadata
         new_cols <- new_names %!in% old_names
         if( any( new_cols ) ) {
             # Print a lot message noting the addition of new columns
-            printLog( 'New categories added to metadata: ', 
+            printLog( 'New categories added to metadata: ',
                       paste( new_names[ new_cols ], collapse = ',' ) )
-            
+
             # Add the new columns to the previously read-in metadata with filler
             #   'NA' values for the column entries
             new_colnum <- length( new_names[ new_cols ] )
             old_filler <- array( 'NA', c( old_rownum, new_colnum ) )
             colnames( old_filler ) <- new_names[ new_cols ]
-            
+
             # Add in the filler columns to the old metadata
             old_metadata <- cbind( old_metadata, old_filler )
         }
-        
+
         missing_cols <- old_names %!in% new_names
         if( any( missing_cols ) ) {
             # Add the missing columns to the new metadata with filler
@@ -913,10 +915,10 @@ addMetaData <- function( metadata = NULL, metadata_names = NULL ) {
             missing_col_num <- length( old_names[ missing_cols ] )
             new_filler <- array( 'NA', c( new_rownum, missing_col_num ) )
             colnames( new_filler ) <- old_names[ missing_cols ]
-            # Add in the filler columns to the new metadata            
+            # Add in the filler columns to the new metadata
             new_metadata <- cbind( new_metadata, new_filler )
         }
-        
+
         # If new columns are added, match the column order to the new metadata. If
         #   new columns were not added, keep the old order.
         if( exists( 'new_cols' ) && any( new_cols ) ) {
@@ -925,9 +927,9 @@ addMetaData <- function( metadata = NULL, metadata_names = NULL ) {
         } else {
             all_metadata <- rbind( old_metadata, new_metadata, deparse.level = 0 )
         }
-        
-        assign( 'all_metadata', all_metadata, .GlobalEnv )    
-    } 
+
+        assign( 'all_metadata', all_metadata, .GlobalEnv )
+    }
 }
 
 # ------------------------------------------------------------------------------
@@ -938,7 +940,7 @@ addMetaData <- function( metadata = NULL, metadata_names = NULL ) {
 # Dependencies: all_metadata, filePath()
 # Author: Tyler Pitkanen
 # parameters:
-#   meta_domain: The domain of the printed metadata, often equal to the 
+#   meta_domain: The domain of the printed metadata, often equal to the
 #               file's domain [default: 'none']
 #   file_name: The file name of the data set that corresponds to the metadata. In
 #       standard naming format, the file name of the metadata is the same
@@ -951,30 +953,30 @@ addMetaData <- function( metadata = NULL, metadata_names = NULL ) {
 # output files: metadata file, e.g. 'example-metadata.csv'
 
 writeMetaData <- function( domain, file_name = 'none', meta_name = 'none' ) {
-    
+
     # Set the metadata file name
     if( meta_name == 'none' ) mymeta_name <- filePath( domain, paste0( file_name, "-metadata" ) )
-    
+
     # Suppress the warning from write-out
     w <- getOption( "warn" )
-    options( warn = -1 )  
-    
+    options( warn = -1 )
+
     # Write out all_metadata
     if( exists( "all_metadata" ) ) {
         # Remove duplicate entries if necessary
         all_metadata <- all_metadata[ !duplicated( all_metadata ), ]
-        
+
         write.table( all_metadata, file=mymeta_name, sep=",", row.names=F,
                      col.names=T, append=F, ... )
     }
-    
+
     options( warn=w )
 }
 
 # -----------------------------------------------------------------------------
 # clearMeta
 # Brief:        Clear the metadata accumulated thus far.
-# Details:      Removes the global variable "all_metadata". Should be called at the 
+# Details:      Removes the global variable "all_metadata". Should be called at the
 #                   beginning of each script.
 # Dependencies: None
 # Author(s):    Tyler Pitkanen
