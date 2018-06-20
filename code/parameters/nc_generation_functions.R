@@ -717,8 +717,18 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
     dplyr::select(sector_name, year, unit, grid_sum, orig_sum, pct_diff)
 
   largest_diff <- round(max(abs(diff_df$pct_diff), na.rm = T), 4)
-  if (largest_diff > 1) {
+  if (largest_diff > .1) {
     warning(paste('Values for', em, 'were modified by up to', largest_diff, 'percent'))
+
+    err_rows <- diff_df %>%
+      dplyr::filter( is.nan( pct_diff ) | is.na( pct_diff) | abs( pct_diff ) > 1 ) %>%
+      dplyr::mutate( em = !!em, scenario = !!scenario ) %>%
+      dplyr::select( scenario, em, everything() )
+
+    err_fname <- paste0( '../diagnostic-output/ERROR_', RUNSUFFIX, '.csv' )
+    add_to_file <- file.exists( err_fname )
+    write.table( err_rows, file = err_fname, append = add_to_file, sep = ',',
+                 row.names = F, col.names = !add_to_file )
   }
 
   writeData( diff_df, 'DIAG_OUT', sub( '.nc', '_DIFF', nc_file_name, fixed = T), meta = F )
