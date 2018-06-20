@@ -77,6 +77,7 @@ em_gridding_env$voc_speciation <- 'none'
 
 # Diagnostics
 em_gridding_env$diagnostic_plots <- F
+em_gridding_env$error_tolerance <- 0.1  # minimum percent difference allowed
 
 # Other settings
 em_gridding_env$clean_med_out <- F

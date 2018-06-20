@@ -716,12 +716,14 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
     dplyr::rename(grid_sum = value.x, orig_sum = value.y) %>%
     dplyr::select(sector_name, year, unit, grid_sum, orig_sum, pct_diff)
 
+  ERR_TOL <- get_global_constant( 'error_tolerance' )
   largest_diff <- round(max(abs(diff_df$pct_diff), na.rm = T), 4)
-  if (largest_diff > .1) {
-    warning(paste('Values for', em, 'were modified by up to', largest_diff, 'percent'))
+
+  if ( largest_diff > ERR_TOL ) {
+    warning( paste('Values for', em, 'were modified by up to', largest_diff, 'percent') )
 
     err_rows <- diff_df %>%
-      dplyr::filter( is.nan( pct_diff ) | is.na( pct_diff) | abs( pct_diff ) > 1 ) %>%
+      dplyr::filter( is.nan( pct_diff ) | is.na( pct_diff ) | abs( pct_diff ) > ERR_TOL ) %>%
       dplyr::mutate( em = !!em, scenario = !!scenario ) %>%
       dplyr::select( scenario, em, everything() )
 
@@ -731,7 +733,7 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
                  row.names = F, col.names = !add_to_file )
   }
 
-  writeData( diff_df, 'DIAG_OUT', sub( '.nc', '_DIFF', nc_file_name, fixed = T), meta = F )
+  writeData( diff_df, 'DIAG_OUT', sub( '.nc', '_DIFF', nc_file_name, fixed = T ), meta = F )
   write.csv( out_df, out_name, row.names = F )
 
   return( list( out_name = nc_file_name, diag_cells = diagnostic_cells_list ) )
