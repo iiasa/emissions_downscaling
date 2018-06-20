@@ -414,16 +414,24 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
         conv_mat_sum <- sum( conv_mat )
 
         # computation for diagnostic cells
-        cell_value_list <- lapply( 1 : nrow( diagnostic_cells ) , function( i ) {
-          out_df <- data.frame( em = em,
-                                sector = current_sector,
-                                year = year,
-                                month = current_month,
-                                unit = 'Mt',
-                                value = conv_mat[ diagnostic_cells$row[ i ], diagnostic_cells$col[ i ] ],
-                                stringsAsFactors = F )
-        } )
-        cell_value_df <- do.call( 'rbind', cell_value_list )
+        cell_values <- conv_mat[ as.matrix( diagnostic_cells[ c( 'row', 'col' ) ] ) ]
+        cell_value_df <- data.frame( em = em,
+                                     sector = current_sector,
+                                     year = year,
+                                     month = current_month,
+                                     unit = 'Mt',
+                                     value = cell_values,
+                                     stringsAsFactors = F )
+        # cell_value_list <- lapply( 1 : nrow( diagnostic_cells ) , function( i ) {
+        #   data.frame( em = em,
+        #               sector = current_sector,
+        #               year = year,
+        #               month = current_month,
+        #               unit = 'Mt',
+        #               value = conv_mat[ diagnostic_cells$row[ i ], diagnostic_cells$col[ i ] ],
+        #               stringsAsFactors = F )
+        # } )
+        # cell_value_df <- do.call( 'rbind', cell_value_list )
         cell_value_df <- cbind( diagnostic_cells, cell_value_df )
 
         return( list( conv_mat_sum, cell_value_df ) )

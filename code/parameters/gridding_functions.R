@@ -549,7 +549,7 @@ add_seasonality <- function( annual_flux, em, sector, year, days_in_month, grid_
   }
   if ( sector %in% c( 'AGR', 'AWB', 'FRTB', 'GRSB', 'PEAT', 'IND', 'RCO', 'TRA', 'SHP', 'ENE', 'SLV', 'WST' ) ) {
     month_array <- array( unlist( lapply( days_in_month, rep, ( 180 / grid_resolution * 360 / grid_resolution ) ) ) , dim = common_dim )
-    sea_adj <- 365 / apply( sea_fracs * month_array * 12, c( 1, 2 ), sum )
+    sea_adj <- 365 / rowSums( sea_fracs * month_array * 12, dims = 2 )
     for ( i in month_list ) {
       storage_array[ , , i ] <- annual_flux * sea_fracs[ , , i ] * 12 * sea_adj
     }
@@ -603,7 +603,7 @@ sum_monthly_em <- function( fin_grid, em, sector, year, days_in_month, global_gr
     monthly_em <- do.call( 'rbind', monthly_em_list )
   }
   if ( sector %in% c( 'AGR', 'AWB', 'FRTB', 'GRSB', 'PEAT', 'IND', 'RCO', 'TRA', 'SHP', 'ENE', 'SLV', 'WST' ) ) {
-    sea_adj <- 365 / apply( sea_fracs * month_array * 12, c( 1, 2 ), sum )
+    sea_adj <- 365 / rowSums( sea_fracs * month_array * 12, dims = 2 )
     monthly_em_list <- lapply( 1 : 12, function( i ) {
       month_flux <- fin_grid[ , , i ]
       month_mass <- month_flux * global_grid_area * days_in_month[ i ] * 24 * 60 * 60

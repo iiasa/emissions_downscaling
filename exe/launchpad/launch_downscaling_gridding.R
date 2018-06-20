@@ -38,12 +38,18 @@ initialize( script_name, log_msg, headers )
 # 1. Set up desired IAM to be processing
 
 # debug flag
-debug <- F
+debug <- T
 
 if (debug) {
-  args_from_makefile <- c( 'AIM',
+  # args_from_makefile <- c( 'AIM',
+  #                          'Harmonized-DB',
+  #                          'C:/Users/brau074/Documents/emissions_downscaling/input/IAM_emissions/AIM_SSP3-LowNTCF/output_harmonized.xlsx',
+  #                          'C:/Users/brau074/Documents/emissions_downscaling/final-output/module-B',
+  #                          'C:/Users/brau074/Documents/emissions_downscaling/final-output/module-C',
+  #                          'NOTgridding' )
+  args_from_makefile <- c( 'MESSAGE-GLOBIOM',
                            'Harmonized-DB',
-                           'C:/Users/brau074/Documents/emissions_downscaling/input/IAM_emissions/AIM_SSP3-LowNTCF/output_harmonized.xlsx',
+                           'C:/Users/brau074/Documents/emissions_downscaling/input/IAM_emissions/MESSAGE-GLOBIOM_SSP2-45/output_harmonized.xlsx',
                            'C:/Users/brau074/Documents/emissions_downscaling/final-output/module-B',
                            'C:/Users/brau074/Documents/emissions_downscaling/final-output/module-C',
                            'NOTgridding' )
