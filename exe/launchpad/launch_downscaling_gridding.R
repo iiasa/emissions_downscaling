@@ -65,9 +65,7 @@ gridding_flag <- args_from_makefile[ 6 ]
 run_species <-   args_from_makefile[ 7 ]
 
 # the flag for intermediate file cleaning
-MED_OUT_CLEAN <- F
-
-RUNSUFFIX <- format( Sys.time(), '%m-%d-%H%M%S' )
+MED_OUT_CLEAN <- get_global_constant( 'clean_med_out' )
 
 # update domainmapping for current run
 domainmapping <- read.csv( DOMAINPATHMAP, stringsAsFactors = F )
@@ -83,7 +81,14 @@ if ( gridding_flag == 'gridding' ) {
 }
 
 # create unique directory for intermediate files
-med_out <- paste0( '../intermediate-output', '/', RUNSUFFIX )
+st_time <- format( Sys.time(), '%m-%d-%H%M%S' )
+med_out <- paste0( '../intermediate-output', '/', st_time )
+while ( dir.exists( med_out ) ) {
+  Sys.sleep(1)
+  st_time <- format( Sys.time(), '%m-%d-%H%M%S' )
+  med_out <- paste0( '../intermediate-output', '/', st_time )
+}
+RUNSUFFIX <- st_time
 dir.create( med_out )
 
 domainmapping[ domainmapping$Domain == 'MED_OUT',  "PathToDomain" ] <- med_out
