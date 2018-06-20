@@ -75,6 +75,9 @@ em_gridding_env$institution_id         <- 'IAMC'
 #   'none' - Do not do VOC speciation
 em_gridding_env$voc_speciation <- 'none'
 
+# Diagnostics
+em_gridding_env$diagnostic_plots <- F
+
 # The below are not used anywhere, but may be good references
 em_gridding_env$supported_species       <- c( 'BC', 'CO', 'NH3', 'NOx', 'OC', 'Sulfur', 'VOC' )
 em_gridding_env$supported_species_alias <- c( 'BC', 'CO', 'NH3', 'NOx', 'OC', 'SO2', 'NMVOC' )

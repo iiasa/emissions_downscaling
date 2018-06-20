@@ -52,26 +52,33 @@ generate_bulk_grids_nc <- function( allyear_grids_list,
   diagnostic_cells <- do.call( 'rbind', diagnostics$diag_cells )
   out_name <- gsub( '.nc', '_cells', diagnostics$out_name, fixed = T )
   writeData( diagnostic_cells, 'DIAG_OUT', out_name, meta = F )
-  diagnostic_cells <- aggregate( diagnostic_cells$value, by = list( diagnostic_cells$loc, diagnostic_cells$em,
-                                                                    diagnostic_cells$year, diagnostic_cells$month,
-                                                                    diagnostic_cells$unit ),
-                                 FUN = sum )
-  names( diagnostic_cells ) <- c( 'loc', 'em', 'year', 'month', 'unit', 'value' )
-  diagnostic_cells <- arrange( diagnostic_cells, loc, em, year, month )
-  for ( em in unique( diagnostic_cells$em ) ) {
-    for ( loc in unique( diagnostic_cells$loc ) ) {
-      plot_df <- diagnostic_cells[ diagnostic_cells$loc == loc & diagnostic_cells$em == em, ]
-      plot_df$date <-paste0(plot_df$year, "-", sprintf( '%02d', plot_df$month ))
-      plot_df$date <-  lubridate::ymd(plot_df$date, truncated=2)
-      plot <- ggplot( plot_df ) +
-        geom_line( aes( x = date, y = value ) ) +
-        ylab( paste0( em, ' Mt' ) ) +
-        xlab( '' ) +
-        scale_x_date(date_breaks = "10 years", labels=scales::date_format("%Y-%m"), date_minor_breaks = "6 months") +
-        ggtitle( paste0( gsub( '_cells', '', out_name ), '\n', loc ) )
-      ggsave( filePath( "DIAG_OUT", paste0( out_name, '_', em, '_', loc ), extension = ".jpeg" ), units = 'in', width = 13, height = 5 )
+
+  GENERATE_PLOTS <- get_global_constant( 'diagnostic_plots' )
+  if ( GENERATE_PLOTS ) {
+    printLog( 'Generating diagnostic plots' )
+
+    # Aggregate to regional (selected cell) totals by month
+    diagnostic_cells <- diagnostic_cells %>%
+      dplyr::group_by( loc, em, year, month, unit ) %>%
+      dplyr::summarise( value = sum( value ) ) %>%
+      dplyr::arrange( loc, em, year, month )
+
+    for ( em in unique( diagnostic_cells$em ) ) {
+      for ( loc in unique( diagnostic_cells$loc ) ) {
+        plot_df <- diagnostic_cells[ diagnostic_cells$loc == loc & diagnostic_cells$em == em, ]
+        plot_df$date <- paste0(plot_df$year, "-", sprintf( '%02d', plot_df$month ))
+        plot_df$date <- lubridate::ymd(plot_df$date, truncated=2)
+        plot <- ggplot( plot_df ) +
+          geom_line( aes( x = date, y = value ) ) +
+          ylab( paste0( em, ' Mt' ) ) +
+          xlab( '' ) +
+          scale_x_date(date_breaks = "10 years", labels=scales::date_format("%Y-%m"), date_minor_breaks = "6 months") +
+          ggtitle( paste0( gsub( '_cells', '', out_name ), '\n', loc ) )
+        ggsave( filePath( "DIAG_OUT", paste0( out_name, '_', em, '_', loc ), extension = ".jpeg" ), units = 'in', width = 13, height = 5 )
+      }
     }
   }
+
   invisible( gc( ) )
 }
 
@@ -106,35 +113,44 @@ generate_openburning_grids_nc <- function( allyear_grids_list,
   # 1. Build and write out netCDF file
   #    Returns: diag_cells - diagnostic cells list
   #             out_name - output file name
-  diagnostics <- build_ncdf( allyear_grids_list, output_dir, grid_resolution,
-                             year_list, em, openburning_sectors, sector_type,
-                             sector_ids, aggregate_sectors = TRUE )
-  diagnostics <- build_ncdf( allyear_grids_list, output_dir, grid_resolution,
-                             year_list, em, openburning_sectors, sector_type,
-                             sector_ids, sector_shares = TRUE)
+  diag_agg <- build_ncdf( allyear_grids_list, output_dir, grid_resolution,
+                          year_list, em, openburning_sectors, sector_type,
+                          sector_ids, aggregate_sectors = TRUE )
+  diag_share <- build_ncdf( allyear_grids_list, output_dir, grid_resolution,
+                            year_list, em, openburning_sectors, sector_type,
+                            sector_ids, sector_shares = TRUE)
 
   # 2. Create diagnostic cells plots
-  diagnostic_cells <- do.call( 'rbind', diagnostics$diag_cells )
-  out_name <- gsub( '.nc', '_cells', diagnostics$out_name, fixed = T )
-  writeData( diagnostic_cells, 'DIAG_OUT', out_name, meta = F )
-  diagnostic_cells <- aggregate( diagnostic_cells$value, by = list( diagnostic_cells$loc, diagnostic_cells$em,
-                                                                    diagnostic_cells$year, diagnostic_cells$month,
-                                                                    diagnostic_cells$unit ),
-                                 FUN = sum )
-  names( diagnostic_cells ) <- c( 'loc', 'em', 'year', 'month', 'unit', 'value' )
-  diagnostic_cells <- arrange( diagnostic_cells, loc, em, year, month )
-  for ( em in unique( diagnostic_cells$em ) ) {
-    for ( loc in unique( diagnostic_cells$loc ) ) {
-      plot_df <- diagnostic_cells[ diagnostic_cells$loc == loc & diagnostic_cells$em == em, ]
-      plot_df$time_line <- 1 : nrow( plot_df )
-      plot_df$time_label <- paste0( plot_df$year, sprintf( '%02d', plot_df$month ) )
-      plot <- ggplot( plot_df ) +
-        geom_line( aes( x = time_line, y = value ) ) +
-        ylab( paste0( em, ' Mt' ) ) +
-        xlab( '' ) +
-        scale_x_continuous( breaks = seq( 1, nrow( plot_df ), 10 ), labels = plot_df$time_label[ seq( 1, nrow( plot_df ), 10 ) ] ) +
-        ggtitle( paste0( gsub( '_cells', '', out_name ), '\n', loc ) )
-      ggsave( filePath( "DIAG_OUT", paste0( out_name, '_', em, '_', loc ), extension = ".jpeg" ), units = 'in', width = 13, height = 5 )
+  for ( diagnostics in list( diag_agg, diag_share ) ) {
+
+    diagnostic_cells <- do.call( 'rbind', diagnostics$diag_cells )
+    out_name <- gsub( '.nc', '_cells', diagnostics$out_name, fixed = T )
+    writeData( diagnostic_cells, 'DIAG_OUT', out_name, meta = F )
+
+    GENERATE_PLOTS <- get_global_constant( 'diagnostic_plots' )
+    if ( GENERATE_PLOTS ) {
+      printLog( 'Generating diagnostic plots' )
+
+      # Aggregate to regional (selected cell) totals by month
+      diagnostic_cells <- diagnostic_cells %>%
+        dplyr::group_by( loc, em, year, month, unit ) %>%
+        dplyr::summarise( value = sum( value ) ) %>%
+        dplyr::arrange( loc, em, year, month )
+
+      for ( em in unique( diagnostic_cells$em ) ) {
+        for ( loc in unique( diagnostic_cells$loc ) ) {
+          plot_df <- diagnostic_cells[ diagnostic_cells$loc == loc & diagnostic_cells$em == em, ]
+          plot_df$time_line <- 1 : nrow( plot_df )
+          plot_df$time_label <- paste0( plot_df$year, sprintf( '%02d', plot_df$month ) )
+          plot <- ggplot( plot_df ) +
+            geom_line( aes( x = time_line, y = value ) ) +
+            ylab( paste0( em, ' Mt' ) ) +
+            xlab( '' ) +
+            scale_x_continuous( breaks = seq( 1, nrow( plot_df ), 10 ), labels = plot_df$time_label[ seq( 1, nrow( plot_df ), 10 ) ] ) +
+            ggtitle( paste0( gsub( '_cells', '', out_name ), '\n', loc ) )
+          ggsave( filePath( "DIAG_OUT", paste0( out_name, '_', em, '_', loc ), extension = ".jpeg" ), units = 'in', width = 13, height = 5 )
+        }
+      }
     }
   }
 
@@ -176,7 +192,7 @@ generate_air_grids_nc <- function( allyear_grids_list,
     # flip the dimension
     for ( i in 1 : 25 ) {  # go through each height layer
       for ( j in 1 : 12 ) {  # go through each month
-        current_year_array[ , , i, j ] <- t( flip_a_matrix( current_year_grids[ , , i, j ] ) )
+        current_year_array[ , , i, j ] <- rotate_a_matrix( current_year_grids[ , , i, j ] )
       }
     }
 
@@ -383,6 +399,7 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
 
   # Prepare data from writing
   # (1) emission array
+  grid_cell_column <- grid_area( grid_resolution, all_lon = T )
   year_data_list <- lapply( year_list, function( year ) {
 
     current_year_grids_list <- allyear_grids_list[[ paste0( 'X', year ) ]]
@@ -396,19 +413,18 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
       current_sector <- ncdf_sectors[ i ]
       temp_array <- current_year_grids_list[[ current_sector ]]
       temp_array_checksum <- temp_array
+
       # flip each time slice of temp_array
-      temp_array <- array( unlist( lapply( 1 : 12, function( i ) { t( flip_a_matrix( temp_array[ , , i ] ) ) } ) ), dim = c( 360 / grid_resolution, 180 / grid_resolution, 12 ) )
+      temp_array <- array( unlist( lapply( 1:12, function( i ) { rotate_a_matrix( temp_array[ , , i ] ) } ) ), dim = c( 360 / grid_resolution, 180 / grid_resolution, 12 ) )
 
       current_year_sector_array[ , , i, ] <- temp_array
 
       # checksum and diagnostic cells computation
-      checksum_diag_list <- lapply( 1 : 12, function( i ) {
+      checksum_diag_list <- lapply( 1:12, function( i ) {
         current_month <- i
         # convert the matrix from from kg m-2 s-1 to Mt
-        conv_mat <- temp_array_checksum[ , , i ] *
-          grid_area( grid_resolution, all_lon = T ) *
-          ( days_in_month[ i ] * 24 * 60 * 60 ) /
-          1000000000
+        conv_mat <- temp_array_checksum[ , , i ] * grid_cell_column *
+          ( days_in_month[ i ] * 24 * 60 * 60 ) / 1000000000
 
         # computation for checksum
         conv_mat_sum <- sum( conv_mat )
@@ -422,16 +438,6 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
                                      unit = 'Mt',
                                      value = cell_values,
                                      stringsAsFactors = F )
-        # cell_value_list <- lapply( 1 : nrow( diagnostic_cells ) , function( i ) {
-        #   data.frame( em = em,
-        #               sector = current_sector,
-        #               year = year,
-        #               month = current_month,
-        #               unit = 'Mt',
-        #               value = conv_mat[ diagnostic_cells$row[ i ], diagnostic_cells$col[ i ] ],
-        #               stringsAsFactors = F )
-        # } )
-        # cell_value_df <- do.call( 'rbind', cell_value_list )
         cell_value_df <- cbind( diagnostic_cells, cell_value_df )
 
         return( list( conv_mat_sum, cell_value_df ) )

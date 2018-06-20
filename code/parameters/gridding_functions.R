@@ -671,16 +671,16 @@ grid_area <- function( grid_resolution, all_lon = F ) {
 
 
 # ------------------------------------------------------------------------------
-# flip_a_matrix
-# Brief: generate a fliped matrix by a given matrix
+# rotate_a_matrix
+# Brief: rotate the input matrix 90 degrees clockwise (must be 2D)
 # Dependencies: null
-# Author: Leyang Feng
-# parameters: x - the matrix to be fliped
-# return: a fliped matrix
+# Author: Caleb Braun
+# parameters: x - the matrix to be rotated
+# return: a rotated matrix
 # input files: null
 # output: null
-flip_a_matrix <- function( x ) {
-  apply( x, 2, rev )
+rotate_a_matrix <- function( x ) {
+  t( x[ nrow(x):1, ] )
 }
 
 # ------------------------------------------------------------------------------
