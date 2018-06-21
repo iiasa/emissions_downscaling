@@ -44,7 +44,8 @@ read_in_reference_ems <- function() {
 # Given a scenario name (e.g. GCAM4-ssp434), output a facetted plot containing
 # each emission's global totals, including historical data.
 plot_scenario_ems <- function(scen, historical, all_files) {
-  print(paste("Plotting global emissions for", sub('(.*)_gn_.*', '\\1', scen)))
+  scen_short_name <- sub('input4MIPs_emissions_(.*ssp[^_]*).*', '\\1', scen)
+  printLog(paste("Plotting global emissions for", scen_short_name))
 
   all_sector <- lapply(scen, function(sect) {
     sector <- paste0(modc_out, '/', grep(sect, all_files, value = T))
@@ -58,7 +59,9 @@ plot_scenario_ems <- function(scen, historical, all_files) {
     dplyr::group_by(em, sector, year) %>%
     dplyr::summarise(value = sum(value))
 
-  agg <- dplyr::group_by(agg_sector, em, year) %>%
+  agg <- agg_sector %>%
+    dplyr::filter(!grepl('VOC\\d\\d', em)) %>%  # We have no historical VOCs
+    dplyr::group_by(em, year) %>%
     dplyr::summarise(value = sum(value))
 
   all_ems <- historical %>%
@@ -77,9 +80,10 @@ plot_scenario_ems <- function(scen, historical, all_files) {
     geom_blank(data = dummy) +
     labs(y = "Mt") +
     facet_wrap(. ~ em, scales = "free_y") +
-    ggtitle(paste(scen, "global emissions"))
+    ggtitle(paste(scen_short_name, "Global Emissions"))
 
-  ggsave(paste0(scen, '_global_ems.png'), width = 6, height = 4)
+  ggsave(filePath("DIAG_OUT", paste0(scen_short_name, '_global_ems'), '.png'),
+         width = 8, height = 6)
 }
 
 

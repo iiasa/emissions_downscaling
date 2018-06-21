@@ -41,6 +41,7 @@ initialize( script_name, log_msg, headers )
 if ( !exists( 'args_from_makefile' ) ) args_from_makefile <- commandArgs( TRUE )
 iam <- args_from_makefile[ 1 ]
 harm_status <- args_from_makefile[ 2 ]
+run_species <- args_from_makefile[ 7 ]
 if ( is.na( iam ) ) iam <- "GCAM4"
 
 
@@ -96,13 +97,19 @@ if ( VOC_SPEC != 'none' ) {
     dplyr::summarise( ratio = sum( ratio ) )
   stopifnot( all( round( ratio_sums$ratio, 8 ) == 1 ) )
 
+  # Check if user requested a specific sub-VOC
+  if ( !is.na( run_species ) && run_species %in% names( VOC_ratios ) )
+    em_filter <- run_species
+  else
+    em_filter <- names( VOC_ratios )
+
   # disaggregate VOCs into sub-VOCs, then multiply each sub-VOC by its
   # corresponding ratio
   iam_data_sub_vocs <- iam_data %>%
     dplyr::left_join( VOC_ratios_CEDS9, by = c( 'iso', 'em', 'sector' = 'CEDS9' ) ) %>%
     dplyr::mutate( ratio = if_else( is.na( ratio ), 1, ratio ),
                    em    = if_else( is.na( sub_VOC ), em, sub_VOC ) ) %>%
-    dplyr::filter( em %in% names( VOC_ratios ) ) %>%
+    dplyr::filter( em %in% em_filter ) %>%
     dplyr::mutate_at( vars( num_range( 'X', ds_start_year:ds_end_year ) ), funs( . * ratio ) ) %>%
     dplyr::select( -sub_VOC, -ratio )
 

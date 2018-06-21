@@ -83,7 +83,7 @@ em_gridding_env$institution_id         <- 'IAMC'
 em_gridding_env$voc_speciation <- 'none'
 
 # Diagnostics
-em_gridding_env$diagnostic_plots <- F
+em_gridding_env$diagnostic_plots <- T
 em_gridding_env$total_ems_plots  <- T    # generate plot of all ems in scenario
 em_gridding_env$error_tolerance  <- 0.1  # minimum percent difference allowed
 

@@ -46,12 +46,13 @@ RUNSUFFIX <- paste0( format( Sys.time(), '%m-%d-%H%M%S' ), '_',
                      substr( digest::sha1( runif(1) ), 1, 6 ) )
 
 if ( DEBUG ) {
+  message( 'Debug mode is on' )
   args_from_makefile <- c( 'MESSAGE-GLOBIOM',
                            'Harmonized-DB',
                            'C:/Users/brau074/Documents/emissions_downscaling/input/IAM_emissions/MESSAGE-GLOBIOM_SSP2-45/output_harmonized.xlsx',
                            'C:/Users/brau074/Documents/emissions_downscaling/final-output/module-B',
                            'C:/Users/brau074/Documents/emissions_downscaling/final-output/module-C',
-                           'NOTgridding' )
+                           'gridding' )
 
   calculationDir <- "/Users/Caleb/Documents/JGCRI/emissions_downscaling/code/error/parameters"
   calculationYears <- 2016:2020
@@ -72,11 +73,11 @@ run_species <-   args_from_makefile[ 7 ]
 domainmapping <- read.csv( DOMAINPATHMAP, stringsAsFactors = F )
 
 # create output directories (if they don't already exist)
-dir.create( modb_out )
+if ( !dir.exists( modb_out ) ) dir.create( modb_out )
 
 # modc_out only needs to be created if only the gridding flag is given
 if ( gridding_flag == 'gridding' ) {
-  dir.create( modc_out )
+  if ( !dir.exists( modc_out ) ) dir.create( modc_out )
 } else {
   modc_out <- NA
 }
@@ -120,6 +121,6 @@ if ( MED_OUT_CLEAN ) {
 # 5. Generate diagnostic charts -------------------------------------------
 if ( SCENARIO_DIAG ) {
   diag_in <- domainmapping[ domainmapping$Domain == 'DIAG', "PathToDomain" ]
-  source( paste0( diag_in, 'global_total_ems.R' ) )
+  source( paste0( diag_in, '/global_total_ems.R' ) )
 }
 

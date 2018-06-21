@@ -91,11 +91,16 @@
 
   # Filter for if only one emission species is desired.
   VOC_SPEC <- get_global_constant( 'voc_speciation' )
+  sub_spec <- !is.na( run_species )
+
   if ( VOC_SPEC == 'only' ) {
+    if ( sub_spec && !grepl( "VOC", run_species ) )
+      stop( paste( "Cannot speciate VOCs for emission", run_species ) )
     iam_data <- iam_data[ iam_data$em == "VOC", ]
-  }
-  if ( !is.na( run_species ) && run_species %in% iam_data$em ) {
+  } else if ( sub_spec && run_species %in% iam_data$em ) {
     iam_data <- iam_data[ iam_data$em == run_species, ]
+  } else if ( sub_spec ) {
+    stop( paste( "Cannot downscale for missing emission", run_species ) )
   }
 
 
