@@ -343,7 +343,7 @@ generate_air_grids_nc <- function( allyear_grids_list,
   ncatt_put( nc_new, "time", "standard_name", "time" )
   # attributes for variables
   ncatt_put( nc_new, flat_var_name, 'cell_methods', 'time: mean' )
-  ncatt_put( nc_new, flat_var_name, 'long_name', flat_var_longname )
+  ncatt_put( nc_new, flat_var_name, 'long_name', longname )
   ncatt_put( nc_new, flat_var_name, 'missing_value', 1e+20, prec = 'float' )
   # nc global attributes
   add_global_atts( nc_new, MD_comment, institution, institution_id, product,
