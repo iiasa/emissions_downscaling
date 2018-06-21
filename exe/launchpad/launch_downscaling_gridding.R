@@ -37,7 +37,7 @@ initialize( script_name, log_msg, headers )
 
 # 1. Set up desired IAM to be processing ----------------------------------
 
-SCENARIO_DIAG <- get_global_constant( 'total_ems_plot' )
+SCENARIO_DIAG <- get_global_constant( 'total_ems_plots' )
 MED_OUT_CLEAN <- get_global_constant( 'clean_med_out' )
 DEBUG <- get_global_constant( 'debug' )
 
