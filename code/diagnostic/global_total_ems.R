@@ -9,10 +9,24 @@
 # Note that CO2 openburning emissions are removed from the historical dataset
 # before comparison, as emissions_downscaling does not currently generate CO2
 # emissions for burning sectors.
+#
+# Must be run with emissions_downscaling/input as working directory
 
 library(dplyr)
 library(tidyr)
 library(ggplot2)
+
+
+# Run script when sourced even if on own
+if (!exists('PARAM_DIR')) {
+  PARAM_DIR <- "../code/parameters/"
+  source( paste0( PARAM_DIR, "header.R" ) )
+  script_name <- "global_total_ems.R"
+  initialize( script_name, NULL, NULL )
+
+  modc_out <- "../final-output/module-C"
+  domainmapping <- read.csv( DOMAINPATHMAP, stringsAsFactors = F )
+}
 
 
 generate_global_total_ems <- function() {
@@ -22,7 +36,6 @@ generate_global_total_ems <- function() {
   scenarios <- all_files %>%
     data.frame(fn = ., stringsAsFactors = F) %>%
     tidyr::separate(fn, c('em', 'scenario'), '_', extra = 'merge') %>%
-    dplyr::filter(!grepl('openburning-share', em)) %>%
     dplyr::pull(scenario) %>%
     unique()
 
@@ -47,19 +60,14 @@ plot_scenario_ems <- function(scen, historical, all_files) {
   scen_short_name <- sub('input4MIPs_emissions_(.*ssp[^_]*).*', '\\1', scen)
   printLog(paste("Plotting global emissions for", scen_short_name))
 
-  all_sector <- lapply(scen, function(sect) {
-    sector <- paste0(modc_out, '/', grep(sect, all_files, value = T))
-    sector_comb <- do.call(rbind, lapply(sector, read.csv, stringsAsFactors = F))
-    sector_comb %>%
-      dplyr::group_by(em, sector, year) %>%
-      dplyr::summarise(value = sum(value))
-  })
-
-  agg_sector <- do.call(rbind, all_sector) %>%
+  sectors <- paste0(modc_out, '/', grep(sect, all_files, value = T))
+  sectors <- grep('openburning-share', sector, value = T, invert = T)
+  all_sectors <- do.call(rbind, lapply(sector, read.csv, stringsAsFactors = F))
+  agg_sectors <- all_sectors %>%
     dplyr::group_by(em, sector, year) %>%
     dplyr::summarise(value = sum(value))
 
-  agg <- agg_sector %>%
+  agg <- agg_sectors %>%
     dplyr::filter(!grepl('VOC\\d\\d', em)) %>%  # We have no historical VOCs
     dplyr::group_by(em, year) %>%
     dplyr::summarise(value = sum(value))
@@ -87,5 +95,4 @@ plot_scenario_ems <- function(scen, historical, all_files) {
 }
 
 
-# Run script when sourced
 generate_global_total_ems()
