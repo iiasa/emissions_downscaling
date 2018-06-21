@@ -9,4 +9,4 @@ User input can specify to run just downscaling, or downscaling & gridding. See t
 
 ### Example output:
 
-![BC emissions example](https://raw.githubusercontent.com/iiasa/emissions_downscaling/master/documentation/img/BC-anthro_emissions.png)
+![BC emissions example](/documentation/img/BC-anthro_emissions.png)
