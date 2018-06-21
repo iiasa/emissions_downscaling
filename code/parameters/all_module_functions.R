@@ -126,24 +126,3 @@ iamInfoExtract <- function( master_config, iam ) {
   return( tango_iam_list )
   }
 
-# ------------------------------------------------------------------------------
-# getFileExt
-# Brief: get file extensions for a list of file names
-# Dependencies:
-# Author: Leyang Feng
-# parameters: file_list
-# return:
-# input files:
-# output:
-getFileExt <- function( file_list ) {
-  split_res <- strsplit( file_list, split = '.', fixed = T )
-  ext_list <- sort( unique( unlist( lapply( split_res, function( each_res ) {
-    split_len <- length( each_res )
-    tango_ext <- each_res[ split_len ]
-    } ) ) ) )
-
-  if ( length( ext_list ) > 1 ) { stop( 'More than one file type provided' ) }
-  if ( !( ext_list %in% c( 'xlsx', 'csv', 'xls') )  ) { stop( 'Unknown file type provided' ) }
-
-  return( ext_list )
-  }

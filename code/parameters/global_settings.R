@@ -62,6 +62,13 @@ get_global_constant <- function (const_name) {
   return( get( const_name, envir = em_gridding_env ) )
 }
 
+
+# Configuration Options ---------------------------------------------------
+
+# Input files
+em_gridding_env$reference_emissions <- 'CEDS_by_country_by_CEDS_sector_with_luc_all_em'
+
+# Output netCDF metadata options
 em_gridding_env$dataset_version_number <- '1.1'
 em_gridding_env$target_mip             <- 'ScenarioMIP'
 em_gridding_env$license                <- 'ScenarioMIP gridded emissions data produced by the IAMC are licensed under a Creative Commons Attribution-ShareAlike 4.0 International License (https://creativecommons.org/licenses). Consult https://pcmdi.llnl.gov/CMIP6/TermsOfUse for terms of use governing input4MIPs output, including citation requirements and proper acknowledgment. Further information about this data, including some limitations, can be found via the further_info_url (recorded as a global attribute in this file). The data producers and data providers make no warranty, either express or implied, including, but not limited to, warranties of merchantability and fitness for a particular purpose. All liabilities arising from the supply of the information (including any liability arising in negligence) are excluded to the fullest extent permitted by law.'
@@ -77,10 +84,12 @@ em_gridding_env$voc_speciation <- 'none'
 
 # Diagnostics
 em_gridding_env$diagnostic_plots <- F
-em_gridding_env$error_tolerance <- 0.1  # minimum percent difference allowed
+em_gridding_env$total_ems_plots  <- T    # generate plot of all ems in scenario
+em_gridding_env$error_tolerance  <- 0.1  # minimum percent difference allowed
 
 # Other settings
-em_gridding_env$clean_med_out <- F
+em_gridding_env$debug         <- F       # run in debug mode
+em_gridding_env$clean_med_out <- F       # erase intermediate output when done
 
 # The below are not used anywhere, but may be good references
 em_gridding_env$supported_species       <- c( 'BC', 'CO', 'NH3', 'NOx', 'OC', 'Sulfur', 'VOC' )

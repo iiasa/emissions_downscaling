@@ -69,10 +69,10 @@ method_mapping <- readData( domain = 'MAPPINGS', file_name = ds_method_mapping )
 
 # -----------------------------------------------------------------------------
 # 2. Read IAM_emissions and reference emission data
-iam_em <- readData( domain = 'MED_OUT', file_name = paste0( 'B.', iam, '_emissions_reformatted', '_', RUNSUFFIX ) )
+REF_EM_CSV <- get_global_constant( 'reference_emissions' )
 
-ref_em <- readData( domain = 'REF_EM', file_name = 'CEDS_by_country_by_CEDS_sector_with_luc_all_em',
-                    domain_extension = ref_domain_extension )
+iam_em <- readData( 'MED_OUT', file_name = paste0( 'B.', iam, '_emissions_reformatted', '_', RUNSUFFIX ) )
+ref_em <- readData( 'REF_EM', file_name = REF_EM_CSV, domain_extension = ref_domain_extension )
 
 # -----------------------------------------------------------------------------
 # 3. Process reference emissions

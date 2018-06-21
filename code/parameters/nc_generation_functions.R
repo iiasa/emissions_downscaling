@@ -1,11 +1,8 @@
 #------------------------------------------------------------------------------
 # Program Name: nc_generation_functions.R
-# Author's Name: Leyang Feng
-# Date Last Modified: June 30 2016
+# Authors: Leyang Feng, Caleb Braun
+# Date Last Modified: June 21 2018
 # Program Purpose: NetCDF generation related functions for gridding routine.
-# Note:
-# TODO:
-#
 # ------------------------------------------------------------------------------
 
 # Special Packages
@@ -291,7 +288,6 @@ generate_air_grids_nc <- function( allyear_grids_list,
   # generate flat_var variable name
   MD_variable_id_value <- gsub( "-", "_", FN_variable_id_value ) # Change to underscore for metadata
   flat_var_name <- MD_variable_id_value
-  flat_var_longname <- flat_var_name
 
   # define unit and missing value
   data_unit <- 'kg m-2 s-1'

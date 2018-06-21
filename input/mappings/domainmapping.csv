@@ -3,6 +3,7 @@ MAPPINGS,../input/mappings
 IAM_EM,../input/IAM_emissions
 REF_EM,../input/reference_emissions
 PARAM,../code/parameters
+DIAG,../code/diagnostic
 LOGS,../code/logs
 MED_OUT,../intermediate-output
 FIN_OUT,../final-output
