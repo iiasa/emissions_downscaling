@@ -368,6 +368,7 @@ generate_air_grids_nc <- function( allyear_grids_list,
     info_line <- reporting_info[ em ]
   }
   ncatt_put( nc_new, 0, 'reporting_unit', info_line )
+  ncatt_put( nc_new, 0, 'tracking_id', paste0( "hdl:21.14100/", uuid() ) )
 
   # ---
   # 9. close nc_new
