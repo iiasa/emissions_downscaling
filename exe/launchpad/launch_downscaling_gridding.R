@@ -1,7 +1,7 @@
 # ------------------------------------------------------------------------------
-# Program Name: luanch_downscaling_gridding.R
-# Author(s): Leyang Feng
-# Date Last Updated: Nov 28, 2017
+# Program Name: launch_downscaling_gridding.R
+# Author(s): Leyang Feng, Caleb Braun
+# Date Last Updated: June 22, 2018
 # Program Purpose: The script runs downscaling and gridding
 # Input Files:
 # Output Files:
@@ -12,17 +12,8 @@
 # ------------------------------------------------------------------------------
 # 0. Read in global settings and headers
 
-# Set working directory to the CEDS input directory and define PARAM_DIR as the
-# location of the CEDS parameters directory, relative to the new working directory.
-dirs <- paste0( unlist( strsplit( getwd(), c( '/', '\\' ), fixed = T ) ), '/' )
-for ( i in 1:length( dirs ) ) {
-  setwd( paste( dirs[ 1:( length( dirs ) + 1 - i ) ], collapse = '' ) )
-  wd <- grep( 'emissions_downscaling/input', list.dirs(), value = T )
-  if ( length( wd ) > 0 ) {
-    setwd( wd[ 1 ] )
-    break
-  }
-}
+# Must be run from the emissions_downscaling/input directory
+if ( !endsWith( getwd(), '/input' ) ) setwd( 'input' )
 PARAM_DIR <- "../code/parameters/"
 
 # Call standard script header function to read in universal header files -
