@@ -203,15 +203,15 @@ generate_air_grids_nc <- function( allyear_grids_list,
       sum( current_year_grids_no_height[ , , i ] *
              global_grid_area *
              ( days_in_month[ i ] * 24 * 60 * 60 ) /
-             1000000000 ) # convert from kg m-2 s-1 to Mt for sum
+             1000000 ) # convert from kg m-2 s-1 to kt for sum
     } ) )
 
-    temp_checksum_df <- data.frame( em = em,
+    temp_checksum_df <- data.frame( year = year,
+                                    em = em,
                                     sector = 'AIR',
-                                    year = year,
                                     month = 1:12,
-                                    unit = 'Mt',
-                                    value = temp_array_checksum,
+                                    global_total = temp_array_checksum,
+                                    units = 'kt',
                                     stringsAsFactors = F )
 
     return( list( current_year_array, temp_checksum_df ) )
@@ -451,12 +451,12 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
       temp_cell_value_storage <- rbind( temp_cell_value_storage, temp_cell_value_df )
     }
 
-    temp_checksum_df <- data.frame( em = em,
-                                    sector = unlist( lapply( ncdf_sectors, rep, 12 ) ),
-                                    year = year,
-                                    month = rep( 1:12, length( ncdf_sectors ) ),
-                                    unit = 'Mt',
-                                    value = temp_checksum_storage,
+    temp_checksum_df <- data.frame( year = year,
+                                    em = em,
+                                    sector = rep( ncdf_sectors, each = 12 ),
+                                    month = 1:12,
+                                    global_total = temp_checksum_storage * 1000,
+                                    units = 'kt',
                                     stringsAsFactors = F )
 
     return( list( current_year_sector_array, temp_checksum_df, temp_cell_value_storage ) )
