@@ -54,26 +54,30 @@ generate_bulk_grids_nc <- function( allyear_grids_list,
   if ( GENERATE_PLOTS ) {
     printLog( 'Generating diagnostic plots' )
 
-    # Aggregate to regional (selected cell) totals by month
-    diagnostic_cells <- diagnostic_cells %>%
-      dplyr::group_by( loc, em, year, month, unit ) %>%
+    # Aggregate to regional (selected cell) totals by month, then plot the
+    # timeseries for each unique emission and region
+    diagnostic_cells %>%
+      dplyr::mutate( full_date = as.Date( paste( year, sprintf( '%02d', month ), '01', sep = '-' ) ) ) %>%
+      dplyr::arrange( loc, em, full_date ) %>%
+      dplyr::group_by( loc, em, unit, full_date ) %>%
       dplyr::summarise( value = sum( value ) ) %>%
-      dplyr::arrange( loc, em, year, month )
-
-    for ( em in unique( diagnostic_cells$em ) ) {
-      for ( loc in unique( diagnostic_cells$loc ) ) {
-        plot_df <- diagnostic_cells[ diagnostic_cells$loc == loc & diagnostic_cells$em == em, ]
-        plot_df$date <- paste0(plot_df$year, "-", sprintf( '%02d', plot_df$month ))
-        plot_df$date <- lubridate::ymd(plot_df$date, truncated=2)
-        plot <- ggplot( plot_df ) +
-          geom_line( aes( x = date, y = value ) ) +
+      dplyr::group_by( loc, em, unit ) %>%
+      dplyr::do({
+        em <- unique( .$em )
+        loc <- unique( .$loc )
+        plt <- ggplot( data = . ) +
+          geom_line( aes( x = full_date, y = value ) ) +
           ylab( paste0( em, ' Mt' ) ) +
           xlab( '' ) +
-          scale_x_date(date_breaks = "10 years", labels=scales::date_format("%Y-%m"), date_minor_breaks = "6 months") +
+          scale_x_date( date_breaks = "10 years",
+                        labels=scales::date_format( "%Y-%m" ),
+                        date_minor_breaks = "6 months" ) +
           ggtitle( paste0( gsub( '_cells', '', out_name ), '\n', loc ) )
-        ggsave( filePath( "DIAG_OUT", paste0( out_name, '_', em, '_', loc ), extension = ".jpeg" ), units = 'in', width = 13, height = 5 )
-      }
-    }
+
+        ggsave( filename = filePath( "DIAG_OUT", paste0( out_name, '_', em, '_', loc ), extension = ".jpeg" ),
+                plot = plt, units = 'in', width = 13, height = 5 )
+        invisible( . )
+      })
   }
 
   invisible( gc( ) )

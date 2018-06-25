@@ -56,8 +56,8 @@ sector_mapping <- readData( domain = 'GRIDDING',
 
 
 # -----------------------------------------------------------------------------
-# 3. Disaggregate VOCs
-# Take the anthropogenic VOC emissions and speciate them into the CEDS species
+# 3. Disaggregate NMVOCs
+# Take the anthropogenic NMVOC emissions and speciate them into the CEDS species
 VOC_SPEC <- get_global_constant('voc_speciation')
 
 if ( VOC_SPEC != 'none' ) {
@@ -77,7 +77,7 @@ if ( VOC_SPEC != 'none' ) {
   VOC_ratios_CEDS9 <- VOC_ratios %>%
     # dplyr::filter( iso != 'global' ) %>%
     dplyr::left_join( CEDS16_abr_to_CEDS9, by = c( 'sector' = 'CEDS16_abr' ) ) %>%
-    dplyr::mutate( em = 'VOC' ) %>%
+    dplyr::mutate( em = 'NMVOC' ) %>%
     tidyr::gather( sub_VOC, ratio, VOC01:VOC25 ) %>%
     dplyr::group_by( iso, CEDS9, em, sub_VOC ) %>%
     dplyr::summarise( ratio = mean( ratio ) )

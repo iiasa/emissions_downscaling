@@ -57,7 +57,7 @@ iam_em_ipat <- readData( domain = 'MED_OUT', file_name = paste0( 'B.', iam, '_em
 
 # -----------------------------------------------------------------------------
 # 3. Combine different parts of downscaled IAM emissions
-colnames( iam_em_nods ) [ which( colnames( iam_em_nods ) == 'region' ) ] <- 'iso'
+iam_em_nods <- dplyr::rename( iam_em_nods, iso = region )
 
 common_header_col_names <- c( "model", "scenario", "em", "sector", "iso", "unit" )
 iam_reporting_years <- c( 2015, 2020, 2030, 2040, 2050, 2060, 2070, 2080, 2090, 2100 )
@@ -80,17 +80,20 @@ iam_em_gridding_full <- rbind( iam_em_nods_gridding, iam_em_linear_gridding, iam
 
 # ------------------------------------------------------------------------------
 # 4. reformat into standard format
-iam_em_iamc <- merge( iam_em_full, var_mapping, by = 'sector', all.x = T )
-colnames( iam_em_iamc )[ which( colnames( iam_em_iamc ) == 'IAMC' ) ] <- 'variable'
+iam_em_iamc <- iam_em_full %>%
+  dplyr::left_join( var_mapping, by = 'sector' ) %>%
+  dplyr::rename( variable = IAMC )
+
 iam_em_iamc$variable <- unname( mapply( function( var, em ) {
   if ( em == 'SO2' ) { em <- 'Sulfur' }
-  if ( em == 'NMVOC' ) { em <- 'VOC' }
+  if ( em == 'VOC' ) { em <- 'NMVOC' }
   out_var <- gsub( '|XXX|', paste0( '|', em, '|' ), var, fixed = T  )
   return( out_var )
   }, iam_em_iamc$variable, iam_em_iamc$em  ) )
 
 iam_em_iamc$unit <- paste0( 'Mt ', iam_em_iamc$em, '/yr' )
 iam_em_iamc$unit <- gsub( 'Sulfur', 'SO2', iam_em_iamc$unit, fixed = T )
+iam_em_iamc$unit <- gsub( 'VOC', 'NMVOC', iam_em_iamc$unit, fixed = T )
 
 output_header_cols <- c( "model", "scenario", "variable", "iso", "unit", iam_reporting_xyears )
 

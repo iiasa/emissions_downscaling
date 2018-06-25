@@ -64,6 +64,7 @@ REF_EM_CSV <- get_global_constant( 'reference_emissions' )
 
 iam_em <- readData( 'MED_OUT', file_name = paste0( 'B.', iam, '_emissions_reformatted', '_', RUNSUFFIX ) )
 ref_em <- readData( 'REF_EM', file_name = REF_EM_CSV, domain_extension = ref_domain_extension )
+ref_em <- dplyr::mutate( ref_em, em = gsub( '^VOC$', 'NMVOC', em ) )
 
 # -----------------------------------------------------------------------------
 # 3. Process reference emissions
@@ -74,12 +75,15 @@ ref_em_xyear <- colnames( ref_em )[ grep( '^X', colnames( ref_em ) )  ]
 # convert reference emissions into CEDS9 sectors if necessary
 if ( ds_sector_scheme == 'CEDS9' ) {
   sector_level_mapping <- readData( 'MAPPINGS', 'IAMC_CEDS16_CEDS9' )
-  ref_em <- merge( ref_em, sector_level_mapping, by.x = 'sector', by.y = 'CEDS16', all.x = T  )
-  ref_em <- aggregate( ref_em[ , c( ref_em_xyear ) ],
-                       by = list( ref_em$iso, ref_em$CEDS9, ref_em$em, ref_em$unit ),
-                       FUN = sum )
-  colnames( ref_em ) <- c( ref_em_header_columns, ref_em_xyear  )
-  }
+  ref_em <- ref_em %>%
+    dplyr::left_join( sector_level_mapping, by = c( 'sector' = 'CEDS16' ) ) %>%
+    dplyr::group_by( iso, CEDS9, em, unit ) %>%
+    dplyr::summarise_at( vars( starts_with( 'X' ) ), sum ) %>%
+    dplyr::ungroup() %>%
+    dplyr::rename( sector = CEDS9 ) %>%
+    dplyr::rename_all( make.names ) %>%
+    dplyr::arrange( em, sector )
+}
 
 # -----------------------------------------------------------------------------
 # 3.1 Pick out base year reference emissions and change column names
@@ -101,7 +105,7 @@ ref_em_baseyear <- ref_em_baseyear[ ref_em_baseyear$sector %!in% sector_nodownsc
 # 3.3. Add region information to ref_em_baseyear
 ref_em_baseyear$region <- region_mapping[ match( ref_em_baseyear$iso, region_mapping$iso ), 'region' ]
 ref_em_baseyear <- ref_em_baseyear[ !is.na( ref_em_baseyear$region ), ]
-ref_em_baseyear<- ref_em_baseyear[ , c( 'iso', 'em', 'sector', 'region', 'unit', paste0( 'ctry_ref_em_', x_baseyear ) ) ]
+ref_em_baseyear <- ref_em_baseyear[ , c( 'iso', 'em', 'sector', 'region', 'unit', paste0( 'ctry_ref_em_', x_baseyear ) ) ]
 
 # -----------------------------------------------------------------------------
 # 3.4. Pick out sectors that use linear method

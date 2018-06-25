@@ -76,10 +76,10 @@ em_gridding_env$location               <- 'Laxenburg, Austria'
 em_gridding_env$institution            <- 'Integrated Assessment Modeling Consortium'
 em_gridding_env$institution_id         <- 'IAMC'
 
-# How should VOC speciation be done? Value must be one of the following:
-#   'all'  - Do VOC speciation along with all other emissions
-#   'only' - Do VOC speciation and no other emissions
-#   'none' - Do not do VOC speciation
+# How should NMVOC speciation be done? Value must be one of the following:
+#   'all'  - Do NMVOC speciation along with all other emissions
+#   'only' - Do NMVOC speciation and no other emissions
+#   'none' - Do not do NMVOC speciation
 em_gridding_env$voc_speciation <- 'none'
 
 # Diagnostics

@@ -135,7 +135,7 @@ thingsToDoPerSpecies <- function( em ) {
 
   # --
   # write out
-  if ( em == 'NMVOC-bulk' ) { em <- 'VOC' }
+  if ( em == 'NMVOC-bulk' ) { em <- 'NMVOC' }
   if ( em == 'SO2' ) { em <- 'Sulfur' }
 
   out_name <- paste0( em, '_', proxy_year, '_AWB' )

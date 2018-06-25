@@ -60,9 +60,9 @@ plot_scenario_ems <- function(scen, historical, all_files) {
   scen_short_name <- sub('input4MIPs_emissions_(.*ssp[^_]*).*', '\\1', scen)
   printLog(paste("Plotting global emissions for", scen_short_name))
 
-  sectors <- paste0(modc_out, '/', grep(sect, all_files, value = T))
-  sectors <- grep('openburning-share', sector, value = T, invert = T)
-  all_sectors <- do.call(rbind, lapply(sector, read.csv, stringsAsFactors = F))
+  sectors <- paste0(modc_out, '/', grep(scen, all_files, value = T))
+  sectors <- grep('openburning-share', sectors, value = T, invert = T)
+  all_sectors <- do.call(rbind, lapply(sectors, read.csv, stringsAsFactors = F))
   agg_sectors <- all_sectors %>%
     dplyr::group_by(em, sector, year) %>%
     dplyr::summarise(value = sum(value))
