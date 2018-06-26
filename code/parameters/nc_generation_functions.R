@@ -528,7 +528,7 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
   if ( em == 'Sulfur' ) {
     FN_em <- 'SO2'
   } else if ( grepl( 'VOC\\d\\d', em ) ) {
-    FN_em <- paste0( em, '-', substr( sub( '_', '-', get_VOC_name( em ) ), 1, 10 ) )
+    FN_em <- paste0( em, '-', substr( sub( '_', '-', get_VOC_info( em, 'name' ) ), 1, 10 ) )
     sector_type <- paste0( 'speciated-VOC-', sector_type )
   } else {
     FN_em <- em
@@ -549,7 +549,7 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
   product <- 'primary-emissions-data'
   dtype <- ''
   if ( grepl( 'VOC\\d\\d', em ) ) {
-    FN_em <- paste( em, get_VOC_name( em ) )
+    FN_em <- paste( em, get_VOC_info( em, 'name' ) )
     product <- 'supplementary-emissions-data'
     dtype <- '-supplemental-data'
   }
@@ -599,10 +599,10 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
   longname <- paste( FN_em, toTitleCase( sector_long_name ) )
 
   # Data usage tips and reporting unit change if they are shares or not
-  em_key <- c( 'Sulfur', 'NOx', 'CO', 'VOC', 'NH3', 'BC', 'OC', 'CO2', 'CH4' )
-  em_actual <- c( 'SOx', 'NOx', 'CO', 'NMVOC', 'NH3', 'BC', 'OC', 'CO2', 'CH4' )
+  em_key <- c( 'Sulfur', 'NOx', 'CO', 'NMVOC', 'VOC', 'NH3', 'BC', 'OC', 'CO2', 'CH4' )
+  em_actual <- c( 'SOx', 'NOx', 'CO', 'NMVOC', 'NMVOC', 'NH3', 'BC', 'OC', 'CO2', 'CH4' )
   em_val <- em_actual[ em == em_key ]
-  if (length(em_val)==0) {em_val <- 'VOC'}
+  if (length(em_val)==0) {em_val <- 'NMVOC'}
   if ( sector_shares ) {
     data_usage_tips <- 'These are monthly averages.'
     info_line <- paste( 'Fraction of', em_val, 'from each land category listed in the sector variable' )
@@ -680,6 +680,8 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
   add_global_atts( nc_new, MD_comment, institution, institution_id, product,
                    dataset_version_number, target_mip, MD_source_id_value,
                    sector_long_name, FN_em, MD_variable_id_value )
+  # Sub-NMVOC specific metadata
+  if ( grepl( 'VOC\\d\\d', em ) ) add_sub_voc_atts( nc_new, em )
   # some other metadata
   ncatt_put( nc_new, 0, 'license', license )
   ncatt_put( nc_new, 0, 'data_usage_tips', data_usage_tips )
@@ -780,6 +782,16 @@ add_global_atts <- function( nc_new, MD_comment, institution, institution_id,
   ncatt_put( nc_new, 0, 'variable_id', MD_variable_id_value )
 }
 
+add_sub_voc_atts <- function( nc_new, voc_id ) {
+  VOC_name <- get_voc_info( voc_id, 'name' )
+  molecular_weight <- get_voc_info( voc_id, 'weight' )
+  molecular_weight_unit <- "g mole-1"
+
+  ncatt_put( nc_new, 0, 'VOC_name', VOC_name )
+  ncatt_put( nc_new, 0, 'molecular_weight', molecular_weight, prec = 'float' )
+  ncatt_put( nc_new, 0, 'molecular_weight_unit', molecular_weight_unit )
+}
+
 
 # Version 4 UUIDs have the form xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx
 # where x is any hexadecimal digit and y is one of 8, 9, A, or B
@@ -802,10 +814,18 @@ uuid <- function() {
 
 
 # Historically, only the first 10 letters of the voc name are included
-get_VOC_name <- function( voc ) {
+get_VOC_info <- function( voc, type ) {
   voc_map <- read.csv( 'gridding/gridding-mappings/VOC_id_name_mapping.csv',
                        row.names = 1, stringsAsFactors = F )
-  voc_map[ voc, 'VOC_name' ]
+  if ( type == 'name' ) {
+    voc_map[ voc, 'VOC_name' ]
+  }
+  else if ( type == 'weight' ) {
+    voc_map[ voc, 'molecular weight' ]
+  }
+  else {
+    stop( 'invalid argument type to get_VOC_info' )
+  }
 }
 
 clean_scenario_name <- function( scenario ) {
