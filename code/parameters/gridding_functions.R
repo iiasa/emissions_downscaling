@@ -475,7 +475,7 @@ get_proxy <- function( em, year, sector, proxy_mapping, proxy_type = 'primary' )
 
   # use VOC proxy files for all sub-VOCs
   if ( startsWith(em, 'VOC') ) {
-    em <- 'VOC'
+    em <- 'NMVOC'
   }
 
   proxy_col <- if ( proxy_type == 'primary' ) 'proxy_file' else 'proxybackup_file'
@@ -517,7 +517,7 @@ add_seasonality <- function( annual_flux, em, sector, year, days_in_month, grid_
 
   # use VOC seasonality mapping for all sub-VOCs
   if ( startsWith(em, 'VOC') ) {
-    em <- 'VOC'
+    em <- 'NMVOC'
   }
 
   file_name <- seasonality_mapping[ seasonality_mapping$em == em & seasonality_mapping$sector == sector & seasonality_mapping$year == year, 'seasonality_file' ]
