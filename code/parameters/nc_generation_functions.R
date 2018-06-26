@@ -703,19 +703,19 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
     dplyr::group_by(sector_name) %>%
     dplyr::summarise_if(is.numeric, sum) %>%
     tidyr::gather(year, value, make.names(year_list)) %>%
-    dplyr::mutate(year = as.integer(sub('X', '', year)))
+    dplyr::mutate(year = as.integer(sub('X', '', year)), global_total = value * 1000) # Convert to kt
   diff_df <- out_df %>%
     dplyr::mutate(sector_short = as.character(sector)) %>%
     dplyr::select(-sector, -em, -month) %>%
-    dplyr::group_by(sector_short, year, unit) %>%
-    dplyr::summarise(value = sum(value)) %>%
+    dplyr::group_by(sector_short, year, units) %>%
+    dplyr::summarise(global_total = sum(global_total)) %>%
     dplyr::ungroup() %>%
     dplyr::left_join(sector_mapping, by = 'sector_short') %>%
     dplyr::left_join(in_df, by = c('year', 'sector_name')) %>%
-    dplyr::mutate(pct_diff = (value.x - value.y) / value.y) %>%
+    dplyr::mutate(pct_diff = (global_total.x - global_total.y) / global_total.y) %>%
     dplyr::mutate(pct_diff = if_else(is.nan(pct_diff), 0, pct_diff * 100)) %>%
-    dplyr::rename(grid_sum = value.x, orig_sum = value.y) %>%
-    dplyr::select(sector_name, year, unit, grid_sum, orig_sum, pct_diff)
+    dplyr::rename(grid_sum = global_total.x, orig_sum = global_total.y) %>%
+    dplyr::select(sector_name, year, units, grid_sum, orig_sum, pct_diff)
 
   ERR_TOL <- get_global_constant( 'error_tolerance' )
   largest_diff <- round(max(abs(diff_df$pct_diff), na.rm = T), 4)
