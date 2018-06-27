@@ -76,9 +76,20 @@ if ( VOC_SPEC != 'none' ) {
     dplyr::filter( !is.na( CEDS16 ), !grepl( 'Burning', CEDS9 ) ) %>%
     dplyr::distinct()
 
+  # the TANK sector exists for the ratios but not in the data; average the
+  # ratios for the TANK sector with the SHP sector
+  TANK_RATIO <- 0.7516055
+  weights <- c( 1 - TANK_RATIO, TANK_RATIO )
+  VOC_ratios[ VOC_ratios$sector == 'SHP', ] <- VOC_ratios %>%
+    dplyr::filter( sector %in% c( 'SHP', 'TANK' ) ) %>%
+    dplyr::mutate( sector = 'SHP' ) %>%
+    dplyr::group_by( iso, sector ) %>%
+    dplyr::summarise_if( is.numeric, weighted.mean, weights )
+
   # expand VOC_ratios sector from CEDS16_abr to CEDS16
   VOC_ratios <- VOC_ratios %>%
     dplyr::rename( CEDS16_abr = sector ) %>%
+    dplyr::filter( CEDS16_abr != 'TANK' ) %>%
     dplyr::left_join( CEDS16_to_CEDS9, by = 'CEDS16_abr' )
 
   # select non-burning VOCs from historical and map to proper sectors
@@ -89,7 +100,7 @@ if ( VOC_SPEC != 'none' ) {
     dplyr::select( iso, CEDS16, base_value ) %>%
     dplyr::left_join( CEDS16_to_CEDS9, by = 'CEDS16' )
 
-  # find sectors missing from historical
+  # find sectors missing from historical, but that we have ratios for
   missing_sectors <- VOC_ratios %>%
     dplyr::anti_join( historical, by = c( 'iso', 'CEDS16' ) ) %>%
     dplyr::select( iso, CEDS16, CEDS16_abr, CEDS9 ) %>%
@@ -104,7 +115,6 @@ if ( VOC_SPEC != 'none' ) {
 
   # map the sub-VOC shares of each sector to CEDS9 format
   VOC_ratios_CEDS9 <- VOC_ratios %>%
-    dplyr::filter( CEDS16_abr != 'TANK' ) %>%
     tidyr::gather( sub_VOC, ratio, VOC01:VOC25 ) %>%
     dplyr::left_join( VOC_ratio_shares, by = c( 'iso', 'CEDS16', 'CEDS16_abr', 'CEDS9' ) ) %>%
     dplyr::mutate( share = if_else( is.na( share ), 0, share ) ) %>%
@@ -113,14 +123,11 @@ if ( VOC_SPEC != 'none' ) {
     dplyr::summarise( ratio = sum( ratio * share ) )
 
   # assert that after aggregating, ratios still sum to one for each sector
-  # TODO: Shipping emissions currently do not take into account the speciation
-  # ratios for the tanker loading sector (TANK). Only SHP ratios are used, which
-  # are off by 0.001.
+  # (we round to the 12th digit because the arithmetic is not exact)
   ratio_sums <- VOC_ratios_CEDS9 %>%
     dplyr::group_by( iso, CEDS9, em ) %>%
-    dplyr::summarise( ratio = sum( ratio ) ) %>%
-    dplyr::filter( iso != 'World' )
-  stopifnot( all( round( ratio_sums$ratio, 8 ) == 1 | ratio_sums$ratio == 0 ) )
+    dplyr::summarise( ratio = sum( ratio ) )
+  stopifnot( all( round( ratio_sums$ratio, 12 ) == 1 ) )
 
   # Check if user requested a specific sub-VOC
   if ( !is.na( run_species ) && run_species %in% names( VOC_ratios ) )
