@@ -32,6 +32,7 @@ initialize( script_name, log_msg, headers )
 if ( !exists( 'args_from_makefile' ) ) args_from_makefile <- commandArgs( TRUE )
 iam <- args_from_makefile[ 1 ]
 harm_status <- args_from_makefile[ 2 ]
+input_file <- args_from_makefile[ 3 ]
 run_species <- args_from_makefile[ 7 ]
 if ( is.na( iam ) ) iam <- "GCAM4"
 
@@ -61,32 +62,65 @@ sector_mapping <- readData( domain = 'GRIDDING',
 VOC_SPEC <- get_global_constant('voc_speciation')
 
 if ( VOC_SPEC != 'none' ) {
+  REF_EM_CSV <- get_global_constant( 'reference_emissions' )
+  historical <- readData( 'REF_EM', REF_EM_CSV, domain_extension = ref_domain_extension )
+
   VOC_ratios <- readData( 'GRIDDING', 'VOC_ratio_AllSectors', domain_extension = "gridding-mappings/" )
   CEDS_maps <-  readData( 'MAPPINGS', 'CEDS_sector_mapping' )
+  sect_maps <-  readData( 'MAPPINGS', 'IAMC_CEDS16_CEDS9' )
 
-  VOC_ratios$iso <- gsub( 'global', 'World', VOC_ratios$iso )
-  VOC_ratios$sector <- gsub( 'TANK', 'SHP', VOC_ratios$sector )
-
-  # create map from CEDS16_abr format (ex. WST) to CEDS9 format (ex. Waste)
-  CEDS16_abr_to_CEDS9 <- CEDS_maps %>%
-    dplyr::select( CEDS16_abr, CEDS9 ) %>%
-    dplyr::filter( !grepl( 'Burning', CEDS9 ) ) %>%
+  # create map from CEDS16 format (ex. Fossil Fuel Fires or FFFI) to CEDS9
+  # format (ex. Energy Sector)
+  CEDS16_to_CEDS9 <- CEDS_maps %>%
+    dplyr::select( CEDS16, CEDS16_abr, CEDS9 ) %>%
+    dplyr::filter( !is.na( CEDS16 ), !grepl( 'Burning', CEDS9 ) ) %>%
     dplyr::distinct()
+
+  # expand VOC_ratios sector from CEDS16_abr to CEDS16
+  VOC_ratios <- VOC_ratios %>%
+    dplyr::rename( CEDS16_abr = sector ) %>%
+    dplyr::left_join( CEDS16_to_CEDS9, by = 'CEDS16_abr' )
+
+  # select non-burning VOCs from historical and map to proper sectors
+  x_base_year <- paste0( 'X', base_year )
+  historical <- historical %>%
+    dplyr::filter( em == 'VOC', !grepl( 'Burning', sector ) ) %>%
+    dplyr::rename( base_value = !!x_base_year, CEDS16 = sector ) %>%
+    dplyr::select( iso, CEDS16, base_value ) %>%
+    dplyr::left_join( CEDS16_to_CEDS9, by = 'CEDS16' )
+
+  # find sectors missing from historical
+  missing_sectors <- VOC_ratios %>%
+    dplyr::anti_join( historical, by = c( 'iso', 'CEDS16' ) ) %>%
+    dplyr::select( iso, CEDS16, CEDS16_abr, CEDS9 ) %>%
+    dplyr::mutate( base_value = 0 )
+
+  # calculate iso sector ratios from CEDS16 to CEDS9
+  VOC_ratio_shares <- historical %>%
+    dplyr::bind_rows( missing_sectors ) %>%
+    dplyr::group_by( iso, CEDS9 ) %>%
+    dplyr::mutate( share = base_value / sum( base_value ) ) %>%
+    dplyr::mutate( share = if_else( is.nan( share ), 1 / n(), share ) )
 
   # map the sub-VOC shares of each sector to CEDS9 format
   VOC_ratios_CEDS9 <- VOC_ratios %>%
-    # dplyr::filter( iso != 'global' ) %>%
-    dplyr::left_join( CEDS16_abr_to_CEDS9, by = c( 'sector' = 'CEDS16_abr' ) ) %>%
-    dplyr::mutate( em = 'NMVOC' ) %>%
+    dplyr::filter( CEDS16_abr != 'TANK' ) %>%
     tidyr::gather( sub_VOC, ratio, VOC01:VOC25 ) %>%
+    dplyr::left_join( VOC_ratio_shares, by = c( 'iso', 'CEDS16', 'CEDS16_abr', 'CEDS9' ) ) %>%
+    dplyr::mutate( share = if_else( is.na( share ), 0, share ) ) %>%
+    dplyr::mutate( em = 'NMVOC', iso = gsub( 'global', 'World', iso ) ) %>%
     dplyr::group_by( iso, CEDS9, em, sub_VOC ) %>%
-    dplyr::summarise( ratio = mean( ratio ) )
+    dplyr::summarise( ratio = sum( ratio * share ) )
 
   # assert that after aggregating, ratios still sum to one for each sector
+  # TODO: Shipping emissions currently do not take into account the speciation
+  # ratios for the tanker loading sector (TANK). Only SHP ratios are used, which
+  # are off by 0.001.
   ratio_sums <- VOC_ratios_CEDS9 %>%
     dplyr::group_by( iso, CEDS9, em ) %>%
-    dplyr::summarise( ratio = sum( ratio ) )
-  stopifnot( all( round( ratio_sums$ratio, 8 ) == 1 ) )
+    dplyr::summarise( ratio = sum( ratio ) ) %>%
+    dplyr::filter( iso != 'World' )
+  stopifnot( all( round( ratio_sums$ratio, 8 ) == 1 | ratio_sums$ratio == 0 ) )
 
   # Check if user requested a specific sub-VOC
   if ( !is.na( run_species ) && run_species %in% names( VOC_ratios ) )

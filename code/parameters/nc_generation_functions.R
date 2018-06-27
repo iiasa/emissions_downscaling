@@ -783,8 +783,8 @@ add_global_atts <- function( nc_new, MD_comment, institution, institution_id,
 }
 
 add_sub_voc_atts <- function( nc_new, voc_id ) {
-  VOC_name <- get_voc_info( voc_id, 'name' )
-  molecular_weight <- get_voc_info( voc_id, 'weight' )
+  VOC_name <- get_VOC_info( voc_id, 'name' )
+  molecular_weight <- get_VOC_info( voc_id, 'weight' )
   molecular_weight_unit <- "g mole-1"
 
   ncatt_put( nc_new, 0, 'VOC_name', VOC_name )
@@ -821,7 +821,7 @@ get_VOC_info <- function( voc, type ) {
     voc_map[ voc, 'VOC_name' ]
   }
   else if ( type == 'weight' ) {
-    voc_map[ voc, 'molecular weight' ]
+    voc_map[ voc, 'molecular.weight' ]
   }
   else {
     stop( 'invalid argument type to get_VOC_info' )
