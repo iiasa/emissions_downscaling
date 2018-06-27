@@ -78,13 +78,19 @@ if ( VOC_SPEC != 'none' ) {
 
   # the TANK sector exists for the ratios but not in the data; average the
   # ratios for the TANK sector with the SHP sector
-  TANK_RATIO <- 0.7516055
+  TANK_RATIO <- 0.7511027754013855
   weights <- c( 1 - TANK_RATIO, TANK_RATIO )
-  VOC_ratios[ VOC_ratios$sector == 'SHP', ] <- VOC_ratios %>%
-    dplyr::filter( sector %in% c( 'SHP', 'TANK' ) ) %>%
-    dplyr::mutate( sector = 'SHP' ) %>%
-    dplyr::group_by( iso, sector ) %>%
-    dplyr::summarise_if( is.numeric, weighted.mean, weights )
+  shp_corrected <- c(0, 0.0698525581123288, 0.193784516053557, 0.204299954909177,
+                     0.109661005208602, 0.117076899357022, 0.0519144539149665, 0.0568823442417576,
+                     0.00149036709803732, 0.00546467935947016, 0.0238517927949798,
+                     0.0144187204004595, 0.0151875808550091, 0.00919059710456345,
+                     0.0570838109305053, 0, 0, 0, 0, 0, 0, 0, 0.0698407196595634)
+  VOC_ratios[ VOC_ratios$sector == 'SHP', 3:25 ] <- shp_corrected
+    # VOC_ratios %>%
+    # dplyr::filter( sector %in% c( 'SHP', 'TANK' ) ) %>%
+    # dplyr::mutate( sector = 'SHP' ) %>%
+    # dplyr::group_by( iso, sector ) %>%
+    # dplyr::summarise_if( is.numeric, weighted.mean, weights )
 
   # expand VOC_ratios sector from CEDS16_abr to CEDS16
   VOC_ratios <- VOC_ratios %>%
