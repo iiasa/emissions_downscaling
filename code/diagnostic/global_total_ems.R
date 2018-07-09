@@ -68,7 +68,7 @@ plot_scenario_ems <- function(scen, historical, all_files) {
     dplyr::summarise(value = sum(value))
 
   agg <- agg_sectors %>%
-    dplyr::filter(!grepl('VOC\\d\\d', em)) %>%  # We have no historical VOCs
+    dplyr::filter(!grepl('VOC\\d\\d', em)) %>%  # Speciated VOCs done separately
     dplyr::group_by(em, year) %>%
     dplyr::summarise(value = sum(value))
 

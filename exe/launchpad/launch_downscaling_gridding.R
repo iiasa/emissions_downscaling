@@ -43,7 +43,7 @@ if ( DEBUG ) {
                            'C:/Users/brau074/Documents/emissions_downscaling/input/IAM_emissions/MESSAGE-GLOBIOM_SSP2-45/output_harmonized.xlsx',
                            'C:/Users/brau074/Documents/emissions_downscaling/final-output/module-B',
                            'C:/Users/brau074/Documents/emissions_downscaling/final-output/module-C',
-                           'gridding' )
+                           'gridding', 'NMVOC' )
 
   calculationDir <- "/Users/Caleb/Documents/JGCRI/emissions_downscaling/code/error/parameters"
   calculationYears <- 2016:2020

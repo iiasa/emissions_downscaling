@@ -65,21 +65,21 @@ if ( VOC_SPEC != 'none' ) {
   REF_EM_CSV <- get_global_constant( 'reference_emissions' )
   historical <- readData( 'REF_EM', REF_EM_CSV, domain_extension = ref_domain_extension )
 
+  VOC_burn_ratios <- readData( 'GRIDDING', 'VOC_ratio_BurnSectors', domain_extension = "gridding-mappings/" )
   VOC_ratios <- readData( 'GRIDDING', 'VOC_ratio_AllSectors', domain_extension = "gridding-mappings/" )
-  CEDS_maps <-  readData( 'MAPPINGS', 'CEDS_sector_mapping' )
   sect_maps <-  readData( 'MAPPINGS', 'IAMC_CEDS16_CEDS9' )
 
   # create map from CEDS16 format (ex. Fossil Fuel Fires or FFFI) to CEDS9
   # format (ex. Energy Sector)
-  CEDS16_to_CEDS9 <- CEDS_maps %>%
+  CEDS16_to_CEDS9 <- sect_maps %>%
     dplyr::select( CEDS16, CEDS16_abr, CEDS9 ) %>%
-    dplyr::filter( !is.na( CEDS16 ), !grepl( 'Burning', CEDS9 ) ) %>%
     dplyr::distinct()
 
   # the TANK sector exists for the ratios but not in the data; average the
   # ratios for the TANK sector with the SHP sector
   TANK_RATIO <- 0.7511027754013855
   weights <- c( 1 - TANK_RATIO, TANK_RATIO )
+  # from support script calculate_voc_ratios.R
   shp_corrected <- c(0, 0.0698525581123288, 0.193784516053557, 0.204299954909177,
                      0.109661005208602, 0.117076899357022, 0.0519144539149665, 0.0568823442417576,
                      0.00149036709803732, 0.00546467935947016, 0.0238517927949798,
@@ -128,18 +128,27 @@ if ( VOC_SPEC != 'none' ) {
     dplyr::group_by( iso, CEDS9, em, sub_VOC ) %>%
     dplyr::summarise( ratio = sum( ratio * share ) )
 
+  # add on open burning ratios
+  VOC_ratios_CEDS9 <- VOC_burn_ratios %>%
+    tidyr::gather( sub_VOC, ratio, -iso, -sector ) %>%
+    dplyr::left_join( CEDS16_to_CEDS9, by = c( 'sector' = 'CEDS16_abr' ) ) %>%
+    dplyr::mutate( em = 'NMVOC', sub_VOC = gsub( '\\.', '-', sub_VOC ) ) %>%
+    dplyr::select( iso, CEDS9, em, sub_VOC, ratio ) %>%
+    dplyr::bind_rows( VOC_ratios_CEDS9 )
+
   # assert that after aggregating, ratios still sum to one for each sector
   # (we round to the 12th digit because the arithmetic is not exact)
   ratio_sums <- VOC_ratios_CEDS9 %>%
     dplyr::group_by( iso, CEDS9, em ) %>%
-    dplyr::summarise( ratio = sum( ratio ) )
-  stopifnot( all( round( ratio_sums$ratio, 12 ) == 1 ) )
+    dplyr::summarise( ratio = sum( ratio ) ) %>%
+    dplyr::filter( round( ratio, 8 ) != 1 )
+  writeData( ratio_sums, 'DIAG_OUT', 'NMVOC_ratio_sums' )
 
   # Check if user requested a specific sub-VOC
   if ( !is.na( run_species ) && run_species %in% names( VOC_ratios ) )
     em_filter <- run_species
   else
-    em_filter <- names( VOC_ratios )
+    em_filter <- union( names( VOC_ratios ), names( VOC_burn_ratios ) )
 
   # disaggregate VOCs into sub-VOCs, then multiply each sub-VOC by its
   # corresponding ratio

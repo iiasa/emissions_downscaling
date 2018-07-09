@@ -474,8 +474,8 @@ grid_all_years_air <- function( year_list,
 get_proxy <- function( em, year, sector, proxy_mapping, proxy_type = 'primary' ) {
 
   # use VOC proxy files for all sub-VOCs
-  if ( startsWith(em, 'VOC') ) {
-    em <- 'NMVOC'
+  if ( em %!in% proxy_mapping$em ) {
+    stop( paste( 'Could not find proxy mapping for emission', em ) )
   }
 
   proxy_col <- if ( proxy_type == 'primary' ) 'proxy_file' else 'proxybackup_file'
@@ -516,8 +516,17 @@ get_proxy <- function( em, year, sector, proxy_mapping, proxy_type = 'primary' )
 add_seasonality <- function( annual_flux, em, sector, year, days_in_month, grid_resolution, seasonality_mapping ) {
 
   # use VOC seasonality mapping for all sub-VOCs
-  if ( startsWith(em, 'VOC') ) {
-    em <- 'NMVOC'
+  if ( em %!in% seasonality_mapping$em ) {
+    VOC_burn_ratios <- readData( 'GRIDDING', 'VOC_ratio_BurnSectors',
+                                 domain_extension = "gridding-mappings/" )
+    VOC_ratios <- readData( 'GRIDDING', 'VOC_ratio_AllSectors',
+                            domain_extension = "gridding-mappings/" )
+
+    if ( em %in% c( names( VOC_ratios ), names( VOC_burn_ratios ) ) ) {
+      em <- 'NMVOC'
+    } else {
+      stop( paste( 'Could not find proxy mapping for emission', em ) )
+    }
   }
 
   file_name <- seasonality_mapping[ seasonality_mapping$em == em & seasonality_mapping$sector == sector & seasonality_mapping$year == year, 'seasonality_file' ]

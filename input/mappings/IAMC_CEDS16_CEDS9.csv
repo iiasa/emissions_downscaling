@@ -1,22 +1,22 @@
-CEDS16,CEDS9
-Agriculture,Agriculture
-Agricultural Waste Burning,Agricultural Waste Burning
-Forest Burning,Forest Burning
-Grassland Burning,Grassland Burning
-Peat Burning,Peat Burning
-Residential Commercial Other - Other,Residential Commercial Other
-Industrial Combustion,Industrial Sector
-Residential Commercial Other - Residential Commercial,Residential Commercial Other
-Aircraft,Aircraft
-Road Transportation,Transportation Sector
-Non-Road Transportation,Transportation Sector
-International Shipping,International Shipping
-International Shipping - Tanker Loading,International Shipping
-Electricity and Heat Production,Energy Sector
-Fuel Production and Transformation,Energy Sector
-Other Fugitive/Flaring,Energy Sector
-Oil and Gas Fugitive/Flaring,Energy Sector
-Fossil Fuel Fires,Energy Sector
-Industrial Process and Product Use,Industrial Sector
-Solvents Production and Application,Solvents Production and Application
-Waste,Waste
+CEDS16,CEDS16_abr,CEDS9,CEDS9_abr
+Agriculture,AGR,Agriculture,AGR
+Agricultural Waste Burning,AGRI,Agricultural Waste Burning,AGRI
+Forest Burning,FRTB,Forest Burning,FRTB
+Grassland Burning,SAVA,Grassland Burning,SAVA
+Peat Burning,PEAT,Peat Burning,PEAT
+Residential Commercial Other - Other,RCOO,Residential Commercial Other,RCO
+Industrial Combustion,INDC,Industrial Sector,IND
+Residential Commercial Other - Residential Commercial,RCORC,Residential Commercial Other,RCO
+Aircraft,AIR,Aircraft,AIR
+Road Transportation,ROAD,Transportation Sector,TRA
+Non-Road Transportation,NRTR,Transportation Sector,TRA
+International Shipping,SHP,International Shipping,SHP
+International Shipping - Tanker Loading,TANK,International Shipping,SHP
+Electricity and Heat Production,ELEC,Energy Sector,ENE
+Fuel Production and Transformation,ETRN,Energy Sector,ENE
+Other Fugitive/Flaring,OFF,Energy Sector,ENE
+Oil and Gas Fugitive/Flaring,FLR,Energy Sector,ENE
+Fossil Fuel Fires,FFFI,Energy Sector,ENE
+Industrial Process and Product Use,INPU,Industrial Sector,INPU
+Solvents Production and Application,SLV,Solvents Production and Application,SLV
+Waste,WST,Waste,WST

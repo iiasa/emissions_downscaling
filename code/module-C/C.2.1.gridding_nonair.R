@@ -81,6 +81,9 @@ proxy_sub_mapping <-   readData( 'GRIDDING', domain_extension = grid_maps_ext,
 diagnostic_cells <-    readData( 'GRIDDING', domain_extension = grid_maps_ext,
                                  file_name = 'diagnostic_cells' )
 
+voc_map <- read.csv( 'gridding/gridding-mappings/VOC_id_name_mapping.csv',
+                     row.names = 1, stringsAsFactors = F )
+
 
 # -----------------------------------------------------------------------------
 # 4. Pre-processing of iam emissions
@@ -90,6 +93,7 @@ iam_em <- iam_data[ iam_data$sector != 'AIR', ]
 emissions <- sort( unique( iam_em$em ) )
 scenarios <- sort( unique( iam_em$scenario ) )
 
+nmvoc_ems <- row.names( voc_map )
 
 # -----------------------------------------------------------------------------
 # 5. Gridding and writing output data
@@ -98,8 +102,17 @@ for ( scenario in scenarios ) {
   for ( em in emissions ) {
     gridding_em <- iam_em[ iam_em$scenario == scenario & iam_em$em == em, ]
 
+    # for gridding all years, the em is used only to look up proxy / seasonality
+    if ( em %in% nmvoc_ems ) {
+      proxy_em <- 'NMVOC'
+      sub_nmvoc <- T
+    } else {
+      proxy_em <- em
+      sub_nmvoc <- F
+    }
+
     allyear_grids_list <- grid_all_years( year_list,
-                                          em,
+                                          proxy_em,
                                           grid_resolution,
                                           gridding_em,
                                           location_index,
@@ -110,13 +123,15 @@ for ( scenario in scenarios ) {
                             output_dir,
                             grid_resolution,
                             year_list,
-                            em )
+                            em,
+                            sub_nmvoc )
 
     generate_openburning_grids_nc( allyear_grids_list,
                                    output_dir,
                                    grid_resolution,
                                    year_list,
-                                   em )
+                                   em,
+                                   sub_nmvoc )
   }
 }
 

@@ -24,7 +24,8 @@ generate_bulk_grids_nc <- function( allyear_grids_list,
                                     output_dir,
                                     grid_resolution,
                                     year_list,
-                                    em ) {
+                                    em,
+                                    sub_nmvoc ) {
 
   # ---
   # 0. Define variables specific to anthro
@@ -42,8 +43,8 @@ generate_bulk_grids_nc <- function( allyear_grids_list,
   #    Returns: diag_cells - diagnostic cells list
   #             out_name - output file name
   diagnostics <- build_ncdf( allyear_grids_list, output_dir, grid_resolution,
-                             year_list, em, bulk_sectors, sector_type,
-                             sector_ids )
+                             year_list, em, sub_nmvoc, bulk_sectors,
+                             sector_type, sector_ids )
 
   # 2. Create diagnostic cells plots
   diagnostic_cells <- do.call( 'rbind', diagnostics$diag_cells )
@@ -98,7 +99,8 @@ generate_openburning_grids_nc <- function( allyear_grids_list,
                                            output_dir,
                                            grid_resolution,
                                            year_list,
-                                           em ) {
+                                           em,
+                                           sub_nmvoc ) {
 
   # ---
   # 0. Define variables specific to openburning
@@ -115,11 +117,11 @@ generate_openburning_grids_nc <- function( allyear_grids_list,
   #    Returns: diag_cells - diagnostic cells list
   #             out_name - output file name
   diag_agg <- build_ncdf( allyear_grids_list, output_dir, grid_resolution,
-                          year_list, em, openburning_sectors, sector_type,
-                          sector_ids, aggregate_sectors = TRUE )
+                          year_list, em, sub_nmvoc, openburning_sectors,
+                          sector_type, sector_ids, aggregate_sectors = TRUE )
   diag_share <- build_ncdf( allyear_grids_list, output_dir, grid_resolution,
-                            year_list, em, openburning_sectors, sector_type,
-                            sector_ids, sector_shares = TRUE)
+                            year_list, em, sub_nmvoc, openburning_sectors,
+                            sector_type, sector_ids, sector_shares = TRUE)
 
   # 2. Create diagnostic cells plots
   for ( diagnostics in list( diag_agg, diag_share ) ) {
@@ -393,10 +395,12 @@ generate_air_grids_nc <- function( allyear_grids_list,
 #   aggregate_sectors - sum along the sector dimension?
 #   sector_shares     - output sector's total value or share of all sectors
 build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
-                        year_list, em, ncdf_sectors, sector_type, sector_ids,
-                        aggregate_sectors = F, sector_shares = F ) {
+                        year_list, em, sub_nmvoc, ncdf_sectors, sector_type,
+                        sector_ids, aggregate_sectors = F, sector_shares = F ) {
 
   stopifnot( !( aggregate_sectors && sector_shares ) ) # both can't be TRUE
+
+  is_openburning <- all(names(allyear_grids_list[[1]]) %in% c( "AWB", "FRTB", "GRSB", "PEAT" ))
 
   # Prepare data from writing
   # (1) emission array
@@ -527,8 +531,9 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
   # Sulfur and sub-VOCs get renamed for the file output
   if ( em == 'Sulfur' ) {
     FN_em <- 'SO2'
-  } else if ( grepl( 'VOC\\d\\d', em ) ) {
+  } else if ( sub_nmvoc ) {
     FN_em <- paste0( em, '-', substr( sub( '_', '-', get_VOC_info( em, 'name' ) ), 1, 10 ) )
+    if ( is_openburning ) FN_em <- paste0( 'NMVOC-', em )
     sector_type <- paste0( 'speciated-VOC-', sector_type )
   } else {
     FN_em <- em
@@ -548,8 +553,9 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
 
   product <- 'primary-emissions-data'
   dtype <- ''
-  if ( grepl( 'VOC\\d\\d', em ) ) {
+  if ( sub_nmvoc ) {
     FN_em <- paste( em, get_VOC_info( em, 'name' ) )
+    if ( is_openburning ) FN_em <- em
     product <- 'supplementary-emissions-data'
     dtype <- '-supplemental-data'
   }
@@ -617,7 +623,7 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
     reporting_unit <- if ( sector_type == 'openburning' ) 'NO' else 'NO2'
     info_line <- paste0( info_line, ', reported as ', reporting_unit )
   }
-  if ( grepl( 'VOC\\d\\d', em ) ) { info_line <- paste( 'Mass flux of', FN_em, '(total mass emitted)' ) }
+  if ( sub_nmvoc ) { info_line <- paste( 'Mass flux of', FN_em, '(total mass emitted)' ) }
 
   data_usage_tips <- paste( data_usage_tips, 'Note that emissions are provided in uneven year intervals (2015, 2020, then at 10 year intervals) as these are the years for which projection data is available.' )
 
@@ -681,7 +687,7 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
                    dataset_version_number, target_mip, MD_source_id_value,
                    sector_long_name, FN_em, MD_variable_id_value )
   # Sub-NMVOC specific metadata
-  if ( grepl( 'VOC\\d\\d', em ) ) add_sub_voc_atts( nc_new, em )
+  if ( sub_nmvoc ) add_sub_voc_atts( nc_new, em )
   # some other metadata
   ncatt_put( nc_new, 0, 'license', license )
   ncatt_put( nc_new, 0, 'data_usage_tips', data_usage_tips )
