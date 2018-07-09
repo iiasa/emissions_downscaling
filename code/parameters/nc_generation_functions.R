@@ -533,7 +533,7 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
     FN_em <- 'SO2'
   } else if ( sub_nmvoc ) {
     FN_em <- paste0( em, '-', substr( sub( '_', '-', get_VOC_info( em, 'name' ) ), 1, 10 ) )
-    if ( is_openburning ) FN_em <- paste0( 'NMVOC-', em )
+    if ( is_openburning ) FN_em <- paste0( 'NMVOC-', sub( '\\.', '-', em ) )
     sector_type <- paste0( 'speciated-VOC-', sector_type )
   } else {
     FN_em <- em

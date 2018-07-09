@@ -88,8 +88,8 @@ VOC_SPEC <- get_global_constant( 'voc_speciation' )
 sub_spec <- !is.na( run_species )
 
 if ( VOC_SPEC == 'only' ) {
-  if ( sub_spec && !grepl( "VOC", run_species ) )
-    stop( paste( "Cannot speciate VOCs for emission", run_species ) )
+  # if ( sub_spec && !grepl( "VOC", run_species ) )
+  #   stop( paste( "Cannot speciate VOCs for emission", run_species ) )
   iam_data <- iam_data[ iam_data$em == "NMVOC", ]
 } else if ( sub_spec && run_species %in% iam_data$em ) {
   iam_data <- iam_data[ iam_data$em == run_species, ]

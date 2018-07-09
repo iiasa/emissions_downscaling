@@ -145,10 +145,11 @@ if ( VOC_SPEC != 'none' ) {
   writeData( ratio_sums, 'DIAG_OUT', 'NMVOC_ratio_sums' )
 
   # Check if user requested a specific sub-VOC
-  if ( !is.na( run_species ) && run_species %in% names( VOC_ratios ) )
+  sub_nmvocs <- gsub( '\\.', '-', union( names( VOC_ratios ), names( VOC_burn_ratios ) ) )
+  if ( !is.na( run_species ) && run_species %in% sub_nmvocs )
     em_filter <- run_species
   else
-    em_filter <- union( names( VOC_ratios ), names( VOC_burn_ratios ) )
+    em_filter <- sub_nmvocs
 
   # disaggregate VOCs into sub-VOCs, then multiply each sub-VOC by its
   # corresponding ratio
@@ -163,7 +164,7 @@ if ( VOC_SPEC != 'none' ) {
   # Remove non-sub-VOC emissions if specified, otherwise keep 'VOC' original
   if ( VOC_SPEC == 'all' ) {
     iam_data <- dplyr::bind_rows( iam_data, iam_data_sub_vocs )
-  } else {
+  } else {  # 'only'
     iam_data <- iam_data_sub_vocs
   }
 }
