@@ -692,6 +692,30 @@ rotate_a_matrix <- function( x ) {
   t( x[ nrow(x):1, ] )
 }
 
+
+# ------------------------------------------------------------------------------
+# rotate_lat_lon
+# Brief: rotate the first two dimensions (lon, lat) of a list of 3d arrays, then
+#        return as a 4d array
+# Dependencies: null
+# Author: Caleb Braun
+# parameters: year_grid - the array to be rotated
+#             year_dimensions - the full dimensions of the final array
+# return: a rotated 4d array
+rotate_lat_lon <- function( year_grid, year_dimensions ) {
+  final_grid <- array( dim = year_dimensions )
+
+  lapply( seq_along( year_grid ), function( i ) {
+    sector_grid <- year_grid[[ i ]]
+    lapply( 1:12, function( month ) {
+      final_grid[ , , i, month ] <<- rotate_a_matrix( sector_grid[ , , month ] )
+    } )
+  } )
+
+  final_grid
+}
+
+
 # ------------------------------------------------------------------------------
 # gridding_initialize
 # Brief: Initializing and load the necessary parameters and variables needed by gridding routine.

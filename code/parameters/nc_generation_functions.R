@@ -400,34 +400,82 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
 
   stopifnot( !( aggregate_sectors && sector_shares ) ) # both can't be TRUE
 
-  is_openburning <- all(names(allyear_grids_list[[1]]) %in% c( "AWB", "FRTB", "GRSB", "PEAT" ))
+  # Filter data to only the gridding years specified in gridding_initialize()
+  Xyears <- intersect( paste0( 'X', year_list ), names( allyear_grids_list ) )
+  year_grids_list <- allyear_grids_list[ Xyears ]
+
+  # or just use the sector_type parameter???
+  is_openburning <- all(names(year_grids_list[[1]]) %in% c( "AWB", "FRTB", "GRSB", "PEAT" ))
 
   # Prepare data from writing
   # (1) emission array
   grid_cell_column <- grid_area( grid_resolution, all_lon = T )
-  year_data_list <- lapply( year_list, function( year ) {
 
+  # create the dimensions of each year (lon x lat x sector x month)
+  lon_res <- 360 / grid_resolution
+  lat_res <- 180 / grid_resolution
+  year_dimensions <- c( lon_res, lat_res, length( ncdf_sectors ), 12 )
+
+  # lat and lon are flipped to accommodate nc write-in
+  year_data_list <- lapply( year_grids_list, rotate_lat_lon, year_dimensions )
+
+  checksum_df <- do.call( rbind, lapply( year_data_list, colSums, dims = 2 ) )
+  checksum_df <- data.frame( em, ncdf_sectors, checksum_df ) %>%
+    cbind( rep( year_list, each = length( ncdf_sectors ) ), . ) %>%
+    setNames( c( 'year', 'em', 'sector', 1:12 ) ) %>%
+    tidyr::gather( 'month', 'global_total', '1':'12' ) %>%
+    dplyr::mutate( units = 'kt' ) %>%
+    dplyr::arrange( year, sector )
+
+  diagnostic_cells_list2 <- lapply( year_list, function( year ) {
+    year_grid <- year_grids_list[[ paste0( 'X', year ) ]]
+    do.call( rbind, lapply( names( year_grid ), function( current_sector ) {
+      sector_grid <- year_grid[[ current_sector ]]
+      do.call( rbind, lapply( 1:12, function( month ) {
+        # convert the sector matrix from from kg m-2 s-1 to Mt per month
+        sector_mt <- sector_grid[ , , month ] * grid_cell_column *
+          ( days_in_month[ month ] * 24 * 60 * 60 ) / 1000000000
+
+        # computation for checksum
+        conv_mat_sum <- sum( sector_mt )
+
+        # computation for diagnostic cells
+        cell_values <- sector_mt[ as.matrix( diagnostic_cells[ c( 'row', 'col' ) ] ) ]
+        cell_value_df <- data.frame( em = em,
+                                     sector = current_sector,
+                                     year = year,
+                                     month = month,
+                                     unit = 'Mt',
+                                     value = cell_values,
+                                     stringsAsFactors = F )
+        cell_value_df <- cbind( diagnostic_cells, cell_value_df )
+      }))
+    }))
+  })
+
+  year_data_and_diagnostics_list <- lapply( year_list, function( year ) {
+    # extract current year's data and build array template
     current_year_grids_list <- allyear_grids_list[[ paste0( 'X', year ) ]]
-    current_year_sector_array <- array( dim = c( 360 / grid_resolution, # lat lon flipped to accommodate nc write-in
-                                                 180 / grid_resolution,
-                                                 length( ncdf_sectors ), 12 ) )
+    current_year_sector_array <- array( dim = year_dimensions )
 
     temp_checksum_storage <- c()
     temp_cell_value_storage <- data.frame()
     for ( i in seq_along( ncdf_sectors ) ) {
       current_sector <- ncdf_sectors[ i ]
-      temp_array <- current_year_grids_list[[ current_sector ]]
-      temp_array_checksum <- temp_array
+      current_sector_grid <- current_year_grids_list[[ current_sector ]]
+      temp_array_checksum <- current_sector_grid
 
-      # flip each time slice of temp_array
-      temp_array <- array( unlist( lapply( 1:12, function( i ) { rotate_a_matrix( temp_array[ , , i ] ) } ) ), dim = c( 360 / grid_resolution, 180 / grid_resolution, 12 ) )
-
-      current_year_sector_array[ , , i, ] <- temp_array
+      # flip each time slice of temp_array (rotates lat and lon) and populate
+      # the year template for that sector
+      rotated_sectors <- unlist( lapply( 1:12, function( i ) {
+        rotate_a_matrix( current_sector_grid[ , , i ] )
+      }))
+      current_sector_grid <- array( rotated_sectors, dim = c( lon_res, lat_res, 12 ) )
+      current_year_sector_array[ , , i, ] <- current_sector_grid
 
       # checksum and diagnostic cells computation
       checksum_diag_list <- lapply( 1:12, function( i ) {
-        current_month <- i
-        # convert the matrix from from kg m-2 s-1 to Mt
+        # convert the matrix from from kg m-2 s-1 to Mt per month
         conv_mat <- temp_array_checksum[ , , i ] * grid_cell_column *
           ( days_in_month[ i ] * 24 * 60 * 60 ) / 1000000000
 
@@ -439,7 +487,7 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
         cell_value_df <- data.frame( em = em,
                                      sector = current_sector,
                                      year = year,
-                                     month = current_month,
+                                     month = i,  # current month, as an integer
                                      unit = 'Mt',
                                      value = cell_values,
                                      stringsAsFactors = F )
@@ -451,7 +499,7 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
       temp_array_checksum <- unlist( lapply( checksum_diag_list, '[[', 1 ) )
       temp_checksum_storage <- c( temp_checksum_storage, temp_array_checksum )
 
-      temp_cell_value_df <- do.call( 'rbind', lapply( checksum_diag_list, '[[', 2 ) )
+      temp_cell_value_df <- do.call( rbind, lapply( checksum_diag_list, '[[', 2 ) )
       temp_cell_value_storage <- rbind( temp_cell_value_storage, temp_cell_value_df )
     }
 
@@ -466,14 +514,12 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
     return( list( current_year_sector_array, temp_checksum_df, temp_cell_value_storage ) )
   } )
 
-  checksum_df_list <- lapply( year_data_list, '[[', 2 )
-  diagnostic_cells_list <- lapply( year_data_list, '[[', 3 )
-  year_data_list <- lapply( year_data_list, '[[', 1 )
+  year_data_list <- lapply( year_data_and_diagnostics_list, '[[', 1 )
+  checksum_df_list <- lapply( year_data_and_diagnostics_list, '[[', 2 )
+  diagnostic_cells_list <- lapply( year_data_and_diagnostics_list, '[[', 3 )
 
-  em_array <- array( unlist( year_data_list ),  dim = c( 360 / grid_resolution, # lat lon flipped to accommodate nc write-in
-                                                         180 / grid_resolution,
-                                                         length( ncdf_sectors ),
-                                                         length( year_list ) * 12 ) )
+  all_years_dimensions <- year_dimensions * c( 1, 1, 1, length( year_list ) )
+  em_array <- array( unlist( year_data_list ), dim = all_years_dimensions )
 
   if ( aggregate_sectors ) {
     em_array <- apply(em_array, c( 1, 2, 4 ), sum)
