@@ -9,8 +9,7 @@
 # TODO:
 # ------------------------------------------------------------------------------
 
-# ------------------------------------------------------------------------------
-# 0. Read in global settings and headers
+# 0. Read in global settings and headers ----------------------------------
 
 # Must be run from the emissions_downscaling/input directory
 if ( !endsWith( getwd(), '/input' ) ) setwd( 'input' )
@@ -40,9 +39,9 @@ if ( DEBUG ) {
   message( 'Debug mode is on' )
   args_from_makefile <- c( 'MESSAGE-GLOBIOM',
                            'Harmonized-DB',
-                           'C:/Users/brau074/Documents/emissions_downscaling/input/IAM_emissions/MESSAGE-GLOBIOM_SSP2-45/output_harmonized.xlsx',
-                           'C:/Users/brau074/Documents/emissions_downscaling/final-output/module-B',
-                           'C:/Users/brau074/Documents/emissions_downscaling/final-output/module-C',
+                           '/Users/brau074/Documents/emissions_downscaling/input/IAM_emissions/MESSAGE-GLOBIOM_SSP2-45/output_harmonized.xlsx',
+                           '/Users/brau074/Documents/emissions_downscaling/final-output/module-B',
+                           '/Users/brau074/Documents/emissions_downscaling/final-output/module-C',
                            'gridding', 'NMVOC' )
 
   calculationDir <- "/Users/Caleb/Documents/JGCRI/emissions_downscaling/code/error/parameters"

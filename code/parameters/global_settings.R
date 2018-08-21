@@ -35,11 +35,11 @@ lapply(names(libs), loadPackage, libs)
 # This first group of settings is protected--we don't want it re-set every time
 # this header is read.
 if( !exists( "GCAM_SOURCE_FN" ) ) { # i.e. #ifndef
-  GCAM_SOURCE_FN  <- c( "?" )       # name of currently executing source file (stack structure)
-  GCAM_LOG_SAVE   <- c( FALSE )     # whether current log is also being saved to file (stack structure)
-  GCAM_SOURCE_RD  <- 0              # recursion depth, an index into above structures
-  DEPENDENCIES    <- list()         # dependencies (i.e. what files scripts read)
-  OUTPUTS         <- list()         # outputs (i.e. what files scripts write)
+  GCAM_SOURCE_FN <- c( "?" )        # name of currently executing source file (stack structure)
+  GCAM_LOG_SAVE  <- c( FALSE )      # whether current log is also being saved to file (stack structure)
+  GCAM_SOURCE_RD <- 0               # recursion depth, an index into above structures
+  DEPENDENCIES   <- list()          # dependencies (i.e. what files scripts read)
+  OUTPUTS        <- list()          # outputs (i.e. what files scripts write)
 }
 
 # Comment character for files

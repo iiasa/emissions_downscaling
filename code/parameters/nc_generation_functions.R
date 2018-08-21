@@ -1,8 +1,13 @@
 #------------------------------------------------------------------------------
 # Program Name: nc_generation_functions.R
 # Authors: Leyang Feng, Caleb Braun
-# Date Last Modified: June 21 2018
-# Program Purpose: NetCDF generation related functions for gridding routine.
+# Date Last Modified: August, 2018
+# Program Purpose: Define functions for generating NetCDF files for the gridding
+#   routine. The three main functions that should be called outside of this file
+#   are:
+#     1. generate_air_grids_nc()
+#     2. generate_bulk_grids_nc()
+#     3. generate_openburning_grids_nc()
 # ------------------------------------------------------------------------------
 
 # Special Packages
@@ -10,26 +15,30 @@ library( 'ncdf4' )
 library( 'sp' )
 library( 'geosphere' )
 
-# -------------------------------------------------
-# generate_bulk_grids_nc
-# Brief:
-# Dependencies:
-# Author: Leyang Feng
-# parameters:
-# return: null
-# input files: null
-# output:
-
-generate_bulk_grids_nc <- function( allyear_grids_list,
-                                    output_dir,
-                                    grid_resolution,
-                                    year_list,
-                                    em,
+# Output a NetCDF file for the bulk sectors of an emissions species
+#
+# Convert gridded data from a nested list of sectors by years to a NetCDF file
+# containing total emissions by anthropogenic sector. Additionally write out
+# checksum and diagnostic csv files.
+#
+# Args:
+#   allyear_grids_list: A list of lists. The outer list must be named Xyears,
+#     the inner list must contain open burning sectors, and the contents must
+#     3d arrays (lat / lon / month)
+#   output_dir: Path to write the ouput files
+#   grid_resolution: Resolution in degrees of the spatial data
+#   year_list: List of years from the data to write out
+#   em: Name of the emission species
+#   sub_nmvoc: Is the emission a NMVOC subspecies?
+#
+# Return:
+#   NULL
+generate_bulk_grids_nc <- function( allyear_grids_list, output_dir,
+                                    grid_resolution, year_list, em,
                                     sub_nmvoc ) {
 
-  # ---
-  # 0. Define variables specific to anthro
-  #    Order matters, so make sure bulk_sectors and sector_ids are in correct positions
+  # Define variables specific to anthro. Note that order matters, so make sure
+  # bulk_sectors and sector_ids are in correct positions.
   bulk_sectors <- c( "AGR", "ENE", "IND", "TRA", "RCO", "SLV", "WST", "SHP" )
   sector_ids <- "0: Agriculture; 1: Energy; 2: Industrial; 3: Transportation; 4: Residential, Commercial, Other; 5: Solvents production and application; 6: Waste; 7: International Shipping"
   sector_type <- "anthro"
@@ -39,14 +48,14 @@ generate_bulk_grids_nc <- function( allyear_grids_list,
     return( invisible( NULL ) )
   }
 
-  # 1. Build and write out netCDF file
-  #    Returns: diag_cells - diagnostic cells list
-  #             out_name - output file name
+  # Build and write out netCDF file
+  # Returns: diag_cells - diagnostic cells list
+  #          out_name - output file name
   diagnostics <- build_ncdf( allyear_grids_list, output_dir, grid_resolution,
                              year_list, em, sub_nmvoc, bulk_sectors,
                              sector_type, sector_ids )
 
-  # 2. Create diagnostic cells plots
+  # Create diagnostic cells plots
   diagnostic_cells <- do.call( 'rbind', diagnostics$diag_cells )
   out_name <- gsub( '.nc', '_cells', diagnostics$out_name, fixed = T )
   writeData( diagnostic_cells, 'DIAG_OUT', out_name, meta = F )
@@ -85,25 +94,29 @@ generate_bulk_grids_nc <- function( allyear_grids_list,
 }
 
 
-# -------------------------------------------------
-# generate_openburning_grids_nc
-# Brief:
-# Dependencies:
-# Author: Leyang Feng
-# parameters:
-# return: null
-# input files: null
-# output:
-
-generate_openburning_grids_nc <- function( allyear_grids_list,
-                                           output_dir,
-                                           grid_resolution,
-                                           year_list,
-                                           em,
+# Output NetCDF files for the open burning sectors of an emissions species
+#
+# Convert gridded data from a nested list of sectors by years to a NetCDF file
+# containing total emissions by sector and a NetCDF file containing sector
+# shares of total emissions. Additionally write out checksum and diagnostic
+# csv files.
+#
+# Args:
+#   allyear_grids_list: A list of lists. The outer list must be named Xyears,
+#     the inner list must contain open burning sectors, and the contents must
+#     3d arrays (lat / lon / month)
+#   output_dir: Path to write the ouput files
+#   grid_resolution: Resolution in degrees of the spatial data
+#   year_list: List of years from the data to write out
+#   em: Name of the emission species
+#   sub_nmvoc: Is the emission a NMVOC subspecies?
+#
+# Return:
+#   NULL
+generate_openburning_grids_nc <- function( allyear_grids_list, output_dir,
+                                           grid_resolution, year_list, em,
                                            sub_nmvoc ) {
-
-  # ---
-  # 0. Define variables specific to openburning
+  # Define variables specific to openburning
   openburning_sectors <- c( "AWB", "FRTB", "GRSB", "PEAT" )
   sector_type <- "openburning"
   sector_ids <- "0: Agricultural Waste Burning On Fields; 1: Forest Burning; 2: Grassland Burning; 3: Peat Burning"
@@ -113,17 +126,17 @@ generate_openburning_grids_nc <- function( allyear_grids_list,
     return( invisible( NULL ) )
   }
 
-  # 1. Build and write out netCDF file
-  #    Returns: diag_cells - diagnostic cells list
-  #             out_name - output file name
+  # Build and write out netCDF file
+  # Returns: diag_cells - diagnostic cells list
+  #          out_name - output file name
   diag_agg <- build_ncdf( allyear_grids_list, output_dir, grid_resolution,
                           year_list, em, sub_nmvoc, openburning_sectors,
                           sector_type, sector_ids, aggregate_sectors = TRUE )
   diag_share <- build_ncdf( allyear_grids_list, output_dir, grid_resolution,
                             year_list, em, sub_nmvoc, openburning_sectors,
-                            sector_type, sector_ids, sector_shares = TRUE)
+                            sector_type, sector_ids, sector_shares = TRUE )
 
-  # 2. Create diagnostic cells plots
+  # Create diagnostic cells plots
   for ( diagnostics in list( diag_agg, diag_share ) ) {
 
     diagnostic_cells <- do.call( 'rbind', diagnostics$diag_cells )
@@ -161,30 +174,31 @@ generate_openburning_grids_nc <- function( allyear_grids_list,
 }
 
 
-# -------------------------------------------------
-# generate_air_grids_nc
-# Brief:
-# Dependencies:
-# Author: Leyang Feng
-# parameters:
-# return: null
-# input files: null
-# output:
-
+# Output a NetCDF file for aircraft emissions
+#
+# Convert gridded data from a nested list of sectors by years to a NetCDF file
+# containing total aircraft emissions. Additionally write out checksum and
+# diagnostic csv files.
+#
+# Args:
+#   allyear_grids_list: A list of lists. The outer list must be named Xyears,
+#     the inner list must contain open burning sectors, and the contents must
+#     3d arrays (lat / lon / month)
+#   output_dir: Path to write the ouput files
+#   grid_resolution: Resolution in degrees of the spatial data
+#   year: TODO: Why is this year and not year_list??
+#   em: Name of the emission species
+#
+# Return:
+#   NULL
 generate_air_grids_nc <- function( allyear_grids_list,
                                    output_dir,
                                    grid_resolution,
                                    year,
                                    em ) {
-
-
-  # ---
-  # 0. Define some needed variables
   global_grid_area <- grid_area( grid_resolution, all_lon = T )
 
-  # ---
-  # 1. Prepare data from writing
-  # (1) emission array
+  # Prepare data for writing
   year_data_list <- lapply( year_list, function( year ) {
 
     current_year_grids <- allyear_grids_list[[ paste0( 'X', year ) ]]
@@ -225,42 +239,23 @@ generate_air_grids_nc <- function( allyear_grids_list,
                                                          180 / grid_resolution,
                                                          25, length( year_list ) * 12 ) )
 
-  # (2) lons data and lon bound data
-  lons <- seq( -180 + grid_resolution / 2, 180 - grid_resolution / 2, grid_resolution )
-  lon_bnds_data <- cbind( lons - grid_resolution / 2, lons + grid_resolution / 2 )
+  bnds <- prepBounds( grid_resolution, days_in_month, year_list )
 
-  # (3) lats data and lat bound data
-  lats <- seq( -90 + grid_resolution / 2, 90 - grid_resolution / 2, grid_resolution )
-  lat_bnds_data <- cbind( lats - grid_resolution / 2, lats + grid_resolution / 2 )
-
-  # (4) levs data and levs bound data
+  # levs data and levs bound data
   levs <- seq( 0.305, 14.945, 0.61 )
-
-  # (5) time dimension data
-  month_middle_days <- floor(cumsum(days_in_month) - days_in_month / 2)
-  time_data <- rep( ( year_list - 2015 ) * 365, each = 12 ) + month_middle_days
-
-  # (6) time dimension bounds data
-  month_bnds_days <- cbind( c( 0, cumsum(days_in_month)[1:11] ), cumsum(days_in_month) )
-  time_bnds_data <- do.call( rbind, lapply( year_list, function( yr ) {
-    month_bnds_days + ( ( yr - 2015 ) * 365 )
-  } ) )
-
-  # (7) upper lower bnds data
-  bnds <- 1 : 2
 
   # ---
   # 2. define nc dimensions
   # Define nc dimensions
-  londim <- ncdim_def( "lon", "degrees_east",  lons, longname = 'longitude' )
-  latdim <- ncdim_def( "lat", "degrees_north", lats, longname = 'latitude' )
-  levdim <- ncdim_def( "level", "km", as.double ( levs ), longname = 'altitude' )
-  timedim <- ncdim_def( "time", paste0( "days since 2015-01-01 0:0:0" ), time_data,
-                        calendar = '365_day', longname = 'time', unlim = T )
+  londim <- ncdim_def( "lon", "degrees_east",  bnds$lons, longname = 'longitude' )
+  latdim <- ncdim_def( "lat", "degrees_north", bnds$lats, longname = 'latitude' )
+  levdim <- ncdim_def( "level", "km", levs, longname = 'altitude' )
+  timedim <- ncdim_def( "time", paste0( "days since 2015-01-01 0:0:0" ),
+                        bnds$time_data, calendar = '365_day', longname = 'time',
+                        unlim = T )
+  bndsdim <- ncdim_def( 'bound', '', 1:2, longname = 'bound', create_dimvar = F )
 
   dim_list <- list( londim, latdim, levdim, timedim )
-
-  bndsdim <- ncdim_def( 'bound', '', as.integer( bnds ), longname = 'bound', create_dimvar = F )
 
   # ---
   # 3. generate nc file name and some variables
@@ -322,9 +317,9 @@ generate_air_grids_nc <- function( allyear_grids_list,
   # ---
   # 7. put nc variables into the nc file
   ncvar_put( nc_new, flat_var, em_array )
-  ncvar_put( nc_new, lon_bnds, t( lon_bnds_data ) )
-  ncvar_put( nc_new, lat_bnds, t( lat_bnds_data ) )
-  ncvar_put( nc_new, time_bnds, t( time_bnds_data ) )
+  ncvar_put( nc_new, lon_bnds, t( bnds$lon_bnds_data ) )
+  ncvar_put( nc_new, lat_bnds, t( bnds$lat_bnds_data ) )
+  ncvar_put( nc_new, time_bnds, t( bnds$time_bnds_data ) )
 
   # ---
   # 8. nc variable attributes
@@ -388,12 +383,12 @@ generate_air_grids_nc <- function( allyear_grids_list,
 
 # Construct and output a NetCDF file
 #
-# Parameters:
-#   ncdf_sectors      - the sectors to include
-#   sector_type       - one of "anthro" or "openburning"
-#   sector_ids        - string for the NetCDF metadata of the sector ids
-#   aggregate_sectors - sum along the sector dimension?
-#   sector_shares     - output sector's total value or share of all sectors
+# Args:
+#   ncdf_sectors: The sectors to include
+#   sector_type: One of "anthro" or "openburning"
+#   sector_ids: String for the NetCDF metadata of the sector ids
+#   aggregate_sectors: Sum along the sector dimension?
+#   sector_shares: Output sector's total value or share of all sectors
 build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
                         year_list, em, sub_nmvoc, ncdf_sectors, sector_type,
                         sector_ids, aggregate_sectors = F, sector_shares = F ) {
@@ -404,11 +399,7 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
   Xyears <- intersect( paste0( 'X', year_list ), names( allyear_grids_list ) )
   year_grids_list <- allyear_grids_list[ Xyears ]
 
-  # or just use the sector_type parameter???
-  is_openburning <- all(names(year_grids_list[[1]]) %in% c( "AWB", "FRTB", "GRSB", "PEAT" ))
-
-  # Prepare data from writing
-  # (1) emission array
+  # Prepare data for writing to NetCDF
   grid_cell_column <- grid_area( grid_resolution, all_lon = T )
 
   # create the dimensions of each year (lon x lat x sector x month)
@@ -529,29 +520,15 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
     em_array[is.nan(em_array)] <- 0
   }
 
-  # (2) lons data and lon bound data
-  lons <- seq( -180 + grid_resolution / 2, 180 - grid_resolution / 2, grid_resolution )
-  lon_bnds_data <- cbind( lons - grid_resolution / 2, lons + grid_resolution / 2 )
-
-  # (3) lats data and lat bound data
-  lats <- seq( -90 + grid_resolution / 2, 90 - grid_resolution / 2, grid_resolution )
-  lat_bnds_data <- cbind( lats - grid_resolution / 2, lats + grid_resolution / 2 )
-
-  # (4) time dimension data
-  month_middle_days <- floor(cumsum(days_in_month) - days_in_month / 2)
-  time_data <- rep( ( year_list - 2015 ) * 365, each = 12 ) + month_middle_days
-
-  # (5) time dimension bounds data
-  month_bnds_days <- cbind( c( 0, cumsum(days_in_month)[1:11] ), cumsum(days_in_month) )
-  time_bnds_data <- do.call( rbind, lapply( year_list, function( yr ) {
-    month_bnds_days + ( ( yr - 2015 ) * 365 )
-  } ) )
+  bnds <- prepBounds( grid_resolution, days_in_month, year_list )
 
   # Define nc dimensions
-  londim <- ncdim_def( "lon", "degrees_east",  lons, longname = 'longitude' )
-  latdim <- ncdim_def( "lat", "degrees_north", lats, longname = 'latitude' )
-  timedim <- ncdim_def( "time", paste0( "days since 2015-01-01 0:0:0" ), time_data,
-                        calendar = '365_day', longname = 'time', unlim = T )
+  londim <- ncdim_def( "lon", "degrees_east",  bnds$lons, longname = 'longitude' )
+  latdim <- ncdim_def( "lat", "degrees_north", bnds$lats, longname = 'latitude' )
+  timedim <- ncdim_def( "time", paste0( "days since 2015-01-01 0:0:0" ),
+                        bnds$time_data, calendar = '365_day', longname = 'time',
+                        unlim = T )
+  bndsdim <- ncdim_def( 'bound', '', 1:2, longname = 'bound', create_dimvar = F )
 
   # sector dimension data and bounds data
   if ( !aggregate_sectors ) {
@@ -562,10 +539,6 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
   } else {
     dim_list <- list( londim, latdim, timedim )
   }
-
-  # upper lower bnds data
-  bnds <- 1 : 2
-  bndsdim <- ncdim_def( 'bound', '', bnds, longname = 'bound', create_dimvar = F )
 
   # Generate nc file name and some variables
   dataset_version_number <- get_global_constant( "dataset_version_number" )
@@ -579,7 +552,8 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
     FN_em <- 'SO2'
   } else if ( sub_nmvoc ) {
     FN_em <- paste0( em, '-', substr( sub( '_', '-', get_VOC_info( em, 'name' ) ), 1, 10 ) )
-    if ( is_openburning ) FN_em <- paste0( 'NMVOC-', sub( '\\.', '-', em ) )
+    if ( sector_type == 'openburning' )
+      FN_em <- paste0( 'NMVOC-', sub( '\\.', '-', em ) )
     sector_type <- paste0( 'speciated-VOC-', sector_type )
   } else {
     FN_em <- em
@@ -601,7 +575,7 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
   dtype <- ''
   if ( sub_nmvoc ) {
     FN_em <- paste( em, get_VOC_info( em, 'name' ) )
-    if ( is_openburning ) FN_em <- em
+    if ( sector_type == 'openburning' ) FN_em <- em
     product <- 'supplementary-emissions-data'
     dtype <- '-supplemental-data'
   }
@@ -671,7 +645,10 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
   }
   if ( sub_nmvoc ) { info_line <- paste( 'Mass flux of', FN_em, '(total mass emitted)' ) }
 
-  data_usage_tips <- paste( data_usage_tips, 'Note that emissions are provided in uneven year intervals (2015, 2020, then at 10 year intervals) as these are the years for which projection data is available.' )
+  data_usage_tips <- paste( data_usage_tips, 'Note that emissions are provided',
+                            'in uneven year intervals (2015, 2020, then at 10',
+                            'year intervals) as these are the years for which',
+                            'projection data is available.' )
 
   # ---
   # 4. define nc variables
@@ -696,9 +673,9 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
   # ---
   # 7. put nc variables into the nc file
   ncvar_put( nc_new, flat_var, em_array )
-  ncvar_put( nc_new, lon_bnds, t( lon_bnds_data ) )
-  ncvar_put( nc_new, lat_bnds, t( lat_bnds_data ) )
-  ncvar_put( nc_new, time_bnds, t( time_bnds_data ) )
+  ncvar_put( nc_new, lon_bnds, t( bnds$lon_bnds_data ) )
+  ncvar_put( nc_new, lat_bnds, t( bnds$lat_bnds_data ) )
+  ncvar_put( nc_new, time_bnds, t( bnds$time_bnds_data ) )
   if ( !aggregate_sectors ) {
     ncvar_put( nc_new, sector_bnds, t( sector_bnds_data ) )
   }
@@ -889,4 +866,38 @@ clean_scenario_name <- function( scenario ) {
   scenario <- gsub("ssp3-lowNTCF", "ssp3-70-lowNTCF", scenario) # CMIP-specific change to RCP nomenclature
   scenario <- gsub("ssp5-ref", "ssp5-85", scenario) # CMIP-specific change to RCP nomenclature
   scenario <- gsub("(ssp\\d)-(\\d)\\.?(\\d)", "\\1\\2\\3", scenario) # Remove ssp hyphen
+}
+
+
+# Build the bounds for the NetCDF dimensions
+#
+# Args:
+#   grid_resolution: Resolution in degrees
+#   days_in_month: Vector of days in each month (non leap year) in order
+#   year_list: Integer vector of years
+#
+# Returns:
+#   Named list of bounds and bounds data
+prepBounds <- function( grid_resolution, days_in_month, year_list ) {
+  # Prepare lons data and lon bound data
+  lons <- seq( -180 + grid_resolution / 2, 180 - grid_resolution / 2, grid_resolution )
+  lon_bnds_data <- cbind( lons - grid_resolution / 2, lons + grid_resolution / 2 )
+
+  # Prepare lats data and lat bound data
+  lats <- seq( -90 + grid_resolution / 2, 90 - grid_resolution / 2, grid_resolution )
+  lat_bnds_data <- cbind( lats - grid_resolution / 2, lats + grid_resolution / 2 )
+
+  # Prepare time dimension data
+  month_middle_days <- floor(cumsum(days_in_month) - days_in_month / 2)
+  time_data <- rep( ( year_list - 2015 ) * 365, each = 12 ) + month_middle_days
+
+  # Prepare time dimension bounds data
+  month_bnds_days <- cbind( c( 0, cumsum(days_in_month)[1:11] ), cumsum(days_in_month) )
+  time_bnds_data <- do.call( rbind, lapply( year_list, function( yr ) {
+    month_bnds_days + ( ( yr - 2015 ) * 365 )
+  } ) )
+
+  return( list( lons = lons, lon_bnds_data = lon_bnds_data,
+                lats = lats, lat_bnds_data = lat_bnds_data,
+                time_data = time_data, time_bnds_data = time_bnds_data ) )
 }
