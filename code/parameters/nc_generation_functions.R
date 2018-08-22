@@ -324,24 +324,8 @@ generate_air_grids_nc <- function( allyear_grids_list,
   # ---
   # 8. nc variable attributes
   # attributes for dimensions
-  ncatt_put( nc_new, "lon", "axis", "X" )
-  ncatt_put( nc_new, "lon", "bounds", "lon_bnds" )
-  ncatt_put( nc_new, "lon", "modulo", 360.0, prec = 'double' )
-  ncatt_put( nc_new, "lon", "realtopology", "circular" )
-  ncatt_put( nc_new, "lon", "standard_name", "longitude" )
-  ncatt_put( nc_new, "lon", "topology", "circular" )
-  ncatt_put( nc_new, "lat", "axis", "Y" )
-  ncatt_put( nc_new, "lat", "bounds", "lat_bnds" )
-  ncatt_put( nc_new, "lat", "realtopology", "linear" )
-  ncatt_put( nc_new, "lat", "standard_name", "latitude" )
-  ncatt_put( nc_new, "time", "axis", "T" )
-  ncatt_put( nc_new, "time", "bounds", "time_bnds" )
-  ncatt_put( nc_new, "time", "realtopology", "linear" )
-  ncatt_put( nc_new, "time", "standard_name", "time" )
-  # attributes for variables
-  ncatt_put( nc_new, flat_var_name, 'cell_methods', 'time: mean' )
-  ncatt_put( nc_new, flat_var_name, 'long_name', longname )
-  ncatt_put( nc_new, flat_var_name, 'missing_value', 1e+20, prec = 'float' )
+  add_variable_atts( nc_new, FALSE, flat_var_name, longname, missing_value )
+
   # nc global attributes
   add_global_atts( nc_new, MD_comment, institution, institution_id, product,
                    dataset_version_number, target_mip, MD_source_id_value,
@@ -395,6 +379,7 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
 
   SEC_IN_MONTH <- days_in_month * 24 * 60 * 60
   KT_PER_KG <- 1e-06
+  NMONTHS <- 12L
 
   # Filter data to only the gridding years specified in gridding_initialize()
   Xyears <- intersect( paste0( 'X', year_list ), names( allyear_grids_list ) )
@@ -408,55 +393,38 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
 
   # Prepare data for writing to NetCDF
 
-  # create the dimensions of each year array (lon x lat x sector x month)
+  # Define array dimensions:
+  #    each year array:    (lon x lat x sectors x months in year)
+  #    array of all years: (lon x lat x sectors x all months)
   lon_res <- as.integer( 360 / grid_resolution )
   lat_res <- as.integer( 180 / grid_resolution )
-  year_dimensions <- c( lon_res, lat_res, length( ncdf_sectors ), 12L )
+  year_grid_dims <- c( lon_res, lat_res, length( ncdf_sectors ), NMONTHS )
+  all_years_dims <- year_grid_dims * c( 1, 1, 1, length( year_grids_list ) )
 
   # Build conversion array to convert monthly values to kt. The dimensions are
   # (lon x lat x 12), where each value represents the conversion factor for
   # going from kg m-2 s-1 to kt per month for each grid cell for each month.
   grid_cell_column <- grid_area( grid_resolution, all_lon = T )
-  grid_cell_conv <- rep( t( grid_cell_column ), 12 ) %>%
-    array( dim = c( lon_res, lat_res, 12 ) ) %>%
+  grid_cell_conv <- rep( t( grid_cell_column ), NMONTHS ) %>%
+    array( dim = c( lon_res, lat_res, NMONTHS ) ) %>%
     sweep( 3, SEC_IN_MONTH * KT_PER_KG, `*` )
 
-  # Flip lat and lon to accommodate nc write-in, then convert to kt
-  year_data_list <- lapply( year_grids_list, rotate_lat_lon, year_dimensions )
-  year_data_list <- lapply( year_data_list, sweep, c( 1, 2, 4 ), grid_cell_conv, `*` )
+  # Flip lat and lon to accommodate nc write-in
+  year_grids_rtd <- lapply( year_grids_list, rotate_lat_lon, year_dimensions )
 
-  year_data_list.orig <- lapply( year_list, function( year ) {
-    # extract current year's data and build array template
-    current_year_grids_list <- allyear_grids_list[[ paste0( 'X', year ) ]]
-    current_year_sector_array <- array( dim = year_dimensions )
+  # Convert to kt
+  year_grids_kt <- lapply( year_grids_rtd, sweep, c( 1, 2, 4 ), grid_cell_conv, `*` )
 
-    temp_checksum_storage <- c()
-    temp_cell_value_storage <- data.frame()
-    for ( i in seq_along( ncdf_sectors ) ) {
-      current_sector <- ncdf_sectors[ i ]
-      current_sector_grid <- current_year_grids_list[[ current_sector ]]
+  # Flatten list of all year grids into one large array
+  em_array <- array( unlist( year_grids_rtd, use.names = F ), all_years_dimensions )
 
-      # flip each time slice of temp_array (rotates lat and lon) and populate
-      # the year template for that sector
-      rotated_sectors <- unlist( lapply( 1:12, function( i ) {
-        rotate_a_matrix( current_sector_grid[ , , i ] )
-      }))
-      current_sector_grid <- array( rotated_sectors, dim = c( lon_res, lat_res, 12 ) )
-      current_year_sector_array[ , , i, ] <- current_sector_grid
-    }
-
-    return( current_year_sector_array )
-  })
-
-  all_years_dimensions <- year_dimensions * c( 1, 1, 1, length( year_list ) )
-  em_array <- array( unlist( year_data_list.orig ), dim = all_years_dimensions )
-
+  # Apply transformations on the sector dimension (the 3rd one), if requested
   if ( aggregate_sectors ) {
-    em_array <- apply(em_array, c( 1, 2, 4 ), sum)
+    em_array <- apply( em_array, c( 1, 2, 4 ), sum )
   }
   if ( sector_shares ) {
     em_array <- prop.table( em_array, c( 1, 2, 4 ) )
-    em_array[is.nan(em_array)] <- 0
+    em_array[ is.nan( em_array ) ] <- 0
   }
 
   bnds <- prepBounds( grid_resolution, days_in_month, year_list )
@@ -614,34 +582,16 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
   # ---
   # 8. nc variable attributes
   # attributes for dimensions
-  ncatt_put( nc_new, "lon", "axis", "X" )
-  ncatt_put( nc_new, "lon", "bounds", "lon_bnds" )
-  ncatt_put( nc_new, "lon", "modulo", 360.0, prec = 'double' )
-  ncatt_put( nc_new, "lon", "realtopology", "circular" )
-  ncatt_put( nc_new, "lon", "standard_name", "longitude" )
-  ncatt_put( nc_new, "lon", "topology", "circular" )
-  ncatt_put( nc_new, "lat", "axis", "Y" )
-  ncatt_put( nc_new, "lat", "bounds", "lat_bnds" )
-  ncatt_put( nc_new, "lat", "realtopology", "linear" )
-  ncatt_put( nc_new, "lat", "standard_name", "latitude" )
-  ncatt_put( nc_new, "time", "axis", "T" )
-  ncatt_put( nc_new, "time", "bounds", "time_bnds" )
-  ncatt_put( nc_new, "time", "realtopology", "linear" )
-  ncatt_put( nc_new, "time", "standard_name", "time" )
-  if ( !aggregate_sectors ) {
-    ncatt_put( nc_new, "sector", "bounds", "sector_bnds" )
-    ncatt_put( nc_new, "sector", "ids", sector_ids )
-  }
-  # attributes for variables
-  ncatt_put( nc_new, flat_var_name, 'cell_methods', 'time: mean' )
-  ncatt_put( nc_new, flat_var_name, 'long_name', longname )
-  ncatt_put( nc_new, flat_var_name, 'missing_value', 1e+20, prec = 'float' )
+  add_variable_atts( nc_new, !aggregate_sectors, flat_var_name, longname, missing_value )
+
   # nc global attributes
   add_global_atts( nc_new, MD_comment, institution, institution_id, product,
                    dataset_version_number, target_mip, MD_source_id_value,
                    sector_long_name, FN_em, MD_variable_id_value )
+
   # Sub-NMVOC specific metadata
   if ( sub_nmvoc ) add_sub_voc_atts( nc_new, em )
+
   # some other metadata
   ncatt_put( nc_new, 0, 'license', license )
   ncatt_put( nc_new, 0, 'data_usage_tips', data_usage_tips )
@@ -649,13 +599,13 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
   ncatt_put( nc_new, 0, 'tracking_id', paste0( "hdl:21.14100/", uuid() ) )
 
   # ---
-  # 9. close nc_new
+  # 9. close and write the NetCDF file
   nc_close( nc_new )
 
   # ---
   # 10. add checksum file
   out_name <- gsub( '.nc', '.csv', nc_file_name_w_path, fixed = T )
-  out_df <- do.call( 'rbind', checksum_df_list )
+  out_df <- build_checksum( year_grids_kt, em, ncdf_sectors, year_list )
 
   # diag
   sector_mapping <- readData( domain = 'GRIDDING', domain_extension = 'gridding-mappings/', file_name = gridding_sector_mapping )
@@ -698,9 +648,9 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
 
   writeData( diff_df, 'DIAG_OUT', sub( '.nc', '_DIFF', nc_file_name, fixed = T ), meta = F )
   write.csv( out_df, out_name, row.names = F )
-  write_checksum( year_data_list, out_name, em, ncdf_sectors, year_list )
 
-
+  diagnostic_cells_list <- extract_diag_cells( year_data_list, diagnostic_cells,
+                                               ncdf_sectors, lat_res, em)
   return( list( out_name = nc_file_name, diag_cells = diagnostic_cells_list ) )
 }
 
@@ -742,6 +692,32 @@ add_global_atts <- function( nc_new, MD_comment, institution, institution_id,
   ncatt_put( nc_new, 0, 'target_mip', target_mip )
   ncatt_put( nc_new, 0, 'title', paste( 'Future', sector_long_name, 'of', FN_em, 'prepared for input4MIPs' ) )
   ncatt_put( nc_new, 0, 'variable_id', MD_variable_id_value )
+}
+
+add_variable_atts <- function( nc_new, sector_var, sector_ids, flat_var_name,
+                               longname, missing_value ) {
+  ncatt_put( nc_new, "lon", "axis", "X" )
+  ncatt_put( nc_new, "lon", "bounds", "lon_bnds" )
+  ncatt_put( nc_new, "lon", "modulo", 360.0, prec = 'double' )
+  ncatt_put( nc_new, "lon", "realtopology", "circular" )
+  ncatt_put( nc_new, "lon", "standard_name", "longitude" )
+  ncatt_put( nc_new, "lon", "topology", "circular" )
+  ncatt_put( nc_new, "lat", "axis", "Y" )
+  ncatt_put( nc_new, "lat", "bounds", "lat_bnds" )
+  ncatt_put( nc_new, "lat", "realtopology", "linear" )
+  ncatt_put( nc_new, "lat", "standard_name", "latitude" )
+  ncatt_put( nc_new, "time", "axis", "T" )
+  ncatt_put( nc_new, "time", "bounds", "time_bnds" )
+  ncatt_put( nc_new, "time", "realtopology", "linear" )
+  ncatt_put( nc_new, "time", "standard_name", "time" )
+  if ( sector_var ) {
+    ncatt_put( nc_new, "sector", "bounds", "sector_bnds" )
+    ncatt_put( nc_new, "sector", "ids", sector_ids )
+  }
+  # attributes for variables
+  ncatt_put( nc_new, flat_var_name, 'cell_methods', 'time: mean' )
+  ncatt_put( nc_new, flat_var_name, 'long_name', longname )
+  ncatt_put( nc_new, flat_var_name, 'missing_value', missing_value, prec = 'float' )
 }
 
 add_sub_voc_atts <- function( nc_new, voc_id ) {
@@ -868,31 +844,29 @@ prepBounds <- function( grid_resolution, days_in_month, year_list ) {
 }
 
 
-# Write global checksum csv file
+# Build global checksum csv file
 #
-# Write out a csv file of global totals (in kt) for each year, sector, and month
+# Build a data.frame of global totals (in kt) for each year, sector, and month
 # for the given emission species.
 #
 # Args:
 #   year_data_list: List of arrays, each containing emission totals for each
 #     year in kt for each grid cell for each sector for each month
-#   fn: Output file name
 #   em: Emission species name
 #   ncdf_sectors: Sector names
 #   year_list: Integer vector of output years
 #
 # Returns:
-#   NULL
-write_checksum <- function( year_data_list, fn, em, ncdf_sectors, year_list ) {
+#   The checksum data.frame
+build_checksum <- function( year_data_list, em, ncdf_sectors, year_list ) {
   checksum_df <- do.call( rbind, lapply( year_data_list, colSums, dims = 2 ) )
-  checksum_df <- data.frame( em, ncdf_sectors, checksum_df ) %>%
+
+  data.frame( em, ncdf_sectors, checksum_df ) %>%
     cbind( rep( year_list, each = length( ncdf_sectors ) ), . ) %>%
     setNames( c( 'year', 'em', 'sector', 1:12 ) ) %>%
     tidyr::gather( 'month', 'global_total', '1':'12' ) %>%
     dplyr::mutate( units = 'kt' ) %>%
     dplyr::arrange( year, sector )
-
-  write.csv( checksum_df, fn, row.names = F )
 }
 
 
