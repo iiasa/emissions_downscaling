@@ -27,9 +27,9 @@ initialize( script_name, log_msg, headers )
 
 # 1. Set up desired IAM to be processing ----------------------------------
 
-SCENARIO_DIAG <- get_global_constant( 'total_ems_plots' )
-MED_OUT_CLEAN <- get_global_constant( 'clean_med_out' )
-DEBUG <- get_global_constant( 'debug' )
+SCENARIO_DIAG <- get_constant( 'total_ems_plots' )
+MED_OUT_CLEAN <- get_constant( 'clean_med_out' )
+DEBUG <- get_constant( 'debug' )
 
 # create unique runsuffix for intermediate files
 RUNSUFFIX <- paste0( format( Sys.time(), '%m-%d-%H%M%S' ), '_',

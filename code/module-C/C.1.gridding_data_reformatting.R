@@ -59,10 +59,10 @@ sector_mapping <- readData( domain = 'GRIDDING',
 # -----------------------------------------------------------------------------
 # 3. Disaggregate NMVOCs
 # Take the anthropogenic NMVOC emissions and speciate them into the CEDS species
-VOC_SPEC <- get_global_constant('voc_speciation')
+VOC_SPEC <- get_constant('voc_speciation')
 
 if ( VOC_SPEC != 'none' ) {
-  REF_EM_CSV <- get_global_constant( 'reference_emissions' )
+  REF_EM_CSV <- get_constant( 'reference_emissions' )
   historical <- readData( 'REF_EM', REF_EM_CSV, domain_extension = ref_domain_extension )
 
   VOC_burn_ratios <- readData( 'GRIDDING', 'VOC_ratio_BurnSectors', domain_extension = "gridding-mappings/" )

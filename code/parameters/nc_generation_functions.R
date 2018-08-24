@@ -60,7 +60,7 @@ generate_bulk_grids_nc <- function( allyear_grids_list, output_dir,
   out_name <- gsub( '.nc', '_cells', diagnostics$out_name, fixed = T )
   writeData( diagnostic_cells, 'DIAG_OUT', out_name, meta = F )
 
-  GENERATE_PLOTS <- get_global_constant( 'diagnostic_plots' )
+  GENERATE_PLOTS <- get_constant( 'diagnostic_plots' )
   if ( GENERATE_PLOTS ) {
     printLog( 'Generating diagnostic plots' )
 
@@ -143,7 +143,7 @@ generate_openburning_grids_nc <- function( allyear_grids_list, output_dir,
     out_name <- gsub( '.nc', '_cells', diagnostics$out_name, fixed = T )
     writeData( diagnostic_cells, 'DIAG_OUT', out_name, meta = F )
 
-    GENERATE_PLOTS <- get_global_constant( 'diagnostic_plots' )
+    GENERATE_PLOTS <- get_constant( 'diagnostic_plots' )
     if ( GENERATE_PLOTS ) {
       printLog( 'Generating diagnostic plots' )
 
@@ -239,7 +239,7 @@ generate_air_grids_nc <- function( allyear_grids_list,
                                                          180 / grid_resolution,
                                                          25, length( year_list ) * 12 ) )
 
-  bnds <- prepBounds( grid_resolution, days_in_month, year_list, "AIR" )
+  bnds <- prep_bounds( grid_resolution, days_in_month, year_list, "AIR" )
 
   # levs data and levs bound data
   levs <- seq( 0.305, 14.945, 0.61 )
@@ -261,11 +261,11 @@ generate_air_grids_nc <- function( allyear_grids_list,
   # 3. generate nc file name and some variables
   if (em == 'Sulfur') {FN_em <- 'SO2'} else {FN_em <- em}
 
-  dataset_version_number <- get_global_constant( "dataset_version_number" )
-  institution_id <- get_global_constant( "institution_id" )
-  institution <- get_global_constant( "institution" )
-  target_mip <- get_global_constant( "target_mip" )
-  license <- get_global_constant( "license" )
+  dataset_version_number <- get_constant( "dataset_version_number" )
+  institution_id <- get_constant( "institution_id" )
+  institution <- get_constant( "institution" )
+  target_mip <- get_constant( "target_mip" )
+  license <- get_constant( "license" )
 
   # Generate comment here to preserve SPA information from original scenario
   MD_comment <- paste0( 'SSP harmonized, gridded emissions for IAMC-', iam, '_',
@@ -368,18 +368,23 @@ generate_air_grids_nc <- function( allyear_grids_list,
 # Construct and output a NetCDF file
 #
 # Args:
+#   allyear_grids_list:
+#   output_dir: Where should the NetCDF be written?
+#   grid_resolution:
+#   year_list:
+#   em:
+#   sub_nmvoc:
 #   ncdf_sectors: The sectors to include
 #   sector_type: One of "anthro" or "openburning"
 #   sector_ids: String for the NetCDF metadata of the sector ids
 #   aggregate_sectors: Sum along the sector dimension?
 #   sector_shares: Output sector's total value or share of all sectors
+#
+# Returns:
+#   NULL
 build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
                         year_list, em, sub_nmvoc, ncdf_sectors, sector_type,
                         sector_ids, aggregate_sectors = F, sector_shares = F ) {
-
-  SEC_IN_MONTH <- days_in_month * 24 * 60 * 60
-  KT_PER_KG <- 1e-06
-  NMONTHS <- 12L
 
   # Filter data to only the gridding years specified in gridding_initialize()
   Xyears <- intersect( paste0( 'X', year_list ), names( allyear_grids_list ) )
@@ -391,169 +396,56 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
   stopifnot( sector_type %in% c( "anthro", "openburning" ) )
   stopifnot( !( aggregate_sectors && sector_shares ) ) # both can't be TRUE
 
-
-  ### Prepare data for writing to NetCDF
-
-  # Define array dimensions:
-  #    each year array:    (lon x lat x sectors x months in year)
-  #    array of all years: (lon x lat x sectors x all months)
-  lon_res <- as.integer( 360 / grid_resolution )
-  lat_res <- as.integer( 180 / grid_resolution )
-  year_grid_dims <- c( lon_res, lat_res, length( ncdf_sectors ), NMONTHS )
-  all_years_dims <- year_grid_dims * c( 1, 1, 1, length( year_grids_list ) )
-
-  # Flip lat and lon to accommodate nc write-in
-  year_grids_rtd <- lapply( year_grids_list, rotate_lat_lon, year_grid_dims )
-
-  # Flatten list of all year grids into one large array
-  em_array <- array( unlist( year_grids_rtd, use.names = F ), all_years_dims )
-
-  # Apply transformations on the sector dimension (the 3rd one), if requested
-  if ( aggregate_sectors ) {
-    # em_array <- apply( em_array, c( 1, 2, 4 ), sum )
-    em_array <- em_array
-  } else if ( sector_shares ) {
-    em_array <- prop.table( em_array, c( 1, 2, 4 ) )
-    em_array[ is.nan( em_array ) ] <- 0
-  }
-
-
-  ### Define NetCDF dimensions
-  bnds <- prepBounds( grid_resolution, days_in_month, year_list, ncdf_sectors )
-
-  bndsdim <- ncdim_def( 'bound', '', 1:2, longname = 'bound', create_dimvar = F )
-  londim <- ncdim_def( "lon", "degrees_east",  bnds$lons, longname = 'longitude' )
-  latdim <- ncdim_def( "lat", "degrees_north", bnds$lats, longname = 'latitude' )
-  sectordim <- ncdim_def( "sector", "", bnds$sectors, longname = 'sector' )
-  timedim <- ncdim_def( "time", paste0( "days since 2015-01-01 0:0:0" ),
-                        bnds$time_data, calendar = '365_day', longname = 'time',
-                        unlim = T )
-
-  if ( !aggregate_sectors ) {
-    dim_list <- list( londim, latdim, sectordim, timedim )
-  } else {
-    dim_list <- list( londim, latdim, timedim )
-  }
-
-
-  ### Generate nc file name and some variables
-  #
-  # fn = file name
-  # md = metadata
-
-  DATASET_VERSION <- get_global_constant( "dataset_version_number" )
-  INSTITUTION_ID <- get_global_constant( "institution_id" )
-  INSTITUTION <- get_global_constant( "institution" )
-  target_mip <- get_global_constant( "target_mip" )
-  license <- get_global_constant( "license" )
-
-  NC_COMPRESSION <- 5
-  MISSING_VALUE <- 1.e20
-  DATA_UNIT <- if_else( sector_shares, 'percent', 'kg m-2 s-1' )
-  DATA_TYPE <- if_else( sub_nmvoc, 'supplemental-data', '' )
-  PRODUCT   <- if_else( sub_nmvoc, 'supplementary-emissions-data',
-                        'primary-emissions-data' )
-
-  DATASET_GROUP <- 'input4MIPs_emissions'
-  GRID_LABEL <- 'gn'
-  TIME_RANGE <- '201501-210012'
-
   fn_em <- clean_em_name( em, sub_nmvoc, sector_type )
   fn_sector <- clean_sector_name( sector_type, sector_shares, sub_nmvoc )
   fn_scenario <- clean_scenario_name( scenario )
 
-  # In UoM-AIM-ssp370-lowNTCF all instances of ScenarioMIP are to be changed to
-  # AerChemMIP, including filename.
-  if ( iam == 'AIM' && fn_scenario == 'ssp370-lowNTCF' ) {
-    new_target <- 'AerChemMIP'
-    md_license <- gsub( target_mip, new_target, license )
-    target_mip <- new_target
-  }
+  var_atts <- build_nc_var_atts( fn_em, fn_sector, aggregate_sectors,
+                                 sector_shares, sector_type )
+  global_atts <- build_global_atts( em, fn_em, fn_scenario, sub_nmvoc,
+                                    sector_shares, sector_type, var_atts )
 
-  fn_variable_id <- paste( fn_em, fn_sector, sep = '-' )
-  md_source_id <- paste( INSTITUTION_ID, iam, fn_scenario, gsub( "\\.", "-", DATASET_VERSION ), DATA_TYPE, sep = '-' )
-  nc_file_name <- paste( fn_variable_id, DATASET_GROUP, target_mip, md_source_id, GRID_LABEL, TIME_RANGE, sep = '_' )
-  nc_file_name_w_path <- paste0( output_dir, '/', nc_file_name, '.nc' )
+  nc_file_name <- build_nc_filename( var_atts$em_var_name_fn, global_atts )
+  nc_file_path <- paste0( output_dir, '/', nc_file_name )
 
-  # Change hyphens in variable name to underscores for the metadata
-  flat_var_name <- gsub( "-", "_", fn_variable_id )
+  ### Prepare data for writing to NetCDF
+  em_array <- unlist_for_ncdf( year_grids_list, ncdf_sectors, grid_resolution,
+                               aggregate_sectors, sector_shares, nc_file_name )
 
-  # Generate comment with SPA information from original scenario (iam and
-  # scenario are variables in the global namespace). Add description of
-  # aggregate for open burning
-  md_comment <- paste0( 'SSP harmonized, gridded emissions for IAMC-', iam, '_',
-                        scenario, '. Data harmonized to historical emissions ',
-                        'CEDS-v2017-05-18 (anthropogenic) and v1.2 (land-use ',
-                        'change).' )
-	if ( aggregate_sectors && ( sector_type == "openburning" ) ) {
-  	md_comment <- paste( md_comment, sector_type, 'emissions are provided here',
-                        'as one aggregate total. Future emissions shares by',
-                        'land-type are provided in a separate file.' )
-	}
-
-  if ( sector_type == 'openburning' && aggregate_sectors ) {
-    sector_long_name <- 'open burning sector shares'
-  } else if ( sector_type == 'openburning' && sector_shares ) {
-    sector_long_name <- 'total open burning emissions'
-  } else if ( sector_type == 'openburning') {
-    sector_long_name <- 'open burning'
-  } else {
-    sector_long_name <- 'anthropogenic emissions'
-  }
-  longname <- paste( fn_em, toTitleCase( sector_long_name ) )
-
-  data_details <- build_data_details( em, fn_em, sector_shares, sector_type, sub_nmvoc )
-
+  ### Define NetCDF dimensions
+  bnds <- prep_bounds( grid_resolution, days_in_month, year_list, ncdf_sectors )
+  ncdims <- define_ncdims( bnds, aggregate_sectors )
 
   ### Define NetCDF variables
-  flat_var  <- ncvar_def( flat_var_name, DATA_UNIT, dim_list,missval = MISSING_VALUE,
-                          longname = longname, compression = NC_COMPRESSION )
-  lon_bnds    <- ncvar_def( 'lon_bnds',    '', list( bndsdim, londim ),    prec = 'double' )
-  lat_bnds    <- ncvar_def( 'lat_bnds',    '', list( bndsdim, latdim ),    prec = 'double' )
-  time_bnds   <- ncvar_def( 'time_bnds',   '', list( bndsdim, timedim ),   prec = 'double' )
-  sector_bnds <- ncvar_def( 'sector_bnds', '', list( bndsdim, sectordim ), prec = 'double' )
-
-  if ( !aggregate_sectors ) {
-    variable_list <- list( flat_var, lat_bnds, lon_bnds, time_bnds, sector_bnds )
-  } else {
-    variable_list <- list( flat_var, lat_bnds, lon_bnds, time_bnds )
-  }
-
+  ncvars <- define_ncvars( ncdims, var_atts )
 
   ### Create and write the NetCDF file
-  nc_new <- nc_create( nc_file_name_w_path, variable_list, force_v4 = T )
+  nc_new <- nc_create( nc_file_path, ncvars, force_v4 = T )
 
-  ncvar_put( nc_new, flat_var,  em_array )
-  ncvar_put( nc_new, lon_bnds,  t( bnds$lon_bnds_data ) )
-  ncvar_put( nc_new, lat_bnds,  t( bnds$lat_bnds_data ) )
-  ncvar_put( nc_new, time_bnds, t( bnds$time_bnds_data ) )
+  ncvar_put( nc_new, ncvars$em_var,    em_array )
+  ncvar_put( nc_new, ncvars$lon_bnds,  t( bnds$lon_bnds_data ) )
+  ncvar_put( nc_new, ncvars$lat_bnds,  t( bnds$lat_bnds_data ) )
+  ncvar_put( nc_new, ncvars$time_bnds, t( bnds$time_bnds_data ) )
+
   if ( !aggregate_sectors ) {
-    ncvar_put( nc_new, sector_bnds, t( bnds$sector_bnds_data ) )
+    ncvar_put( nc_new, ncvars$sector_bnds, t( bnds$sector_bnds_data ) )
   }
 
-
   ### Add variable and global attributes
-  add_variable_atts( nc_new, !aggregate_sectors, sector_ids, flat_var_name,
-                     longname, MISSING_VALUE )
+  add_variable_atts( nc_new, var_atts, !aggregate_sectors, sector_ids )
 
-  add_global_atts( nc_new, md_comment, INSTITUTION, INSTITUTION_ID, PRODUCT,
-                   DATASET_VERSION, target_mip, md_source_id, sector_long_name,
-                   fn_em, flat_var_name )
-
-  # Sub-NMVOC specific metadata
-  if ( sub_nmvoc ) add_sub_voc_atts( nc_new, em )
-
-  # some other metadata
-  ncatt_put( nc_new, 0, 'license', license )
-  ncatt_put( nc_new, 0, 'data_usage_tips', data_details$data_usage_tips )
-  ncatt_put( nc_new, 0, 'reporting_unit', data_details$info_line )
-  ncatt_put( nc_new, 0, 'tracking_id', paste0( "hdl:21.14100/", uuid() ) )
+  invisible( mapply( ncatt_put, names( global_atts ), global_atts,
+                     MoreArgs = list( nc = nc_new, varid = 0 ) ) )
 
   # Close and write the NetCDF file
   nc_close( nc_new )
 
+  return( invisible( NULL ) )
 
   ### Generate diagnostics
+
+  SEC_IN_MONTH <- days_in_month * 24 * 60 * 60
+  KT_PER_KG <- 1e-06
 
   # Build conversion array to convert monthly values to kt. The dimensions are
   # (lon x lat x 12), where each value represents the conversion factor for
@@ -590,7 +482,7 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
     dplyr::rename(grid_sum = global_total.x, orig_sum = global_total.y) %>%
     dplyr::select(sector_name, year, units, grid_sum, orig_sum, pct_diff)
 
-  ERR_TOL <- get_global_constant( 'error_tolerance' )
+  ERR_TOL <- get_constant( 'error_tolerance' )
   largest_diff <- round(max(abs(diff_df$pct_diff), na.rm = T), 4)
 
   if ( largest_diff > ERR_TOL ) {
@@ -616,47 +508,20 @@ build_ncdf <- function( allyear_grids_list, output_dir, grid_resolution,
 }
 
 
-# Add global attributes to a netCDF file
-add_global_atts <- function( nc_new, md_comment, institution, institution_id,
-                             product, dataset_version_number, target_mip,
-                             md_source_id, sector_long_name, fn_em,
-                             md_variable_id ) {
-
-  creation_date <- as.POSIXlt( Sys.time(), "UTC" )
-  location <- get_global_constant( "location" )
-  history <- paste0( format( creation_date, format = '%d-%m-%Y %H:%M:%S %p %Z' ), '; ', location )
-
-  ncatt_put( nc_new, 0, 'Conventions', 'CF-1.6' )
-  ncatt_put( nc_new, 0, 'activity_id', 'input4MIPs' )
-  ncatt_put( nc_new, 0, 'comment', md_comment )
-  ncatt_put( nc_new, 0, 'contact', 'Steven J. Smith (ssmith@pnnl.gov)' )
-  ncatt_put( nc_new, 0, 'creation_date', format( creation_date, format = '%Y-%m-%dT%H:%M:%SZ' ) )
-  ncatt_put( nc_new, 0, 'data_structure', 'grid' )
-  ncatt_put( nc_new, 0, 'dataset_category', 'emissions' )
-  ncatt_put( nc_new, 0, 'external_variables', 'gridcell_area' )
-  ncatt_put( nc_new, 0, 'frequency', 'mon' )
-  ncatt_put( nc_new, 0, 'further_info_url', 'https://secure.iiasa.ac.at/web-apps/ene/SspDb/' )
-  ncatt_put( nc_new, 0, 'grid', '0.5x0.5 degree latitude x longitude' )
-  ncatt_put( nc_new, 0, 'grid_label', 'gn' )
-  ncatt_put( nc_new, 0, 'nominal_resolution', '50 km' )
-  ncatt_put( nc_new, 0, 'history', history )
-  ncatt_put( nc_new, 0, 'institution', institution )
-  ncatt_put( nc_new, 0, 'institution_id', institution_id )
-  ncatt_put( nc_new, 0, 'mip_era', 'CMIP6' )
-  ncatt_put( nc_new, 0, 'product', product )
-  ncatt_put( nc_new, 0, 'realm', 'atmos' )
-  ncatt_put( nc_new, 0, 'references', 'See: https://secure.iiasa.ac.at/web-apps/ene/SspDb/ for references' )
-  ncatt_put( nc_new, 0, 'source', 'IAMC Scenario Database hosted at IIASA' )
-  ncatt_put( nc_new, 0, 'source_id', md_source_id )
-  ncatt_put( nc_new, 0, 'source_version', dataset_version_number )
-  ncatt_put( nc_new, 0, 'table_id', 'input4MIPs' )
-  ncatt_put( nc_new, 0, 'target_mip', target_mip )
-  ncatt_put( nc_new, 0, 'title', paste( 'Future', sector_long_name, 'of', fn_em, 'prepared for input4MIPs' ) )
-  ncatt_put( nc_new, 0, 'variable_id', md_variable_id )
-}
-
-add_variable_atts <- function( nc_new, sector_var, sector_ids, flat_var_name,
-                               longname, missing_value ) {
+# Add variable attributes to a NetCDF file
+#
+# Add the standard values for representing the grid and time variables. If there
+# is sectoral data, add that as well.
+#
+# Args:
+#    nc_new: A ncdf4 object
+#    atts: List of the variable attributes
+#    sector_var: Does the data have a dimension for sectors?
+#    sector_ids: The sector ids, used only if there is a sector dimension
+#
+# Returns:
+#    NULL
+add_variable_atts <- function( nc_new, atts, sector_var, sector_ids ) {
   ncatt_put( nc_new, "lon", "axis", "X" )
   ncatt_put( nc_new, "lon", "bounds", "lon_bnds" )
   ncatt_put( nc_new, "lon", "modulo", 360.0, prec = 'double' )
@@ -675,19 +540,9 @@ add_variable_atts <- function( nc_new, sector_var, sector_ids, flat_var_name,
     ncatt_put( nc_new, "sector", "bounds", "sector_bnds" )
     ncatt_put( nc_new, "sector", "ids", sector_ids )
   }
-  ncatt_put( nc_new, flat_var_name, 'cell_methods', 'time: mean' )
-  ncatt_put( nc_new, flat_var_name, 'long_name', longname )
-  ncatt_put( nc_new, flat_var_name, 'missing_value', missing_value, prec = 'float' )
-}
-
-add_sub_voc_atts <- function( nc_new, voc_id ) {
-  VOC_name <- get_VOC_info( voc_id, 'name' )
-  molecular_weight <- get_VOC_info( voc_id, 'weight' )
-  molecular_weight_unit <- "g mole-1"
-
-  ncatt_put( nc_new, 0, 'VOC_name', VOC_name )
-  ncatt_put( nc_new, 0, 'molecular_weight', molecular_weight, prec = 'float' )
-  ncatt_put( nc_new, 0, 'molecular_weight_unit', molecular_weight_unit )
+  ncatt_put( nc_new, var_atts$em_var_name, 'cell_methods', 'time: mean' )
+  ncatt_put( nc_new, var_atts$em_var_name, 'long_name', var_atts$longname )
+  ncatt_put( nc_new, var_atts$em_var_name, 'missing_value', var_atts$missing_value, prec = 'float' )
 }
 
 
@@ -727,35 +582,171 @@ get_VOC_info <- function( voc, type ) {
 }
 
 
-# Data usage tips and reporting unit change if they are shares or not
-build_data_details <- function( em, fn_em, sector_shares, sector_type, sub_nmvoc ) {
-  em_key <- c( 'Sulfur', 'NOx', 'CO', 'NMVOC', 'VOC', 'NH3', 'BC', 'OC', 'CO2', 'CH4' )
-  em_actual <- c( 'SOx', 'NOx', 'CO', 'NMVOC', 'NMVOC', 'NH3', 'BC', 'OC', 'CO2', 'CH4' )
-  em_val <- em_actual[ em == em_key ]
-  if ( length( em_val ) == 0 ) { em_val <- 'NMVOC' }
-  if ( sector_shares ) {
-    data_usage_tips <- 'These are monthly averages.'
-    info_line <- paste( 'Fraction of', em_val, 'from each land category listed',
-                        'in the sector variable' )
+build_global_atts <- function( em, fn_em, fn_scenario, sub_nmvoc, sector_shares,
+                               sector_type, var_atts ) {
+  creation_date   <- as.POSIXlt( Sys.time(), "UTC" )
+  reporting_unit  <- build_reporting_unit( em, fn_em, sector_shares, sector_type, sub_nmvoc )
+  product         <- paste0( if_else( sub_nmvoc, 'supplementary', 'primary' ), '-emissions-data' )
+  title           <- paste( 'Future', var_atts$sector_long_name, 'of', fn_em )
+  data_usage_tips <- paste(
+    'These are monthly average', if_else( sector_shares, 's.', 'fluxes.' ),
+    'Note that emissions are provided in uneven year intervals (2015, 2020,',
+    'then at 10 year intervals) as these are the years for which projection',
+    'data is available.'
+  )
+
+  default_atts <- list(
+    Conventions        = 'CF-1.6',
+    comment            = NULL,
+    creation_date      = format( creation_date, format = '%Y-%m-%dT%H:%M:%SZ' ),
+    data_structure     = 'grid',
+    dataset_category   = 'emissions',
+    data_usage_tips    = data_usage_tips,
+    external_variables = 'gridcell_area',
+    frequency          = 'mon',
+    grid               = '0.5x0.5 degree latitude x longitude',
+    grid_label         = 'gn',
+    history            = format( creation_date, format = '%d-%m-%Y %H:%M:%S %p %Z' ),
+    institution        = NULL,
+    nominal_resolution = '50 km',
+    product            = product,
+    realm              = 'atmos',
+    references         = NULL,
+    reporting_unit     = reporting_unit,
+    source             = NULL,
+    source_version     = '1.0',
+    table_id           = 'input4MIPs',
+    target_mip         = 'ScenarioMIP',
+    tracking_id        = paste0( "hdl:21.14100/", uuid() ),
+    title              = title,
+    variable_id        = var_atts$em_var_name
+  )
+
+  user_atts <- get_constant( 'NC_ATTS' )
+  user_att_additions <- get_constant( 'NC_ATT_ADDITIONS' )
+
+  defaults_to_add <- names( default_atts ) %!in% names( user_atts )
+  global_atts <- c( user_atts, default_atts[ defaults_to_add ] )
+
+  suffixes_to_add <- names( global_atts ) %in% names( user_att_additions )
+  global_atts[ suffixes_to_add ] <- paste0( global_atts[ suffixes_to_add ],
+                                            user_att_additions )
+
+  # The global attribute source_id is a composition of other attributes
+  source_id <- c( global_atts$institution_id, iam, fn_scenario,
+                  gsub( "\\.", "-", global_atts$source_version ),
+                  if_else( sub_nmvoc, 'supplemental-data', '' ) )
+  global_atts$source_id <- paste( source_id, collapse = '-' )
+
+  global_atts <- compile_template( global_atts )
+
+  # Return sorted list of global attributes
+  return( global_atts[ sort( names( global_atts ) ) ] )
+}
+
+
+build_nc_var_atts <- function( fn_em, fn_sector, aggregate_sectors, sector_shares, sector_type ) {
+  em_var_name_fn <- paste( fn_em, fn_sector, sep = '-' )
+  em_var_name <- gsub( "-", "_", em_var_name_fn )
+
+  data_unit <- if_else( sector_shares, 'percent', 'kg m-2 s-1' )
+
+  if ( sector_type == 'openburning' && aggregate_sectors ) {
+    sector_long_name <- 'total open burning emissions'
+  } else if ( sector_type == 'openburning' && sector_shares ) {
+    sector_long_name <- 'open burning sector shares'
+  } else if ( sector_type == 'openburning') {
+    sector_long_name <- 'open burning'
   } else {
-    data_usage_tips <- 'Note that these are monthly average fluxes.'
-    info_line <- paste( 'Mass flux of', em_val )
-    if ( em_val == 'NMVOC' ) info_line <- paste( info_line, '(total mass emitted)' )
-    if ( em_val == 'BC' || em_val == 'OC' ) info_line <- paste0( info_line, ', reported as carbon mass' )
+    sector_long_name <- 'anthropogenic emissions'
   }
-  if ( em_val == 'SOx' ) info_line <- paste0( info_line, ', reported as SO2' )
-  if ( em_val == 'NOx' ) {
-    reporting_unit <- if ( sector_type == 'openburning' ) 'NO' else 'NO2'
-    info_line <- paste0( info_line, ', reported as ', reporting_unit )
+
+  longname <- paste( fn_em, toTitleCase( sector_long_name ) )
+
+  list(
+    em_var_name_fn   = em_var_name_fn,
+    em_var_name      = em_var_name,
+    data_unit        = data_unit,
+    sector_long_name = sector_long_name,
+    longname         = longname,
+    missing_value    = 1e+20,
+    nc_compression   = 5
+  )
+}
+
+
+# Build the output filename
+#
+# Piece together the output filename from key attributes. Follows the convention
+# specified for CMIP6 (http://goo.gl/r8up31) if all parts are provided.
+#
+# Args:
+#   em_var_name_fn: The emission variable name without underscores
+#   global_atts: A list of the NetCDF's global attributes
+#
+# Returns:
+#   The output filename
+build_nc_filename <- function( em_var_name_fn, global_atts ) {
+  # These are global variables defined in all_module_functions.R
+  time_range <- paste0( ds_start_year, '01-', ds_end_year, '12' )
+
+  # Put together the pieces of the file name and separate with underscores
+  # (Not all parts are required, but using c() removes the NULL values)
+  filename <- c( em_var_name_fn,               global_atts$activity_id,
+                 global_atts$dataset_category, global_atts$target_mip,
+                 global_atts$source_id,        global_atts$grid_label,
+                 time_range )
+
+  filename <- paste( filename, collapse = '_' )
+
+  return( paste0( filename, '.nc' ) )
+}
+
+
+# Build the reporting_unit global attribute
+#
+# The reporting_unit global attribute has several nuances, addressed here.
+# - The emission 'VOC' is not allowed, so we report it as NMVOC
+# - Sulfur is reported as SOx
+# - If outputing sector shares, we need to report that data is a fraction
+# - NOx emissions are reported as NO for open burning and NO2 for anthro
+#
+# Args:
+#   em: The emission species
+#   fn_em: The full emission species name
+#   sector_shares: Are we outputting sector shares?
+#   sector_type: Either 'openburning' or 'anthro'
+#   sub_nmvoc: Is em a NMVOC sub species?
+#
+# Returns:
+#   The value of the reporting_unit global attribute
+build_reporting_unit <- function( em, fn_em, sector_shares, sector_type, sub_nmvoc ) {
+
+  reporting_em <- switch ( em, Sulfur = 'SOx', VOC = 'NMVOC', em )
+
+  if ( sub_nmvoc ) {
+    reporting_unit <- paste( 'Mass flux of', fn_em, '(total mass emitted)' )
+  } else if ( sector_shares ) {
+    reporting_unit <- paste( 'Fraction of', reporting_em, 'from each land',
+                             'category listed in the sector variable' )
+  } else if ( reporting_em == 'NMVOC' ) {
+    reporting_unit <- 'Mass flux of NMVOC (total mass emitted)'
+  } else if ( reporting_em == 'BC' || reporting_em == 'OC' ) {
+    reporting_unit <- paste0( 'Mass flux of ', reporting_em, ', reported as ',
+                              'carbon mass' )
+  } else {
+    reporting_unit <- paste( 'Mass flux of', reporting_em )
   }
-  if ( sub_nmvoc ) { info_line <- paste( 'Mass flux of', fn_em, '(total mass emitted)' ) }
 
-  data_usage_tips <- paste( data_usage_tips, 'Note that emissions are provided',
-                            'in uneven year intervals (2015, 2020, then at 10',
-                            'year intervals) as these are the years for which',
-                            'projection data is available.' )
+  if ( reporting_em == 'SOx' ) {
+    reporting_unit <- paste0( reporting_unit, ', reported as SO2' )
+  } else if ( reporting_em == 'NOx' && sector_type == 'openburning' ) {
+    reporting_unit <- paste0( reporting_unit, ', reported as NO' )
+  } else if ( reporting_em == 'NOx' && sector_type == 'anthro' ) {
+    reporting_unit <- paste0( reporting_unit, ', reported as NO2' )
+  }
 
-  list( data_usage_tips = data_usage_tips, info_line = info_line)
+  return( reporting_unit )
 }
 
 
@@ -813,6 +804,79 @@ clean_sector_name <- function( sector_type, sector_shares, sub_nmvoc ) {
 }
 
 
+# Evaluate variables defined in config text
+#
+# Replace variables in a list of character vectors designated by double
+# brackets. For example:
+#   > info <- list( "My R version is [[R.version.string]]", "pi: [[pi]]" )
+#   > compile_template(info)
+#   [[1]]
+#   [1] "My R version is R version 3.5.1 (2018-07-02)"
+#
+#   [[2]]
+#   [1] "pi: 3.14159265358979"
+#
+# Does not work for list elements of length greater than one.
+#
+# Args:
+#   l: List of character vectors
+#
+# Returns:
+#   Compiled list of character vectors
+compile_template <- function( l ) {
+  lapply( l, function( x ) {
+    splits <- strsplit( x, '(\\[\\[|\\]\\])' )[[1]]
+    if ( length( splits ) == 1 ) return( x )
+    splits[ c( F, T ) ] <- sapply( splits[ c( F, T ) ], get, parent.frame() )
+    paste( splits, collapse = '' )
+  })
+}
+
+
+define_ncdims <- function( bnds, aggregate_sectors ) {
+  londim <- ncdim_def( "lon", "degrees_east",  bnds$lons, longname = 'longitude' )
+  latdim <- ncdim_def( "lat", "degrees_north", bnds$lats, longname = 'latitude' )
+  timedim <- ncdim_def( "time", paste0( "days since 2015-01-01 0:0:0" ),
+                        bnds$time_data, calendar = '365_day', longname = 'time',
+                        unlim = T )
+
+  dim_list <- list( londim = londim, latdim = latdim, timedim = timedim )
+
+  if ( !aggregate_sectors ) {
+    dim_list$sectordim <- ncdim_def( "sector", "", bnds$sectors, longname = 'sector' )
+  }
+
+  return( dim_list )
+}
+
+
+define_ncvars <- function( dim_list, atts ) {
+  bndsdim <- ncdim_def( 'bound', '', 1:2, longname = 'bound', create_dimvar = F )
+
+  lon_bnds  <- ncvar_def( 'lon_bnds',  '', list( bndsdim, dim_list$londim ),  prec = 'double' )
+  lat_bnds  <- ncvar_def( 'lat_bnds',  '', list( bndsdim, dim_list$latdim ),  prec = 'double' )
+  time_bnds <- ncvar_def( 'time_bnds', '', list( bndsdim, dim_list$timedim ), prec = 'double' )
+
+  em_var  <- ncvar_def( name        = atts$em_var_name,
+                        units       = atts$data_unit,
+                        dim         = dim_list,
+                        missval     = atts$missing_value,
+                        longname    = atts$longname,
+                        compression = atts$nc_compression )
+
+
+  var_list <- list( em_var = em_var, lon_bnds = lon_bnds, lat_bnds = lat_bnds,
+                    time_bnds = time_bnds )
+
+  if ( !is.null( dim_list$sectordim ) ) {
+    var_list$sector_bnds <-
+      ncvar_def( 'sector_bnds', '', list( bndsdim, dim_list$sectordim ), prec = 'double' )
+  }
+
+  return( var_list )
+}
+
+
 # Build the bounds for the NetCDF dimensions
 #
 # Args:
@@ -823,7 +887,7 @@ clean_sector_name <- function( sector_type, sector_shares, sub_nmvoc ) {
 #
 # Returns:
 #   Named list of bounds and bounds data
-prepBounds <- function( grid_resolution, days_in_month, year_list, ncdf_sectors ) {
+prep_bounds <- function( grid_resolution, days_in_month, year_list, ncdf_sectors ) {
   # Prepare lons data and lon bound data
   lons <- seq( -180 + grid_resolution / 2, 180 - grid_resolution / 2, grid_resolution )
   lon_bnds_data <- cbind( lons - grid_resolution / 2, lons + grid_resolution / 2 )
@@ -914,4 +978,34 @@ extract_diag_cells <- function( year_grids_list, diagnostic_cells, ncdf_sectors,
                        value = cell_values / 1000,
                        stringsAsFactors = F) )
   })
+}
+
+
+unlist_for_ncdf <- function( year_grids_list, ncdf_sectors, grid_resolution,
+                             aggregate_sectors, sector_shares, diag_fname ) {
+  NMONTHS <- 12L
+
+  # Define array dimensions:
+  #    each year array:    (lon x lat x sectors x months in year)
+  #    array of all years: (lon x lat x sectors x all months)
+  lon_res <- as.integer( 360 / grid_resolution )
+  lat_res <- as.integer( 180 / grid_resolution )
+  year_grid_dims <- c( lon_res, lat_res, length( ncdf_sectors ), NMONTHS )
+  all_years_dims <- year_grid_dims * c( 1, 1, 1, length( year_grids_list ) )
+
+  # Flip lat and lon to accommodate nc write-in
+  year_grids_rtd <- lapply( year_grids_list, rotate_lat_lon, year_grid_dims )
+
+  # Flatten list of all year grids into one large array
+  em_array <- array( unlist( year_grids_rtd, use.names = F ), all_years_dims )
+
+  # Apply transformations on the sector dimension (the 3rd one), if requested
+  if ( aggregate_sectors ) {
+    em_array <- apply( em_array, c( 1, 2, 4 ), sum )
+  } else if ( sector_shares ) {
+    em_array <- prop.table( em_array, c( 1, 2, 4 ) )
+    em_array[ is.nan( em_array ) ] <- 0
+  }
+
+  return( em_array )
 }

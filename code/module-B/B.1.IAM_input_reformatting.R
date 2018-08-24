@@ -84,7 +84,7 @@ iam_data <- iam_data %>%
   dplyr::select( model, scenario, region, em, sector, harm_status, unit, one_of( x_year_list ) )
 
 # Filter for if only one emission species is desired.
-VOC_SPEC <- get_global_constant( 'voc_speciation' )
+VOC_SPEC <- get_constant( 'voc_speciation' )
 sub_spec <- !is.na( run_species )
 
 if ( VOC_SPEC == 'only' ) {

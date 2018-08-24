@@ -45,7 +45,7 @@ generate_global_total_ems <- function() {
 }
 
 read_in_reference_ems <- function() {
-  HISTORICAL_EMS <- get_global_constant( 'reference_emissions' )
+  HISTORICAL_EMS <- get_constant( 'reference_emissions' )
   historical_ems_fname <- paste0( 'CEDS_CMIP6_to_2015/', HISTORICAL_EMS )
 
   readData( 'REF_EM', file_name = historical_ems_fname ) %>%
