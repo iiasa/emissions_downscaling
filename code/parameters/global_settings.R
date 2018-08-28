@@ -70,13 +70,13 @@ em_gridding_env$reference_emissions <- 'CEDS_by_country_by_CEDS_sector_with_luc_
 em_gridding_env$config_file         <- 'config_CMIP.R'
 
 # Output netCDF metadata options
-source( paste0( 'config/', get_constant( 'config_file' ) ), em_gridding_env )
+source( paste0( 'ncdf_config/', get_constant( 'config_file' ) ), em_gridding_env )
 
 # How should NMVOC speciation be done? Value must be one of the following:
 #   'all'  - Do NMVOC speciation along with all other emissions
 #   'only' - Do NMVOC speciation and no other emissions
 #   'none' - Do not do NMVOC speciation
-em_gridding_env$voc_speciation <- 'only'
+em_gridding_env$voc_speciation <- 'all'
 
 # Diagnostics
 em_gridding_env$diagnostic_plots <- T

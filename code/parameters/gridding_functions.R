@@ -448,6 +448,13 @@ grid_all_years_air <- function( year_list,
 
   names( allyear_grids_list ) <- paste0( 'X', year_list )
 
+  # Seasonality and other masks do not need to be globals, and it would be good
+  # to not load them into the Global Environment. For now, we can just remove
+  # them when we're done.
+  rm( list = intersect( ls( pos = globalenv() ),
+                        unique( seasonality_mapping$seasonality_file ) ),
+      pos = globalenv() )
+
   invisible( gc( ) )
 
   return( allyear_grids_list )
@@ -695,24 +702,35 @@ rotate_a_matrix <- function( x ) {
 
 # ------------------------------------------------------------------------------
 # rotate_lat_lon
-# Brief: rotate the first two dimensions (lon, lat) of a list of 3d arrays, then
-#        return as a 4d array
-# Dependencies: null
+# Brief: Rotate the first two dimensions (lon, lat) of a list containing arrays
+#        or matrices. If given a list of lists, this function recurses until it
+#        finds the arrays. All arrays in a list must have the same dimensions.
 # Author: Caleb Braun
-# parameters: year_grid - the array to be rotated
-#             year_dimensions - the full dimensions of the final array
+# parameters: grids - a list containing arrays or matrices
 # return: a rotated 4d array
-rotate_lat_lon <- function( year_grid, year_dimensions ) {
-  final_grid <- array( dim = year_dimensions )
+rotate_lat_lon <- function( grids ) {
+  stopifnot( is.list( grids ) )
 
-  lapply( seq_along( year_grid ), function( i ) {
-    sector_grid <- year_grid[[ i ]]
-    lapply( 1:12, function( month ) {
-      final_grid[ , , i, month ] <<- rotate_a_matrix( sector_grid[ , , month ] )
-    } )
-  } )
+  # If given list of lists, call recursively on sub-lists
+  if ( !all( sapply( grids, is.array ) ) ) {
+    return( lapply( grids, rotate_lat_lon ) )
+  }
 
-  final_grid
+  # Get array dimensions and ensure they are all the same
+  grid_dims <- lapply( grids, dim )
+  stopifnot( length( unique( grid_dims ) ) == 1 )
+  grid_dims <- grid_dims[[1]]
+  ndims <- length( grid_dims )
+  stopifnot( ndims > 1 )
+
+  if ( ndims == 2 ) {
+    final_grids <- lapply( grids, rotate_a_matrix )
+  } else {
+    final_grids <- lapply( grids, apply, 3:ndims, rotate_a_matrix )
+  }
+
+  # Rotate first two dimensions as well and return
+  lapply( final_grids, `dim<-`, c( grid_dims[ 2:1 ], grid_dims[ -1:-2 ] ) )
 }
 
 

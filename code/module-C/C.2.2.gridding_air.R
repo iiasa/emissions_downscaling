@@ -98,12 +98,8 @@ for ( scenario in scenarios ) {
                                               proxy_mapping,
                                               seasonality_mapping )
 
-    generate_air_grids_nc( allyear_grids_list,
-                           output_dir,
-                           grid_resolution,
-                           year,
-                           em )
-
+    generate_air_grids_nc( allyear_grids_list, output_dir, grid_resolution,
+                           year_list, em )
   }
 }
 

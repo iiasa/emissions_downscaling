@@ -87,14 +87,17 @@ iam_data <- iam_data %>%
 VOC_SPEC <- get_constant( 'voc_speciation' )
 sub_spec <- !is.na( run_species )
 
-if ( VOC_SPEC == 'only' ) {
-  # if ( sub_spec && !grepl( "VOC", run_species ) )
-  #   stop( paste( "Cannot speciate VOCs for emission", run_species ) )
+if ( VOC_SPEC == 'only' && sub_spec && run_species %!in% c( "VOC", "NMVOC" ) ) {
+  stop( paste0( "Cannot speciate NMVOCs for emission ", run_species, ". ",
+                "Check voc_speciation option in global_settings.R.") )
+} else if ( VOC_SPEC == 'only' ) {
   iam_data <- iam_data[ iam_data$em == "NMVOC", ]
 } else if ( sub_spec && run_species %in% iam_data$em ) {
   iam_data <- iam_data[ iam_data$em == run_species, ]
 } else if ( sub_spec ) {
-  stop( paste( "Cannot downscale for missing emission", run_species ) )
+  stop( paste0( "Cannot downscale for missing emission", run_species, ". ",
+                "Supported emission species include: ",
+                paste( get_constant( 'supported_species' ), collapse = ', ' ) ) )
 }
 
 
