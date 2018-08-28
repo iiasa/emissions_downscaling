@@ -1,8 +1,18 @@
 # config_default.R
 #
-# This file contains the default values for the output NetCDF files.
+# This file contains the default values for the output NetCDF files for CMIP. To
+# use this configuration, make set the global setting 'config_file' to the name
+# of this file (config_CMIP.R).
 #
-# There are also output configuration files available for IAMC and CMIP.
+# All elements of NC_ATTS will be written out as metadata in the final NetCDF,
+# replacing any defaults.
+#
+# Special Rules:
+#   1. Any word inside of double brackets will be replaced with that variable
+#      at run time. This is so that variables like 'scenario' or 'iam' are
+#      available for use.
+#   2. To add on to a default metadata value, put the suffix in a list titled
+#      NC_ATT_ADDITIONS.
 
 NC_ATTS <- list(
   Conventions        = 'CF-1.6',
