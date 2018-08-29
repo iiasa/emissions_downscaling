@@ -78,8 +78,6 @@ proxy_mapping <-       readData( 'GRIDDING', domain_extension = grid_maps_ext,
                                  file_name = gridding_proxy_mapping )
 proxy_sub_mapping <-   readData( 'GRIDDING', domain_extension = grid_maps_ext,
                                  file_name = gridding_proxy_substitution_mapping )
-diagnostic_cells <-    readData( 'GRIDDING', domain_extension = grid_maps_ext,
-                                 file_name = 'diagnostic_cells' )
 
 voc_map <- read.csv( 'gridding/gridding-mappings/VOC_id_name_mapping.csv',
                      row.names = 1, stringsAsFactors = F )

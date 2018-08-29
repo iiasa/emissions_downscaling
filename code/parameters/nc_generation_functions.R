@@ -43,54 +43,15 @@ generate_bulk_grids_nc <- function( allyear_grids_list, output_dir,
   sector_ids <- "0: Agriculture; 1: Energy; 2: Industrial; 3: Transportation; 4: Residential, Commercial, Other; 5: Solvents production and application; 6: Waste; 7: International Shipping"
   sector_type <- "anthro"
 
+  allyear_grids_list <- lapply( allyear_grids_list, `[`, bulk_sectors )
   if ( !any( names( allyear_grids_list[[1]] ) %in% bulk_sectors ) ) {
     warning( paste( "No bulk sectors found for", em, "in", scenario ) )
     return( invisible( NULL ) )
   }
 
   # Build and write out netCDF file
-  # Returns: diag_cells - diagnostic cells list
-  #          out_name - output file name
-  diagnostics <- build_ncdf( allyear_grids_list, output_dir, grid_resolution,
-                             year_list, em, sub_nmvoc, bulk_sectors,
-                             sector_type, sector_ids )
-
-  # Create diagnostic cells plots
-  diagnostic_cells <- do.call( 'rbind', diagnostics$diag_cells )
-  out_name <- gsub( '.nc', '_cells', diagnostics$out_name, fixed = T )
-  writeData( diagnostic_cells, 'DIAG_OUT', out_name, meta = F )
-
-  GENERATE_PLOTS <- get_constant( 'diagnostic_plots' )
-  if ( GENERATE_PLOTS ) {
-    printLog( 'Generating diagnostic plots' )
-
-    # Aggregate to regional (selected cell) totals by month, then plot the
-    # timeseries for each unique emission and region
-    diagnostic_cells %>%
-      dplyr::mutate( full_date = as.Date( paste( year, sprintf( '%02d', month ), '01', sep = '-' ) ) ) %>%
-      dplyr::arrange( loc, em, full_date ) %>%
-      dplyr::group_by( loc, em, unit, full_date ) %>%
-      dplyr::summarise( value = sum( value ) ) %>%
-      dplyr::group_by( loc, em, unit ) %>%
-      dplyr::do({
-        em <- unique( .$em )
-        loc <- unique( .$loc )
-        plt <- ggplot( data = . ) +
-          geom_line( aes( x = full_date, y = value ) ) +
-          ylab( paste0( em, ' Mt' ) ) +
-          xlab( '' ) +
-          scale_x_date( date_breaks = "10 years",
-                        labels=scales::date_format( "%Y-%m" ),
-                        date_minor_breaks = "6 months" ) +
-          ggtitle( paste0( gsub( '_cells', '', out_name ), '\n', loc ) )
-
-        ggsave( filename = filePath( "DIAG_OUT", paste0( out_name, '_', em, '_', loc ), extension = ".jpeg" ),
-                plot = plt, units = 'in', width = 13, height = 5 )
-        invisible( . )
-      })
-  }
-
-  invisible( gc( ) )
+  build_ncdf( allyear_grids_list, output_dir, grid_resolution, year_list, em,
+              sub_nmvoc, bulk_sectors, sector_type, sector_ids )
 }
 
 
@@ -122,56 +83,21 @@ generate_openburning_grids_nc <- function( allyear_grids_list, output_dir,
   sector_type <- "openburning"
   sector_ids <- "0: Agricultural Waste Burning On Fields; 1: Forest Burning; 2: Grassland Burning; 3: Peat Burning"
 
+  allyear_grids_list <- lapply( allyear_grids_list, `[`, openburning_sectors )
   if ( !any( names( allyear_grids_list[[1]] ) %in% openburning_sectors ) ) {
     warning( paste( "No open burning sectors found for", em, "in", scenario ) )
     return( invisible( NULL ) )
   }
 
-  # Build and write out netCDF file
-  # Returns: diag_cells - diagnostic cells list
-  #          out_name - output file name
-  diag_agg <- build_ncdf( allyear_grids_list, output_dir, grid_resolution,
-                          year_list, em, sub_nmvoc, openburning_sectors,
-                          sector_type, sector_ids, aggregate_sectors = TRUE )
-  diag_share <- build_ncdf( allyear_grids_list, output_dir, grid_resolution,
-                            year_list, em, sub_nmvoc, openburning_sectors,
-                            sector_type, sector_ids, sector_shares = TRUE )
+  # Build and write out netCDF file where all sectors are summed together
+  build_ncdf( allyear_grids_list, output_dir, grid_resolution, year_list, em,
+              sub_nmvoc, openburning_sectors, sector_type, sector_ids,
+              aggregate_sectors = TRUE )
 
-  # Create diagnostic cells plots
-  for ( diagnostics in list( diag_agg, diag_share ) ) {
-
-    diagnostic_cells <- do.call( 'rbind', diagnostics$diag_cells )
-    out_name <- gsub( '.nc', '_cells', diagnostics$out_name, fixed = T )
-    writeData( diagnostic_cells, 'DIAG_OUT', out_name, meta = F )
-
-    GENERATE_PLOTS <- get_constant( 'diagnostic_plots' )
-    if ( GENERATE_PLOTS ) {
-      printLog( 'Generating diagnostic plots' )
-
-      # Aggregate to regional (selected cell) totals by month
-      diagnostic_cells <- diagnostic_cells %>%
-        dplyr::group_by( loc, em, year, month, unit ) %>%
-        dplyr::summarise( value = sum( value ) ) %>%
-        dplyr::arrange( loc, em, year, month )
-
-      for ( em in unique( diagnostic_cells$em ) ) {
-        for ( loc in unique( diagnostic_cells$loc ) ) {
-          plot_df <- diagnostic_cells[ diagnostic_cells$loc == loc & diagnostic_cells$em == em, ]
-          plot_df$time_line <- 1 : nrow( plot_df )
-          plot_df$time_label <- paste0( plot_df$year, sprintf( '%02d', plot_df$month ) )
-          plot <- ggplot( plot_df ) +
-            geom_line( aes( x = time_line, y = value ) ) +
-            ylab( paste0( em, ' Mt' ) ) +
-            xlab( '' ) +
-            scale_x_continuous( breaks = seq( 1, nrow( plot_df ), 10 ), labels = plot_df$time_label[ seq( 1, nrow( plot_df ), 10 ) ] ) +
-            ggtitle( paste0( gsub( '_cells', '', out_name ), '\n', loc ) )
-          ggsave( filePath( "DIAG_OUT", paste0( out_name, '_', em, '_', loc ), extension = ".jpeg" ), units = 'in', width = 13, height = 5 )
-        }
-      }
-    }
-  }
-
-  invisible( gc( ) )
+  # Build and write out netCDF file where values are sector shares
+  build_ncdf( allyear_grids_list, output_dir, grid_resolution, year_list, em,
+              sub_nmvoc, openburning_sectors, sector_type, sector_ids,
+              sector_shares = TRUE )
 }
 
 
@@ -202,13 +128,9 @@ generate_air_grids_nc <- function( allyear_grids_list, output_dir,
   sector_ids <- ""
 
   # Build and write out netCDF file
-  # Returns: diag_cells - diagnostic cells list
-  #          out_name - output file name
-  diag_agg <- build_ncdf( allyear_grids_list, output_dir, grid_resolution,
+  build_ncdf( allyear_grids_list, output_dir, grid_resolution,
                           year_list, em, FALSE, air_sectors, sector_type,
                           sector_ids )
-
-  return(invisible(NULL))
 }
 
 
@@ -256,9 +178,9 @@ build_ncdf <- function( year_grids_list, output_dir, grid_resolution,
   nc_file_path <- paste0( output_dir, '/', nc_file_name )
 
   ### Prepare data for writing to NetCDF
-  em_array <- unlist_for_ncdf( year_grids_list, length( ncdf_sectors ),
-                               grid_resolution, aggregate_sectors,
-                               sector_shares, nc_file_name )
+  em_array <- unlist_for_ncdf( year_grids_list, ncdf_sectors, grid_resolution,
+                               aggregate_sectors, sector_shares, nc_file_path,
+                               sector_type )
 
   ### Define NetCDF dimensions
   bnds <- prep_bounds( grid_resolution, days_in_month, year_list, ncdf_sectors )
@@ -287,72 +209,6 @@ build_ncdf <- function( year_grids_list, output_dir, grid_resolution,
 
   # Close and write the NetCDF file
   nc_close( nc_new )
-
-  return( invisible( NULL ) )
-
-  ### Generate diagnostics
-
-  SEC_IN_MONTH <- days_in_month * 24 * 60 * 60
-  KT_PER_KG <- 1e-06
-
-  # Build conversion array to convert monthly values to kt. The dimensions are
-  # (lon x lat x 12), where each value represents the conversion factor for
-  # going from kg m-2 s-1 to kt per month for each grid cell for each month.
-  grid_cell_column <- grid_area( grid_resolution, all_lon = T )
-  grid_cell_conv <- rep( t( grid_cell_column ), NMONTHS ) %>%
-    array( dim = c( lon_res, lat_res, NMONTHS ) ) %>%
-    sweep( 3, SEC_IN_MONTH * KT_PER_KG, `*` )
-
-  # Convert to kt
-  year_grids_kt <- lapply( year_grids_rtd, sweep, c( 1, 2, 4 ), grid_cell_conv, `*` )
-
-  out_name <- gsub( '.nc', '.csv', nc_file_name_w_path, fixed = T )
-  out_df <- build_checksum( year_grids_kt, em, ncdf_sectors, year_list )
-
-  sector_mapping <- readData( domain = 'GRIDDING', domain_extension = 'gridding-mappings/', file_name = gridding_sector_mapping )
-  in_df <- readData('MED_OUT', paste0( 'B.', iam, '_emissions_reformatted', '_', RUNSUFFIX )) %>%
-    dplyr::filter(em == !!em) %>%
-    dplyr::select(sector_name = sector, one_of(make.names(year_list))) %>%
-    dplyr::group_by(sector_name) %>%
-    dplyr::summarise_if(is.numeric, sum) %>%
-    tidyr::gather(year, value, make.names(year_list)) %>%
-    dplyr::mutate(year = as.integer(sub('X', '', year)), global_total = value * 1000) # Convert to kt
-  diff_df <- out_df %>%
-    dplyr::mutate(sector_short = as.character(sector)) %>%
-    dplyr::select(-sector, -em, -month) %>%
-    dplyr::group_by(sector_short, year, units) %>%
-    dplyr::summarise(global_total = sum(global_total)) %>%
-    dplyr::ungroup() %>%
-    dplyr::left_join(sector_mapping, by = 'sector_short') %>%
-    dplyr::left_join(in_df, by = c('year', 'sector_name')) %>%
-    dplyr::mutate(pct_diff = (global_total.x - global_total.y) / global_total.y) %>%
-    dplyr::mutate(pct_diff = if_else(is.nan(pct_diff), 0, pct_diff * 100)) %>%
-    dplyr::rename(grid_sum = global_total.x, orig_sum = global_total.y) %>%
-    dplyr::select(sector_name, year, units, grid_sum, orig_sum, pct_diff)
-
-  ERR_TOL <- get_constant( 'error_tolerance' )
-  largest_diff <- round(max(abs(diff_df$pct_diff), na.rm = T), 4)
-
-  if ( largest_diff > ERR_TOL ) {
-    warning( paste('Values for', em, 'were modified by up to', largest_diff, 'percent') )
-
-    err_rows <- diff_df %>%
-      dplyr::filter( is.nan( pct_diff ) | is.na( pct_diff ) | abs( pct_diff ) > ERR_TOL ) %>%
-      dplyr::mutate( em = !!em, scenario = !!scenario ) %>%
-      dplyr::select( scenario, em, everything() )
-
-    err_fname <- paste0( '../diagnostic-output/ERROR_', RUNSUFFIX, '.csv' )
-    add_to_file <- file.exists( err_fname )
-    write.table( err_rows, file = err_fname, append = add_to_file, sep = ',',
-                 row.names = F, col.names = !add_to_file )
-  }
-
-  writeData( diff_df, 'DIAG_OUT', sub( '.nc', '_DIFF', nc_file_name, fixed = T ), meta = F )
-  write.csv( out_df, out_name, row.names = F )
-
-  diagnostic_cells_list <- extract_diag_cells( year_grids_list, diagnostic_cells,
-                                               ncdf_sectors, lat_res, em)
-  return( list( out_name = nc_file_name, diag_cells = diagnostic_cells_list ) )
 }
 
 
@@ -743,83 +599,153 @@ prep_bounds <- function( grid_resolution, days_in_month, year_list, ncdf_sectors
 }
 
 
-# Build global checksum csv file
+# Write global checksum csv file
 #
 # Build a data.frame of global totals (in kt) for each year, sector, and month
 # for the given emission species.
 #
 # Args:
-#   year_data_list: List of arrays, each containing emission totals for each
+#   out_name: Name of the output file
+#   year_grids_rtd: List of arrays, each containing emission totals for each
 #     year in kt for each grid cell for each sector for each month
 #   em: Emission species name
 #   ncdf_sectors: Sector names
-#   year_list: Integer vector of output years
+#   res: The grid resolution
 #
 # Returns:
 #   The checksum data.frame
-build_checksum <- function( year_data_list, em, ncdf_sectors, year_list ) {
-  checksum_df <- do.call( rbind, lapply( year_data_list, colSums, dims = 2 ) )
+write_checksum <- function( out_name, year_grids_rtd, em, ncdf_sectors, res ) {
+  KT_PER_KG <- 1e-06
+  SEC_IN_MONTH <- days_in_month * 24 * 60 * 60
+  NMONTHS <- 12L
 
-  data.frame( em, ncdf_sectors, checksum_df ) %>%
-    cbind( rep( year_list, each = length( ncdf_sectors ) ), . ) %>%
-    setNames( c( 'year', 'em', 'sector', 1:12 ) ) %>%
-    tidyr::gather( 'month', 'global_total', '1':'12' ) %>%
+  grid_dims <- dim( year_grids_rtd[[1]] )
+
+  # Build conversion array to convert monthly values to kt. The dimensions are
+  # (lon x lat x 12), where each value represents the conversion factor for
+  # going from kg m-2 s-1 to kt per month for each grid cell for each month.
+  grid_cell_column <- grid_area( res, all_lon = T )
+  grid_cell_conv <- rep( t( grid_cell_column ), NMONTHS ) %>%
+    array( dim = c( grid_dims[ 1:2 ], NMONTHS ) ) %>%
+    sweep( 3, SEC_IN_MONTH * KT_PER_KG, `*` )
+
+  # Convert to kt
+  year_grids_kt <- lapply( year_grids_rtd, sweep, 1:3, grid_cell_conv, `*` )
+
+  # Sum over all grid cells (converts 3d to 2d)
+  checksum_df <- do.call( rbind, lapply( year_grids_kt, colSums, dims = 2 ) )
+
+  year_list <- as.integer( substr( names( year_grids_rtd ), 2, 5 ) )
+
+  out_df <- data.frame( em, seq( NMONTHS ), checksum_df ) %>%
+    cbind( rep( year_list, each = NMONTHS ), . ) %>%
+    setNames( c( 'year', 'em', 'month', ncdf_sectors ) ) %>%
+    tidyr::gather( 'sector', 'global_total', ncdf_sectors ) %>%
     dplyr::mutate( units = 'kt' ) %>%
     dplyr::arrange( year, sector )
+
+  # Write out file
+  write.csv( out_df, out_name, row.names = F )
+
+  out_df
 }
 
 
-# Extract values at key grid cells
-#
-# Use matrix indexing to extract just the cells of interest speficied by
-# diagnostic_cells for each year, month, and sector.
+# Write global difference diagnostics csv file
 #
 # Args:
-#   year_grids_list: List of arrays, each containing emission totals for each
-#     year in kt for each grid cell for each sector for each month
-#   diagnostic_cells: A data.frame specifying cells to pull out
-#   ncdf_sectors: Names of sectors in the order given in year_grids_list
-#   lat_res:
+#   global_sums: Data frame of emissions global totals per month and sector
+#   out_name: Name of the output NetCDF file (used for naming the csv)
 #   em: Emission species name
 #
 # Returns:
-#   List of data.frames of diagnostic cell values for each year
-extract_diag_cells <- function( year_grids_list, diagnostic_cells, ncdf_sectors, lat_res, em ) {
-  diagnostic_cells_indices <- diagnostic_cells[ c('col', 'row') ] %>%
-    tidyr::crossing( sector = 1:length( ncdf_sectors ), month = 1:12 ) %>%
-    dplyr::arrange( sector, month ) %>%
-    dplyr::mutate( row = lat_res - row + 1L ) %>% # Account for rotation
-    as.matrix()
+#   NULL
+write_diffs <- function( global_sums, out_name, em ) {
+  ERR_TOL <- get_constant( 'error_tolerance' )
 
-  lapply( names( year_grids_list ), function( Xyear ) {
-    year_grid <- year_grids_list[[ Xyear ]]
-    cell_values <- year_grid[ diagnostic_cells_indices ]
+  # gridding_sector_mapping is a global variable
+  sector_mapping <- readData( 'GRIDDING', gridding_sector_mapping,
+                              domain_extension = 'gridding-mappings/'  )
 
-    cbind( diagnostic_cells,
-           data.frame( em = em,
-                       sector = ncdf_sectors[ diagnostic_cells_indices[ , 3 ] ],
-                       year = as.integer( substr( Xyear, 2, 5 ) ),
-                       month = diagnostic_cells_indices[ , 4 ],
-                       unit = 'kt',
-                       value = cell_values / 1000,
-                       stringsAsFactors = F) )
-  })
+  # Original data
+  in_df <- readData( 'MED_OUT', paste0( 'B.', iam, '_emissions_reformatted', '_', RUNSUFFIX ) ) %>%
+    dplyr::filter( em == !!em ) %>%
+    dplyr::select( sector_name = sector, one_of( make.names( year_list ) ) ) %>%
+    dplyr::group_by( sector_name ) %>%
+    dplyr::summarise_if( is.numeric, sum ) %>%
+    tidyr::gather( year, value, make.names( year_list ) ) %>%
+    dplyr::mutate( year = as.integer( sub( 'X', '', year ) ), global_total = value * 1000 ) # Convert to kt
+
+  # Compare with the new global sums. First aggregate to the sector level, then
+  # join on the longer sector name and join on the historical data.
+  diff_df <- global_sums %>%
+    dplyr::mutate( sector_short = as.character( sector ) ) %>%
+    dplyr::select( -sector, -em, -month ) %>%
+    dplyr::group_by( sector_short, year, units ) %>%
+    dplyr::summarise( global_total = sum( global_total ) ) %>%
+    dplyr::ungroup() %>%
+    dplyr::left_join( sector_mapping, by = 'sector_short' ) %>%
+    dplyr::left_join( in_df, by = c('year', 'sector_name') ) %>%
+    dplyr::mutate( pct_diff = ( global_total.x - global_total.y ) / global_total.y ) %>%
+    dplyr::mutate( pct_diff = if_else( is.nan( pct_diff ), 0, pct_diff * 100 ) ) %>%
+    dplyr::rename( grid_sum = global_total.x, orig_sum = global_total.y ) %>%
+    dplyr::select( sector_name, year, units, grid_sum, orig_sum, pct_diff )
+
+  largest_diff <- round( max( abs( diff_df$pct_diff ), na.rm = T ), 4 )
+
+  # Warn if there are any differences greater than the error tolerance global
+  # setting.
+  if ( largest_diff > ERR_TOL ) {
+    warning( paste('Values for', em, 'were modified by up to', largest_diff, 'percent') )
+
+    err_rows <- diff_df %>%
+      dplyr::filter( is.nan( pct_diff ) | is.na( pct_diff ) | abs( pct_diff ) > ERR_TOL ) %>%
+      dplyr::mutate( em = !!em, scenario = !!scenario ) %>%
+      dplyr::select( scenario, em, everything() )
+
+    err_fname <- paste0( '../diagnostic-output/ERROR_', RUNSUFFIX, '.csv' )
+    add_to_file <- file.exists( err_fname )
+    write.table( err_rows, file = err_fname, append = add_to_file, sep = ',',
+                 row.names = F, col.names = !add_to_file )
+  }
+
+  writeData( diff_df, 'DIAG_OUT', paste( out_name, '_DIFF' ), meta = F )
 }
 
 
-unlist_for_ncdf <- function( year_grids_list, nsectors, grid_resolution,
-                             aggregate_sectors, sector_shares, diag_fname ) {
+# Convert list of yearly gridded data into single array for NetCDF
+#
+# Transform the data into the format required to write to the NetCDF object.
+# This means rotating the lat/lon dimensions of each array and flattening the
+# list into a single array.
+#
+# This function also writes out diagnostics about the gridded data.
+#
+# Args:
+#   year_grids_list: List of arrays or list of lists of arrays
+#   ncdf_sectors: Sector names
+#   grid_resolution: Resolution of the data
+#   aggregate_sectors: Should the sectors be summed?
+#   sector_shares: Represent values as their share compared to other sectors?
+#   diag_fname: NetCDF file path to use for creating diagnostic file names
+#   sector_type: The sector type
+#
+# Returns:
+#   The processed multidimensional array
+unlist_for_ncdf <- function( year_grids_list, ncdf_sectors, grid_resolution,
+                             aggregate_sectors, sector_shares, diag_fname,
+                             sector_type ) {
   NMONTHS <- 12L
+  NSECTORS <- length( ncdf_sectors )
+  GENERATE_PLOTS <- get_constant( 'diagnostic_plots' )
 
   # Define array dimensions:
   #    each year array:    (lon x lat x sectors x months in year)
   #    array of all years: (lon x lat x sectors x all months)
   lon_res <- as.integer( 360 / grid_resolution )
   lat_res <- as.integer( 180 / grid_resolution )
-  # year_grid_dims <- c( lon_res, lat_res, nsectors, NMONTHS )
-  # all_years_dims <- year_grid_dims * c( 1, 1, 1, length( year_grids_list ) )
   all_months <- length( year_grids_list ) * NMONTHS
-  all_years_dims <- as.integer( c( lon_res, lat_res, nsectors, all_months ) )
+  all_years_dims <- as.integer( c( lon_res, lat_res, NSECTORS, all_months ) )
 
   # Flip lat and lon to accommodate nc write-in
   year_grids_rtd <- rotate_lat_lon( year_grids_list )
@@ -833,6 +759,32 @@ unlist_for_ncdf <- function( year_grids_list, nsectors, grid_resolution,
   } else if ( sector_shares ) {
     em_array <- prop.table( em_array, c( 1, 2, 4 ) )
     em_array[ is.nan( em_array ) ] <- 0
+  }
+
+  ### Diagnostics:
+
+  # Checksum and diff functions need a singly nested list
+  if ( is.list( year_grids_rtd[[1]] ) ) {
+    grid_dims <- dim( year_grids_rtd[[1]][[1]] )
+    year_grids_rtd <- lapply( year_grids_rtd, unlist, use.names = F )
+    year_grids_rtd <- lapply( year_grids_rtd, `dim<-`, c( grid_dims, NSECTORS ) )
+  }
+
+  # Always write out checksum and diff files
+  out_path <- gsub( '.nc', '.csv', diag_fname, fixed = T )
+
+  # Remove everything to the last slash '.*/', capture everything up to the
+  # extension '([^/]+)', then the extension '\\.csv'
+  out_name <- sub( '.*/([^/]+)\\.csv', '\\1', out_path )
+
+  global_sums <- write_checksum( out_path, year_grids_rtd, em, ncdf_sectors, grid_resolution )
+  write_diffs( global_sums, out_name, em )
+
+  # Generate diagnostics
+  if ( GENERATE_PLOTS ) {
+    source( filePath( 'DIAG', 'generate_plots', '.R' ) )
+    diag_cells <- extract_diag_cells( year_grids_rtd, ncdf_sectors, lat_res, em )
+    generate_plots( global_sums, diag_cells, out_name, em, sector_type )
   }
 
   return( em_array )

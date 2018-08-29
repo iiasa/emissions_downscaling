@@ -42,7 +42,7 @@ if ( DEBUG ) {
                            '/Users/brau074/Documents/emissions_downscaling/input/IAM_emissions/MESSAGE-GLOBIOM_SSP2-45/output_harmonized.xlsx',
                            '/Users/brau074/Documents/emissions_downscaling/final-output/module-B',
                            '/Users/brau074/Documents/emissions_downscaling/final-output/module-C',
-                           'gridding', 'NMVOC' )
+                           'gridding', 'BC' )
 
   calculationDir <- "/Users/Caleb/Documents/JGCRI/emissions_downscaling/code/error/parameters"
   calculationYears <- 2016:2020
@@ -106,11 +106,3 @@ if ( MED_OUT_CLEAN ) {
   invisible( unlink( med_out, recursive = T ) )
   invisible( file.remove( paste0( '../documentation/IO_documentation_', RUNSUFFIX, '.csv' ) ) )
 }
-
-
-# 5. Generate diagnostic charts -------------------------------------------
-if ( SCENARIO_DIAG ) {
-  diag_in <- domainmapping[ domainmapping$Domain == 'DIAG', "PathToDomain" ]
-  source( paste0( diag_in, '/global_total_ems.R' ) )
-}
-
