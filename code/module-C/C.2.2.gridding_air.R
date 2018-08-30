@@ -98,8 +98,17 @@ for ( scenario in scenarios ) {
                                               proxy_mapping,
                                               seasonality_mapping )
 
-    generate_air_grids_nc( allyear_grids_list, output_dir, grid_resolution,
-                           year_list, em )
+    # Build and write out netCDF file
+    write_ncdf( year_grids_list = allyear_grids_list,
+                output_dir      = output_dir,
+                grid_resolution = grid_resolution,
+                year_list       = year_list,
+                em              = em,
+                scenario        = scenario,
+                sub_nmvoc       = FALSE,         # We don't do aircraft NMVOCs
+                sector_type     = "AIR-anthro",
+                ncdf_sectors    = 1:25,          # This is the altitude layer
+                sector_ids      = "" )
   }
 }
 

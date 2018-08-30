@@ -3,11 +3,8 @@
 # Authors: Leyang Feng, Caleb Braun
 # Date Last Modified: August, 2018
 # Program Purpose: Define functions for generating NetCDF files for the gridding
-#   routine. The three main functions that should be called outside of this file
-#   are:
-#     1. generate_air_grids_nc()
-#     2. generate_bulk_grids_nc()
-#     3. generate_openburning_grids_nc()
+#   routine. The only function intended to be called from outside of this file
+#   is write_ncdf().
 # ------------------------------------------------------------------------------
 
 # Special Packages
@@ -15,155 +12,46 @@ library( 'ncdf4' )
 library( 'sp' )
 library( 'geosphere' )
 
-# Output a NetCDF file for the bulk sectors of an emissions species
-#
-# Convert gridded data from a nested list of sectors by years to a NetCDF file
-# containing total emissions by anthropogenic sector. Additionally write out
-# checksum and diagnostic csv files.
-#
-# Args:
-#   allyear_grids_list: A list of lists. The outer list must be named Xyears,
-#     the inner list must contain open burning sectors, and the contents must
-#     3d arrays (lat / lon / month)
-#   output_dir: Path to write the ouput files
-#   grid_resolution: Resolution in degrees of the spatial data
-#   year_list: List of years from the data to write out
-#   em: Name of the emission species
-#   sub_nmvoc: Is the emission a NMVOC subspecies?
-#
-# Return:
-#   NULL
-generate_bulk_grids_nc <- function( allyear_grids_list, output_dir,
-                                    grid_resolution, year_list, em,
-                                    sub_nmvoc ) {
-
-  # Define variables specific to anthro. Note that order matters, so make sure
-  # bulk_sectors and sector_ids are in correct positions.
-  bulk_sectors <- c( "AGR", "ENE", "IND", "TRA", "RCO", "SLV", "WST", "SHP" )
-  sector_ids <- "0: Agriculture; 1: Energy; 2: Industrial; 3: Transportation; 4: Residential, Commercial, Other; 5: Solvents production and application; 6: Waste; 7: International Shipping"
-  sector_type <- "anthro"
-
-  allyear_grids_list <- lapply( allyear_grids_list, `[`, bulk_sectors )
-  if ( !any( names( allyear_grids_list[[1]] ) %in% bulk_sectors ) ) {
-    warning( paste( "No bulk sectors found for", em, "in", scenario ) )
-    return( invisible( NULL ) )
-  }
-
-  # Build and write out netCDF file
-  build_ncdf( allyear_grids_list, output_dir, grid_resolution, year_list, em,
-              sub_nmvoc, bulk_sectors, sector_type, sector_ids )
-}
-
-
-# Output NetCDF files for the open burning sectors of an emissions species
-#
-# Convert gridded data from a nested list of sectors by years to a NetCDF file
-# containing total emissions by sector and a NetCDF file containing sector
-# shares of total emissions. Additionally write out checksum and diagnostic
-# csv files.
-#
-# Args:
-#   allyear_grids_list: A list of lists. The outer list must be named Xyears,
-#     the inner list must contain open burning sectors, and the contents must
-#     3d arrays (lat / lon / month)
-#   output_dir: Path to write the ouput files
-#   grid_resolution: Resolution in degrees of the spatial data
-#   year_list: List of years from the data to write out
-#   em: Name of the emission species
-#   sub_nmvoc: Is the emission a NMVOC subspecies?
-#
-# Return:
-#   NULL
-generate_openburning_grids_nc <- function( allyear_grids_list, output_dir,
-                                           grid_resolution, year_list, em,
-                                           sub_nmvoc ) {
-  # Define variables specific to open burning. Note that order matters, so make
-  # sure bulk_sectors and sector_ids are in correct positions.
-  openburning_sectors <- c( "AWB", "FRTB", "GRSB", "PEAT" )
-  sector_type <- "openburning"
-  sector_ids <- "0: Agricultural Waste Burning On Fields; 1: Forest Burning; 2: Grassland Burning; 3: Peat Burning"
-
-  allyear_grids_list <- lapply( allyear_grids_list, `[`, openburning_sectors )
-  if ( !any( names( allyear_grids_list[[1]] ) %in% openburning_sectors ) ) {
-    warning( paste( "No open burning sectors found for", em, "in", scenario ) )
-    return( invisible( NULL ) )
-  }
-
-  # Build and write out netCDF file where all sectors are summed together
-  build_ncdf( allyear_grids_list, output_dir, grid_resolution, year_list, em,
-              sub_nmvoc, openburning_sectors, sector_type, sector_ids,
-              aggregate_sectors = TRUE )
-
-  # Build and write out netCDF file where values are sector shares
-  build_ncdf( allyear_grids_list, output_dir, grid_resolution, year_list, em,
-              sub_nmvoc, openburning_sectors, sector_type, sector_ids,
-              sector_shares = TRUE )
-}
-
-
-# Output a NetCDF file for aircraft emissions
-#
-# Convert gridded data from a nested list of sectors by years to a NetCDF file
-# containing total aircraft emissions. Additionally write out checksum and
-# diagnostic csv files.
-#
-# Args:
-#   allyear_grids_list: A list of lists. The outer list must be named Xyears,
-#     the inner list must contain open burning sectors, and the contents must
-#     3d arrays (lat / lon / month)
-#   output_dir: Path to write the ouput files
-#   grid_resolution: Resolution in degrees of the spatial data
-#   year: TODO: Why is this year and not year_list??
-#   em: Name of the emission species
-#
-# Return:
-#   NULL
-generate_air_grids_nc <- function( allyear_grids_list, output_dir,
-                                   grid_resolution, year_list, em ) {
-
-  # Define variables specific to aircraft emissions. Note that the 'sector'
-  # variable is just the altitude layer.
-  air_sectors <- 1:25
-  sector_type <- "AIR-anthro"
-  sector_ids <- ""
-
-  # Build and write out netCDF file
-  build_ncdf( allyear_grids_list, output_dir, grid_resolution,
-                          year_list, em, FALSE, air_sectors, sector_type,
-                          sector_ids )
-}
-
 
 # Construct and output a NetCDF file
 #
+# Convert gridded data from a nested list of sectors by years to a NetCDF file
+# containing total emissions by sector. Default metadata for the file can be
+# changed or added to with a config file specified in global_settings.R. Note
+# that the input list is slightly different for aircraft emissions.
+#
+# Additionally write out checksum and diagnostic csv files.
+#
 # Args:
-#   year_grids_list:
-#   output_dir: Where should the NetCDF be written?
-#   grid_resolution:
-#   year_list:
-#   em:
-#   sub_nmvoc:
+#   year_grids_list: A list of lists. The inner lists must be named Xyears,
+#     and contain named 3d arrays for each sector. The array is expected in the
+#     format [lat x lon x month].
+#   output_dir: Full output path
+#   grid_resolution: Resolution in degrees of the spatial data
+#   year_list: List of years from the data to write out
+#   em: Name of the emission species
+#   scenario: Name of the scenario
+#   sub_nmvoc: Is the emission a NMVOC subspecies?
 #   ncdf_sectors: The sectors to include
-#   sector_type: One of "AIR", "anthro", or "openburning"
+#   sector_type: One of "AIR-anthro", "anthro", or "openburning"
 #   sector_ids: String for the NetCDF metadata of the sector ids
 #   aggregate_sectors: Sum along the sector dimension?
 #   sector_shares: Output sector's total value or share of all sectors
 #
 # Returns:
 #   NULL
-build_ncdf <- function( year_grids_list, output_dir, grid_resolution,
-                        year_list, em, sub_nmvoc, ncdf_sectors, sector_type,
+write_ncdf <- function( year_grids_list, output_dir, grid_resolution, year_list,
+                        em, scenario, sub_nmvoc, sector_type, ncdf_sectors,
                         sector_ids, aggregate_sectors = F, sector_shares = F ) {
+  # Parameter checks
+  stopifnot( dir.exists( output_dir ) )
+  stopifnot( sector_type %in% c( "AIR-anthro", "anthro", "openburning" ) )
+  stopifnot( !( aggregate_sectors && sector_shares ) ) # both can't be TRUE
 
   # Filter data to only the gridding years specified in gridding_initialize()
   Xyears <- intersect( paste0( 'X', year_list ), names( year_grids_list ) )
   year_grids_list <- year_grids_list[ Xyears ]
-
-  # Parameter checks
-  stopifnot( dir.exists( output_dir ) )
   stopifnot( length( year_grids_list ) > 0 )
-  stopifnot( sector_type %in% c( "AIR-anthro", "anthro", "openburning" ) )
-  stopifnot( !( aggregate_sectors && sector_shares ) ) # both can't be TRUE
 
   fn_em <- clean_em_name( em, sub_nmvoc, sector_type )
   fn_sector <- clean_sector_name( sector_type, sector_shares, sub_nmvoc )
@@ -825,4 +713,3 @@ get_VOC_info <- function( voc, type ) {
     stop( 'invalid argument type to get_VOC_info' )
   }
 }
-
