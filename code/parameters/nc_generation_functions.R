@@ -66,6 +66,7 @@ write_ncdf <- function( year_grids_list, output_dir, grid_resolution, year_list,
   nc_file_path <- paste0( output_dir, '/', nc_file_name )
 
   ### Prepare data for writing to NetCDF
+  printLog( "Preparing to write NetCDF for", var_atts$sector_long_name )
   em_array <- unlist_for_ncdf( year_grids_list, ncdf_sectors, grid_resolution,
                                aggregate_sectors, sector_shares, nc_file_path,
                                sector_type )
@@ -499,10 +500,11 @@ prep_bounds <- function( grid_resolution, days_in_month, year_list, ncdf_sectors
 #   em: Emission species name
 #   ncdf_sectors: Sector names
 #   res: The grid resolution
+#   isAir: Is this for aircraft emissions?
 #
 # Returns:
 #   The checksum data.frame
-write_checksum <- function( out_name, year_grids_rtd, em, ncdf_sectors, res ) {
+write_checksum <- function( out_name, year_grids_rtd, em, ncdf_sectors, res, isAir ) {
   KT_PER_KG <- 1e-06
   SEC_IN_MONTH <- days_in_month * 24 * 60 * 60
   NMONTHS <- 12L
@@ -517,20 +519,29 @@ write_checksum <- function( out_name, year_grids_rtd, em, ncdf_sectors, res ) {
     array( dim = c( grid_dims[ 1:2 ], NMONTHS ) ) %>%
     sweep( 3, SEC_IN_MONTH * KT_PER_KG, `*` )
 
-  # Convert to kt
-  year_grids_kt <- lapply( year_grids_rtd, sweep, 1:3, grid_cell_conv, `*` )
+  # Convert to kt / grid cell
+  year_grids_kt <- lapply( year_grids_rtd, sweep, c( 1, 2, 4 ), grid_cell_conv, `*` )
 
-  # Sum over all grid cells (converts 3d to 2d)
+  # Sum over all grid cells (converts 4d to 2d)
   checksum_df <- do.call( rbind, lapply( year_grids_kt, colSums, dims = 2 ) )
 
   year_list <- as.integer( substr( names( year_grids_rtd ), 2, 5 ) )
 
-  out_df <- data.frame( em, seq( NMONTHS ), checksum_df ) %>%
-    cbind( rep( year_list, each = NMONTHS ), . ) %>%
-    setNames( c( 'year', 'em', 'month', ncdf_sectors ) ) %>%
-    tidyr::gather( 'sector', 'global_total', ncdf_sectors ) %>%
-    dplyr::mutate( units = 'kt' ) %>%
+  out_df <- data.frame( em, ncdf_sectors, checksum_df ) %>%
+    cbind( rep( year_list, each = length( ncdf_sectors ) ), . ) %>%
+    setNames( c( 'year', 'em', 'sector', 1:NMONTHS ) ) %>%
+    tidyr::gather( 'month', 'global_total', as.character( 1:NMONTHS ) ) %>%
+    dplyr::mutate( units = 'kt', month = as.integer( month ) ) %>%
     dplyr::arrange( year, sector )
+
+  if ( isAir ) {
+    out_df <- out_df %>%
+      dplyr::mutate( sector = "AIR" ) %>%
+      dplyr::group_by( year, em, sector, month, units ) %>%
+      dplyr::summarise( global_total = sum( global_total ) ) %>%
+      dplyr::ungroup() %>%
+      dplyr::select( year, em, sector, month, global_total, units )
+  }
 
   # Write out file
   write.csv( out_df, out_name, row.names = F )
@@ -651,11 +662,17 @@ unlist_for_ncdf <- function( year_grids_list, ncdf_sectors, grid_resolution,
 
   ### Diagnostics:
 
-  # Checksum and diff functions need a singly nested list
-  if ( is.list( year_grids_rtd[[1]] ) ) {
+  isAir <- sector_type == 'AIR-anthro'
+
+  # Checksum and diff functions need a singly nested list (one array for each
+  # year) - AIR is already in this format.
+  if ( !isAir ) {
     grid_dims <- dim( year_grids_rtd[[1]][[1]] )
-    year_grids_rtd <- lapply( year_grids_rtd, unlist, use.names = F )
-    year_grids_rtd <- lapply( year_grids_rtd, `dim<-`, c( grid_dims, NSECTORS ) )
+    year_grids_rtd <- lapply( year_grids_rtd, function( yg ) {
+      yg <- unlist( yg, use.names = F )       # Pull out all values
+      dim( yg ) <- c( grid_dims, NSECTORS )   # Rebuild array
+      aperm( yg, c( 1, 2, 4, 3 ) )            # Re-order dimensions (time last)
+    })
   }
 
   # Always write out checksum and diff files
@@ -665,7 +682,7 @@ unlist_for_ncdf <- function( year_grids_list, ncdf_sectors, grid_resolution,
   # extension '([^/]+)', then the extension '\\.csv'
   out_name <- sub( '.*/([^/]+)\\.csv', '\\1', out_path )
 
-  global_sums <- write_checksum( out_path, year_grids_rtd, em, ncdf_sectors, grid_resolution )
+  global_sums <- write_checksum( out_path, year_grids_rtd, em, ncdf_sectors, grid_resolution, isAir )
   write_diffs( global_sums, out_name, em )
 
   # Generate diagnostics

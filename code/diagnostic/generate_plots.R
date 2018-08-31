@@ -28,8 +28,8 @@ extract_diag_cells <- function( year_grids_list, ncdf_sectors, lat_res, em ) {
                                 domain_extension = 'gridding-mappings/' )
 
   diagnostic_cells_indices <- diagnostic_cells[ c('col', 'row') ] %>%
-    tidyr::crossing( month = 1:12, sector = 1:length( ncdf_sectors ) ) %>%
-    dplyr::arrange( month, sector ) %>%
+    tidyr::crossing( sector = 1:length( ncdf_sectors ), month = 1:12 ) %>%
+    dplyr::arrange( sector, month ) %>%
     dplyr::mutate( row = lat_res - row + 1L ) %>% # Account for rotation
     as.matrix()
 
@@ -40,9 +40,9 @@ extract_diag_cells <- function( year_grids_list, ncdf_sectors, lat_res, em ) {
 
     cbind( diagnostic_cells,
            data.frame( em = em,
-                       sector = ncdf_sectors[ diagnostic_cells_indices[ , 4 ] ],
+                       sector = ncdf_sectors[ diagnostic_cells_indices[ , 3 ] ],
                        year = as.integer( substr( Xyear, 2, 5 ) ),
-                       month = diagnostic_cells_indices[ , 3 ],
+                       month = diagnostic_cells_indices[ , 4 ],
                        unit = 'kt',
                        value = cell_values / 1000,
                        stringsAsFactors = F) )
