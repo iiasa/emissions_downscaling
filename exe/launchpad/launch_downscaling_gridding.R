@@ -37,27 +37,27 @@ RUNSUFFIX <- paste0( format( Sys.time(), '%m-%d-%H%M%S' ), '_',
 
 if ( DEBUG ) {
   message( 'Debug mode is on' )
-  args_from_makefile <- c( 'MESSAGE-GLOBIOM',
-                           'Harmonized-DB',
-                           '/Users/brau074/Documents/emissions_downscaling/input/IAM_emissions/MESSAGE-GLOBIOM_SSP2-45/output_harmonized.xlsx',
-                           '/Users/brau074/Documents/emissions_downscaling/final-output/module-B',
-                           '/Users/brau074/Documents/emissions_downscaling/final-output/module-C',
-                           'gridding', 'BC' )
+  command_args <- c( 'MESSAGE-GLOBIOM',
+                     'Harmonized-DB',
+                     '/Users/brau074/Documents/emissions_downscaling/input/IAM_emissions/MESSAGE-GLOBIOM_SSP2-45/output_harmonized.xlsx',
+                     '/Users/brau074/Documents/emissions_downscaling/final-output/module-B',
+                     '/Users/brau074/Documents/emissions_downscaling/final-output/module-C',
+                     'gridding', 'BC' )
 
   calculationDir <- "/Users/Caleb/Documents/JGCRI/emissions_downscaling/code/error/parameters"
   calculationYears <- 2016:2020
 } else {
-  args_from_makefile <- commandArgs( TRUE )  # get args from command line
+  command_args <- commandArgs( TRUE )  # get args from command line
 }
 
-# extract arguments from args_from_makefile
-iam <-           args_from_makefile[ 1 ]
-harm_status <-   args_from_makefile[ 2 ]
-input_file <-    args_from_makefile[ 3 ]
-modb_out <-      args_from_makefile[ 4 ]
-modc_out <-      args_from_makefile[ 5 ]
-gridding_flag <- args_from_makefile[ 6 ]
-run_species <-   args_from_makefile[ 7 ]
+# extract arguments from command_args
+iam           <- command_args[ 1 ]
+harm_status   <- command_args[ 2 ]
+input_file    <- command_args[ 3 ]
+modb_out      <- command_args[ 4 ]
+modc_out      <- command_args[ 5 ]
+gridding_flag <- command_args[ 6 ]
+run_species   <- command_args[ 7 ]
 
 # update domainmapping for current run
 domainmapping <- read.csv( DOMAINPATHMAP, stringsAsFactors = F )
