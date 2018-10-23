@@ -11,7 +11,7 @@ The user can specify just downscaling, or downscaling & gridding. See the [proje
 
 ![BC emissions example](/documentation/img/BC-anthro_emissions.png)
 
-This software is provided with the follwing [licence](https://github.com/iiasa/emissions_downscaling/licence_and_disclaimer.txt)
+This software is provided with the follwing [licence](https://github.com/iiasa/emissions_downscaling/blob/master/licence_and_disclaimer.txt)
 
 Copyright 2018 Battelle Memorial Institute
 
