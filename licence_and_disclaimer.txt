@@ -1,18 +1,3 @@
-# IAM Emissions Downscaling
-
-These routines take emissions data from Integrated Assessment Models and do two things:
-
-1. Downscale from native IAM regions to country level
-2. Map those country level emissions to a global, spatial grid, and export those into netCDF files in CMIP6 standard format.
-
-The user can specify just downscaling, or downscaling & gridding. See the [project wiki](https://github.com/iiasa/emissions_downscaling/wiki) for further details, including a quick guide to getting started.
-
-### Example gridded emissions output:
-
-![BC emissions example](/documentation/img/BC-anthro_emissions.png)
-
-This software is provided with the follwing [licence](https://github.com/iiasa/emissions_downscaling/licence_and_disclaimer.txt)
-
 Copyright 2018 Battelle Memorial Institute
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
