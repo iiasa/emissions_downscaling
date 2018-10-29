@@ -67,9 +67,9 @@ write_ncdf <- function( year_grids_list, output_dir, grid_resolution, year_list,
 
   ### Prepare data for writing to NetCDF
   printLog( "Preparing to write NetCDF for", var_atts$sector_long_name )
-  em_array <- unlist_for_ncdf( year_grids_list, ncdf_sectors, grid_resolution,
-                               aggregate_sectors, sector_shares, nc_file_path,
-                               sector_type )
+  em_array <- unlist_for_ncdf( year_grids_list, nc_file_path, grid_resolution,
+                               em, ncdf_sectors, sector_type, aggregate_sectors,
+                               sector_shares )
 
   ### Define NetCDF dimensions
   bnds <- prep_bounds( grid_resolution, days_in_month, year_list, ncdf_sectors )
@@ -622,18 +622,19 @@ write_diffs <- function( global_sums, out_name, em ) {
 #
 # Args:
 #   year_grids_list: List of arrays or list of lists of arrays
-#   ncdf_sectors: Sector names
+#   nc_file_path: NetCDF file path to use for creating diagnostic file names
 #   grid_resolution: Resolution of the data
+#   em: Emission name
+#   ncdf_sectors: Sector names
+#   sector_type: The sector type
 #   aggregate_sectors: Should the sectors be summed?
 #   sector_shares: Represent values as their share compared to other sectors?
-#   diag_fname: NetCDF file path to use for creating diagnostic file names
-#   sector_type: The sector type
 #
 # Returns:
 #   The processed multidimensional array
-unlist_for_ncdf <- function( year_grids_list, ncdf_sectors, grid_resolution,
-                             aggregate_sectors, sector_shares, diag_fname,
-                             sector_type ) {
+unlist_for_ncdf <- function( year_grids_list, nc_file_path, grid_resolution,
+                             em, ncdf_sectors, sector_type, aggregate_sectors,
+                             sector_shares ) {
   NMONTHS <- 12L
   NSECTORS <- length( ncdf_sectors )
   GENERATE_PLOTS <- get_constant( 'diagnostic_plots' )
@@ -676,7 +677,7 @@ unlist_for_ncdf <- function( year_grids_list, ncdf_sectors, grid_resolution,
   }
 
   # Always write out checksum and diff files
-  out_path <- gsub( '.nc', '.csv', diag_fname, fixed = T )
+  out_path <- gsub( '.nc', '.csv', nc_file_path, fixed = T )
 
   # Remove everything to the last slash '.*/', capture everything up to the
   # extension '([^/]+)', then the extension '\\.csv'

@@ -95,7 +95,7 @@ if ( VOC_SPEC == 'only' && sub_spec && run_species %!in% c( "VOC", "NMVOC" ) ) {
 } else if ( sub_spec && run_species %in% iam_data$em ) {
   iam_data <- iam_data[ iam_data$em == run_species, ]
 } else if ( sub_spec ) {
-  stop( paste0( "Cannot downscale for missing emission", run_species, ". ",
+  stop( paste0( "Cannot downscale for missing emission ", run_species, ". ",
                 "Supported emission species include: ",
                 paste( get_constant( 'supported_species' ), collapse = ', ' ) ) )
 }

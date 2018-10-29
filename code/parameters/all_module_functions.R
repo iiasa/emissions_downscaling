@@ -4,7 +4,8 @@
 # Date Last Modified:
 # Program Purpose:
 # Note:
-# TODO:
+# TODO: Avoid the inferno, (http://www.burns-stat.com/pages/Tutor/R_inferno.pdf)
+#       see chapter 6
 # ----------------------------------------------------------------------------------------------------------------
 
 # ------------------------------------------------------------------------------
