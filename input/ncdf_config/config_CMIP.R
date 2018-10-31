@@ -1,3 +1,5 @@
+# Copyright 2018 Battelle Memorial Institute
+
 # config_default.R
 #
 # This file contains the default values for the output NetCDF files for CMIP. To

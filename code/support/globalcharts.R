@@ -1,3 +1,5 @@
+# Copyright 2018 Battelle Memorial Institute
+
 # globalcharts.R
 #
 # Generate line graphs of total emissions for each emission for each scenario.

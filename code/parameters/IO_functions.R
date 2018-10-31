@@ -1,3 +1,5 @@
+# Copyright 2018 Battelle Memorial Institute
+
 # ----------------------------------------------------------------------------------
 # CEDS R header file: Input and Output functions
 # Author(s): Ben Bond-Lamberty, Page Kyle, Jon Seibert, Tyler Pitkanen, Linh Vu

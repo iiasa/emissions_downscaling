@@ -1,3 +1,5 @@
+# Copyright 2018 Battelle Memorial Institute
+
 # calculate_voc_ratios.R
 #
 # Calculate the sub-VOC ratios for a given sector from the historical sub-VOC

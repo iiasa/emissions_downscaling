@@ -1,3 +1,5 @@
+# Copyright 2018 Battelle Memorial Institute
+
 # ------------------------------------------------------------------------------
 # Program Name: C.1.gridding_data_reformatting.R
 # Author(s): Leyang Feng, Caleb Braun

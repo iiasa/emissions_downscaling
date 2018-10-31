@@ -1,3 +1,5 @@
+# Copyright 2018 Battelle Memorial Institute
+
 # ----------------------------------------------------------------------------------
 # emissions_downscaling R header file: global settings
 # Authors: Modified from CEDS by Caleb Braun

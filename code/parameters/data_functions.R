@@ -1,3 +1,5 @@
+# Copyright 2018 Battelle Memorial Institute
+
 # ----------------------------------------------------------------------------------
 # CEDS R header file: data moulding functions
 # Authors: Ben Bond-Lamberty, Jon Seibert, Tyler Pitkanen

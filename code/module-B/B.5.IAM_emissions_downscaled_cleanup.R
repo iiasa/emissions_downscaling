@@ -1,3 +1,5 @@
+# Copyright 2018 Battelle Memorial Institute
+
 # ------------------------------------------------------------------------------
 # Program Name: B.5.IAM_emissions_downscaled_cleanup.R
 # Author(s): Leyang Feng

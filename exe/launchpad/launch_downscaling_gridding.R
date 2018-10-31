@@ -1,3 +1,5 @@
+# Copyright 2018 Battelle Memorial Institute
+
 # ------------------------------------------------------------------------------
 # Program Name: launch_downscaling_gridding.R
 # Author(s): Leyang Feng, Caleb Braun

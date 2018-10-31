@@ -1,3 +1,5 @@
+# Copyright 2018 Battelle Memorial Institute
+
 
 
 # downscaleIAMemissions ----------------------------------------

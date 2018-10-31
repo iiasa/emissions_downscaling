@@ -1,3 +1,5 @@
+# Copyright 2018 Battelle Memorial Institute
+
 setwd("C:/Users/brau074/Documents/emissions_downscaling/input/reference_emissions/CEDS_CMIP6_to_2015")
 library(magrittr)
 library(dplyr)

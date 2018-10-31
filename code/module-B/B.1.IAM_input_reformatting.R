@@ -1,3 +1,5 @@
+# Copyright 2018 Battelle Memorial Institute
+
 # ------------------------------------------------------------------------------
 # Program Name: B.1.IAM_input_reformatting
 # Author(s): Leyang Feng

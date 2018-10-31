@@ -1,3 +1,5 @@
+# Copyright 2018 Battelle Memorial Institute
+
 # ------------------------------------------------------------------------------
 # Program Name: C.2.1.gridding_nonair.R
 # Author(s): Leyang Feng

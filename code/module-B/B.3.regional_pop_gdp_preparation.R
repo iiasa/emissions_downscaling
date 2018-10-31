@@ -1,3 +1,5 @@
+# Copyright 2018 Battelle Memorial Institute
+
 # ------------------------------------------------------------------------------
 # Program Name: B.3.regional_pop_gdp_preparation.R
 # Author(s): Leyang Feng
