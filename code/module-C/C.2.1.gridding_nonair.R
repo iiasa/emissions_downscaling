@@ -79,8 +79,10 @@ proxy_mapping <-       readData( 'GRIDDING', domain_extension = grid_maps_ext,
 proxy_sub_mapping <-   readData( 'GRIDDING', domain_extension = grid_maps_ext,
                                  file_name = gridding_proxy_substitution_mapping )
 
-voc_map <- read.csv( 'gridding/gridding-mappings/VOC_id_name_mapping.csv',
-                     row.names = 1, stringsAsFactors = F )
+voc_map   <- read.csv( 'gridding/gridding-mappings/VOC_id_name_mapping.csv',
+                       row.names = 1, stringsAsFactors = F )
+ratio_map <- read.csv( 'gridding/gridding-mappings/ratio_mapping.csv',
+                       stringsAsFactors = F )
 
 
 # -----------------------------------------------------------------------------
@@ -124,56 +126,66 @@ for ( scenario in scenarios ) {
                                           proxy_mapping,
                                           proxy_sub_mapping )
 
-    anthro_grids <- lapply( allyear_grids_list, `[`, BULK_SECTORS )
-    openburning_grids <- lapply( allyear_grids_list, `[`, OPENBURNING_SECTORS )
+    # NOTE: Applying emission ratios is not fully supported yet
+    ratio_ems <- ratio_map[ ratio_map$em == em, ]
 
-    # Build and write out netCDF file of anthropogenic emissions
-    if ( all( is.na( unlist( lapply( anthro_grids, names ) ) ) ) ) {
-      warning( paste( "No anthro sectors found for", em, "in", scenario ) )
-    } else {
-      write_ncdf( year_grids_list = anthro_grids,
-                  output_dir      = output_dir,
-                  grid_resolution = grid_resolution,
-                  year_list       = year_list,
-                  em              = em,
-                  scenario        = scenario,
-                  sub_nmvoc       = sub_nmvoc,
-                  sector_type     = "anthro",
-                  ncdf_sectors    = BULK_SECTORS,
-                  sector_ids      = BULK_SECTOR_IDS )
-    }
+    sapply( unique( em, c( ratio_ems$ratio_em ) ), function( ratio_em ) {
+      if ( ratio_em != em ) {
+        allyear_grids_list <- calculate_ratio_em( allyear_grids_list, ratio_ems,
+                                                  ratio_em )
+      }
 
-    if ( all( is.na( unlist( lapply( openburning_grids, names ) ) ) ) ) {
-      warning( paste( "No open burning sectors found for", em, "in", scenario ) )
-    } else {
-      # Build and write out netCDF file of aggergated openburning sectors
-      write_ncdf( year_grids_list   = openburning_grids,
-                  output_dir        = output_dir,
-                  grid_resolution   = grid_resolution,
-                  year_list         = year_list,
-                  em                = em,
-                  scenario          = scenario,
-                  sub_nmvoc         = sub_nmvoc,
-                  sector_type       = "openburning",
-                  ncdf_sectors      = OPENBURNING_SECTORS,
-                  sector_ids        = OPENBURNING_SECTOR_IDS,
-                  aggregate_sectors = TRUE,
-                  sector_shares     = FALSE )
+      anthro_grids <- lapply( allyear_grids_list, `[`, BULK_SECTORS )
+      openburning_grids <- lapply( allyear_grids_list, `[`, OPENBURNING_SECTORS )
 
-      # Build and write out netCDF file of openburning sector shares
-      write_ncdf( year_grids_list   = openburning_grids,
-                  output_dir        = output_dir,
-                  grid_resolution   = grid_resolution,
-                  year_list         = year_list,
-                  em                = em,
-                  scenario          = scenario,
-                  sub_nmvoc         = sub_nmvoc,
-                  sector_type       = "openburning",
-                  ncdf_sectors      = OPENBURNING_SECTORS,
-                  sector_ids        = OPENBURNING_SECTOR_IDS,
-                  aggregate_sectors = FALSE,
-                  sector_shares     = TRUE )
-    }
+      # Build and write out netCDF file of anthropogenic emissions
+      if ( all( is.na( unlist( lapply( anthro_grids, names ) ) ) ) ) {
+        warning( paste( "No anthro sectors found for", ratio_em, "in", scenario ) )
+      } else {
+        write_ncdf( year_grids_list = anthro_grids,
+                    output_dir      = output_dir,
+                    grid_resolution = grid_resolution,
+                    year_list       = year_list,
+                    em              = ratio_em,
+                    scenario        = scenario,
+                    sub_nmvoc       = sub_nmvoc,
+                    sector_type     = "anthro",
+                    ncdf_sectors    = BULK_SECTORS,
+                    sector_ids      = BULK_SECTOR_IDS )
+      }
+
+      if ( all( is.na( unlist( lapply( openburning_grids, names ) ) ) ) ) {
+        warning( paste( "No open burning sectors found for", ratio_em, "in", scenario ) )
+      } else {
+        # Build and write out netCDF file of aggergated openburning sectors
+        write_ncdf( year_grids_list   = openburning_grids,
+                    output_dir        = output_dir,
+                    grid_resolution   = grid_resolution,
+                    year_list         = year_list,
+                    em                = ratio_em,
+                    scenario          = scenario,
+                    sub_nmvoc         = sub_nmvoc,
+                    sector_type       = "openburning",
+                    ncdf_sectors      = OPENBURNING_SECTORS,
+                    sector_ids        = OPENBURNING_SECTOR_IDS,
+                    aggregate_sectors = TRUE,
+                    sector_shares     = FALSE )
+
+        # Build and write out netCDF file of openburning sector shares
+        write_ncdf( year_grids_list   = openburning_grids,
+                    output_dir        = output_dir,
+                    grid_resolution   = grid_resolution,
+                    year_list         = year_list,
+                    em                = ratio_em,
+                    scenario          = scenario,
+                    sub_nmvoc         = sub_nmvoc,
+                    sector_type       = "openburning",
+                    ncdf_sectors      = OPENBURNING_SECTORS,
+                    sector_ids        = OPENBURNING_SECTOR_IDS,
+                    aggregate_sectors = FALSE,
+                    sector_shares     = TRUE )
+      }
+    })
   }
 }
 
