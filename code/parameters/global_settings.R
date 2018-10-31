@@ -76,15 +76,15 @@ source( paste0( 'ncdf_config/', get_constant( 'config_file' ) ), em_gridding_env
 #   'all'  - Do NMVOC speciation along with all other emissions
 #   'only' - Do NMVOC speciation and no other emissions
 #   'none' - Do not do NMVOC speciation
-em_gridding_env$voc_speciation <- 'all'
+em_gridding_env$voc_speciation <- 'none'
 
 # Diagnostics
 em_gridding_env$diagnostic_plots <- T
-em_gridding_env$total_ems_plots  <- T    # generate plot of all ems in scenario
+em_gridding_env$total_ems_plots  <- F    # generate plot of all ems in scenario
 em_gridding_env$error_tolerance  <- 0.1  # minimum percent difference allowed
 
 # Other settings
-em_gridding_env$debug         <- T       # run in debug mode
+em_gridding_env$debug         <- F       # run in debug mode
 em_gridding_env$clean_med_out <- F       # erase intermediate output when done
 
 # The below are not used anywhere, but may be good references
