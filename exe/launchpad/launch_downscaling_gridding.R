@@ -9,8 +9,7 @@
 # TODO:
 # ------------------------------------------------------------------------------
 
-# ------------------------------------------------------------------------------
-# 0. Read in global settings and headers
+# 0. Read in global settings and headers ----------------------------------
 
 # Must be run from the emissions_downscaling/input directory
 if ( !endsWith( getwd(), '/input' ) ) setwd( 'input' )
@@ -28,9 +27,9 @@ initialize( script_name, log_msg, headers )
 
 # 1. Set up desired IAM to be processing ----------------------------------
 
-SCENARIO_DIAG <- get_global_constant( 'total_ems_plots' )
-MED_OUT_CLEAN <- get_global_constant( 'clean_med_out' )
-DEBUG <- get_global_constant( 'debug' )
+SCENARIO_DIAG <- get_constant( 'total_ems_plots' )
+MED_OUT_CLEAN <- get_constant( 'clean_med_out' )
+DEBUG <- get_constant( 'debug' )
 
 # create unique runsuffix for intermediate files
 RUNSUFFIX <- paste0( format( Sys.time(), '%m-%d-%H%M%S' ), '_',
@@ -38,27 +37,27 @@ RUNSUFFIX <- paste0( format( Sys.time(), '%m-%d-%H%M%S' ), '_',
 
 if ( DEBUG ) {
   message( 'Debug mode is on' )
-  args_from_makefile <- c( 'MESSAGE-GLOBIOM',
-                           'Harmonized-DB',
-                           'C:/Users/brau074/Documents/emissions_downscaling/input/IAM_emissions/MESSAGE-GLOBIOM_SSP2-45/output_harmonized.xlsx',
-                           'C:/Users/brau074/Documents/emissions_downscaling/final-output/module-B',
-                           'C:/Users/brau074/Documents/emissions_downscaling/final-output/module-C',
-                           'gridding' )
+  command_args <- c( 'MESSAGE-GLOBIOM',
+                     'Harmonized-DB',
+                     '/Users/brau074/Documents/emissions_downscaling/input/IAM_emissions/MESSAGE-GLOBIOM_SSP2-45/output_harmonized.xlsx',
+                     '/Users/brau074/Documents/emissions_downscaling/final-output/module-B',
+                     '/Users/brau074/Documents/emissions_downscaling/final-output/module-C',
+                     'gridding', 'NOx' )
 
-  calculationDir <- "/Users/Caleb/Documents/JGCRI/emissions_downscaling/code/error/parameters"
+  calculationDir <- "/Users/brau074/Documents/emissions_downscaling/code/error/parameters"
   calculationYears <- 2016:2020
 } else {
-  args_from_makefile <- commandArgs( TRUE )  # get args from command line
+  command_args <- commandArgs( TRUE )  # get args from command line
 }
 
-# extract arguments from args_from_makefile
-iam <-           args_from_makefile[ 1 ]
-harm_status <-   args_from_makefile[ 2 ]
-input_file <-    args_from_makefile[ 3 ]
-modb_out <-      args_from_makefile[ 4 ]
-modc_out <-      args_from_makefile[ 5 ]
-gridding_flag <- args_from_makefile[ 6 ]
-run_species <-   args_from_makefile[ 7 ]
+# extract arguments from command_args
+iam           <- command_args[ 1 ]
+harm_status   <- command_args[ 2 ]
+input_file    <- command_args[ 3 ]
+modb_out      <- command_args[ 4 ]
+modc_out      <- command_args[ 5 ]
+gridding_flag <- command_args[ 6 ]
+run_species   <- command_args[ 7 ]
 
 # update domainmapping for current run
 domainmapping <- read.csv( DOMAINPATHMAP, stringsAsFactors = F )
@@ -107,11 +106,3 @@ if ( MED_OUT_CLEAN ) {
   invisible( unlink( med_out, recursive = T ) )
   invisible( file.remove( paste0( '../documentation/IO_documentation_', RUNSUFFIX, '.csv' ) ) )
 }
-
-
-# 5. Generate diagnostic charts -------------------------------------------
-if ( SCENARIO_DIAG ) {
-  diag_in <- domainmapping[ domainmapping$Domain == 'DIAG', "PathToDomain" ]
-  source( paste0( diag_in, '/global_total_ems.R' ) )
-}
-

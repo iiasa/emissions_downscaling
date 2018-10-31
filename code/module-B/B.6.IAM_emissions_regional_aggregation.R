@@ -28,10 +28,10 @@ initialize( script_name, log_msg, headers )
 
 # ------------------------------------------------------------------------------
 # 0.5 Define IAM variable
-if ( !exists( 'args_from_makefile' ) ) args_from_makefile <- commandArgs( TRUE )
-iam <- args_from_makefile[ 1 ]
-harm_status <- args_from_makefile[ 2 ]
-modb_out <- args_from_makefile[ 3 ]
+if ( !exists( 'command_args' ) ) command_args <- commandArgs( TRUE )
+iam <- command_args[ 1 ]
+harm_status <- command_args[ 2 ]
+modb_out <- command_args[ 3 ]
 if ( is.na( iam ) ) iam <- "GCAM4"
 if ( is.na( modb_out ) ) iam <- "../final-output/module-B"
 

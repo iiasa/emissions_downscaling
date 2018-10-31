@@ -185,7 +185,6 @@ aggregate_all_isos <- function( iso_list, iso_em_spatial_list, location_index, g
 # return: global_em_spatial - a global grid for given sector
 # input files: null
 # output: null
-
 grid_one_sector <- function( sector,
                              em,
                              grid_resolution,
@@ -266,7 +265,7 @@ grid_one_sector <- function( sector,
 
 # ------------------------------------------------------------------------------
 # grid_all_sectors
-# Brief: lapply wraper for grid_one_countriy
+# Brief: lapply wrapper for grid_one_sector
 # Dependencies: grid_one_sector
 # Author: Leyang Feng
 # parameters: sector_list - the sectors in the gridding emissions
@@ -337,20 +336,21 @@ grid_one_year <- function( em,
 
 # ------------------------------------------------------------------------------
 # grid_all_years
-# Brief: Generates one year's gridded emission
+# Brief: Generates gridded emissions for all years in the year_list
 # Dependencies: grid_all_sectors
 # Author: Leyang Feng
-# parameters: em - the current gridding emission species
-#             year - the vurrent gridding year
+# parameters: year_list - vector of all years to grid
+#             em - the current gridding emission species
 #             grid_resolution - gridding resolution
-#             location_index - location index table, contains matrix index information for the country in global extent
+#             location_index - location index table, contains matrix index
+#               information for the country in global extent
 #             proxy_mapping - proxy mapping file
 #             proxy_substitution_mapping - proxy substitution mapping file
-# return: sector_grids_list - a list contains one year's gridded emission for each sector
-# input files: null
-# output: null
-
-grid_all_years <- function( year_list, em, grid_resolution, gridding_em, location_index, proxy_mapping, proxy_substitution_mapping ) {
+# return: sector_grids_list - a list contains one year's gridded emission for
+#           each sector
+grid_all_years <- function( year_list, em, grid_resolution, gridding_em,
+                            location_index, proxy_mapping,
+                            proxy_substitution_mapping ) {
 
   allyear_grids_list <- lapply( year_list, function( year ) {
 
@@ -448,6 +448,13 @@ grid_all_years_air <- function( year_list,
 
   names( allyear_grids_list ) <- paste0( 'X', year_list )
 
+  # Seasonality and other masks do not need to be globals, and it would be good
+  # to not load them into the Global Environment. For now, we can just remove
+  # them when we're done.
+  rm( list = intersect( ls( pos = globalenv() ),
+                        unique( seasonality_mapping$seasonality_file ) ),
+      pos = globalenv() )
+
   invisible( gc( ) )
 
   return( allyear_grids_list )
@@ -474,8 +481,8 @@ grid_all_years_air <- function( year_list,
 get_proxy <- function( em, year, sector, proxy_mapping, proxy_type = 'primary' ) {
 
   # use VOC proxy files for all sub-VOCs
-  if ( startsWith(em, 'VOC') ) {
-    em <- 'NMVOC'
+  if ( em %!in% proxy_mapping$em ) {
+    stop( paste( 'Could not find proxy mapping for emission', em ) )
   }
 
   proxy_col <- if ( proxy_type == 'primary' ) 'proxy_file' else 'proxybackup_file'
@@ -516,8 +523,17 @@ get_proxy <- function( em, year, sector, proxy_mapping, proxy_type = 'primary' )
 add_seasonality <- function( annual_flux, em, sector, year, days_in_month, grid_resolution, seasonality_mapping ) {
 
   # use VOC seasonality mapping for all sub-VOCs
-  if ( startsWith(em, 'VOC') ) {
-    em <- 'NMVOC'
+  if ( em %!in% seasonality_mapping$em ) {
+    VOC_burn_ratios <- readData( 'GRIDDING', 'VOC_ratio_BurnSectors',
+                                 domain_extension = "gridding-mappings/" )
+    VOC_ratios <- readData( 'GRIDDING', 'VOC_ratio_AllSectors',
+                            domain_extension = "gridding-mappings/" )
+
+    if ( em %in% c( names( VOC_ratios ), names( VOC_burn_ratios ) ) ) {
+      em <- 'NMVOC'
+    } else {
+      stop( paste( 'Could not find proxy mapping for emission', em ) )
+    }
   }
 
   file_name <- seasonality_mapping[ seasonality_mapping$em == em & seasonality_mapping$sector == sector & seasonality_mapping$year == year, 'seasonality_file' ]
@@ -631,7 +647,7 @@ sum_monthly_em <- function( fin_grid, em, sector, year, days_in_month, global_gr
 year_length <- function( year ) {
   year <- as.numeric( year )
   ifelse( ( year %% 4 == 0 & year %% 100 != 0) | year %% 400 == 0, 366, 365 )
-  }
+}
 
 # ------------------------------------------------------------------------------
 # grid_area
@@ -679,9 +695,49 @@ grid_area <- function( grid_resolution, all_lon = F ) {
 # return: a rotated matrix
 # input files: null
 # output: null
-rotate_a_matrix <- function( x ) {
-  t( x[ nrow(x):1, ] )
+rotate_a_matrix <- function( x, n = 1 ) {
+  switch(1 + (n %% 4),
+         x,
+         t( x[ nrow(x):1, ] ),
+         x[ nrow(x):1, ncol(x):1 ],
+         t( x[ , ncol(x):1 ] )
+  )
 }
+
+
+# ------------------------------------------------------------------------------
+# rotate_lat_lon
+# Brief: Rotate the first two dimensions (lon, lat) of a list containing arrays
+#        or matrices. If given a list of lists, this function recurses until it
+#        finds the arrays. All arrays in a list must have the same dimensions.
+# Author: Caleb Braun
+# parameters: grids - a list containing arrays or matrices
+# return: a rotated 4d array
+rotate_lat_lon <- function( grids, direction = 1 ) {
+  stopifnot( is.list( grids ) )
+
+  # If given list of lists, call recursively on sub-lists
+  if ( !all( sapply( grids, is.array ) ) ) {
+    return( lapply( grids, rotate_lat_lon ) )
+  }
+
+  # Get array dimensions and ensure they are all the same
+  grid_dims <- lapply( grids, dim )
+  stopifnot( length( unique( grid_dims ) ) == 1 )
+  grid_dims <- grid_dims[[1]]
+  ndims <- length( grid_dims )
+  stopifnot( ndims > 1 )
+
+  if ( ndims == 2 ) {
+    final_grids <- lapply( grids, rotate_a_matrix, direction )
+  } else {
+    final_grids <- lapply( grids, apply, 3:ndims, rotate_a_matrix, direction )
+  }
+
+  # Rotate first two dimensions as well and return
+  lapply( final_grids, `dim<-`, c( grid_dims[ 2:1 ], grid_dims[ -1:-2 ] ) )
+}
+
 
 # ------------------------------------------------------------------------------
 # gridding_initialize
@@ -697,6 +753,8 @@ rotate_a_matrix <- function( x ) {
 # return: null
 # input files: null
 # output: null
+# TODO: Avoid the inferno, (http://www.burns-stat.com/pages/Tutor/R_inferno.pdf)
+#       see chapter 6
 gridding_initialize <- function( grid_resolution = 0.5,
                                  start_year = 2015,
                                  end_year = 2100,
@@ -744,4 +802,53 @@ gridding_initialize <- function( grid_resolution = 0.5,
 
   # other pre-set values
   days_in_month <<- c( 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 )
+}
+
+
+# Calcualte emissions based on gridded ratios
+#
+# Multiply calculated values for an emissions species by gridded ratios to get
+# values for a second species.
+#
+# Args:
+#   all_year_grids_list: A list of years, where each year is a list of gridded
+#     emissions by sector
+#   ratio_map: Table mapping the emission to the ratio file for the sector
+#   ratio_em: Name of the emission for which we are calculating values
+#
+# Returns:
+#   List of same structure of all_year_grids_list, but filtered to sectors
+#     where the ratios could be applied
+calculate_ratio_em <- function( allyear_grids_list, ratio_map, ratio_em ) {
+  ratio_map <- ratio_map[ ratio_map$ratio_em == ratio_em, ]
+
+  ratios <- lapply( ratio_map$sector, function( s ) {
+    sector_ratio_file <- ratio_map[ ratio_map$sector == s, 'ratio_file' ]
+    stopifnot( length( sector_ratio_file ) == 1 )
+
+    nc <- ncdf4::nc_open( paste0( 'gridding/ratios/', sector_ratio_file ) )
+    rt <- ncvar_get( nc )
+    nc_close( nc )
+
+    expected_dims <- dim( allyear_grids_list[[1]][[1]] )[ c( 2, 1, 3 ) ]
+    if ( !all( dim( rt ) == expected_dims ) ) {
+      stop( "Ratio file variable ", sector_ratio_file, " dimensions do not ",
+            "match [", paste( expected_dims, collapse = ' ' ), "]" )
+    }
+
+    rt[ is.na( rt ) ] <- 0
+    rt
+  })
+
+  ratios <- rotate_lat_lon( ratios, -1 )
+  names( ratios ) <- ratio_map$sector
+  plot_grid(ratios$AWB[,,1] > 0, 'H2/CO ratio non-zero cells', 'Non-Zero')
+  plot_grid(allyear_grids_list$X2015$AWB[,,1] > 0, 'CO non-zero cells', 'Non-Zero')
+
+  tmp <- lapply( allyear_grids_list, function( year_grids_list ) {
+    year_grids_list <- year_grids_list[ ratio_map$sector ]
+
+    Map( `*`, year_grids_list, ratios )
+  })
+
 }

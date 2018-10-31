@@ -35,11 +35,11 @@ lapply(names(libs), loadPackage, libs)
 # This first group of settings is protected--we don't want it re-set every time
 # this header is read.
 if( !exists( "GCAM_SOURCE_FN" ) ) { # i.e. #ifndef
-  GCAM_SOURCE_FN  <- c( "?" )       # name of currently executing source file (stack structure)
-  GCAM_LOG_SAVE   <- c( FALSE )     # whether current log is also being saved to file (stack structure)
-  GCAM_SOURCE_RD  <- 0              # recursion depth, an index into above structures
-  DEPENDENCIES    <- list()         # dependencies (i.e. what files scripts read)
-  OUTPUTS         <- list()         # outputs (i.e. what files scripts write)
+  GCAM_SOURCE_FN <- c( "?" )        # name of currently executing source file (stack structure)
+  GCAM_LOG_SAVE  <- c( FALSE )      # whether current log is also being saved to file (stack structure)
+  GCAM_SOURCE_RD <- 0               # recursion depth, an index into above structures
+  DEPENDENCIES   <- list()          # dependencies (i.e. what files scripts read)
+  OUTPUTS        <- list()          # outputs (i.e. what files scripts write)
 }
 
 # Comment character for files
@@ -58,7 +58,7 @@ MODULE_PROC_ROOT <- PARAM_DIR
 em_gridding_env <- new.env()
 
 # Function to retrive values from protected environement
-get_global_constant <- function (const_name) {
+get_constant <- function (const_name) {
   return( get( const_name, envir = em_gridding_env ) )
 }
 
@@ -67,14 +67,10 @@ get_global_constant <- function (const_name) {
 
 # Input files
 em_gridding_env$reference_emissions <- 'CEDS_by_country_by_CEDS_sector_with_luc_all_em'
+em_gridding_env$config_file         <- 'config_CMIP.R'
 
 # Output netCDF metadata options
-em_gridding_env$dataset_version_number <- '1.1'
-em_gridding_env$target_mip             <- 'ScenarioMIP'
-em_gridding_env$license                <- 'ScenarioMIP gridded emissions data produced by the IAMC are licensed under a Creative Commons Attribution-ShareAlike 4.0 International License (https://creativecommons.org/licenses). Consult https://pcmdi.llnl.gov/CMIP6/TermsOfUse for terms of use governing input4MIPs output, including citation requirements and proper acknowledgment. Further information about this data, including some limitations, can be found via the further_info_url (recorded as a global attribute in this file). The data producers and data providers make no warranty, either express or implied, including, but not limited to, warranties of merchantability and fitness for a particular purpose. All liabilities arising from the supply of the information (including any liability arising in negligence) are excluded to the fullest extent permitted by law.'
-em_gridding_env$location               <- 'Laxenburg, Austria'
-em_gridding_env$institution            <- 'Integrated Assessment Modeling Consortium'
-em_gridding_env$institution_id         <- 'IAMC'
+source( paste0( 'ncdf_config/', get_constant( 'config_file' ) ), em_gridding_env )
 
 # How should NMVOC speciation be done? Value must be one of the following:
 #   'all'  - Do NMVOC speciation along with all other emissions
@@ -84,7 +80,7 @@ em_gridding_env$voc_speciation <- 'none'
 
 # Diagnostics
 em_gridding_env$diagnostic_plots <- T
-em_gridding_env$total_ems_plots  <- T    # generate plot of all ems in scenario
+em_gridding_env$total_ems_plots  <- F    # generate plot of all ems in scenario
 em_gridding_env$error_tolerance  <- 0.1  # minimum percent difference allowed
 
 # Other settings
@@ -97,3 +93,6 @@ em_gridding_env$supported_species_alias <- c( 'BC', 'CO', 'NH3', 'NOx', 'OC', 'S
 
 # Standard submission header columns
 em_gridding_env$submission_header_cols <- c( 'model', 'scenario', 'region', 'variable', 'unit' )
+
+# Lock the environment and all variables within it
+lockEnvironment( em_gridding_env, bindings = T )

@@ -18,7 +18,8 @@ library(ggplot2)
 
 
 # Run script when sourced even if on own
-if (!exists('PARAM_DIR')) {
+if (!exists('domainmapping')) {
+  if (!grepl('/input$', getwd())) stop("Working directory must be 'input'.")
   PARAM_DIR <- "../code/parameters/"
   source( paste0( PARAM_DIR, "header.R" ) )
   script_name <- "global_total_ems.R"
@@ -44,7 +45,7 @@ generate_global_total_ems <- function() {
 }
 
 read_in_reference_ems <- function() {
-  HISTORICAL_EMS <- get_global_constant( 'reference_emissions' )
+  HISTORICAL_EMS <- get_constant( 'reference_emissions' )
   historical_ems_fname <- paste0( 'CEDS_CMIP6_to_2015/', HISTORICAL_EMS )
 
   readData( 'REF_EM', file_name = historical_ems_fname ) %>%
@@ -62,13 +63,19 @@ plot_scenario_ems <- function(scen, historical, all_files) {
 
   sectors <- paste0(modc_out, '/', grep(scen, all_files, value = T))
   sectors <- grep('openburning-share', sectors, value = T, invert = T)
-  all_sectors <- do.call(rbind, lapply(sectors, read.csv, stringsAsFactors = F))
+
+  all_sectors <- do.call(rbind, lapply(sectors, function(file_name) {
+    f <- read.csv(file_name, stringsAsFactors = F)
+    names(f)[names(f) == 'global_total'] <- 'value'
+    dplyr::select(f, em, sector, year, month, value)
+  }))
+
   agg_sectors <- all_sectors %>%
     dplyr::group_by(em, sector, year) %>%
     dplyr::summarise(value = sum(value))
 
   agg <- agg_sectors %>%
-    dplyr::filter(!grepl('VOC\\d\\d', em)) %>%  # We have no historical VOCs
+    dplyr::filter(!grepl('VOC\\d\\d', em)) %>%  # Speciated VOCs done separately
     dplyr::group_by(em, year) %>%
     dplyr::summarise(value = sum(value))
 

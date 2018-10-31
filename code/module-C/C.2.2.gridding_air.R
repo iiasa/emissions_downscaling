@@ -29,10 +29,10 @@ initialize( script_name, log_msg, headers )
 
 # ------------------------------------------------------------------------------
 # 0.5 Define IAM variable
-if ( !exists( 'args_from_makefile' ) ) args_from_makefile <- commandArgs( TRUE )
-iam <- args_from_makefile[ 1 ]
-harm_status <- args_from_makefile[ 2 ]
-modc_out <- args_from_makefile[ 5 ]
+if ( !exists( 'command_args' ) ) command_args <- commandArgs( TRUE )
+iam <- command_args[ 1 ]
+harm_status <- command_args[ 2 ]
+modc_out <- command_args[ 5 ]
 if ( is.na( iam ) ) iam <- "GCAM4"
 if ( is.na( modc_out ) ) iam <- "../final-output/module-C"
 
@@ -98,12 +98,17 @@ for ( scenario in scenarios ) {
                                               proxy_mapping,
                                               seasonality_mapping )
 
-    generate_air_grids_nc( allyear_grids_list,
-                           output_dir,
-                           grid_resolution,
-                           year,
-                           em )
-
+    # Build and write out netCDF file
+    write_ncdf( year_grids_list = allyear_grids_list,
+                output_dir      = output_dir,
+                grid_resolution = grid_resolution,
+                year_list       = year_list,
+                em              = em,
+                scenario        = scenario,
+                sub_nmvoc       = FALSE,         # We don't do aircraft NMVOCs
+                sector_type     = "AIR-anthro",
+                ncdf_sectors    = 1:25,          # This is the altitude layer
+                sector_ids      = "" )
   }
 }
 

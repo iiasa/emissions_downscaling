@@ -29,12 +29,12 @@ initialize( script_name, log_msg, headers )
 
 # ------------------------------------------------------------------------------
 # 0.5 Define IAM variable
-if ( !exists( 'args_from_makefile' ) ) args_from_makefile <- commandArgs( TRUE )
-iam <- args_from_makefile[ 1 ]
-harm_status <- args_from_makefile[ 2 ]
-input_file <- args_from_makefile[ 3 ]
-modb_out <- args_from_makefile[ 4 ]
-run_species <- args_from_makefile[ 7 ]
+if ( !exists( 'command_args' ) ) command_args <- commandArgs( TRUE )
+iam         <- command_args[ 1 ]
+harm_status <- command_args[ 2 ]
+input_file  <- command_args[ 3 ]
+modb_out    <- command_args[ 4 ]
+run_species <- command_args[ 7 ]
 if ( is.na( iam ) ) iam <- "GCAM4"
 if ( is.na( input_file ) ) stop( 'No snapshot file provided!' )
 
@@ -84,17 +84,20 @@ iam_data <- iam_data %>%
   dplyr::select( model, scenario, region, em, sector, harm_status, unit, one_of( x_year_list ) )
 
 # Filter for if only one emission species is desired.
-VOC_SPEC <- get_global_constant( 'voc_speciation' )
+VOC_SPEC <- get_constant( 'voc_speciation' )
 sub_spec <- !is.na( run_species )
 
-if ( VOC_SPEC == 'only' ) {
-  if ( sub_spec && !grepl( "VOC", run_species ) )
-    stop( paste( "Cannot speciate VOCs for emission", run_species ) )
+if ( VOC_SPEC == 'only' && sub_spec && run_species %!in% c( "VOC", "NMVOC" ) ) {
+  stop( paste0( "Cannot speciate NMVOCs for emission ", run_species, ". ",
+                "Check voc_speciation option in global_settings.R.") )
+} else if ( VOC_SPEC == 'only' ) {
   iam_data <- iam_data[ iam_data$em == "NMVOC", ]
 } else if ( sub_spec && run_species %in% iam_data$em ) {
   iam_data <- iam_data[ iam_data$em == run_species, ]
 } else if ( sub_spec ) {
-  stop( paste( "Cannot downscale for missing emission", run_species ) )
+  stop( paste0( "Cannot downscale for missing emission ", run_species, ". ",
+                "Supported emission species include: ",
+                paste( get_constant( 'supported_species' ), collapse = ', ' ) ) )
 }
 
 

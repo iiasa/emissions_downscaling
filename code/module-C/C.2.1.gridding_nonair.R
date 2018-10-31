@@ -29,10 +29,10 @@ initialize( script_name, log_msg, headers )
 
 # ------------------------------------------------------------------------------
 # 0.5 Define IAM variable
-if ( !exists( 'args_from_makefile' ) ) args_from_makefile <- commandArgs( TRUE )
-iam <- args_from_makefile[ 1 ]
-harm_status <- args_from_makefile[ 2 ]
-modc_out <- args_from_makefile[ 5 ]
+if ( !exists( 'command_args' ) ) command_args <- commandArgs( TRUE )
+iam <- command_args[ 1 ]
+harm_status <- command_args[ 2 ]
+modc_out <- command_args[ 5 ]
 if ( is.na( iam ) ) iam <- "GCAM4"
 if ( is.na( modc_out ) ) iam <- "../final-output/module-C"
 
@@ -78,8 +78,11 @@ proxy_mapping <-       readData( 'GRIDDING', domain_extension = grid_maps_ext,
                                  file_name = gridding_proxy_mapping )
 proxy_sub_mapping <-   readData( 'GRIDDING', domain_extension = grid_maps_ext,
                                  file_name = gridding_proxy_substitution_mapping )
-diagnostic_cells <-    readData( 'GRIDDING', domain_extension = grid_maps_ext,
-                                 file_name = 'diagnostic_cells' )
+
+voc_map   <- read.csv( 'gridding/gridding-mappings/VOC_id_name_mapping.csv',
+                       row.names = 1, stringsAsFactors = F )
+ratio_map <- read.csv( 'gridding/gridding-mappings/ratio_mapping.csv',
+                       stringsAsFactors = F )
 
 
 # -----------------------------------------------------------------------------
@@ -90,33 +93,99 @@ iam_em <- iam_data[ iam_data$sector != 'AIR', ]
 emissions <- sort( unique( iam_em$em ) )
 scenarios <- sort( unique( iam_em$scenario ) )
 
+nmvoc_ems <- row.names( voc_map )
 
 # -----------------------------------------------------------------------------
 # 5. Gridding and writing output data
+
+# Define variables specific to each sector type. Note that order matters, so
+# make sure the position of the variable matches its id.
+BULK_SECTORS <- c( "AGR", "ENE", "IND", "TRA", "RCO", "SLV", "WST", "SHP" )
+BULK_SECTOR_IDS <- paste( "0: Agriculture; 1: Energy; 2: Industrial;",
+                          "3: Transportation; 4: Residential, Commercial, Other;",
+                          "5: Solvents production and application; 6: Waste;",
+                          "7: International Shipping" )
+OPENBURNING_SECTORS <- c( "AWB", "FRTB", "GRSB", "PEAT" )
+OPENBURNING_SECTOR_IDS <- paste( "0: Agricultural Waste Burning On Fields;",
+                                 "1: Forest Burning; 2: Grassland Burning;",
+                                 "3: Peat Burning" )
 
 for ( scenario in scenarios ) {
   for ( em in emissions ) {
     gridding_em <- iam_em[ iam_em$scenario == scenario & iam_em$em == em, ]
 
+    # for gridding all years, the em is used only to look up proxy / seasonality
+    sub_nmvoc <- em %in% nmvoc_ems
+    proxy_em <- if_else( sub_nmvoc, 'NMVOC', em )
+
     allyear_grids_list <- grid_all_years( year_list,
-                                          em,
+                                          proxy_em,
                                           grid_resolution,
                                           gridding_em,
                                           location_index,
                                           proxy_mapping,
                                           proxy_sub_mapping )
 
-    generate_bulk_grids_nc( allyear_grids_list,
-                            output_dir,
-                            grid_resolution,
-                            year_list,
-                            em )
+    # NOTE: Applying emission ratios is not fully supported yet
+    ratio_ems <- ratio_map[ ratio_map$em == em, ]
 
-    generate_openburning_grids_nc( allyear_grids_list,
-                                   output_dir,
-                                   grid_resolution,
-                                   year_list,
-                                   em )
+    sapply( unique( em, c( ratio_ems$ratio_em ) ), function( ratio_em ) {
+      if ( ratio_em != em ) {
+        allyear_grids_list <- calculate_ratio_em( allyear_grids_list, ratio_ems,
+                                                  ratio_em )
+      }
+
+      anthro_grids <- lapply( allyear_grids_list, `[`, BULK_SECTORS )
+      openburning_grids <- lapply( allyear_grids_list, `[`, OPENBURNING_SECTORS )
+
+      # Build and write out netCDF file of anthropogenic emissions
+      if ( all( is.na( unlist( lapply( anthro_grids, names ) ) ) ) ) {
+        warning( paste( "No anthro sectors found for", ratio_em, "in", scenario ) )
+      } else {
+        write_ncdf( year_grids_list = anthro_grids,
+                    output_dir      = output_dir,
+                    grid_resolution = grid_resolution,
+                    year_list       = year_list,
+                    em              = ratio_em,
+                    scenario        = scenario,
+                    sub_nmvoc       = sub_nmvoc,
+                    sector_type     = "anthro",
+                    ncdf_sectors    = BULK_SECTORS,
+                    sector_ids      = BULK_SECTOR_IDS )
+      }
+
+      if ( all( is.na( unlist( lapply( openburning_grids, names ) ) ) ) ) {
+        warning( paste( "No open burning sectors found for", ratio_em, "in", scenario ) )
+      } else {
+        # Build and write out netCDF file of aggergated openburning sectors
+        write_ncdf( year_grids_list   = openburning_grids,
+                    output_dir        = output_dir,
+                    grid_resolution   = grid_resolution,
+                    year_list         = year_list,
+                    em                = ratio_em,
+                    scenario          = scenario,
+                    sub_nmvoc         = sub_nmvoc,
+                    sector_type       = "openburning",
+                    ncdf_sectors      = OPENBURNING_SECTORS,
+                    sector_ids        = OPENBURNING_SECTOR_IDS,
+                    aggregate_sectors = TRUE,
+                    sector_shares     = FALSE )
+
+        # Build and write out netCDF file of openburning sector shares
+        write_ncdf( year_grids_list   = openburning_grids,
+                    output_dir        = output_dir,
+                    grid_resolution   = grid_resolution,
+                    year_list         = year_list,
+                    em                = ratio_em,
+                    scenario          = scenario,
+                    sub_nmvoc         = sub_nmvoc,
+                    sector_type       = "openburning",
+                    ncdf_sectors      = OPENBURNING_SECTORS,
+                    sector_ids        = OPENBURNING_SECTOR_IDS,
+                    aggregate_sectors = FALSE,
+                    sector_shares     = TRUE )
+      }
+    })
   }
 }
 

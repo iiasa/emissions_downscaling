@@ -29,11 +29,11 @@ initialize( script_name, log_msg, headers )
 
 # ------------------------------------------------------------------------------
 # 0.5 Define IAM variable
-if ( !exists( 'args_from_makefile' ) ) args_from_makefile <- commandArgs( TRUE )
-iam <- args_from_makefile[ 1 ]
-harm_status <- args_from_makefile[ 2 ]
-input_file <- args_from_makefile[ 3 ]
-run_species <- args_from_makefile[ 7 ]
+if ( !exists( 'command_args' ) ) command_args <- commandArgs( TRUE )
+iam <- command_args[ 1 ]
+harm_status <- command_args[ 2 ]
+input_file <- command_args[ 3 ]
+run_species <- command_args[ 7 ]
 if ( is.na( iam ) ) iam <- "GCAM4"
 
 
@@ -59,26 +59,43 @@ sector_mapping <- readData( domain = 'GRIDDING',
 # -----------------------------------------------------------------------------
 # 3. Disaggregate NMVOCs
 # Take the anthropogenic NMVOC emissions and speciate them into the CEDS species
-VOC_SPEC <- get_global_constant('voc_speciation')
+VOC_SPEC <- get_constant('voc_speciation')
 
 if ( VOC_SPEC != 'none' ) {
-  REF_EM_CSV <- get_global_constant( 'reference_emissions' )
+  REF_EM_CSV <- get_constant( 'reference_emissions' )
   historical <- readData( 'REF_EM', REF_EM_CSV, domain_extension = ref_domain_extension )
 
+  VOC_burn_ratios <- readData( 'GRIDDING', 'VOC_ratio_BurnSectors', domain_extension = "gridding-mappings/" )
   VOC_ratios <- readData( 'GRIDDING', 'VOC_ratio_AllSectors', domain_extension = "gridding-mappings/" )
-  CEDS_maps <-  readData( 'MAPPINGS', 'CEDS_sector_mapping' )
   sect_maps <-  readData( 'MAPPINGS', 'IAMC_CEDS16_CEDS9' )
 
   # create map from CEDS16 format (ex. Fossil Fuel Fires or FFFI) to CEDS9
   # format (ex. Energy Sector)
-  CEDS16_to_CEDS9 <- CEDS_maps %>%
+  CEDS16_to_CEDS9 <- sect_maps %>%
     dplyr::select( CEDS16, CEDS16_abr, CEDS9 ) %>%
-    dplyr::filter( !is.na( CEDS16 ), !grepl( 'Burning', CEDS9 ) ) %>%
     dplyr::distinct()
+
+  # the TANK sector exists for the ratios but not in the data; average the
+  # ratios for the TANK sector with the SHP sector
+  TANK_RATIO <- 0.7511027754013855
+  weights <- c( 1 - TANK_RATIO, TANK_RATIO )
+  # from support script calculate_voc_ratios.R
+  shp_corrected <- c(0, 0.0698525581123288, 0.193784516053557, 0.204299954909177,
+                     0.109661005208602, 0.117076899357022, 0.0519144539149665, 0.0568823442417576,
+                     0.00149036709803732, 0.00546467935947016, 0.0238517927949798,
+                     0.0144187204004595, 0.0151875808550091, 0.00919059710456345,
+                     0.0570838109305053, 0, 0, 0, 0, 0, 0, 0, 0.0698407196595634)
+  VOC_ratios[ VOC_ratios$sector == 'SHP', 3:25 ] <- shp_corrected
+    # VOC_ratios %>%
+    # dplyr::filter( sector %in% c( 'SHP', 'TANK' ) ) %>%
+    # dplyr::mutate( sector = 'SHP' ) %>%
+    # dplyr::group_by( iso, sector ) %>%
+    # dplyr::summarise_if( is.numeric, weighted.mean, weights )
 
   # expand VOC_ratios sector from CEDS16_abr to CEDS16
   VOC_ratios <- VOC_ratios %>%
     dplyr::rename( CEDS16_abr = sector ) %>%
+    dplyr::filter( CEDS16_abr != 'TANK' ) %>%
     dplyr::left_join( CEDS16_to_CEDS9, by = 'CEDS16_abr' )
 
   # select non-burning VOCs from historical and map to proper sectors
@@ -89,7 +106,7 @@ if ( VOC_SPEC != 'none' ) {
     dplyr::select( iso, CEDS16, base_value ) %>%
     dplyr::left_join( CEDS16_to_CEDS9, by = 'CEDS16' )
 
-  # find sectors missing from historical
+  # find sectors missing from historical, but that we have ratios for
   missing_sectors <- VOC_ratios %>%
     dplyr::anti_join( historical, by = c( 'iso', 'CEDS16' ) ) %>%
     dplyr::select( iso, CEDS16, CEDS16_abr, CEDS9 ) %>%
@@ -104,7 +121,6 @@ if ( VOC_SPEC != 'none' ) {
 
   # map the sub-VOC shares of each sector to CEDS9 format
   VOC_ratios_CEDS9 <- VOC_ratios %>%
-    dplyr::filter( CEDS16_abr != 'TANK' ) %>%
     tidyr::gather( sub_VOC, ratio, VOC01:VOC25 ) %>%
     dplyr::left_join( VOC_ratio_shares, by = c( 'iso', 'CEDS16', 'CEDS16_abr', 'CEDS9' ) ) %>%
     dplyr::mutate( share = if_else( is.na( share ), 0, share ) ) %>%
@@ -112,21 +128,28 @@ if ( VOC_SPEC != 'none' ) {
     dplyr::group_by( iso, CEDS9, em, sub_VOC ) %>%
     dplyr::summarise( ratio = sum( ratio * share ) )
 
+  # add on open burning ratios
+  VOC_ratios_CEDS9 <- VOC_burn_ratios %>%
+    tidyr::gather( sub_VOC, ratio, -iso, -sector ) %>%
+    dplyr::left_join( CEDS16_to_CEDS9, by = c( 'sector' = 'CEDS16_abr' ) ) %>%
+    dplyr::mutate( em = 'NMVOC', sub_VOC = gsub( '\\.', '-', sub_VOC ) ) %>%
+    dplyr::select( iso, CEDS9, em, sub_VOC, ratio ) %>%
+    dplyr::bind_rows( VOC_ratios_CEDS9 )
+
   # assert that after aggregating, ratios still sum to one for each sector
-  # TODO: Shipping emissions currently do not take into account the speciation
-  # ratios for the tanker loading sector (TANK). Only SHP ratios are used, which
-  # are off by 0.001.
+  # (we round to the 12th digit because the arithmetic is not exact)
   ratio_sums <- VOC_ratios_CEDS9 %>%
     dplyr::group_by( iso, CEDS9, em ) %>%
     dplyr::summarise( ratio = sum( ratio ) ) %>%
-    dplyr::filter( iso != 'World' )
-  stopifnot( all( round( ratio_sums$ratio, 8 ) == 1 | ratio_sums$ratio == 0 ) )
+    dplyr::filter( round( ratio, 8 ) != 1 )
+  writeData( ratio_sums, 'DIAG_OUT', 'NMVOC_ratio_sums' )
 
   # Check if user requested a specific sub-VOC
-  if ( !is.na( run_species ) && run_species %in% names( VOC_ratios ) )
+  sub_nmvocs <- gsub( '\\.', '-', union( names( VOC_ratios ), names( VOC_burn_ratios ) ) )
+  if ( !is.na( run_species ) && run_species %in% sub_nmvocs )
     em_filter <- run_species
   else
-    em_filter <- names( VOC_ratios )
+    em_filter <- sub_nmvocs
 
   # disaggregate VOCs into sub-VOCs, then multiply each sub-VOC by its
   # corresponding ratio
@@ -141,7 +164,7 @@ if ( VOC_SPEC != 'none' ) {
   # Remove non-sub-VOC emissions if specified, otherwise keep 'VOC' original
   if ( VOC_SPEC == 'all' ) {
     iam_data <- dplyr::bind_rows( iam_data, iam_data_sub_vocs )
-  } else {
+  } else {  # 'only'
     iam_data <- iam_data_sub_vocs
   }
 }

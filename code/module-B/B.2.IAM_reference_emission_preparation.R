@@ -37,8 +37,8 @@ initialize( script_name, log_msg, headers )
 
 # ------------------------------------------------------------------------------
 # 0.5 Define IAM variable
-if ( !exists( 'args_from_makefile' ) ) args_from_makefile <- commandArgs( TRUE )
-iam <- args_from_makefile[ 1 ]
+if ( !exists( 'command_args' ) ) command_args <- commandArgs( TRUE )
+iam <- command_args[ 1 ]
 if ( is.na( iam ) ) iam <- "GCAM4"
 
 
@@ -60,7 +60,7 @@ method_mapping <- readData( domain = 'MAPPINGS', file_name = ds_method_mapping )
 
 # -----------------------------------------------------------------------------
 # 2. Read IAM_emissions and reference emission data
-REF_EM_CSV <- get_global_constant( 'reference_emissions' )
+REF_EM_CSV <- get_constant( 'reference_emissions' )
 
 iam_em <- readData( 'MED_OUT', file_name = paste0( 'B.', iam, '_emissions_reformatted', '_', RUNSUFFIX ) )
 ref_em <- readData( 'REF_EM', file_name = REF_EM_CSV, domain_extension = ref_domain_extension )
