@@ -1,3 +1,5 @@
+# Copyright 2018 Battelle Memorial Institute
+
 # ------------------------------------------------------------------------------
 # Program Name: C.2.2.gridding_air.R
 # Author(s): Leyang Feng

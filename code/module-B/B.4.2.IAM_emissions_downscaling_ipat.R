@@ -1,3 +1,5 @@
+# Copyright 2018 Battelle Memorial Institute
+
 # ------------------------------------------------------------------------------
 # Program Name: B.4.2.IAM_emissions_downscaling_ipat.R
 # Author(s): Leyang Feng

@@ -1,3 +1,5 @@
+# Copyright 2018 Battelle Memorial Institute
+
 # ------------------------------------------------------------------------------
 # Program Name: B.2.IAM_reference_emission_preparation.R
 # Author(s): Leyang Feng

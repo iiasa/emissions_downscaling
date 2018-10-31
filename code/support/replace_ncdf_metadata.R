@@ -1,3 +1,5 @@
+# Copyright 2018 Battelle Memorial Institute
+
 # replace_ncdf_metadata.R
 #
 # Author: Caleb Braun

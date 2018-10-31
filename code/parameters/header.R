@@ -1,3 +1,5 @@
+# Copyright 2018 Battelle Memorial Institute
+
 # ----------------------------------------------------------------------------------
 # IAMH R header file: Script initialization ( adapted from CEDS )
 # Author(s): Jon Seibert

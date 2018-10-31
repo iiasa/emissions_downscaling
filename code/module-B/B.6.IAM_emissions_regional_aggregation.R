@@ -1,3 +1,5 @@
+# Copyright 2018 Battelle Memorial Institute
+
 # ------------------------------------------------------------------------------
 # Program Name: B.6.IAM_emissions_regional_aggregation.R
 # Author(s): Leyang Feng

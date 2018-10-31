@@ -1,3 +1,5 @@
+# Copyright 2018 Battelle Memorial Institute
+
 # voc_continuity_charts.R
 #
 # Generate line graphs combining historical and future emissions for sub-VOCs

@@ -1,3 +1,5 @@
+# Copyright 2018 Battelle Memorial Institute
+
 #------------------------------------------------------------------------------
 # Program Name: nc_generation_functions.R
 # Authors: Leyang Feng, Caleb Braun

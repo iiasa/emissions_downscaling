@@ -1,3 +1,5 @@
+# Copyright 2018 Battelle Memorial Institute
+
 # Support functions for plotting diagnostic data.
 #
 # Caleb Braun

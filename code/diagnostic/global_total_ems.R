@@ -1,3 +1,5 @@
+# Copyright 2018 Battelle Memorial Institute
+
 # global_total_ems.R
 #
 # Generate line graphs of total emissions for each emission for each scenario.

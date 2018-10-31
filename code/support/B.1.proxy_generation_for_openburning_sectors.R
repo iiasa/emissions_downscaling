@@ -1,3 +1,5 @@
+# Copyright 2018 Battelle Memorial Institute
+
 # this script creates  proxies for IAMC sectors Forest Burning, Grassland Burning, and Peat Burning for all soppourted species except CO2
 # using biomassburning grids version 1.2
 # this script should be updated to include CO2 if newer version of biomassburning grids contains CO2.

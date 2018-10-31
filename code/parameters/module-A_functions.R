@@ -1,3 +1,5 @@
+# Copyright 2018 Battelle Memorial Institute
+
 #-----------------------------------------------------------------------------------------------------------------
 # Program Name: module-A_functions.R
 # Author's Name: Leyang Feng
