@@ -55,7 +55,7 @@ generate_plots <- function( global_sums, diag_cells, diag_fname, em, sector_type
 
   # Write diagnostic cells csv file
   diagnostic_cells <- do.call( 'rbind', diag_cells )
-  out_name <- paste( diag_fname, '_cells' )
+  out_name <- paste0( diag_fname, '_cells' )
   writeData( diagnostic_cells, 'DIAG_OUT', out_name, meta = F )
 
   if ( sub_nmvoc ) {

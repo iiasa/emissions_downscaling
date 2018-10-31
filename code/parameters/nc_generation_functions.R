@@ -606,7 +606,7 @@ write_diffs <- function( global_sums, out_name, em ) {
                  row.names = F, col.names = !add_to_file )
   }
 
-  writeData( diff_df, 'DIAG_OUT', paste( out_name, '_DIFF' ), meta = F )
+  writeData( diff_df, 'DIAG_OUT', paste0( out_name, '_DIFF' ), meta = F )
 }
 
 
