@@ -1,5 +1,7 @@
 # IAM Emissions Downscaling
 
+[![DOI](https://zenodo.org/badge/81960517.svg)](https://zenodo.org/badge/latestdoi/81960517)
+
 These routines take emissions data from Integrated Assessment Models and do two things:
 
 1. Downscale from native IAM regions to country level
