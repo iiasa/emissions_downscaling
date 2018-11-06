@@ -1,3 +1,5 @@
+# Copyright 2018 Battelle Memorial Institute
+
 # Support functions for plotting diagnostic data.
 #
 # Caleb Braun
@@ -28,7 +30,7 @@ extract_diag_cells <- function( year_grids_list, ncdf_sectors, lat_res, em ) {
                                 domain_extension = 'gridding-mappings/' )
 
   diagnostic_cells_indices <- diagnostic_cells[ c('col', 'row') ] %>%
-    tidyr::crossing( sector = 1:length( ncdf_sectors ), month = 1:12 ) %>%
+    tidyr::crossing( month = 1:12, sector = 1:length( ncdf_sectors ) ) %>%
     dplyr::arrange( sector, month ) %>%
     dplyr::mutate( row = lat_res - row + 1L ) %>% # Account for rotation
     as.matrix()
@@ -40,9 +42,9 @@ extract_diag_cells <- function( year_grids_list, ncdf_sectors, lat_res, em ) {
 
     cbind( diagnostic_cells,
            data.frame( em = em,
-                       sector = ncdf_sectors[ diagnostic_cells_indices[ , 3 ] ],
+                       sector = ncdf_sectors[ diagnostic_cells_indices[ , 4 ] ],
                        year = as.integer( substr( Xyear, 2, 5 ) ),
-                       month = diagnostic_cells_indices[ , 4 ],
+                       month = diagnostic_cells_indices[ , 3 ],
                        unit = 'kt',
                        value = cell_values / 1000,
                        stringsAsFactors = F) )
@@ -55,7 +57,7 @@ generate_plots <- function( global_sums, diag_cells, diag_fname, em, sector_type
 
   # Write diagnostic cells csv file
   diagnostic_cells <- do.call( 'rbind', diag_cells )
-  out_name <- paste( diag_fname, '_cells' )
+  out_name <- paste0( diag_fname, '_cells' )
   writeData( diagnostic_cells, 'DIAG_OUT', out_name, meta = F )
 
   if ( sub_nmvoc ) {

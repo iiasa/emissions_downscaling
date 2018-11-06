@@ -1,3 +1,5 @@
+# Copyright 2018 Battelle Memorial Institute
+
 # ------------------------------------------------------------------------------
 # Program Name: launch_downscaling_gridding.R
 # Author(s): Leyang Feng, Caleb Braun
@@ -42,9 +44,9 @@ if ( DEBUG ) {
                      '/Users/brau074/Documents/emissions_downscaling/input/IAM_emissions/MESSAGE-GLOBIOM_SSP2-45/output_harmonized.xlsx',
                      '/Users/brau074/Documents/emissions_downscaling/final-output/module-B',
                      '/Users/brau074/Documents/emissions_downscaling/final-output/module-C',
-                     'gridding', 'BC' )
+                     'gridding', 'NOx' )
 
-  calculationDir <- "/Users/Caleb/Documents/JGCRI/emissions_downscaling/code/error/parameters"
+  calculationDir <- "/Users/brau074/Documents/emissions_downscaling/code/error/parameters"
   calculationYears <- 2016:2020
 } else {
   command_args <- commandArgs( TRUE )  # get args from command line

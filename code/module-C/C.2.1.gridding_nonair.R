@@ -1,3 +1,5 @@
+# Copyright 2018 Battelle Memorial Institute
+
 # ------------------------------------------------------------------------------
 # Program Name: C.2.1.gridding_nonair.R
 # Author(s): Leyang Feng
@@ -126,9 +128,10 @@ for ( scenario in scenarios ) {
                                           proxy_mapping,
                                           proxy_sub_mapping )
 
+    # NOTE: Applying emission ratios is not fully supported yet
     ratio_ems <- ratio_map[ ratio_map$em == em, ]
 
-    sapply( unique( c( ratio_ems$ratio_em ) ), function( ratio_em ) {
+    sapply( unique( em, c( ratio_ems$ratio_em ) ), function( ratio_em ) {
       if ( ratio_em != em ) {
         allyear_grids_list <- calculate_ratio_em( allyear_grids_list, ratio_ems,
                                                   ratio_em )

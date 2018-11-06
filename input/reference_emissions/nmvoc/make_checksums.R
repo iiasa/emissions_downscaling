@@ -1,3 +1,5 @@
+# Copyright 2018 Battelle Memorial Institute
+
 # make_checksums.R --------------------------------------------------------
 #
 # Take historical speciated NMVOCs from VUA and output checksum files in the

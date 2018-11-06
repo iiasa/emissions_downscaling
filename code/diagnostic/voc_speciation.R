@@ -1,3 +1,5 @@
+# Copyright 2018 Battelle Memorial Institute
+
 # voc_speciation.R
 #
 # Generate charts analyzing VOC speciation

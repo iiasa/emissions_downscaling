@@ -1,3 +1,5 @@
+# Copyright 2018 Battelle Memorial Institute
+
 # ------------------------------------------------------------------------------
 # Program Name: B.4.1.IAM_emissions_downscaling_linear.R
 # Author(s): Leyang Feng

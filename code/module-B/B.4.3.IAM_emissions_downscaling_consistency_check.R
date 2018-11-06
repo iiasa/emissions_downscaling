@@ -1,3 +1,5 @@
+# Copyright 2018 Battelle Memorial Institute
+
 # ------------------------------------------------------------------------------
 # Program Name: B.4.3.IAM_emissions_downscaling_consistency_check.R
 # Author(s): Xavier Gutierrez
