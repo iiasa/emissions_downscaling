@@ -147,10 +147,10 @@ build_global_atts <- function( em, fn_em, fn_scenario, sub_nmvoc, sector_shares,
   reporting_unit  <- build_reporting_unit( em, fn_em, sector_shares, sector_type, sub_nmvoc )
   product         <- paste0( if_else( sub_nmvoc, 'supplementary', 'primary' ), '-emissions-data' )
   title           <- paste( 'Future', var_atts$sector_long_name, 'of', fn_em )
-  data_usage_tips <- paste(
-    'These are monthly average', if_else( sector_shares, 's.', 'fluxes.' ),
-    'Note that emissions are provided in uneven year intervals (2015, 2020,',
-    'then at 10 year intervals) as these are the years for which projection',
+  data_usage_tips <- paste0(
+    'These are monthly average', if_else( sector_shares, 's.', ' fluxes. ' ),
+    'Note that emissions are provided in uneven year intervals (2015, 2020, ',
+    'then at 10 year intervals) as these are the years for which projection ',
     'data is available.'
   )
 
@@ -697,7 +697,7 @@ unlist_for_ncdf <- function( year_grids_list, nc_file_path, grid_resolution,
   write_diffs( global_sums, out_name, em )
 
   # Generate diagnostics
-  if ( GENERATE_PLOTS ) {
+  if ( GENERATE_PLOTS && !sector_shares ) {
     source( filePath( 'DIAG', 'generate_plots', '.R' ) )
     diag_cells <- extract_diag_cells( em_array_list, ncdf_sectors, lat_res, em )
     generate_plots( global_sums, diag_cells, out_name, em, sector_type )

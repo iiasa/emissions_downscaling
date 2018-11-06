@@ -824,33 +824,53 @@ gridding_initialize <- function( grid_resolution = 0.5,
 calculate_ratio_em <- function( allyear_grids_list, ratio_map, ratio_em ) {
   ratio_map <- ratio_map[ ratio_map$ratio_em == ratio_em, ]
 
-  ratios <- lapply( ratio_map$sector, function( s ) {
-    sector_ratio_file <- ratio_map[ ratio_map$sector == s, 'ratio_file' ]
-    stopifnot( length( sector_ratio_file ) == 1 )
+  # Assumes all elements of allyear_grids_list are identical in names and dims
+  expected_dims <- dim( allyear_grids_list[[1]][[1]] )
 
-    nc <- ncdf4::nc_open( paste0( 'gridding/ratios/', sector_ratio_file ) )
-    rt <- ncvar_get( nc )
-    nc_close( nc )
+  ratios <- readRatios( ratio_map, expected_dims )
 
-    expected_dims <- dim( allyear_grids_list[[1]][[1]] )[ c( 2, 1, 3 ) ]
-    if ( !all( dim( rt ) == expected_dims ) ) {
-      stop( "Ratio file variable ", sector_ratio_file, " dimensions do not ",
-            "match [", paste( expected_dims, collapse = ' ' ), "]" )
-    }
-
-    rt[ is.na( rt ) ] <- 0
-    rt
-  })
-
-  ratios <- rotate_lat_lon( ratios, -1 )
-  names( ratios ) <- ratio_map$sector
-  plot_grid(ratios$AWB[,,1] > 0, 'H2/CO ratio non-zero cells', 'Non-Zero')
-  plot_grid(allyear_grids_list$X2015$AWB[,,1] > 0, 'CO non-zero cells', 'Non-Zero')
-
-  tmp <- lapply( allyear_grids_list, function( year_grids_list ) {
-    year_grids_list <- year_grids_list[ ratio_map$sector ]
-
+  lapply( allyear_grids_list, function( year_grids_list ) {
+    year_grids_list <- year_grids_list[ names( ratios ) ]
     Map( `*`, year_grids_list, ratios )
   })
 
+  # plot_grid(ratios$AWB[,,1] > 0, 'H2/CO ratio non-zero cells', 'Non-Zero')
+  # plot_grid(allyear_grids_list$X2015$AWB[,,1] > 0, 'CO non-zero cells', 'Non-Zero')
+}
+
+
+readRatios <- function( ratio_map, expected_dims ) {
+  ratio_dir <- 'gridding/ratios/'
+  ratio_files <- unique( ratio_map$ratio_file )
+
+  if ( length( ratio_files ) == 1 ) {
+    ratios <- readRDS( paste0( ratio_dir, ratio_files ) )
+  } else {
+    ratios <- lapply( ratio_map$sector, function( s ) {
+      sector_ratio_file <- ratio_map[ ratio_map$sector == s, 'ratio_file' ]
+      stopifnot( length( sector_ratio_file ) == 1 )
+
+      nc <- ncdf4::nc_open( paste0( ratio_dir, sector_ratio_file ) )
+      rt <- ncvar_get( nc )
+      nc_close( nc )
+
+      rt[ is.na( rt ) ] <- 0
+      rt
+    })
+
+    ratios <- rotate_lat_lon( ratios, -1 )
+    names( ratios ) <- ratio_map$sector
+  }
+
+  checkRatioDims( ratios, expected_dims, ratio_file )
+}
+
+
+checkRatioDims <- function( ratios, expected_dims, ratio_file ) {
+  if ( !all( vapply( ratios, dim, integer(3) ) == expected_dims ) ) {
+    stop( "Ratio file variable ", sector_ratio_file, " dimensions do not ",
+          "match [", paste( expected_dims, collapse = ' ' ), "]" )
+  }
+
+  ratios
 }

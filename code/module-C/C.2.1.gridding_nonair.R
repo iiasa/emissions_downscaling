@@ -128,13 +128,11 @@ for ( scenario in scenarios ) {
                                           proxy_mapping,
                                           proxy_sub_mapping )
 
-    # NOTE: Applying emission ratios is not fully supported yet
     ratio_ems <- ratio_map[ ratio_map$em == em, ]
 
-    sapply( unique( em, c( ratio_ems$ratio_em ) ), function( ratio_em ) {
-      if ( ratio_em != em ) {
-        allyear_grids_list <- calculate_ratio_em( allyear_grids_list, ratio_ems,
-                                                  ratio_em )
+    sapply( unique( c( em, ratio_ems$ratio_em ) ), function( ratio_em ) {
+      if ( ratio_em != em && get_constant( 'calculate_ratios' ) ) {
+        allyear_grids_list <- calculate_ratio_em( allyear_grids_list, ratio_ems, ratio_em )
       }
 
       anthro_grids <- lapply( allyear_grids_list, `[`, BULK_SECTORS )
@@ -159,7 +157,7 @@ for ( scenario in scenarios ) {
       if ( all( is.na( unlist( lapply( openburning_grids, names ) ) ) ) ) {
         warning( paste( "No open burning sectors found for", ratio_em, "in", scenario ) )
       } else {
-        # Build and write out netCDF file of aggergated openburning sectors
+        # Build and write out netCDF file of aggregated openburning sectors
         write_ncdf( year_grids_list   = openburning_grids,
                     output_dir        = output_dir,
                     grid_resolution   = grid_resolution,

@@ -63,52 +63,34 @@ generate_plots <- function( global_sums, diag_cells, diag_fname, em, sector_type
   if ( sub_nmvoc ) {
     printLog( 'NMVOC diagnostics not currently supported' )
     # return( sub_nmvoc_plots( global_sums, diag_fname, em, sector_type ) )
-  } else if ( sector_type == 'anthro' ) {
+  } else if ( sector_type == 'anthro' || sector_type == 'openburning') {
     # Aggregate to regional (selected cell) totals by month, then plot the
     # timeseries for each unique emission and region
     diagnostic_cells %>%
       dplyr::mutate( full_date = as.Date( paste( year, sprintf( '%02d', month ), '01', sep = '-' ) ) ) %>%
       dplyr::arrange( loc, em, full_date ) %>%
-      dplyr::group_by( loc, em, unit, full_date ) %>%
+      dplyr::group_by( loc, em, unit, year, full_date ) %>%
       dplyr::summarise( value = sum( value ) ) %>%
       dplyr::group_by( loc, em, unit ) %>%
       dplyr::do({
         em <- unique( .$em )
         loc <- unique( .$loc )
         plt <- ggplot( data = . ) +
-          geom_line( aes( x = full_date, y = value ) ) +
-          ylab( paste0( em, ' Mt' ) ) +
-          xlab( '' ) +
+          geom_line( aes( x = full_date, y = value, group = year ) ) +
+          labs( x = '', y = paste0( em, ' Mt' ) ) +
           scale_x_date( date_breaks = "10 years",
-                        labels=scales::date_format( "%Y-%m" ),
+                        labels = scales::date_format( "%Y-%m" ),
                         date_minor_breaks = "6 months" ) +
-          ggtitle( paste0( gsub( '_cells', '', out_name ), '\n', loc ) )
+          scale_y_continuous(breaks = scales::pretty_breaks()) +
+          ggtitle( paste0( gsub( '_cells', '', out_name ), '\n', loc ) ) +
+          theme_bw()
 
         ggsave( filename = filePath( "DIAG_OUT", paste0( out_name, '_', em, '_', loc ), extension = ".jpeg" ),
                 plot = plt, units = 'in', width = 13, height = 5 )
         invisible( . )
       })
-  } else if ( sector_type == 'openburning' ) {
-    # Aggregate to regional (selected cell) totals by month
-    diagnostic_cells <- diagnostic_cells %>%
-      dplyr::group_by( loc, em, year, month, unit ) %>%
-      dplyr::summarise( value = sum( value ) ) %>%
-      dplyr::arrange( loc, em, year, month )
-
-    for ( em in unique( diagnostic_cells$em ) ) {
-      for ( loc in unique( diagnostic_cells$loc ) ) {
-        plot_df <- diagnostic_cells[ diagnostic_cells$loc == loc & diagnostic_cells$em == em, ]
-        plot_df$time_line <- 1 : nrow( plot_df )
-        plot_df$time_label <- paste0( plot_df$year, sprintf( '%02d', plot_df$month ) )
-        plot <- ggplot( plot_df ) +
-          geom_line( aes( x = time_line, y = value ) ) +
-          ylab( paste0( em, ' Mt' ) ) +
-          xlab( '' ) +
-          scale_x_continuous( breaks = seq( 1, nrow( plot_df ), 10 ), labels = plot_df$time_label[ seq( 1, nrow( plot_df ), 10 ) ] ) +
-          ggtitle( paste0( gsub( '_cells', '', out_name ), '\n', loc ) )
-        ggsave( filePath( "DIAG_OUT", paste0( out_name, '_', em, '_', loc ), extension = ".jpeg" ), units = 'in', width = 13, height = 5 )
-      }
-    }
+  } else {
+    warning('Function generate_plots called, but sector_type is ', sector_type )
   }
 
   invisible( NULL )
