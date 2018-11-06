@@ -1,3 +1,5 @@
+# Copyright 2018 Battelle Memorial Institute
+
 #------------------------------------------------------------------------------
 # Program Name: nc_generation_functions.R
 # Authors: Leyang Feng, Caleb Braun
@@ -399,7 +401,7 @@ define_ncdims <- function( bnds, aggregate_sectors, sector_type ) {
                         bnds$time_data, calendar = '365_day', longname = 'time',
                         unlim = T )
 
-  dim_list <- list( londim = londim, latdim = latdim )
+  dim_list <- list( londim = londim, latdim = latdim, timedim = timedim )
 
   # 3rd dimension is 'altitude' for aircraft and 'sector' for everything else,
   # unless the sectors are being aggregated.
@@ -409,9 +411,6 @@ define_ncdims <- function( bnds, aggregate_sectors, sector_type ) {
     else
       dim_list$sectordim <- ncdim_def( 'sector', '', bnds$sectors, longname = 'sector' )
   }
-
-  # Last dimension is time
-  dim_list$timedim <- timedim
 
   return( dim_list )
 }
@@ -432,8 +431,9 @@ define_ncvars <- function( dim_list, atts, sector_type ) {
                         compression = atts$nc_compression )
 
 
-  var_list <- list( em_var = em_var, lon_bnds = lon_bnds, lat_bnds = lat_bnds,
-                    time_bnds = time_bnds )
+  var_list <- list( em_var = em_var, lon_bnds = lon_bnds, lat_bnds = lat_bnds )
+
+  var_list$time_bnds <- time_bnds
 
   if ( !is.null( dim_list$sectordim ) ) {
     var_list$sector_bnds <-
@@ -504,12 +504,12 @@ prep_bounds <- function( grid_resolution, days_in_month, year_list, ncdf_sectors
 #
 # Returns:
 #   The checksum data.frame
-write_checksum <- function( out_name, year_grids_rtd, em, ncdf_sectors, res, isAir ) {
+write_checksum <- function( out_name, em_array_list, em, ncdf_sectors, res, isAir ) {
   KT_PER_KG <- 1e-06
   SEC_IN_MONTH <- days_in_month * 24 * 60 * 60
   NMONTHS <- 12L
 
-  grid_dims <- dim( year_grids_rtd[[1]] )
+  grid_dims <- dim( em_array_list[[1]] )
 
   # Build conversion array to convert monthly values to kt. The dimensions are
   # (lon x lat x 12), where each value represents the conversion factor for
@@ -520,17 +520,17 @@ write_checksum <- function( out_name, year_grids_rtd, em, ncdf_sectors, res, isA
     sweep( 3, SEC_IN_MONTH * KT_PER_KG, `*` )
 
   # Convert to kt / grid cell
-  year_grids_kt <- lapply( year_grids_rtd, sweep, c( 1, 2, 4 ), grid_cell_conv, `*` )
+  year_grids_kt <- lapply( em_array_list, sweep, c( 1, 2, 3 ), grid_cell_conv, `*` )
 
   # Sum over all grid cells (converts 4d to 2d)
   checksum_df <- do.call( rbind, lapply( year_grids_kt, colSums, dims = 2 ) )
 
-  year_list <- as.integer( substr( names( year_grids_rtd ), 2, 5 ) )
+  year_list <- as.integer( substr( names( em_array_list ), 2, 5 ) )
 
-  out_df <- data.frame( em, ncdf_sectors, checksum_df ) %>%
-    cbind( rep( year_list, each = length( ncdf_sectors ) ), . ) %>%
-    setNames( c( 'year', 'em', 'sector', 1:NMONTHS ) ) %>%
-    tidyr::gather( 'month', 'global_total', as.character( 1:NMONTHS ) ) %>%
+  out_df <- data.frame( em, 1:NMONTHS, checksum_df ) %>%
+    cbind( rep( year_list, each = NMONTHS ), . ) %>%
+    setNames( c( 'year', 'em', 'month', ncdf_sectors ) ) %>%
+    tidyr::gather( 'sector', 'global_total', as.character( ncdf_sectors ) ) %>%
     dplyr::mutate( units = 'kt', month = as.integer( month ) ) %>%
     dplyr::arrange( year, sector )
 
@@ -608,7 +608,7 @@ write_diffs <- function( global_sums, out_name, em ) {
                  row.names = F, col.names = !add_to_file )
   }
 
-  writeData( diff_df, 'DIAG_OUT', paste( out_name, '_DIFF' ), meta = F )
+  writeData( diff_df, 'DIAG_OUT', paste0( out_name, '_DIFF' ), meta = F )
 }
 
 
@@ -640,41 +640,49 @@ unlist_for_ncdf <- function( year_grids_list, nc_file_path, grid_resolution,
   GENERATE_PLOTS <- get_constant( 'diagnostic_plots' )
 
   # Define array dimensions:
-  #    each year array:    (lon x lat x sectors x months in year)
-  #    array of all years: (lon x lat x sectors x all months)
+  #    each year array:    (lon x lat x months in year x sectors)
+  #    array of all years: (lon x lat x all months x sectors)
   lon_res <- as.integer( 360 / grid_resolution )
   lat_res <- as.integer( 180 / grid_resolution )
   all_months <- length( year_grids_list ) * NMONTHS
-  all_years_dims <- as.integer( c( lon_res, lat_res, NSECTORS, all_months ) )
+  all_years_dims <- as.integer( c( lon_res, lat_res, all_months, NSECTORS ) )
+
+  isAir <- sector_type == 'AIR-anthro'
 
   # Flip lat and lon to accommodate nc write-in
   year_grids_rtd <- rotate_lat_lon( year_grids_list )
 
-  # Flatten list of all year grids into one large array
-  em_array <- array( unlist( year_grids_rtd, use.names = F ), all_years_dims )
+  # Allocate final large array that will hold flattened list of all year grids
+  em_array <- array( dim = all_years_dims )
 
-  # Apply transformations on the sector dimension (the 3rd one), if requested
+  # Air grids are a list of grids (lon x lat x sectors x 12) and non-air grids
+  # are (lon x lat x 12) nested in lists for each year and named by sector.
+  # Here we make them identically structured as a list of grids by year with
+  # dimensions (lon x lat x 12 x sector).
+  if ( isAir ) {
+    em_array_list <- lapply( year_grids_rtd, aperm, c( 1, 2, 4, 3 ) )
+  } else {
+    em_array_list <- year_grids_rtd %>%
+      lapply( unlist, use.names = F ) %>%
+      lapply( array, c( lon_res, lat_res, NMONTHS, NSECTORS ) )
+  }
+
+  # Fill in final array year by year
+  for ( m in seq( all_months / NMONTHS ) ) {
+    m1 <- NMONTHS * ( m - 1 ) + 1
+    m2 <- NMONTHS * m
+    em_array[ , , m1:m2, ] <- em_array_list[[m]]
+  }
+
+  # Apply transformations on the sector dimension (the 4th one), if requested
   if ( aggregate_sectors ) {
-    em_array <- apply( em_array, c( 1, 2, 4 ), sum )
+    em_array <- apply( em_array, c( 1, 2, 3 ), sum )
   } else if ( sector_shares ) {
-    em_array <- prop.table( em_array, c( 1, 2, 4 ) )
+    em_array <- prop.table( em_array, c( 1, 2, 3 ) )
     em_array[ is.nan( em_array ) ] <- 0
   }
 
   ### Diagnostics:
-
-  isAir <- sector_type == 'AIR-anthro'
-
-  # Checksum and diff functions need a singly nested list (one array for each
-  # year) - AIR is already in this format.
-  if ( !isAir ) {
-    grid_dims <- dim( year_grids_rtd[[1]][[1]] )
-    year_grids_rtd <- lapply( year_grids_rtd, function( yg ) {
-      yg <- unlist( yg, use.names = F )       # Pull out all values
-      dim( yg ) <- c( grid_dims, NSECTORS )   # Rebuild array
-      aperm( yg, c( 1, 2, 4, 3 ) )            # Re-order dimensions (time last)
-    })
-  }
 
   # Always write out checksum and diff files
   out_path <- gsub( '.nc', '.csv', nc_file_path, fixed = T )
@@ -683,13 +691,15 @@ unlist_for_ncdf <- function( year_grids_list, nc_file_path, grid_resolution,
   # extension '([^/]+)', then the extension '\\.csv'
   out_name <- sub( '.*/([^/]+)\\.csv', '\\1', out_path )
 
-  global_sums <- write_checksum( out_path, year_grids_rtd, em, ncdf_sectors, grid_resolution, isAir )
+  # Checksum and diff functions need a singly nested list (one array for each
+  # year)
+  global_sums <- write_checksum( out_path, em_array_list, em, ncdf_sectors, grid_resolution, isAir )
   write_diffs( global_sums, out_name, em )
 
   # Generate diagnostics
   if ( GENERATE_PLOTS ) {
     source( filePath( 'DIAG', 'generate_plots', '.R' ) )
-    diag_cells <- extract_diag_cells( year_grids_rtd, ncdf_sectors, lat_res, em )
+    diag_cells <- extract_diag_cells( em_array_list, ncdf_sectors, lat_res, em )
     generate_plots( global_sums, diag_cells, out_name, em, sector_type )
   }
 
