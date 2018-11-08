@@ -200,7 +200,7 @@ build_global_atts <- function( em, fn_em, fn_scenario, sub_nmvoc, sector_shares,
   global_atts <- compile_template( global_atts )
 
   # Hard-coded exception for convenience
-  if ( scenario == 'ssp3-70-lowNTCF' ) global_atts$target_mip <- 'AerChemMIP'
+  if ( scenario == 'ssp370-lowNTCF' ) global_atts$target_mip <- 'AerChemMIP'
 
   # Return sorted list of global attributes
   return( global_atts[ sort( names( global_atts ) ) ] )
@@ -355,6 +355,7 @@ clean_scenario_name <- function( scenario ) {
   scenario <- gsub("ssp3-lowNTCF", "ssp3-70-lowNTCF", scenario) # CMIP-specific change to RCP nomenclature
   scenario <- gsub("ssp5-ref", "ssp5-85", scenario) # CMIP-specific change to RCP nomenclature
   scenario <- gsub("(ssp\\d)-(\\d)\\.?(\\d)", "\\1\\2\\3", scenario) # Remove ssp hyphen
+  scenario
 }
 
 
