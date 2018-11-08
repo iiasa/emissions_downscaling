@@ -7,7 +7,7 @@
 # basic logics:
 # (1) read in emissions from year 2006 to 2015 (10 years)
 # (2) seperate into 6 sectors
-# (3) compute 10 years avaerage for each sector
+# (3) compute 10 years average for each sector
 # (4) generate proxy for 3 sectors as year 2015
 # (5) generate seasonality profile based on proxies.
 # byproducts: seasonality profile for sector FRTB, GRSB, and PEAT.

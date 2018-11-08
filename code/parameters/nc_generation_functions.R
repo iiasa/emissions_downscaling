@@ -9,10 +9,7 @@
 #   is write_ncdf().
 # ------------------------------------------------------------------------------
 
-# Special Packages
 library( 'ncdf4' )
-library( 'sp' )
-library( 'geosphere' )
 
 
 # Construct and output a NetCDF file
@@ -34,17 +31,17 @@ library( 'geosphere' )
 #   em: Name of the emission species
 #   scenario: Name of the scenario
 #   sub_nmvoc: Is the emission a NMVOC subspecies?
-#   ncdf_sectors: The sectors to include
+#   sector_id_map: Named vector of the sectors to include mapping to the NetCDF
+#     metadata of the sector ids
 #   sector_type: One of "AIR-anthro", "anthro", or "openburning"
-#   sector_ids: String for the NetCDF metadata of the sector ids
 #   aggregate_sectors: Sum along the sector dimension?
 #   sector_shares: Output sector's total value or share of all sectors
 #
 # Returns:
 #   NULL
 write_ncdf <- function( year_grids_list, output_dir, grid_resolution, year_list,
-                        em, scenario, sub_nmvoc, sector_type, ncdf_sectors,
-                        sector_ids, aggregate_sectors = F, sector_shares = F ) {
+                        em, scenario, sub_nmvoc, sector_type, sector_id_map,
+                        aggregate_sectors = F, sector_shares = F ) {
   # Parameter checks
   stopifnot( dir.exists( output_dir ) )
   stopifnot( sector_type %in% c( "AIR-anthro", "anthro", "openburning" ) )
@@ -66,6 +63,8 @@ write_ncdf <- function( year_grids_list, output_dir, grid_resolution, year_list,
 
   nc_file_name <- build_nc_filename( var_atts$em_var_name_fn, global_atts )
   nc_file_path <- paste0( output_dir, '/', nc_file_name )
+
+  ncdf_sectors <- names( sector_id_map )
 
   ### Prepare data for writing to NetCDF
   printLog( "Preparing to write NetCDF for", var_atts$sector_long_name )
@@ -93,6 +92,7 @@ write_ncdf <- function( year_grids_list, output_dir, grid_resolution, year_list,
   }
 
   ### Add variable and global attributes
+  sector_ids <- format_sector_ids( sector_id_map )
   add_variable_atts( nc_new, var_atts, !is.null( ncdims$sectordim ), sector_ids )
 
   invisible( mapply( ncatt_put, names( global_atts ), global_atts,
@@ -198,6 +198,9 @@ build_global_atts <- function( em, fn_em, fn_scenario, sub_nmvoc, sector_shares,
   global_atts$source_id <- paste( source_id, collapse = '-' )
 
   global_atts <- compile_template( global_atts )
+
+  # Hard-coded exception for convenience
+  if ( scenario == 'ssp3-70-lowNTCF' ) global_atts$target_mip <- 'AerChemMIP'
 
   # Return sorted list of global attributes
   return( global_atts[ sort( names( global_atts ) ) ] )
@@ -740,4 +743,9 @@ get_VOC_info <- function( voc, type ) {
   else {
     stop( 'invalid argument type to get_VOC_info' )
   }
+}
+
+
+format_sector_ids <- function( sector_ids ) {
+  paste0( seq_along( sector_ids ) - 1, ': ', sector_ids, collapse = '; ' )
 }

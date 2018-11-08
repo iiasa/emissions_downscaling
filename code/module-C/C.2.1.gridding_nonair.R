@@ -96,21 +96,29 @@ nmvoc_ems <- row.names( voc_map )
 # -----------------------------------------------------------------------------
 # 5. Gridding and writing output data
 
-# Define variables specific to each sector type. Note that order matters, so
-# make sure the position of the variable matches its id.
-BULK_SECTORS <- c( "AGR", "ENE", "IND", "TRA", "RCO", "SLV", "WST", "SHP" )
-BULK_SECTOR_IDS <- paste( "0: Agriculture; 1: Energy; 2: Industrial;",
-                          "3: Transportation; 4: Residential, Commercial, Other;",
-                          "5: Solvents production and application; 6: Waste;",
-                          "7: International Shipping" )
-OPENBURNING_SECTORS <- c( "AWB", "FRTB", "GRSB", "PEAT" )
-OPENBURNING_SECTOR_IDS <- paste( "0: Agricultural Waste Burning On Fields;",
-                                 "1: Forest Burning; 2: Grassland Burning;",
-                                 "3: Peat Burning" )
+# Define variables specific to each sector type. Note that order matters.
+BULK_SECTOR_ID_MAP <- c(
+  AGR = "Agriculture",
+  ENE = "Energy",
+  IND = "Industrial",
+  TRA = "Transportation",
+  RCO = "Residential, Commercial, Other",
+  SLV = "Solvents production and application",
+  WST = "Waste",
+  SHP = "International Shipping",
+  NEGCO2 = "Negative CO2 Emissions"
+)
 
-grid_list <- function( grids_list, sectors, sect_ids, sect_type, em, scen,
+OPENBURNING_SECTOR_ID_MAP <- c(
+  AWB  = "Agricultural Waste Burning On Fields",
+  FRTB = "Forest Burning",
+  GRSB = "Grassland Burning",
+  PEAT = "Peat Burning"
+)
+
+grid_list <- function( grids_list, sector_id_map, sect_type, em, scen,
                        sub_nmvoc, aggregate_sectors = F, sector_shares = F ) {
-  grids_list <- lapply( grids_list, `[`, sectors )
+  grids_list <- lapply( grids_list, `[`, names( sector_id_map ) )
 
   if ( all( is.na( unlist( lapply( grids_list, names ) ) ) ) ) {
     message( paste( "No", sect_type, "sectors found for", em, "in", scenario ) )
@@ -120,7 +128,7 @@ grid_list <- function( grids_list, sectors, sect_ids, sect_type, em, scen,
   # Recurse once to build and write out netCDF file of openburning sector
   # shares, then write out netCDF file of aggregated openburning sectors
   if ( sect_type == 'openburning' && !sector_shares ) {
-    grid_list( grids_list, sectors, sect_ids, sect_type, em, scen, sub_numvoc, F, T )
+    grid_list( grids_list, sector_id_map, sect_type, em, scen, sub_nmvoc, F, T )
     aggregate_sectors = TRUE
   }
 
@@ -132,8 +140,7 @@ grid_list <- function( grids_list, sectors, sect_ids, sect_type, em, scen,
               scenario          = scen,
               sub_nmvoc         = sub_nmvoc,
               sector_type       = sect_type,
-              ncdf_sectors      = sectors,
-              sector_ids        = sect_ids,
+              sector_id_map     = sector_id_map,
               aggregate_sectors = aggregate_sectors,
               sector_shares     = sector_shares )
 }
@@ -163,8 +170,8 @@ for ( scenario in scenarios ) {
         allyear_grids_list <- calculate_ratio_em( allyear_grids_list, ratio_ems,
                                                   ratio_em )
       }
-      grid_list( allyear_grids_list, BULK_SECTORS, BULK_SECTOR_IDS, 'anthro', em, scenario, sub_nmvoc )
-      grid_list( allyear_grids_list, OPENBURNING_SECTORS, OPENBURNING_SECTOR_IDS, 'openburning', em, scenario, sub_nmvoc )
+      grid_list( allyear_grids_list, BULK_SECTOR_ID_MAP, 'anthro', em, scenario, sub_nmvoc )
+      grid_list( allyear_grids_list, OPENBURNING_SECTOR_ID_MAP, 'openburning', em, scenario, sub_nmvoc )
     })
   }
 }

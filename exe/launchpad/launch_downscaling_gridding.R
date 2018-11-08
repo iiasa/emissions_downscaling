@@ -39,9 +39,9 @@ RUNSUFFIX <- paste0( format( Sys.time(), '%m-%d-%H%M%S' ), '_',
 
 if ( DEBUG ) {
   message( 'Debug mode is on' )
-  command_args <- c( 'MESSAGE-GLOBIOM',
+  command_args <- c( 'IMAGE',
                      'Harmonized-DB',
-                     '/Users/brau074/Documents/emissions_downscaling/input/IAM_emissions/MESSAGE-GLOBIOM_SSP2-45/output_harmonized.xlsx',
+                     '/Users/brau074/Documents/emissions_downscaling/input/IAM_emissions/IMAGE_SSP1-19/output_harmonized.xlsx',
                      '/Users/brau074/Documents/emissions_downscaling/final-output/module-B',
                      '/Users/brau074/Documents/emissions_downscaling/final-output/module-C',
                      'gridding', 'CO2' )
