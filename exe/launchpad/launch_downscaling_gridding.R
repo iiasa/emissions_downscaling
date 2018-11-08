@@ -44,7 +44,7 @@ if ( DEBUG ) {
                      '/Users/brau074/Documents/emissions_downscaling/input/IAM_emissions/MESSAGE-GLOBIOM_SSP2-45/output_harmonized.xlsx',
                      '/Users/brau074/Documents/emissions_downscaling/final-output/module-B',
                      '/Users/brau074/Documents/emissions_downscaling/final-output/module-C',
-                     'gridding', 'NOx' )
+                     'gridding', 'CO2' )
 
   calculationDir <- "/Users/brau074/Documents/emissions_downscaling/code/error/parameters"
   calculationYears <- 2016:2020

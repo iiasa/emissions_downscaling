@@ -2,13 +2,9 @@
 
 # ------------------------------------------------------------------------------
 # Program Name: C.2.1.gridding_nonair.R
-# Author(s): Leyang Feng
-# Date Last Updated: Apr 3, 2017
-# Program Purpose: Gridding none-aircraft emissions in given IAM emissions file
-# Input Files:
-# Output Files:
-# Notes:
-# TODO:
+# Author(s): Leyang Feng, Caleb Braun
+# Date Last Updated: November, 2018
+# Program Purpose: Gridding non-aircraft emissions in given IAM emissions file
 # ------------------------------------------------------------------------------
 
 # ------------------------------------------------------------------------------
@@ -112,6 +108,37 @@ OPENBURNING_SECTOR_IDS <- paste( "0: Agricultural Waste Burning On Fields;",
                                  "1: Forest Burning; 2: Grassland Burning;",
                                  "3: Peat Burning" )
 
+grid_list <- function( grids_list, sectors, sect_ids, sect_type, em, scen,
+                       sub_nmvoc, aggregate_sectors = F, sector_shares = F ) {
+  grids_list <- lapply( grids_list, `[`, sectors )
+
+  if ( all( is.na( unlist( lapply( grids_list, names ) ) ) ) ) {
+    message( paste( "No", sect_type, "sectors found for", em, "in", scenario ) )
+    return()
+  }
+
+  # Recurse once to build and write out netCDF file of openburning sector
+  # shares, then write out netCDF file of aggregated openburning sectors
+  if ( sect_type == 'openburning' && !sector_shares ) {
+    grid_list( grids_list, sectors, sect_ids, sect_type, em, scen, sub_numvoc, F, T )
+    aggregate_sectors = TRUE
+  }
+
+  write_ncdf( year_grids_list   = grids_list,
+              output_dir        = output_dir,
+              grid_resolution   = grid_resolution,
+              year_list         = year_list,
+              em                = em,
+              scenario          = scen,
+              sub_nmvoc         = sub_nmvoc,
+              sector_type       = sect_type,
+              ncdf_sectors      = sectors,
+              sector_ids        = sect_ids,
+              aggregate_sectors = aggregate_sectors,
+              sector_shares     = sector_shares )
+}
+
+
 for ( scenario in scenarios ) {
   for ( em in emissions ) {
     gridding_em <- iam_em[ iam_em$scenario == scenario & iam_em$em == em, ]
@@ -136,57 +163,8 @@ for ( scenario in scenarios ) {
         allyear_grids_list <- calculate_ratio_em( allyear_grids_list, ratio_ems,
                                                   ratio_em )
       }
-
-      anthro_grids <- lapply( allyear_grids_list, `[`, BULK_SECTORS )
-      openburning_grids <- lapply( allyear_grids_list, `[`, OPENBURNING_SECTORS )
-
-      # Build and write out netCDF file of anthropogenic emissions
-      if ( all( is.na( unlist( lapply( anthro_grids, names ) ) ) ) ) {
-        warning( paste( "No anthro sectors found for", ratio_em, "in", scenario ) )
-      } else {
-        write_ncdf( year_grids_list = anthro_grids,
-                    output_dir      = output_dir,
-                    grid_resolution = grid_resolution,
-                    year_list       = year_list,
-                    em              = ratio_em,
-                    scenario        = scenario,
-                    sub_nmvoc       = sub_nmvoc,
-                    sector_type     = "anthro",
-                    ncdf_sectors    = BULK_SECTORS,
-                    sector_ids      = BULK_SECTOR_IDS )
-      }
-
-      if ( all( is.na( unlist( lapply( openburning_grids, names ) ) ) ) ) {
-        warning( paste( "No open burning sectors found for", ratio_em, "in", scenario ) )
-      } else {
-        # Build and write out netCDF file of aggergated openburning sectors
-        write_ncdf( year_grids_list   = openburning_grids,
-                    output_dir        = output_dir,
-                    grid_resolution   = grid_resolution,
-                    year_list         = year_list,
-                    em                = ratio_em,
-                    scenario          = scenario,
-                    sub_nmvoc         = sub_nmvoc,
-                    sector_type       = "openburning",
-                    ncdf_sectors      = OPENBURNING_SECTORS,
-                    sector_ids        = OPENBURNING_SECTOR_IDS,
-                    aggregate_sectors = TRUE,
-                    sector_shares     = FALSE )
-
-        # Build and write out netCDF file of openburning sector shares
-        write_ncdf( year_grids_list   = openburning_grids,
-                    output_dir        = output_dir,
-                    grid_resolution   = grid_resolution,
-                    year_list         = year_list,
-                    em                = ratio_em,
-                    scenario          = scenario,
-                    sub_nmvoc         = sub_nmvoc,
-                    sector_type       = "openburning",
-                    ncdf_sectors      = OPENBURNING_SECTORS,
-                    sector_ids        = OPENBURNING_SECTOR_IDS,
-                    aggregate_sectors = FALSE,
-                    sector_shares     = TRUE )
-      }
+      grid_list( allyear_grids_list, BULK_SECTORS, BULK_SECTOR_IDS, 'anthro', em, scenario, sub_nmvoc )
+      grid_list( allyear_grids_list, OPENBURNING_SECTORS, OPENBURNING_SECTOR_IDS, 'openburning', em, scenario, sub_nmvoc )
     })
   }
 }
