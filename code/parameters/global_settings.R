@@ -86,7 +86,7 @@ em_gridding_env$total_ems_plots  <- F    # generate plot of all ems in scenario
 em_gridding_env$error_tolerance  <- 0.1  # minimum percent difference allowed
 
 # Other settings
-em_gridding_env$debug         <- F       # run in debug mode
+em_gridding_env$debug         <- T       # run in debug mode
 em_gridding_env$clean_med_out <- F       # erase intermediate output when done
 
 # The below are not used anywhere, but may be good references

@@ -354,11 +354,20 @@ grid_all_years <- function( year_list, em, grid_resolution, gridding_em,
                             location_index, proxy_mapping,
                             proxy_substitution_mapping ) {
 
+  if ( em == 'CO2' ) {
+    source( filePath( 'MODC', 'C.2.1.gridding_negco2', '.R' ) )
+    negative_em <- extractNegativeEms( gridding_em, year_list )
+    gridding_em <- zeroNegativeEms( gridding_em )
+  }
+
   allyear_grids_list <- lapply( year_list, grid_one_year,
                                 em, grid_resolution, gridding_em, location_index,
                                 proxy_mapping, proxy_substitution_mapping )
-
   names( allyear_grids_list ) <- paste0( 'X', year_list )
+
+  if ( em == 'CO2' ) {
+    allyear_grids_list <- addNegativesAsSector( allyear_grids_list, negative_em )
+  }
 
   return( allyear_grids_list )
 }
@@ -639,7 +648,7 @@ year_length <- function( year ) {
 # grid_area
 # Brief: Compute areas of a column of grid cells for all latitude at
 #        desired resolution in square meters
-# Dependencies: null
+# Dependencies: sp::GridTopology, geosphere::areaPolygon
 # Author: Leyang Feng
 # parameters:  grid_resolution - the resolution of desired grid cell
 #              all_lon - by default the function only return a column of areas since
