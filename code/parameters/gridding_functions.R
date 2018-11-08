@@ -302,8 +302,8 @@ grid_all_sectors <- function( sector_list,
 # Brief: Generates one year's gridded emission
 # Dependencies: grid_all_sectors
 # Author: Leyang Feng
-# parameters: em - the current gridding emission species
-#             year - the vurrent gridding year
+# parameters: year - the current gridding year
+#             em - the current gridding emission species
 #             grid_resolution - gridding resolution
 #             location_index - location index table, contains matrix index information for the country in global extent
 #             proxy_mapping - proxy mapping file
@@ -311,8 +311,8 @@ grid_all_sectors <- function( sector_list,
 # return: sector_grids_list - a list contains one year's gridded emission for each sector
 # input files: null
 # output: null
-grid_one_year <- function( em,
-                           year,
+grid_one_year <- function( year,
+                           em,
                            grid_resolution,
                            gridding_emissions,
                            location_index,
@@ -354,20 +354,11 @@ grid_all_years <- function( year_list, em, grid_resolution, gridding_em,
                             location_index, proxy_mapping,
                             proxy_substitution_mapping ) {
 
-  allyear_grids_list <- lapply( year_list, function( year ) {
-
-    fin_grids_list <- grid_one_year( em,
-                                     year,
-                                     grid_resolution,
-                                     gridding_em,
-                                     location_index,
-                                     proxy_mapping,
-                                     proxy_substitution_mapping )
-  } )
+  allyear_grids_list <- lapply( year_list, grid_one_year,
+                                em, grid_resolution, gridding_em, location_index,
+                                proxy_mapping, proxy_substitution_mapping )
 
   names( allyear_grids_list ) <- paste0( 'X', year_list )
-
-  invisible( gc( ) )
 
   return( allyear_grids_list )
 }
@@ -377,16 +368,16 @@ grid_all_years <- function( year_list, em, grid_resolution, gridding_em,
 # Brief: Generates one year's gridded emission for sector AIR
 # Dependencies: get_proxy
 # Author: Leyang Feng
-# parameters: em - the current gridding emission species
-#             year - the current gridding year
+# parameters: year - the current gridding year
+#             em - the current gridding emission species
 #             grid_resolution - gridding resolution
 #             gridding_emissions - emissions df used for gridding
 #             proxy_mapping - proxy mapping file
 # return: AIR_global_em_spatial - a 3D array of distributed aircraft emissions
 # input files: null
 # output: null
-grid_one_year_air <- function( em,
-                               year,
+grid_one_year_air <- function( year,
+                               em,
                                grid_resolution,
                                gridding_emissions,
                                proxy_mapping,
@@ -437,16 +428,9 @@ grid_all_years_air <- function( year_list,
                                 proxy_mapping,
                                 seasonality_mapping ) {
 
-
-  allyear_grids_list <- lapply( year_list, function( year ) {
-
-    fin_grids_list <- grid_one_year_air( em,
-                                         year,
-                                         grid_resolution,
-                                         gridding_em,
-                                         proxy_mapping,
-                                         seasonality_mapping )
-  } )
+  allyear_grids_list <- lapply( year_list, grid_one_year_air,
+                                em, grid_resolution, gridding_em,
+                                proxy_mapping, seasonality_mapping )
 
   names( allyear_grids_list ) <- paste0( 'X', year_list )
 
