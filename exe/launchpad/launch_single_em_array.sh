@@ -2,7 +2,7 @@
 #SBATCH -A IHESD
 #SBATCH -t 90
 #SBATCH -n 1
-#SBATCH -p shared
+#SBATCH -p slurm
 
 # -----------------------------------------------------------------------------
 # Copyright 2018 Battelle Memorial Institute
@@ -58,7 +58,7 @@ iam=${iams[iam_id]}
 #     6. Gridding flag
 #     7. Run species (optional)
 echo "Run command:"
-echo "Rscript exe/launchpad/launch_downscaling_gridding.R $iam Harmonized-DB IAM_emissions/$iam_dir/output_harmonized.xlsx ../final-output/modB/ ../final-output/modC/ gridding $em --nosave --no-restore"
+echo "Rscript exe/launchpad/launch_downscaling_gridding.R $iam Harmonized-DB IAM_emissions/$iam_dir/output_harmonized.xlsx ../final-output/module-B/ ../final-output/module-C/ gridding $em --nosave --no-restore"
 
 Rscript exe/launchpad/launch_downscaling_gridding.R $iam Harmonized-DB IAM_emissions/$iam_dir/output_harmonized.xlsx ../final-output/module-B/ ../final-output/module-C/ gridding $em --nosave --no-restore
 

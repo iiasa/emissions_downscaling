@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH -A IHESD
-#SBATCH -t 40
+#SBATCH -t 60
 #SBATCH -n 1
 #SBATCH -p shared
 
@@ -44,7 +44,7 @@ em=$3
 #     6. Gridding flag
 #     7. Run species (optional)
 echo "Run command:"
-echo "Rscript exe/launchpad/launch_downscaling_gridding.R $iam Harmonized-DB IAM_emissions/$iam_dir/output_harmonized.xlsx ../final-output/modB/ ../final-output/modC/ gridding $em --nosave --no-restore"
+echo "Rscript exe/launchpad/launch_downscaling_gridding.R $iam Harmonized-DB IAM_emissions/$iam_dir/output_harmonized.xlsx ../final-output/module-B/ ../final-output/module-C/ gridding $em --nosave --no-restore"
 
 Rscript exe/launchpad/launch_downscaling_gridding.R $iam Harmonized-DB IAM_emissions/$iam_dir/output_harmonized.xlsx ../final-output/module-B/ ../final-output/module-C/ gridding $em --nosave --no-restore
 

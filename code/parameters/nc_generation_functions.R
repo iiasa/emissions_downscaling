@@ -199,6 +199,9 @@ build_global_atts <- function( em, fn_em, fn_scenario, sub_nmvoc, sector_shares,
 
   global_atts <- compile_template( global_atts )
 
+  # Hard-coded exception for convenience
+  if ( fn_scenario == 'ssp370-lowNTCF' ) global_atts$target_mip <- 'AerChemMIP'
+
   # Return sorted list of global attributes
   return( global_atts[ sort( names( global_atts ) ) ] )
 }

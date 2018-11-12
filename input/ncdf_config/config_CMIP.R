@@ -42,6 +42,6 @@ NC_ATTS <- list(
 )
 
 NC_ATT_ADDITIONS <- list(
-  history = '; Laxenburg, Austria',
+  history = '; College Park, MD',
   title   = ' prepared for input4MIPs'
 )
