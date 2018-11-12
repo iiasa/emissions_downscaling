@@ -257,7 +257,7 @@ grid_one_sector <- function( sector,
                                    proxy_backup )
     names( iso_em_spatial_list ) <- iso_list
     global_em_spatial <- aggregate_all_isos( iso_list, iso_em_spatial_list, location_index, grid_resolution, flux_factor )
-    }
+  }
 
   # add seasonality
   global_em_spatial_fin <- add_seasonality( global_em_spatial, em, sector, year, days_in_month, grid_resolution, seasonality_mapping )
@@ -356,6 +356,11 @@ grid_all_years <- function( year_list, em, grid_resolution, gridding_em,
 
   if ( em == 'CO2' ) {
     source( filePath( 'MODC', 'C.2.1.gridding_negco2', '.R' ) )
+
+    # We don't need to produce openburning CO2 files
+    bio_sectors <- c( 'AWB', 'FRTB', 'GRSB', 'PEAT' )
+    gridding_em <- filter( gridding_em, !sector %in% bio_sectors )
+
     negative_em <- extractNegativeEms( gridding_em, year_list )
     gridding_em <- zeroNegativeEms( gridding_em )
   }

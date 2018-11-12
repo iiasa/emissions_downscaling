@@ -170,8 +170,8 @@ for ( scenario in scenarios ) {
         allyear_grids_list <- calculate_ratio_em( allyear_grids_list, ratio_ems,
                                                   ratio_em )
       }
-      grid_list( allyear_grids_list, BULK_SECTOR_ID_MAP, 'anthro', em, scenario, sub_nmvoc )
-      grid_list( allyear_grids_list, OPENBURNING_SECTOR_ID_MAP, 'openburning', em, scenario, sub_nmvoc )
+      grid_list( allyear_grids_list, BULK_SECTOR_ID_MAP, 'anthro', ratio_em, scenario, sub_nmvoc )
+      grid_list( allyear_grids_list, OPENBURNING_SECTOR_ID_MAP, 'openburning', ratio_em, scenario, sub_nmvoc )
     })
   }
 }

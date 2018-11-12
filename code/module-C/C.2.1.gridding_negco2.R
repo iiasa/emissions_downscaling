@@ -11,7 +11,7 @@ addNegativesAsSector <- function(allyear_grids_list, neg_totals) {
   neg_grid <- readNegativeCO2Grid()
   multiplier <- prop.table(neg_grid)
   neg_em_grids <- lapply(neg_totals, `*`, multiplier)
-  neg_em_grids <- lapply(neg_em_grids, convertToFlux, unit = 't')
+  neg_em_grids <- lapply(neg_em_grids, convertToFlux, unit = 'Mt')
   neg_em_grids <- lapply(neg_em_grids, extendToMonth)
 
   Map(`[[<-`, allyear_grids_list, 'NEGCO2', neg_em_grids)
@@ -50,7 +50,7 @@ convertToFlux <- function(grid, unit) {
     stop("Unit not recognized.")
   )
 
-  global_grid_area <- grid_area( grid_resolution, all_lon = T )
+  global_grid_area <- grid_area(grid_resolution, all_lon = T)
 
   stopifnot(all(dim(grid) == dim(global_grid_area)))
 

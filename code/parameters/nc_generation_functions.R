@@ -200,7 +200,7 @@ build_global_atts <- function( em, fn_em, fn_scenario, sub_nmvoc, sector_shares,
   global_atts <- compile_template( global_atts )
 
   # Hard-coded exception for convenience
-  if ( scenario == 'ssp370-lowNTCF' ) global_atts$target_mip <- 'AerChemMIP'
+  if ( fn_scenario == 'ssp370-lowNTCF' ) global_atts$target_mip <- 'AerChemMIP'
 
   # Return sorted list of global attributes
   return( global_atts[ sort( names( global_atts ) ) ] )
@@ -536,7 +536,7 @@ write_checksum <- function( out_name, em_array_list, em, ncdf_sectors, res, isAi
     setNames( c( 'year', 'em', 'month', ncdf_sectors ) ) %>%
     tidyr::gather( 'sector', 'global_total', as.character( ncdf_sectors ) ) %>%
     dplyr::mutate( units = 'kt', month = as.integer( month ) ) %>%
-    dplyr::arrange( year, sector )
+    dplyr::arrange( year )
 
   if ( isAir ) {
     out_df <- out_df %>%
