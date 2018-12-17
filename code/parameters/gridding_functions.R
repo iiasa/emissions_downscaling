@@ -718,7 +718,7 @@ rotate_lat_lon <- function( grids, direction = 1 ) {
 
   # If given list of lists, call recursively on sub-lists
   if ( !all( sapply( grids, is.array ) ) ) {
-    return( lapply( grids, rotate_lat_lon ) )
+    return( lapply( grids, rotate_lat_lon, direction ) )
   }
 
   # Get array dimensions and ensure they are all the same

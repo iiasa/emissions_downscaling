@@ -118,12 +118,18 @@ OPENBURNING_SECTOR_ID_MAP <- c(
 
 grid_list <- function( grids_list, sector_id_map, sect_type, em, scen,
                        sub_nmvoc, aggregate_sectors = F, sector_shares = F ) {
-  grids_list <- lapply( grids_list, `[`, names( sector_id_map ) )
+  # All years should have the same sectors
+  stopifnot( length( unique( lapply( grids_list, names ) ) ) == 1 )
 
-  if ( all( is.na( unlist( lapply( grids_list, names ) ) ) ) ) {
+  # Select, in order, just the sectors defined in the sector id map.
+  grid_sectors <- intersect( names( sector_id_map ), names( grids_list[[1]] ) )
+  if ( length( grid_sectors ) == 0 ) {
     message( paste( "No", sect_type, "sectors found for", em, "in", scenario ) )
     return()
   }
+
+  grids_list <- lapply( grids_list, `[`, grid_sectors )
+  sector_id_map <- sector_id_map[ grid_sectors ]
 
   # Recurse once to build and write out netCDF file of openburning sector
   # shares, then write out netCDF file of aggregated openburning sectors
