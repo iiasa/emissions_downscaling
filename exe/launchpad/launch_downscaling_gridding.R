@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 # Program Name: launch_downscaling_gridding.R
 # Authors: Leyang Feng, Caleb Braun
-# Date Last Updated: June 22, 2018
+# Date Last Updated: December 19, 2018
 # Program Purpose: The script runs downscaling and gridding
 #
 # Several run options are defined in code/parameters/global_settings.R; Make
@@ -35,20 +35,7 @@ DEBUG <- get_constant( 'debug' )
 RUNSUFFIX <- paste0( format( Sys.time(), '%m-%d-%H%M%S' ), '_',
                      substr( digest::sha1( runif(1) ), 1, 6 ) )
 
-if ( DEBUG ) {
-  message( 'Debug mode is on' )
-  command_args <- c( 'AIM',
-                     'Harmonized-DB',
-                     '/Users/brau074/Documents/emissions_downscaling/input/IAM_emissions/AIM_SSP3-LowNTCF/output_harmonized.xlsx',
-                     '/Users/brau074/Documents/emissions_downscaling/final-output/module-B',
-                     '/Users/brau074/Documents/emissions_downscaling/final-output/module-C',
-                     'gridding', 'CO2' )
-
-  calculationDir <- "/Users/brau074/Documents/emissions_downscaling/code/error/parameters"
-  calculationYears <- 2016:2020
-} else {
-  command_args <- commandArgs( TRUE )  # get args from command line
-}
+command_args <- commandArgs( TRUE )  # get args from command line
 
 # extract arguments from command_args
 iam           <- command_args[ 1 ]
