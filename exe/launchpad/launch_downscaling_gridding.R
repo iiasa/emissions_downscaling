@@ -2,13 +2,12 @@
 
 # ------------------------------------------------------------------------------
 # Program Name: launch_downscaling_gridding.R
-# Author(s): Leyang Feng, Caleb Braun
+# Authors: Leyang Feng, Caleb Braun
 # Date Last Updated: June 22, 2018
 # Program Purpose: The script runs downscaling and gridding
-# Input Files:
-# Output Files:
-# Notes:
-# TODO:
+#
+# Several run options are defined in code/parameters/global_settings.R; Make
+#   sure they are correct before calling this script.
 # ------------------------------------------------------------------------------
 
 # 0. Read in global settings and headers ----------------------------------
@@ -19,12 +18,11 @@ PARAM_DIR <- "../code/parameters/"
 
 # Call standard script header function to read in universal header files -
 # provides logging, file support, and system functions - and start the script log.
-headers <- c()
 log_msg <- "Initiate downscaling routines."
 script_name <- "launch_downscaling.R"
 
 source( paste0( PARAM_DIR, "header.R" ) )
-initialize( script_name, log_msg, headers )
+initialize( script_name, log_msg, headers = NULL )
 
 
 # 1. Set up desired IAM to be processing ----------------------------------

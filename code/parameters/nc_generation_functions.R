@@ -9,10 +9,7 @@
 #   is write_ncdf().
 # ------------------------------------------------------------------------------
 
-# Special Packages
 library( 'ncdf4' )
-library( 'sp' )
-library( 'geosphere' )
 
 
 # Construct and output a NetCDF file
@@ -34,17 +31,17 @@ library( 'geosphere' )
 #   em: Name of the emission species
 #   scenario: Name of the scenario
 #   sub_nmvoc: Is the emission a NMVOC subspecies?
-#   ncdf_sectors: The sectors to include
+#   sector_id_map: Named vector of the sectors to include mapping to the NetCDF
+#     metadata of the sector ids
 #   sector_type: One of "AIR-anthro", "anthro", or "openburning"
-#   sector_ids: String for the NetCDF metadata of the sector ids
 #   aggregate_sectors: Sum along the sector dimension?
 #   sector_shares: Output sector's total value or share of all sectors
 #
 # Returns:
 #   NULL
 write_ncdf <- function( year_grids_list, output_dir, grid_resolution, year_list,
-                        em, scenario, sub_nmvoc, sector_type, ncdf_sectors,
-                        sector_ids, aggregate_sectors = F, sector_shares = F ) {
+                        em, scenario, sub_nmvoc, sector_type, sector_id_map,
+                        aggregate_sectors = F, sector_shares = F ) {
   # Parameter checks
   stopifnot( dir.exists( output_dir ) )
   stopifnot( sector_type %in% c( "AIR-anthro", "anthro", "openburning" ) )
@@ -62,10 +59,13 @@ write_ncdf <- function( year_grids_list, output_dir, grid_resolution, year_list,
   var_atts <- build_nc_var_atts( fn_em, fn_sector, aggregate_sectors,
                                  sector_shares, sector_type )
   global_atts <- build_global_atts( em, fn_em, fn_scenario, sub_nmvoc,
-                                    sector_shares, sector_type, var_atts )
+                                    sector_shares, sector_type, var_atts,
+                                    grid_resolution )
 
   nc_file_name <- build_nc_filename( var_atts$em_var_name_fn, global_atts )
   nc_file_path <- paste0( output_dir, '/', nc_file_name )
+
+  ncdf_sectors <- names( sector_id_map )
 
   ### Prepare data for writing to NetCDF
   printLog( "Preparing to write NetCDF for", var_atts$sector_long_name )
@@ -93,6 +93,7 @@ write_ncdf <- function( year_grids_list, output_dir, grid_resolution, year_list,
   }
 
   ### Add variable and global attributes
+  sector_ids <- format_sector_ids( sector_id_map )
   add_variable_atts( nc_new, var_atts, !is.null( ncdims$sectordim ), sector_ids )
 
   invisible( mapply( ncatt_put, names( global_atts ), global_atts,
@@ -140,11 +141,27 @@ add_variable_atts <- function( nc_new, atts, sector_var, sector_ids ) {
   ncatt_put( nc_new, atts$em_var_name, 'missing_value', atts$missing_value, prec = 'float' )
 }
 
-
+# Construct global attributes
+#
+# Create default attribute, then overwrite with user's custom attribute values.
+#
+# Args:
+#    em: Emission name
+#    fn_em: Emission name, as used for the filename
+#    fn_scenario: Scenario name, as used for the filename
+#    sub_nmvoc: Is em a sub-NMVOC?
+#    sector_shares: Is the data sector shares?
+#    sector_type: The sector category ('anthro', 'openburning', 'AIR-anthro')
+#    var_atts: The variable attributes, as created by build_nc_var_atts()
+#    res: Grid resolution
+#
+# Returns:
+#    Sorted list of global attributes
 build_global_atts <- function( em, fn_em, fn_scenario, sub_nmvoc, sector_shares,
-                               sector_type, var_atts ) {
+                               sector_type, var_atts, res ) {
   creation_date   <- as.POSIXlt( Sys.time(), "UTC" )
   reporting_unit  <- build_reporting_unit( em, fn_em, sector_shares, sector_type, sub_nmvoc )
+  grid_details    <- paste0( res, 'x', res, ' degree latitude x longitude' )
   product         <- paste0( if_else( sub_nmvoc, 'supplementary', 'primary' ), '-emissions-data' )
   title           <- paste( 'Future', var_atts$sector_long_name, 'of', fn_em )
   data_usage_tips <- paste0(
@@ -163,7 +180,7 @@ build_global_atts <- function( em, fn_em, fn_scenario, sub_nmvoc, sector_shares,
     data_usage_tips    = data_usage_tips,
     external_variables = 'gridcell_area',
     frequency          = 'mon',
-    grid               = '0.5x0.5 degree latitude x longitude',
+    grid               = grid_details,
     grid_label         = 'gn',
     history            = format( creation_date, format = '%d-%m-%Y %H:%M:%S %p %Z' ),
     institution        = NULL,
@@ -211,7 +228,7 @@ build_nc_var_atts <- function( fn_em, fn_sector, aggregate_sectors, sector_share
   em_var_name_fn <- paste( fn_em, fn_sector, sep = '-' )
   em_var_name <- gsub( "-", "_", em_var_name_fn )
 
-  data_unit <- if_else( sector_shares, 'percent', 'kg m-2 s-1' )
+  data_unit <- if_else( sector_shares, 'fraction', 'kg m-2 s-1' )
 
   if ( sector_type == 'openburning' && aggregate_sectors ) {
     sector_long_name <- 'total open burning emissions'
@@ -355,6 +372,7 @@ clean_scenario_name <- function( scenario ) {
   scenario <- gsub("ssp3-lowNTCF", "ssp3-70-lowNTCF", scenario) # CMIP-specific change to RCP nomenclature
   scenario <- gsub("ssp5-ref", "ssp5-85", scenario) # CMIP-specific change to RCP nomenclature
   scenario <- gsub("(ssp\\d)-(\\d)\\.?(\\d)", "\\1\\2\\3", scenario) # Remove ssp hyphen
+  scenario
 }
 
 
@@ -535,7 +553,7 @@ write_checksum <- function( out_name, em_array_list, em, ncdf_sectors, res, isAi
     setNames( c( 'year', 'em', 'month', ncdf_sectors ) ) %>%
     tidyr::gather( 'sector', 'global_total', as.character( ncdf_sectors ) ) %>%
     dplyr::mutate( units = 'kt', month = as.integer( month ) ) %>%
-    dplyr::arrange( year, sector )
+    dplyr::arrange( year )
 
   if ( isAir ) {
     out_df <- out_df %>%
@@ -631,7 +649,7 @@ write_diffs <- function( global_sums, out_name, em ) {
 #   ncdf_sectors: Sector names
 #   sector_type: The sector type
 #   aggregate_sectors: Should the sectors be summed?
-#   sector_shares: Represent values as their share compared to other sectors?
+#   sector_shares: Write values as their share compared to other sectors?
 #
 # Returns:
 #   The processed multidimensional array
@@ -743,4 +761,9 @@ get_VOC_info <- function( voc, type ) {
   else {
     stop( 'invalid argument type to get_VOC_info' )
   }
+}
+
+
+format_sector_ids <- function( sector_ids ) {
+  paste0( seq_along( sector_ids ) - 1, ': ', sector_ids, collapse = '; ' )
 }

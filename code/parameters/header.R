@@ -1,33 +1,30 @@
 # Copyright 2018 Battelle Memorial Institute
 
-# ----------------------------------------------------------------------------------
-# IAMH R header file: Script initialization ( adapted from CEDS )
-# Author(s): Jon Seibert
-# Last Updated: 7 August 2015
-
+# ------------------------------------------------------------------------------
+# IAMH R header file: Script initialization (adapted from CEDS)
+# Authors: Jon Seibert, Caleb Braun
+# Last Updated: 8 November 2018
+#
 # This file must be sourced by all IAMH R scripts to perform log initialization,
 #   read in other required functions, and note initial dependencies.
 # Functions contained:
 #   sourceFunctions, addDep, initialize
-
+#
 # Notes: Requires functions in IO_functions.R (automatically loaded)
+#
+# ------------------------------------------------------------------------------
 
-# -----------------------------------------------------------------------------
+initialize <- function( script_name, log_msg, headers ) {
+  # Ensure the critical headers are read in first, in the correct order
+  required_headers <- c( "IO_functions.R", "global_settings.R" )
+  headers <- union( required_headers, headers )
 
-# PARAM_DIR defined by each script
-sourceFunctions <- function( file_name ){ source( paste0( PARAM_DIR, file_name) ) }
-addDep <- function( file_name ){ addDependency( paste0 ( PARAM_DIR, file_name ) ) }
+  # PARAM_DIR is a global var defined by each script
+  header_paths <- paste0( PARAM_DIR, headers )
 
-initialize <- function( script_name, log_msg, headers, common_data = TRUE ){
-
-    # Ensure the critical headers are read in first, in the correct order
-    if( ! "IO_functions.R" %in% headers ){ headers <- c( "IO_functions.R", headers ) }
-    if( ! "global_settings.R" %in% headers ){ headers <- c( "global_settings.R", headers ) }
-
-    invisible( lapply( headers, sourceFunctions ) )
+  invisible( lapply( header_paths, source ) )
 	logStart( script_name )
-    clearMeta()
-    invisible( lapply( headers, addDep ) )
-    printLog( log_msg )
-
+  clearMeta()
+  invisible( lapply( header_paths, addDependency ) )
+  printLog( log_msg )
 }
