@@ -19,7 +19,7 @@ The current release is operational for downscaling. Gridding requires additional
 
 ---
 
-This software is provided with the following [licence](https://github.com/iiasa/emissions_downscaling/blob/master/licence_and_disclaimer.txt)
+This software is provided with the following [licence](https://github.com/iiasa/emissions_downscaling/blob/master/LICENSE.txt)
 
 Copyright 2018 Battelle Memorial Institute
 
