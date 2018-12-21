@@ -109,8 +109,7 @@ for ( scenario in scenarios ) {
                 scenario        = scenario,
                 sub_nmvoc       = FALSE,         # We don't do aircraft NMVOCs
                 sector_type     = "AIR-anthro",
-                ncdf_sectors    = 1:25,          # This is the altitude layer
-                sector_ids      = "" )
+                sector_id_map   = setNames( 1:25, 1:25 ) )  # This is the altitude layer
   }
 }
 
