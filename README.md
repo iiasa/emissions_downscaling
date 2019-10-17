@@ -9,8 +9,10 @@ These routines take emissions data from Integrated Assessment Models and do two 
 
 The user can specify just downscaling, or downscaling & gridding. See the [project wiki](https://github.com/iiasa/emissions_downscaling/wiki) for further details, including a quick guide to getting started.
 
-#### *November 2018 Release Note*
-The current release is operational for downscaling. Gridding requires additional input data files which we are currently posting to Zenodo. Links and instructions will be added to the wiki when this is completed. For further information contact [Steve Smith](https://www.pnnl.gov/contacts/staffinfo.asp?uid=4437DB8911651043BBCB149C0C52AE28).
+#### *Janurary 2019 Release Note*
+The system is now operational for gridding. Additional input data files need to be downloaded from Zenodo as described in the [Runing The System](https://github.com/iiasa/emissions_downscaling/wiki/Running-the-system) portion of the wiki.
+
+For further information contact [Steve Smith](https://www.pnnl.gov/contacts/staffinfo.asp?uid=4437DB8911651043BBCB149C0C52AE28).
 
 ---
 ### Example gridded emissions output:
