@@ -40,7 +40,6 @@ run_species <- command_args[ 7 ]
 if ( is.na( iam ) ) iam <- "GCAM4"
 if ( is.na( input_file ) ) stop( 'No snapshot file provided!' )
 
-
 # ------------------------------------------------------------------------------
 # 1. Read mapping files and axtract iam info
 # read in master config file
@@ -84,6 +83,8 @@ iam_data <- iam_data %>%
   dplyr::mutate( em = gsub( '^VOC$', 'NMVOC', em ) ) %>%
   dplyr::rename_all( make.names ) %>%
   dplyr::select( model, scenario, region, em, sector, harm_status, unit, one_of( x_year_list ) )
+
+if (object.size(iam_data) < 4000 )  stop("No input data found after filtering. Check formatting and model name.")
 
 # Filter for if only one emission species is desired.
 VOC_SPEC <- get_constant( 'voc_speciation' )

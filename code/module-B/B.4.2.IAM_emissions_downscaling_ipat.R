@@ -58,7 +58,17 @@ gdp_data <- readData( domain = 'MED_OUT', file_name = paste0( 'B.iiasa_gdp_iso_'
 
 # -----------------------------------------------------------------------------
 # 3. create short ssp label for iam_em
-iam_em$ssp_label <- unlist( lapply( strsplit( iam_em$scenario, '-' ), '[[', 1 ) )
+scenario_SSP_mapping <- readData( domain = 'MAPPINGS', file_name = "Scenario_SSP_mapping" )
+
+# Previous method that relied on standard SSP scenario naming
+# iam_em$ssp_label <- unlist( lapply( strsplit( iam_em$scenario, '-' ), '[[', 1 ) )
+
+# New more general method that uses mapping file
+iam_em <- iam_em %>%
+  # join with mapping table to get SSP
+  left_join( scenario_SSP_mapping, by = c( "scenario" ) ) %>%
+  # rename columns to match desired output
+  rename( ssp_label = SSP )
 
 iam_em_data_cols <- grep( 'X', colnames( iam_em ), value = T )
 ref_em_data_cols <- grep( 'X', colnames( ref_em ), value = T )
