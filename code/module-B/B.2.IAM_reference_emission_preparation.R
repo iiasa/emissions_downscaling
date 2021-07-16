@@ -157,7 +157,16 @@ calculateConYear <- function( iam_em_ipat ) {
   temp_df <- iam_em_ipat[ , c( iam_em_ipat_header_cols, paste0( 'reg_iam_em_X', calc_baseyears ) ) ]
 
   # create ssp_label and loop over each individual ssp
-  temp_df$ssp_label <- unlist( lapply( strsplit( temp_df$scenario, '-' ), '[[', 1 ) )
+  # temp_df$ssp_label <- unlist( lapply( strsplit( temp_df$scenario, '-' ), '[[', 1 ) )
+
+  scenario_SSP_mapping <- readData( domain = 'MAPPINGS', file_name = "Scenario_SSP_mapping" )
+
+  temp_df <- temp_df %>%
+    # join with mapping table to get SSP
+    left_join( scenario_SSP_mapping, by = c( "scenario" ) ) %>%
+    # rename columns to match desired output
+    rename( ssp_label = SSP )
+
   temp_df_list <- lapply( unique( temp_df$ssp_label ), function( ssp ) {
 
     # subset to specific ssp data
