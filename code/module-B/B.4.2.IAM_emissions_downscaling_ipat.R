@@ -32,7 +32,7 @@ initialize( script_name, log_msg, headers )
 # 0.5 Define IAM variable
 if ( !exists( 'command_args' ) ) command_args <- commandArgs( TRUE )
 iam <- command_args[ 1 ]
-if ( is.na( iam ) ) iam <- "GCAM4"
+if ( is.na( iam ) ) iam <- "GCAM52"
 
 MODULE_B <- "../code/module-B/"
 

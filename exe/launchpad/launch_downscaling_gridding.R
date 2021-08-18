@@ -35,6 +35,9 @@ DEBUG <- get_constant( 'debug' )
 RUNSUFFIX <- paste0( format( Sys.time(), '%m-%d-%H%M%S' ), '_',
                      substr( digest::sha1( runif(1) ), 1, 6 ) )
 
+# Un-comment this to use data from a previous run
+# RUNSUFFIX <- "08-18-172015_e528fc"
+
 command_args <- commandArgs( TRUE )  # get args from command line
 
 # extract arguments from command_args

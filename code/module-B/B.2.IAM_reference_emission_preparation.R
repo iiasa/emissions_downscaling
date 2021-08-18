@@ -45,7 +45,7 @@ if ( is.na( iam ) ) iam <- "GCAM4"
 
 
 # ------------------------------------------------------------------------------
-# 1. Read mapping files and axtract iam info
+# 1. Read mapping files and extract iam info
 # read in master config file
 master_config <- readData( 'MAPPINGS', 'master_config', column_names = F )
 # select iam configuration line from the mapping and read the iam information as a list
@@ -68,9 +68,13 @@ iam_em <- readData( 'MED_OUT', file_name = paste0( 'B.', iam, '_emissions_reform
 ref_em <- readData( 'REF_EM', file_name = REF_EM_CSV, domain_extension = ref_domain_extension )
 ref_em <- dplyr::mutate( ref_em, em = gsub( '^VOC$', 'NMVOC', em ) )
 
+# Check that iam emissions file has all unique rows
+iam_unique <- unique(iam_em[ , c("model","scenario","region","em","sector","harm_status")])
+if (nrow(iam_unique) != nrow(iam_em)) stop( "ERROR: Duplicate rows in iam input datafile" )
+
 # -----------------------------------------------------------------------------
 # 3. Process reference emissions
-# extrac column name information from ref_em
+# extract column name information from ref_em
 ref_em_header_columns <- colnames( ref_em )[ grep( '^X', colnames( ref_em ), invert = T )  ]
 ref_em_xyear <- colnames( ref_em )[ grep( '^X', colnames( ref_em ) )  ]
 
@@ -126,9 +130,11 @@ iam_em_xyear <- colnames( iam_em )[ grep( '^X', colnames( iam_em ) )  ]
 
 # -----------------------------------------------------------------------------
 # 4.1 Pick out no-downscaling sectors in iam_em
+`%notin%` <- Negate(`%in%`)
+
 sector_nodownscaling <- method_mapping[ method_mapping$downscale_method == 'none', 'sector' ]
 iam_em_nods <- iam_em[ iam_em$sector %in% sector_nodownscaling, ]
-iam_em <- iam_em[ iam_em$sector %!in% sector_nodownscaling, ]
+iam_em <- iam_em[ iam_em$sector %notin% sector_nodownscaling, ]
 
 # -----------------------------------------------------------------------------
 # 4.2 Add iso information to iam_em
@@ -148,7 +154,7 @@ sector_ipat <- method_mapping[ method_mapping$downscale_method == 'ipat', 'secto
 iam_em_ipat <- iam_em_iso_added[ iam_em_iso_added$sector %in% sector_ipat, ]
 
 # -----------------------------------------------------------------------------
-# 4.5 Convergence year value calculation for energy relatd
+# 4.5 Convergence year value calculation for energy related
 calculateConYear <- function( iam_em_ipat ) {
 
   # subset IAM regional emissions df to 2090 & 2100
@@ -165,7 +171,8 @@ calculateConYear <- function( iam_em_ipat ) {
     # join with mapping table to get SSP
     left_join( scenario_SSP_mapping, by = c( "scenario" ) ) %>%
     # rename columns to match desired output
-    rename( ssp_label = SSP )
+    rename( ssp_label = SSP ) %>%
+    distinct()
 
   temp_df_list <- lapply( unique( temp_df$ssp_label ), function( ssp ) {
 
