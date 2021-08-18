@@ -80,7 +80,7 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping, CO2_or_negCY) {
       }
 
       # EI_star pathways for zero_in_BY rows is bounded by minimum EI_star in nonzero_in_BY rows
-      par_df_ssp <- adjustEI_star( par_df_ssp, zero_in_BY.trunc )
+      par_df_ssp <- adjustEI_star( par_df_ssp, zero_in_BY.trunc, year )
 
       # this year's preliminary emissions = this year's emissions intensity * this year's GDP
       par_df_ssp <- equation4( wide_df_ssp, par_df_ssp, year )
@@ -111,17 +111,21 @@ downscaleIAMemissions <- function( wide_df, con_year_mapping, CO2_or_negCY) {
         par_df_ssp <- equation2a_EI_gr_C_pm( par_df_ssp, year )
       }
 
+      # Get rid of any duplicate rows
+      res_df_ssp <- res_df_ssp %>%  distinct()
 
       # drop final emissions result into results df
       df <- par_df_ssp %>%
         select(region, iso, ssp_label, em, sector, model, scenario, unit, E_final)
+
       res_df_ssp <- res_df_ssp %>%
-        left_join(df, by=c("region", "iso", "ssp_label", "em", "sector", "model", "scenario", "unit"))
+        left_join(df, by=c("region", "iso", "ssp_label", "em", "sector", "model", "scenario", "unit")) %>%
+        distinct()
 
       # format name of new final emissions data column
       names(res_df_ssp) <- c(names(res_df_ssp)[1:ncol(res_df_ssp)-1],
                              paste0( "ctry_ref_em_X", year ))
-    }
+      }
 
     out_df_ssp <- res_df_ssp[ , c( 'region', 'iso', 'em', 'sector', 'model', 'scenario', 'unit',
                                    paste0( 'ctry_ref_em_X', base_year : ds_end_year ) ) ]
@@ -597,7 +601,6 @@ identify_EI_gr_C <- function(par_df_ssp, year) {
 equation3 <- function(wide_df_ssp, res_df_ssp, par_df_ssp, year) {
 
   # identify/calculate last year's EI and drop into par_df_ssp
-
   if (year == as.numeric(base_year) + 1) {
     # either use adjusted EICBY values when calculating first time step...
     par_df_ssp <- par_df_ssp %>%
@@ -632,10 +635,12 @@ equation3 <- function(wide_df_ssp, res_df_ssp, par_df_ssp, year) {
     # EI_prev = E_prev / GDP_prev
     par_df_ssp <- par_df_ssp %>%
       left_join(ctry_ref_em_prev, by = c("region", "iso", "ssp_label", "em", "sector", "model", "scenario", "unit")) %>%
+      distinct() %>%
       left_join(ctry_gdp_prev, by = c("region", "iso", "ssp_label", "em", "sector", "model", "scenario", "unit")) %>%
-      mutate( EI_prev = ctry_ref_em_prev / ctry_gdp_prev )
+      distinct() %>%
+      mutate( EI_prev = ctry_ref_em_prev / ctry_gdp_prev ) %>%
+      distinct()
   }
-
 
   # calculate next year's preliminary emissions intensity
   # equation depends on entry in 'equation3'
@@ -705,7 +710,7 @@ equation3a <- function(wide_df_ssp, res_df_ssp, par_df_ssp, year) {
 }
 
 # zero in BY rows Emissions Intensity bounded by min(abs(EI_star)) in region
-adjustEI_star <- function(par_df, zero_in_BY.trunc) {
+adjustEI_star <- function(par_df, zero_in_BY.trunc, year) {
   nonzero_in_BY <- par_df %>%
     anti_join(zero_in_BY.trunc, by = c("region", "iso", "ssp_label", "em", "sector", "model", "scenario", "unit"))
 
@@ -714,11 +719,14 @@ adjustEI_star <- function(par_df, zero_in_BY.trunc) {
     summarise(replacement_value = min(abs(EI_star))) %>%
     ungroup()
 
-  zero_in_BY.mod <- par_df %>%
+  zero_in_BY.mod.part1 <- par_df %>%
     inner_join(zero_in_BY.trunc, by = c("region", "iso", "ssp_label", "em", "sector", "model", "scenario", "unit")) %>%
+    distinct()
+
+  zero_in_BY.mod <- zero_in_BY.mod.part1 %>%
     left_join(replacement_values, by = c("region", "ssp_label", "em", "sector", "model", "scenario", "unit")) %>%
     mutate(EI_star = ifelse(abs(EI_star) > abs(replacement_value), replacement_value, EI_star)) %>%
-    select(-replacement_value)
+    select(-replacement_value) %>% distinct()
 
   return(rbind(nonzero_in_BY, zero_in_BY.mod))
 
@@ -743,7 +751,8 @@ equation4 <- function(wide_df_ssp, par_df_ssp, year) {
   # E = EI * GDP
   par_df_ssp <- par_df_ssp %>%
     left_join(gdp, by = c("region", "iso", "ssp_label", "em", "sector", "model", "scenario", "unit")) %>%
-    mutate(E_star = EI_star * ctry_gdp_X_year)
+    mutate(E_star = EI_star * ctry_gdp_X_year) %>%
+    distinct()
 }
 
 # scale preliminary emissions to match this year's regional IAM emissions
@@ -815,7 +824,8 @@ equation5 <- function(wide_df_ssp, par_df_ssp, year, res_df_ssp) {
     # combine country and regional emissions
     ctry_and_reg_em.melt <- ctry_ref_em.melt %>%
       inner_join(reg_ref_em.melt, by = c("region", "ssp_label", "em", "sector", "model", "scenario", "unit", "year")) %>%
-      select(-year)
+      select(-year) %>%
+      distinct()
 
     # replace E_star & sum_E_star w/ E.country & E.region, respectively
     replace <- replace %>%

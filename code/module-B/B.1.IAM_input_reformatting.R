@@ -40,7 +40,6 @@ run_species <- command_args[ 7 ]
 if ( is.na( iam ) ) iam <- "GCAM4"
 if ( is.na( input_file ) ) stop( 'No snapshot file provided!' )
 
-
 # ------------------------------------------------------------------------------
 # 1. Read mapping files and axtract iam info
 # read in master config file
@@ -85,6 +84,8 @@ iam_data <- iam_data %>%
   dplyr::rename_all( make.names ) %>%
   dplyr::select( model, scenario, region, em, sector, harm_status, unit, one_of( x_year_list ) )
 
+if (object.size(iam_data) < 4000 )  stop("No input data found after filtering. Check formatting and model name.")
+
 # Filter for if only one emission species is desired.
 VOC_SPEC <- get_constant( 'voc_speciation' )
 sub_spec <- !is.na( run_species )
@@ -96,7 +97,7 @@ if ( VOC_SPEC == 'only' && sub_spec && run_species %!in% c( "VOC", "NMVOC" ) ) {
   iam_data <- iam_data[ iam_data$em == "NMVOC", ]
 } else if ( sub_spec && run_species %in% iam_data$em ) {
   iam_data <- iam_data[ iam_data$em == run_species, ]
-} else if ( sub_spec ) {
+} else if ( sub_spec && !(VOC_SPEC == 'none') ) {
   stop( paste0( "Cannot downscale for missing emission ", run_species, ". ",
                 "Supported emission species include: ",
                 paste( get_constant( 'supported_species' ), collapse = ', ' ) ) )
